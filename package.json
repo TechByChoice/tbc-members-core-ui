@@ -33,7 +33,7 @@
     "react-quill": "^0.0.2",
     "react-router": "latest",
     "react-router-dom": "^6.15.0",
-    "react-scripts": "^3.0.1",
+    "react-scripts": "^5.0.1",
     "style-loader": "^3.3.0",
     "webpack": "^5.57.1",
     "webpack-cli": "^4.10.0",
