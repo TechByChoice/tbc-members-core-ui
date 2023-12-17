@@ -1,32 +1,32 @@
-import {
-    Autocomplete,
-    Button, Checkbox,
-    FormControl, FormControlLabel,
+import {Autocomplete,
+    Button,
+    Checkbox,
+    FormControl,
+    FormControlLabel,
     FormHelperText,
     FormLabel,
     Grid,
     OutlinedInput,
     TextField,
-    Typography
-} from "@mui/material";
-import React, {useEffect, useState} from "react";
-import {createFilterOptions} from "@mui/material/Autocomplete";
+    Typography,} from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { createFilterOptions } from '@mui/material/Autocomplete';
 
 const filter = createFilterOptions();
 
-export default function FormMenteeApplication({handleChange, questions, formErrors, formData}) {
-
+export default function FormMenteeApplication({
+    handleChange, questions, formErrors, formData 
+}) {
     function handleSave() {
-        console.log('saved')
+        console.log('saved');
     }
-
 
     return (
         <>
             <Grid container>
                 <Grid item xs={12}>
                     <Typography variant="h6">Mentee Application</Typography>
-                    <hr/>
+                    <hr />
                 </Grid>
                 <Grid item xs={12} md={4} spacing={3} mt={3}>
                     <Typography variant="body">Update how and when we reach out to you</Typography>
@@ -36,10 +36,7 @@ export default function FormMenteeApplication({handleChange, questions, formErro
                         {/* Checkbox for Community Updates */}
                         <Grid item xs={12}>
                             <FormControl>
-                                <FormControlLabel
-                                    control={<Checkbox onChange={handleChange} name="marketing_org_updates"/>}
-                                    label="Community Updates"
-                                />
+                                <FormControlLabel control={<Checkbox onChange={handleChange} name="marketing_org_updates" />} label="Community Updates" />
                             </FormControl>
                         </Grid>
                         <Grid item xs={12} sm={8}>
@@ -51,5 +48,5 @@ export default function FormMenteeApplication({handleChange, questions, formErro
                 </Grid>
             </Grid>
         </>
-    )
+    );
 }

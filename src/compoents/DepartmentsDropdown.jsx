@@ -1,47 +1,42 @@
-import React, {useState, useEffect} from 'react';
-import {Autocomplete, FormControl, FormLabel, TextField} from '@mui/material';
-import {getBasicSystemInfo} from "../api-calls";
-import {createFilterOptions} from "@mui/material/Autocomplete";
+import React, { useState, useEffect } from 'react';
+import { Autocomplete, FormControl, FormLabel, TextField } from '@mui/material';
+import { getBasicSystemInfo } from '../api-calls';
+import { createFilterOptions } from '@mui/material/Autocomplete';
 
 const filter = createFilterOptions();
-export default function ExperiencesDropdown({setAnswers}) {
-    const [experiences, setExperiences] = useState([]);
-    const [experiencesSkill, setExperiencesSkill] = useState('');
+export default function DepartmentsDropdown({ setAnswers }) {
+    const [ departments, setDepartments ] = useState([]);
+    const [ selectedDepartment, setSelectedDepartment ] = useState('');
 
     useEffect(() => {
         // Fetch the list of companies when the component mounts
-        async function fetchExperiences() {
+        async function fetchDepartments() {
             try {
                 const response = await getBasicSystemInfo();
-                setExperiences(response.career_journey_choices);
+                setDepartments(response.job_department);
             } catch (error) {
-                console.error("Error fetching skills:", error);
+                console.error('Error fetching departments:', error);
             }
         }
 
-        fetchExperiences();
+        fetchDepartments();
     }, []);
 
     return (
         <FormControl fullWidth variant="outlined">
-            <FormLabel id="skills-label">What level of experiences are you looking for?</FormLabel>
+            <FormLabel id="departments-label">Departments</FormLabel>
             <Autocomplete
-                id="experiences-label"
+                id="departments-label"
                 multiple
                 required
                 selectOnFocus
                 includeInputInList
                 handleHomeEndKeys
-                options={experiences || []}
+                options={departments || []}
                 isOptionEqualToValue={(option, value) =>
                     (option.inputValue && value.inputValue && option.inputValue === value.inputValue) || option === value
                 }
-                renderOption={(props, option) => (
-                    <li {...props} key={option.id}>
-                        {option.name}
-                    </li>
-                )}
-                getOptionLabel={(option) => {
+                getOptionLabel={option => {
                     if (typeof option === 'string') {
                         return option;
                     }
@@ -54,9 +49,9 @@ export default function ExperiencesDropdown({setAnswers}) {
                 filterOptions={(options, params) => {
                     const filtered = filter(options, params);
 
-                    const {inputValue} = params;
+                    const { inputValue } = params;
                     // Suggest the creation of a new value
-                    const isExisting = options.some((option) => inputValue === option.name);
+                    const isExisting = options.some(option => inputValue === option.name);
                     if (inputValue !== '' && !isExisting) {
                         filtered.push({
                             inputValue,
@@ -68,13 +63,14 @@ export default function ExperiencesDropdown({setAnswers}) {
                 }}
                 // value={selectedSkill}
                 onChange={(e, newValue) => {
-                    setExperiencesSkill(newValue);
+                    setSelectedDepartment(newValue);
                     setAnswers(prevState => ({
                         ...prevState,
-                        years_of_experience: newValue,
+                        department: newValue,
                     }));
                 }}
-                renderInput={(params) => <TextField name="years_of_experience" {...params} />}
+                renderOption={(props, option) => <li {...props}>{option.name}</li>}
+                renderInput={params => <TextField name="job_departments" {...params} />}
             />
         </FormControl>
     );
