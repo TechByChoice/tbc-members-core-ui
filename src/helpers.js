@@ -14,25 +14,26 @@
 //     return cookieValue;
 // };
 
-export const isValidToken = (token) => {
-    const TOKEN_LENGTH = 64;  // Replace with your token's length
+export const isValidToken = token => {
+    const TOKEN_LENGTH = 64; // Replace with your token's length
     const ALPHANUMERIC_REGEX = /^[a-zA-Z0-9]+$/;
 
     return token.length === TOKEN_LENGTH && ALPHANUMERIC_REGEX.test(token);
 };
 
-export const handleUrlChange = (event) => {
+export const handleUrlChange = event => {
     let inputValue = event.target.value;
 
     if (!inputValue.startsWith('http://') && inputValue !== '') {
-      inputValue = 'http://' + inputValue;
+        inputValue = 'http://' + inputValue;
     }
 
     return inputValue;
-  };
+};
 
-export default function getCookie (name) {
+export default function getCookie(name) {
     const value = `; ${document.cookie}`;
     const parts = value.split(`; ${name}=`);
-    if (parts.length === 2) return parts.pop().split(';').shift();
+    if (parts.length === 2) return parts.pop().split(';')
+        .shift();
 }
