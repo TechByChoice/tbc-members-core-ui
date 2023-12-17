@@ -1,25 +1,25 @@
-import React, {useState, useEffect, useRef} from 'react';
-import {FormControl, FormLabel, TextField, Autocomplete} from '@mui/material';
-import {getBasicSystemInfo} from "../api-calls";
-import {createFilterOptions} from "@mui/material/Autocomplete";
+import React, { useState, useEffect, useRef } from 'react';
+import { FormControl, FormLabel, TextField, Autocomplete } from '@mui/material';
+import { getBasicSystemInfo } from '../api-calls';
+import { createFilterOptions } from '@mui/material/Autocomplete';
 
 const filter = createFilterOptions();
 
-export default function CompanyDropdownUpdate({answers, setAnswers, onCompanySelect}) {
-    const [companies, setCompanies] = useState([]);
-    const [selectedCompany, setSelectedCompany] = useState(answers.select_company || null);
+export default function CompanyDropdownUpdate({ answers, setAnswers, onCompanySelect }) {
+    const [ companies, setCompanies ] = useState([]);
+    const [ selectedCompany, setSelectedCompany ] = useState(answers.select_company || null);
 
     // Create a ref to store the previous selected company
     // const prevSelectedCompany = useRef();
 
     useEffect(() => {
-        console.log(answers, 'try here')
+        console.log(answers, 'try here');
         // Compare the previous selected company with the current one
         // if (selectedCompany ) {
-            console.log(answers)
+        console.log(answers);
         setSelectedCompany(answers.select_company || null);
         // }
-    }, [answers.select_company]);
+    }, [ answers.select_company ]);
 
     useEffect(() => {
         // Fetch the list of companies when the component mounts
@@ -28,7 +28,7 @@ export default function CompanyDropdownUpdate({answers, setAnswers, onCompanySel
                 const response = await getBasicSystemInfo();
                 setCompanies(response.company_list);
             } catch (error) {
-                console.error("Error fetching companies:", error);
+                console.error('Error fetching companies:', error);
             }
         }
 
@@ -45,19 +45,18 @@ export default function CompanyDropdownUpdate({answers, setAnswers, onCompanySel
                 handleHomeEndKeys
                 value={selectedCompany}
                 options={companies}
-                getOptionLabel={(option) => {
+                getOptionLabel={option => {
                     return typeof option === 'object' ? option.company_name : '';
                 }}
                 renderOption={(props, option) => (
                     <li {...props} key={option.id}>
                         {option.company_name}
-                        <br/>
+                        <br />
                         {option.company_url}
                     </li>
                 )}
                 filterOptions={(options, params) => {
                     return filter(options, params);
-                    ;
                 }}
                 onChange={(event, newValue) => {
                     setSelectedCompany(newValue);
@@ -68,18 +67,14 @@ export default function CompanyDropdownUpdate({answers, setAnswers, onCompanySel
                         company_id: newValue?.id,
                     }));
                 }}
-
-                renderInput={(params) => (
+                renderInput={params => (
                     <TextField
                         {...params}
                         name="company_name"
-                        inputProps={{
-                            ...params.inputProps,
-                        }}
+                        inputProps={{...params.inputProps,}}
                     />
                 )}
             />
-
         </FormControl>
     );
 }
