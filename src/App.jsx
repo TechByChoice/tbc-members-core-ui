@@ -1,27 +1,26 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 
-import './index.css';
 import { Container } from '@mui/material';
-import { Route, Routes } from 'react-router';
+import { Routes } from 'react-router';
 import { BrowserRouter } from 'react-router-dom';
 import StatusAlert from './compoents/Alerts';
 import NavBar from './compoents/layout/NavBar';
-import { PrivateRoutes } from './providers/PrivateRouteProvider';
+import './index.css';
 import { AuthProvider, useAuth } from './providers/AuthProvider';
-import Dashboard from './pages/Dashboard';
 import { StatusProvider } from './providers/MsgStatusProvider';
-import LoginPage from './pages/LoginPage';
-import MemberSignupPage from './pages/MemberSignupPage';
-import NewMemberPage from './pages/NewMemeberPage';
-import AllEventsPage from './pages/AllEventsPage';
-import ProfileSettingPage from './pages/ProfileSettingPage';
-import NewMentorPage from './pages/NewMentorPage';
-import AllMentorsPage from './pages/AllMentorsPage';
-import ViewMemberProfile from './pages/ViewMemberProfile';
-import JobReferralPage from './pages/JobReferralPage';
-import ViewJobPage from './pages/ViewJobPage';
-import AllJobsPage from './pages/AllJobsPage';
+// import Dashboard from './pages/Dashboard';
+// import LoginPage from './pages/LoginPage';
+// import MemberSignupPage from './pages/MemberSignupPage';
+// import NewMemberPage from './pages/NewMemeberPage';
+// import AllEventsPage from './pages/AllEventsPage';
+// import ProfileSettingPage from './pages/ProfileSettingPage';
+// import NewMentorPage from './pages/NewMentorPage';
+// import AllMentorsPage from './pages/AllMentorsPage';
+// import ViewMemberProfile from './pages/ViewMemberProfile';
+// import JobReferralPage from './pages/JobReferralPage';
+// import ViewJobPage from './pages/ViewJobPage';
+// import AllJobsPage from './pages/AllJobsPage';
 
 // import TestPage from ;
 // const TestPage = React.lazy(() => import("open_doors/TestPage"  ));
@@ -41,8 +40,8 @@ const App = () => {
                     <NavBar />
                     <Container>
                         <Routes>
-                            <Route exact path="/login" element={<LoginPage />} />
-                            <Route
+                            {/* <Route exact path="/login" element={<LoginPage />} /> */}
+                            {/* <Route
                                 exact
                                 path="/profile"
                                 element={
@@ -68,7 +67,7 @@ const App = () => {
                             <Route exact path="/job/all" element={<AllJobsPage />} />
                             <Route exact path="/member/:id" element={<ViewMemberProfile isLoading={isLoading} userDetail={user?.[0]} />} />
                             <Route exact path="/mentor/create" element={<NewMentorPage isLoading={isLoading} userDetail={user?.[0]} />} />
-                            <Route exact path="/mentor/all" element={<AllMentorsPage isLoading={isLoading} userDetail={user?.[0]} />} />
+                            <Route exact path="/mentor/all" element={<AllMentorsPage isLoading={isLoading} userDetail={user?.[0]} />} /> */}
                         </Routes>
                     </Container>
                 </BrowserRouter>
