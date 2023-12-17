@@ -28,7 +28,6 @@ function ViewMemberProfile() {
     const [basicData, setBasicData] = useState()
     const { user, isLoading } = useAuth();
     const loggedInUser = user[0]
-    console.log(user[0], 'user')
 
 
     useEffect(() => {
@@ -56,8 +55,6 @@ function ViewMemberProfile() {
             </Grid>
         );
     }
-    console.log('user?.user_info?.id', loggedInUser?.user_info?.id)
-    console.log('memberData?.data?.user?.id', memberData?.data?.user?.id)
     const isOwnProfile = loggedInUser?.user_info?.id === memberData?.data?.user?.id;
 
     const renderApplicationReviewCard = () => (
@@ -218,14 +215,6 @@ function ViewMemberProfile() {
             }
         return null;
     };
-    // console.log(memberData?.data?.talent_profile?.skills[0], 'memberData?.data?.talent_profile?.skills')
-    if (memberData?.data?.talent_profile?.skills) {
-
-        memberData.data.talent_profile.skills.forEach((skill, index) => {
-            // const skillItem = basicData.job_skills.find(item => item.id === skill);
-            console.log(skill.name, 'skill')
-        })
-    }
 
 
     const renderMentorProfileSection = () => (
