@@ -16,7 +16,7 @@ export default defineConfig({
         })
         */
     ],
-    resolve: {alias: {'@': resolve('.', '/src'),},},
+    resolve: { alias: { '@': resolve('.', '/src') } },
     server: {
         watch: {
             ignored: [
@@ -38,7 +38,7 @@ export default defineConfig({
             './src/**/*.jsx',
             './src/**/*.js',
             './src/index.css',
-            './src/index.html'
+            './index.html'
         ],
         output: {
             // format: 'umd',
@@ -55,7 +55,7 @@ export default defineConfig({
             external: [], //'react', 'react-dom', 'preact', 'alpinejs'],
             treeshake: 'recommended',
             input: {
-                main: resolve('.', '/src/index.html'),
+                main: resolve('.', '/index.html'),
                 // './src/index.css',
                 // './src/index.html',
             },
