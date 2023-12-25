@@ -15,8 +15,6 @@ import {createFilterOptions} from "@mui/material/Autocomplete";
 const filter = createFilterOptions();
 
 function CommunityQuestionsStep({questions, handleAutocompleteChange, handleInputChange}) {
-    // Your state management, if required, will go here
-
     return (
         <Grid container spacing={3}>
             <Grid item xs={12}>

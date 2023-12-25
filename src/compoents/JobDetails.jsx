@@ -14,7 +14,6 @@ import SkillsDropdown from './SkillsDropdown';
 import SalaryDropdown from './SalaryDropdown';
 import RolesDropdown from './RolesDropdown';
 import DepartmentsDropdown from './DepartmentsDropdown';
-// import ReactQuill from "react-quill";
 import ExperiencesDropdown from './ExpericesDropdown';
 import { EditorContent, useEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
@@ -141,36 +140,7 @@ export default function JobForm({ answers, setAnswers }) {
             [editorId]: content,
         }));
     };
-    const handleSkills = selectedCompanyId => {
-        setAnswers(prevState => ({
-            ...prevState,
-            job_skills: selectedCompanyId,
-        }));
-    };
-    const handleMinSalary = selectedMinSalaryId => {
-        setAnswers(prevState => ({
-            ...prevState,
-            min_compensation: selectedMinSalaryId,
-        }));
-    };
-    const handleMaxSalary = selectedMaxSalaryId => {
-        setAnswers(prevState => ({
-            ...prevState,
-            max_compensation: selectedMaxSalaryId,
-        }));
-    };
-    const handleRole = selectedMaxSalaryId => {
-        setAnswers(prevState => ({
-            ...prevState,
-            max_compensation: selectedMaxSalaryId,
-        }));
-    };
-    const handleDepartment = selectedDepartmentId => {
-        setAnswers(prevState => ({
-            ...prevState,
-            job_department: selectedDepartmentId,
-        }));
-    };
+
     return (
         <Container maxWidth="md">
             <TextField fullWidth label="Job Title" name="job_title" variant="outlined" margin="normal" onChange={handleChange} />

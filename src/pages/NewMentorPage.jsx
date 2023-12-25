@@ -56,7 +56,11 @@ export default function NewMentorPage() {
                 break;
         }
         setFormData(newFormDataState);
+<<<<<<< Updated upstream
         console.log(newFormDataState, 'newFormDataState')
+=======
+
+>>>>>>> Stashed changes
     };
     const getStepContent = (step) => {
         switch (step) {
@@ -97,7 +101,11 @@ export default function NewMentorPage() {
     };
 
     const saveCareerQuestions = async (data) => {
+<<<<<<< Updated upstream
         console.log(formData, 'formDataformData')
+=======
+
+>>>>>>> Stashed changes
         try {
             const url = process.env.REACT_APP_API_BASE_URL + 'mentorship/update/career/';
             const response = await fetch(url, {
@@ -171,7 +179,11 @@ export default function NewMentorPage() {
 
     const handleNext = async () => {
         let saveResponse;
+<<<<<<< Updated upstream
         console.log(activeStep, 'activeStep')
+=======
+
+>>>>>>> Stashed changes
         switch (activeStep) {
             case 0:
                 saveResponse = await saveCommitmentLevel(formData.commitmentLevel);
@@ -185,7 +197,11 @@ export default function NewMentorPage() {
                 }
                 break;
             case 1:
+<<<<<<< Updated upstream
                 console.log(activeStep, 'activeStep')
+=======
+
+>>>>>>> Stashed changes
                 saveResponse = await saveCareerQuestions(formData.careerQuestions);
                 if (saveResponse.status) {
                     // If save is successful, move to the next step
@@ -197,7 +213,11 @@ export default function NewMentorPage() {
                 }
                 break;
             case 2:
+<<<<<<< Updated upstream
                 console.log(activeStep, 'activeStep')
+=======
+
+>>>>>>> Stashed changes
                 saveResponse = await saveValues(formData.values);
                 if (saveResponse.status) {
                     // If save is successful, move to the next step

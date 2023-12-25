@@ -40,8 +40,11 @@ function LoginPage() {
     const [password, setPassword] = useState('');
     const [rememberMe, setRememberMe] = useState(false);
     const navigate = useNavigate();
+<<<<<<< Updated upstream
     // const isAuthenticated = false;
     console.log(login, 'auth')
+=======
+>>>>>>> Stashed changes
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -52,7 +55,7 @@ function LoginPage() {
 
     useEffect(() => {
         if (user?.length > 0) {
-            navigate('/dashboard', {replace: true});
+            navigate('/', {replace: true});
         }
     }, [user]);
 

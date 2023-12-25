@@ -59,7 +59,6 @@ function LoginPage() {
             .then(response => response.json())
             .then(data => {
                 if (data.status) {
-                    alert('we movin')
                     setToken(data.token)
                     localStorage.setItem('token', data.token);
                     setIsAlertOpen(true);
@@ -96,7 +95,11 @@ function LoginPage() {
     useEffect(() => {
         if (auth.errorMessage) {
             if (auth.errorMessage['non_field_errors']) {
+<<<<<<< Updated upstream
                 console.log(auth.errorMessage['non_field_errors'][0]);
+=======
+
+>>>>>>> Stashed changes
                 setStatusMessage(auth.errorMessage['non_field_errors'][0])
                 setStatusType('error');
                 setIsAlertOpen(true)
