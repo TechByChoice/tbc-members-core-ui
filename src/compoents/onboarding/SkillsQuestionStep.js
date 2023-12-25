@@ -95,7 +95,6 @@ function SkillsQuestionStep({
                         onChange={(event, value) => {
                             const valueArray = []
                             value.map((item, index) => {
-                                console.log(item)
                                 valueArray.push(item.name)
                             } );
                             handleAutocompleteChange("job_skills", valueArray)

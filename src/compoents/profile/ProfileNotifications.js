@@ -60,7 +60,6 @@ export default function ProfileNotifications() {
 
     const handleChange = (event) => {
         const {name, checked} = event.target;
-        console.log(`Changing ${name} to ${checked}`);
         setNotificationsFormData((prevFormData) => ({...prevFormData, [name]: checked}));
     };
 

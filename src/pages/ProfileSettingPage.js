@@ -96,7 +96,6 @@ function ProfileSettingPage({userDetail}) {
                     setQuestions(data);
                     // setAnswers(initialAnswers);
                     if (data.detail === 'Invalid token.') {
-                        alert('aint got a token');
                         logout();
                     }
                 } else {

@@ -58,7 +58,7 @@ export default function NewMemberPage() {
                     setQuestions(data);
                     // setAnswers(initialAnswers);
                     if (data.detail === 'Invalid token.') {
-                        alert('aint got a token');
+
                         logout();
                     }
                 } else {
@@ -68,7 +68,6 @@ export default function NewMemberPage() {
     }, []);
 
     if (activeStep === steps.length) {
-        console.log(answers, 'answers')
         // const key = localStorage.getItem("token");
         //
         // if (!key) {
@@ -104,8 +103,6 @@ export default function NewMemberPage() {
         if (!isValid) {
             setFormErrors(errors);  // Save the errors into the state
         }
-
-        console.log(errors, isValid)
 
         return isValid;  // Return true if no errors found, else false
     }
@@ -156,7 +153,6 @@ export default function NewMemberPage() {
 
     const handleInputChange = (e) => {
         const {name, value} = e.target;
-        console.log(name, value)
         setAnswers(prev => ({...prev, [name]: value}));
     };
 
@@ -170,16 +166,13 @@ export default function NewMemberPage() {
     };
 
     const handleAutocompleteChange = (name, value) => {
-        console.log(name, value)
         // Check if the value is an array (since Autocomplete can be multiple)
         if (Array.isArray(value)) {
             value = value.map(item =>
                 item.pronouns || item.name || item.range || item.gender || item.identity || item.ethnicity || item // the 'item' fallback is in case you have other Autocomplete instances with string values
             );
-            console.log(value)
         } else {
             value = item.inputValue || item[name] || item;
-            console.log(value)
         }
         setAnswers(prev => ({...prev, [name]: value}));
     };
@@ -216,7 +209,6 @@ export default function NewMemberPage() {
 
     const handleNext = () => {
         let validationResult = {isValid: true, errorMessage: ""};
-        console.log(validationResult, 'validationResult')
         switch (activeStep) {
             case 0: // For the BasicInfoStep
                 validationResult.isValid = validateBasicInfo();
@@ -229,16 +221,11 @@ export default function NewMemberPage() {
             default:
                 break;
         }
-        console.log(validationResult, 'validationResult')
         if (validationResult.isValid) {
             setActiveStep(activeStep + 1);
             setStatusType("");
             setStatusMessage();
             setIsAlertOpen(false);
-<<<<<<< Updated upstream
-            console.log(activeStep, 'activeStep')
-=======
->>>>>>> Stashed changes
         } else {
             setStatusType("error");
             setStatusMessage(validationResult.errorMessage);

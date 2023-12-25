@@ -8,8 +8,6 @@ export default function AllEventsPage({}) {
 
     useEffect(() => {
         const url = process.env.REACT_APP_API_BASE_URL + 'event/';
-        console.log(url)
-
 
         fetch(url, {
             method: 'GET',

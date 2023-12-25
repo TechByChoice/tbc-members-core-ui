@@ -12,7 +12,7 @@ export default function PickCompany({answers, setAnswers}) {
     const [displayCompanyForm, setDisplayCompanyForm] = React.useState(false);
 
     useEffect(() => {
-        console.log(answers)
+
     }, [setAnswers, answers]);
     // const handleSelection = (event, value) => {
     //     setAnswers(prevState => ({
@@ -21,13 +21,10 @@ export default function PickCompany({answers, setAnswers}) {
     //     }));
     // };
     const handleSelection = (e) => {
-        console.log(e, 'selectedCompanyId')
         setAnswers(prevState => ({
             ...prevState,
             select_company: e
         }));
-
-        console.log(answers, 'answers')
     };
 
     const toggleDisplayCompanyForm = () => setDisplayCompanyForm(prevState => !prevState);

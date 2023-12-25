@@ -45,7 +45,7 @@ const MyEditor = ({ id, onFormDataChange }) => {
                 levels: [
                     1,
                     2,
-                    3 
+                    3
                 ],
             }),
         ],
@@ -131,7 +131,6 @@ export default function JobForm({ answers, setAnswers }) {
     const handleChange = event => {
         const { name, value } = event.target;
         setAnswers(prevFormData => ({ ...prevFormData, [name]: value }));
-        console.log(answers);
     };
 
     const handleEditorUpdate = (editorId, content) => {

@@ -16,11 +16,9 @@ import {useStatus} from "../../providers/MsgStatusProvider";
 
 const filter = createFilterOptions();
 export default function WorkPlaceForm({questions}) {
-    // console.log(questions?.job_roles, 'workplace questions')
     const {user} = useAuth();
     const {viewNewCompany, setViewNewCompany} = useState()
     const userDetails = user[0]
-    console.log(userDetails, 'userDetails')
     const [formErrors, setFormErrors] = useState({});
     const {statusType, setStatusMessage, setIsAlertOpen, setStatusType} = useStatus();
 
@@ -46,7 +44,6 @@ export default function WorkPlaceForm({questions}) {
 
         if (userDetails && userDetails?.user_info?.talentprofile?.role) {
             userDetails?.user_info?.talentprofile?.role.map((role, index) => {
-                console.log(role, 'role')
                 // Parse the role to an integer (if it's a string)
                 // const roleId = parseInt(role, 10);
                 //

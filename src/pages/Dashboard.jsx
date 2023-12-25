@@ -16,7 +16,6 @@ function MentorDashboard() {
 function Dashboard() {
     const auth = useAuth();
     const accountInfo = auth.accountDetails[0];
-    console.log(accountInfo)
 
     // if (!auth?.isLoading) {
     //     return (

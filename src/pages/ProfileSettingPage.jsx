@@ -96,10 +96,6 @@ function ProfileSettingPage({userDetail}) {
                     setQuestions(data);
                     // setAnswers(initialAnswers);
                     if (data.detail === 'Invalid token.') {
-<<<<<<< Updated upstream
-                        alert('aint got a token');
-=======
->>>>>>> Stashed changes
                         logout();
                     }
                 } else {
