@@ -56,6 +56,7 @@ export default function NewMentorPage() {
                 break;
         }
         setFormData(newFormDataState);
+
     };
     const getStepContent = (step) => {
         switch (step) {
@@ -96,6 +97,7 @@ export default function NewMentorPage() {
     };
 
     const saveCareerQuestions = async (data) => {
+
         try {
             const url = process.env.REACT_APP_API_BASE_URL + 'mentorship/update/career/';
             const response = await fetch(url, {
@@ -169,6 +171,7 @@ export default function NewMentorPage() {
 
     const handleNext = async () => {
         let saveResponse;
+
         switch (activeStep) {
             case 0:
                 saveResponse = await saveCommitmentLevel(formData.commitmentLevel);
@@ -182,6 +185,7 @@ export default function NewMentorPage() {
                 }
                 break;
             case 1:
+
                 saveResponse = await saveCareerQuestions(formData.careerQuestions);
                 if (saveResponse.status) {
                     // If save is successful, move to the next step
@@ -193,6 +197,7 @@ export default function NewMentorPage() {
                 }
                 break;
             case 2:
+
                 saveResponse = await saveValues(formData.values);
                 if (saveResponse.status) {
                     // If save is successful, move to the next step

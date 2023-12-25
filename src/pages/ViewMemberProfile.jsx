@@ -215,6 +215,13 @@ function ViewMemberProfile() {
             }
         return null;
     };
+    if (memberData?.data?.talent_profile?.skills) {
+
+        memberData.data.talent_profile.skills.forEach((skill, index) => {
+            // const skillItem = basicData.job_skills.find(item => item.id === skill);
+
+        })
+    }
 
 
     const renderMentorProfileSection = () => (

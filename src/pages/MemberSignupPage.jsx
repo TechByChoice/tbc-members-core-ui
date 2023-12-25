@@ -59,7 +59,6 @@ function LoginPage() {
             .then(response => response.json())
             .then(data => {
                 if (data.status) {
-                    alert('we movin')
                     setToken(data.token)
                     localStorage.setItem('token', data.token);
                     setIsAlertOpen(true);

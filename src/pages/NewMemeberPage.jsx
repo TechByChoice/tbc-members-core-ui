@@ -226,12 +226,10 @@ export default function NewMemberPage() {
             setStatusType("");
             setStatusMessage();
             setIsAlertOpen(false);
-
         } else {
             setStatusType("error");
             setStatusMessage(validationResult.errorMessage);
             setIsAlertOpen(true);
-            console.log(activeStep, 'activeStep == error')
         }
     };
 
@@ -241,7 +239,6 @@ export default function NewMemberPage() {
 
     const handleFormSubmit = (e) => {
         e.preventDefault();
-        console.log('form submit')
         const url = `${process.env.REACT_APP_API_BASE_URL}user/new-member/profile/create`;
 
         const formData = new FormData();
@@ -266,8 +263,6 @@ export default function NewMemberPage() {
             })
             .then(data => {
                 // Handle the successful JSON response here, e.g.:
-                console.log(data);
-                console.log(answers, 'answers')
                 setStatusMessage("You're in!");
                 setIsAlertOpen(true);
                 setStatusType('success');

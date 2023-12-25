@@ -77,6 +77,7 @@ export default function JobReferralPage() {
                     return response.json();
                 })
                 .then(data => {
+
                     setStatusMessage("Your job post is in!");
                     setIsAlertOpen(true);
                     setStatusType('success');

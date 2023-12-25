@@ -79,7 +79,6 @@ function ViewJobPage({userDetail, isLoading}) {
                     if (!response.ok) {
                         // If not OK, throw an error to be caught in the catch block
                         return response.json().then(errorData => {
-                            console.log(errorData);
                             setStatusMessage("Sorry it looks like we can't publish your job");
                             setIsAlertOpen(true);
                             setStatusType('error');
@@ -96,7 +95,7 @@ function ViewJobPage({userDetail, isLoading}) {
                     console.error('There was an error publish the job', error);
                 });
         } else {
-            alert("Sorry we can't get ")
+
         }
     }
     const handelPauseJob = () => {
@@ -114,7 +113,6 @@ function ViewJobPage({userDetail, isLoading}) {
                     if (!response.ok) {
                         // If not OK, throw an error to be caught in the catch block
                         return response.json().then(errorData => {
-                            console.log(errorData);
                             setStatusMessage("Sorry it looks like we can't pause your job");
                             setIsAlertOpen(true);
                             setStatusType('error');
@@ -131,7 +129,7 @@ function ViewJobPage({userDetail, isLoading}) {
                     console.error('There was an error publish the job', error);
                 });
         } else {
-            alert("Sorry we can't get ")
+
         }
     }
     const handelCloseJob = () => {
@@ -166,7 +164,7 @@ function ViewJobPage({userDetail, isLoading}) {
                     console.error('There was an error publish the job', error);
                 });
         } else {
-            alert("Sorry we can't get ")
+
         }
     }
     const handelActiveJob = () => {
@@ -193,6 +191,7 @@ function ViewJobPage({userDetail, isLoading}) {
                     return response.json();
                 })
                 .then(data => {
+
                     setStatusMessage("Job is now active");
                     setIsAlertOpen(true);
                     setStatusType('success');
