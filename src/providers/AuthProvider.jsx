@@ -29,7 +29,7 @@ export const AuthProvider = ({ children }) => {
                         setUser([ data ]);
                         setAccountDetails([ data.account_info ]);
                         if (data.detail === 'Invalid token.') {
-                            alert('aint got a token');
+
                             logout();
                         }
                     } else {
@@ -53,7 +53,7 @@ export const AuthProvider = ({ children }) => {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                username, email, password, timezone 
+                username, email, password, timezone
             }),
         })
             .then(response => response.json())

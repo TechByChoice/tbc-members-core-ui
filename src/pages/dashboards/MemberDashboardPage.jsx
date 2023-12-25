@@ -28,7 +28,6 @@ export default function MemberDashboard() {
             })
             .then((data) => {
                 setEvent(data.events[0]);
-                console.log(event)
             })
             .catch((error) => {
                 console.error('Error fetching events:', error);
@@ -74,7 +73,6 @@ export default function MemberDashboard() {
             })
             .then((data) => {
                 setMentor(data.matching_mentors[0]);
-                console.log(data.matching_mentors[0], 'data.matching_mentors[0]')
             })
             .catch((error) => {
                 console.error('Error fetching events:', error);

@@ -33,7 +33,6 @@ export default function SocialMediaForm() {
 
     const handelSocialAccountSave = (e) => {
         e.preventDefault()
-        console.log(socialMediaFormData)
         const url = process.env.REACT_APP_API_BASE_URL + 'user/profile/update/social-accounts';
         fetch(url, {
             method: 'POST',

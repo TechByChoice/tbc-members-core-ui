@@ -61,9 +61,7 @@ export default function ProfileInterests({handleChange, questions}) {
 
         if (userDetails && userDetails?.user_info?.talentprofile.department) {
             userDetails?.user_info?.talentprofile.department.forEach(dep => {
-                console.log('hey', dep)
                 const departmentId = parseInt(dep);
-                console.log(dep, 'dep')
 
                 const departmentItem = questions.job_department.find(item => item.id === departmentId)
                 if (departmentItem) {

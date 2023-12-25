@@ -40,8 +40,6 @@ function LoginPage() {
     const [password, setPassword] = useState('');
     const [rememberMe, setRememberMe] = useState(false);
     const navigate = useNavigate();
-    // const isAuthenticated = false;
-    console.log(login, 'auth')
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -59,7 +57,6 @@ function LoginPage() {
     useEffect(() => {
         if (errorMessage) {
             if (errorMessage['non_field_errors']) {
-                console.log(errorMessage['non_field_errors'][0]);
                 setStatusMessage(errorMessage['non_field_errors'][0])
                 setStatusType('error');
                 setIsAlertOpen(true)

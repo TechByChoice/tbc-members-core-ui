@@ -106,11 +106,6 @@ function CompanyProfileStep({
                         }}
                         renderOption={(props, option) => <li {...props}>{option.name}</li>}
                         onChange={(event, value) => {
-                            // const valueArray = []
-                            // value.map((item, index) => {
-                            //     console.log(item)
-                            //     valueArray.push(item.name)
-                            // });
                             handleAutocompleteChange("company_size", [value])
                         }}
                         renderInput={(params) => <TextField name="company_size" {...params} />}
@@ -159,7 +154,6 @@ function CompanyProfileStep({
                         }}
                         renderOption={(props, option) => <li {...props}>{option.name || option.name}</li>}
                         onChange={(event, value) => {
-                            console.log(value, event)
                             handleAutocompleteChange("company_types", [value])
                         }}
                         renderInput={(params) => <TextField name="company_types" {...params} />}

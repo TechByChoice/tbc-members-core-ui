@@ -53,7 +53,7 @@ export default function JobReferralPage() {
 
         if (activeStep === steps.length) {
             const url = `${process.env.REACT_APP_API_BASE_URL}company/new/jobs/create-referral/`;
-            console.log(answers, 'answers')
+
             fetch(url, {
                 method: 'POST',
                 credentials: 'include',
@@ -77,7 +77,7 @@ export default function JobReferralPage() {
                     return response.json();
                 })
                 .then(data => {
-                    console.log(data);
+
                     setStatusMessage("Your job post is in!");
                     setIsAlertOpen(true);
                     setStatusType('success');

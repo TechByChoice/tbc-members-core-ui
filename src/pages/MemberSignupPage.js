@@ -96,7 +96,7 @@ function LoginPage() {
     useEffect(() => {
         if (auth.errorMessage) {
             if (auth.errorMessage['non_field_errors']) {
-                console.log(auth.errorMessage['non_field_errors'][0]);
+
                 setStatusMessage(auth.errorMessage['non_field_errors'][0])
                 setStatusType('error');
                 setIsAlertOpen(true)

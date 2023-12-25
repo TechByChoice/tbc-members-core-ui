@@ -88,7 +88,6 @@ function ViewJobPage({userDetail, isLoading}) {
                     return response.json();
                 })
                 .then(data => {
-                    console.log(data);
                     setStatusMessage("We're reviewing your job now");
                     setIsAlertOpen(true);
                     setStatusType('success');
@@ -124,7 +123,6 @@ function ViewJobPage({userDetail, isLoading}) {
                     return response.json();
                 })
                 .then(data => {
-                    console.log(data);
                     setStatusMessage("We've paused your job");
                     setIsAlertOpen(true);
                     setStatusType('success');
@@ -160,7 +158,6 @@ function ViewJobPage({userDetail, isLoading}) {
                     return response.json();
                 })
                 .then(data => {
-                    console.log(data);
                     setStatusMessage("We've closed your job now");
                     setIsAlertOpen(true);
                     setStatusType('success');
@@ -196,7 +193,6 @@ function ViewJobPage({userDetail, isLoading}) {
                     return response.json();
                 })
                 .then(data => {
-                    console.log(data);
                     setStatusMessage("Job is now active");
                     setIsAlertOpen(true);
                     setStatusType('success');
