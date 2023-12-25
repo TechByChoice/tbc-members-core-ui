@@ -1,172 +1,156 @@
-import React, {useEffect, useState} from 'react';
-import {
-    Grid,
-    Card,
-    CardContent,
-    Typography,
-    Button,
-    Hidden,
-    IconButton,
-    CircularProgress,
-    Chip,
-    CardMedia,
-    Divider, DialogActions, DialogContent, DialogTitle, Dialog, useTheme, useMediaQuery, ButtonGroup
-} from '@mui/material';
-import {LinkedIn, Instagram, GitHub, Twitter, YouTube, Web, Language} from '@mui/icons-material';
-import {useParams} from "react-router";
-import {getBasicSystemInfo, getCompanyList, getJobDetails, getMemberData} from "../api-calls";
-import Container from "@mui/material/Container";
-import CompanyCard from "../compoents/CompanyCard";
-import {Global} from "@emotion/react";
-import {Link} from "react-router-dom";
-import {useStatus} from "../providers/MsgStatusProvider";
+import React, { useEffect, useState } from 'react';
+import { Button, ButtonGroup, Card, CardContent, CardMedia, Chip, CircularProgress, Divider, Grid, Hidden, Typography } from '@mui/material';
+import { useParams } from 'react-router';
+import { getJobDetails } from '../api-calls';
+import Container from '@mui/material/Container';
+import CompanyCard from '../compoents/CompanyCard';
+import { Link } from 'react-router-dom';
+import { useStatus } from '../providers/MsgStatusProvider';
 
-const HtmlContentRenderer = ({htmlContent}) => {
-    return (
-        <div dangerouslySetInnerHTML={{__html: htmlContent}}/>
-    );
+const HtmlContentRenderer = ({ htmlContent }) => {
+    return <div dangerouslySetInnerHTML={{ __html: htmlContent }} />;
 };
 
-const formatDate = (dateString) => {
+const formatDate = dateString => {
     const date = new Date(dateString);
     return date.toLocaleDateString('de-DE'); // Using German locale ('de-DE') to get the date in 'dd.mm.yyyy' format
 };
 
-function ViewJobPage({userDetail, isLoading}) {
-    const {id} = useParams();
-    const [jobData, setJobData] = useState()
-    const {setStatusMessage, setIsAlertOpen, setStatusType} = useStatus();
+function ViewJobPage({ userDetail, isLoading }) {
+    const { id } = useParams();
+    const [ jobData, setJobData ] = useState();
+    const [ jobStatusCard, setJobStatusCard ] = useState(null);
+    const { setStatusMessage, setIsAlertOpen, setStatusType } = useStatus();
     const isOwnProfile = userDetail?.user_info.id === jobData?.created_by_id;
-
+    const isStaffOrEditor = userDetail?.account_info?.is_staff || jobData?.created_by_id === userDetail?.user_info?.id;
 
     useEffect(() => {
         async function fetchData() {
             try {
-                const [jobResponse] = await Promise.all([
-                    getJobDetails(id)
-                ]);
+                const jobResponse = await getJobDetails(id);
 
                 setJobData(jobResponse);
             } catch (error) {
-                console.error("Error fetching data:", error);
+                console.error('Error fetching data:', error);
             }
         }
 
         fetchData();
-    }, []);
+    }, [ id ]);
 
+    useEffect(() => {
+        setJobStatusCard(renderJobStatusSpecificCard());
+    }, [ jobData ]);
 
     if (isLoading) {
         return (
-            <Grid container justifyContent="center" alignItems="center" style={{minHeight: '100vh'}}>
-                <CircularProgress/>
+            <Grid container justifyContent="center" alignItems="center" style={{ minHeight: '100vh' }}>
+                <CircularProgress />
             </Grid>
         );
     }
 
     const handelPublishJob = () => {
-        if (isOwnProfile) {
-            const url = `${process.env.REACT_APP_API_BASE_URL}company/new/jobs/${id}/referral/publish/`;
-            fetch(url, {
-                method: 'GET',
-                credentials: 'include',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Token ${localStorage.getItem('token')}`
-                },
+        // if () {
+        const url = `${process.env.REACT_APP_API_BASE_URL}company/new/jobs/${id}/referral/publish/`;
+        fetch(url, {
+            method: 'GET',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Token ${localStorage.getItem('token')}`,
+            },
+        })
+            .then(response => {
+                if (!response.ok) {
+                    // If not OK, throw an error to be caught in the catch block
+                    return response.json().then(errorData => {
+                        setStatusMessage("Sorry it looks like we can't publish your job");
+                        setIsAlertOpen(true);
+                        setStatusType('error');
+                    });
+                }
+                return response.json();
             })
-                .then(response => {
-                    if (!response.ok) {
-                        // If not OK, throw an error to be caught in the catch block
-                        return response.json().then(errorData => {
-                            setStatusMessage("Sorry it looks like we can't publish your job");
-                            setIsAlertOpen(true);
-                            setStatusType('error');
-                        });
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    setStatusMessage("We're reviewing your job now");
-                    setIsAlertOpen(true);
-                    setStatusType('success');
-                })
-                .catch(error => {
-                    console.error('There was an error publish the job', error);
-                });
-        } else {
-
-        }
-    }
+            .then(data => {
+                setStatusMessage("We're reviewing your job now");
+                setIsAlertOpen(true);
+                setStatusType('success');
+            })
+            .catch(error => {
+                console.error('There was an error publish the job', error);
+            });
+        // } else {
+        //     alert("don't have access")
+        // }
+    };
     const handelPauseJob = () => {
-        if (isOwnProfile) {
-            const url = `${process.env.REACT_APP_API_BASE_URL}company/new/jobs/${id}/referral/pause/`;
-            fetch(url, {
-                method: 'GET',
-                credentials: 'include',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Token ${localStorage.getItem('token')}`
-                },
+        // if (isOwnProfile) {
+        const url = `${process.env.REACT_APP_API_BASE_URL}company/new/jobs/${id}/referral/pause/`;
+        fetch(url, {
+            method: 'GET',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Token ${localStorage.getItem('token')}`,
+            },
+        })
+            .then(response => {
+                if (!response.ok) {
+                    // If not OK, throw an error to be caught in the catch block
+                    return response.json().then(errorData => {
+                        setStatusMessage("Sorry it looks like we can't pause your job");
+                        setIsAlertOpen(true);
+                        setStatusType('error');
+                    });
+                }
+                return response.json();
             })
-                .then(response => {
-                    if (!response.ok) {
-                        // If not OK, throw an error to be caught in the catch block
-                        return response.json().then(errorData => {
-                            setStatusMessage("Sorry it looks like we can't pause your job");
-                            setIsAlertOpen(true);
-                            setStatusType('error');
-                        });
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    setStatusMessage("We've paused your job");
-                    setIsAlertOpen(true);
-                    setStatusType('success');
-                })
-                .catch(error => {
-                    console.error('There was an error publish the job', error);
-                });
-        } else {
-
-        }
-    }
+            .then(data => {
+                setStatusMessage("We've paused your job");
+                setIsAlertOpen(true);
+                setStatusType('success');
+            })
+            .catch(error => {
+                console.error('There was an error publish the job', error);
+            });
+        // } else {
+        //
+        // }
+    };
     const handelCloseJob = () => {
-        if (isOwnProfile) {
-            const url = `${process.env.REACT_APP_API_BASE_URL}company/new/jobs/${id}/referral/closed/`;
-            fetch(url, {
-                method: 'GET',
-                credentials: 'include',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Token ${localStorage.getItem('token')}`
-                },
+        // if (isOwnProfile) {
+        const url = `${process.env.REACT_APP_API_BASE_URL}company/new/jobs/${id}/referral/closed/`;
+        fetch(url, {
+            method: 'GET',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Token ${localStorage.getItem('token')}`,
+            },
+        })
+            .then(response => {
+                if (!response.ok) {
+                    // If not OK, throw an error to be caught in the catch block
+                    return response.json().then(errorData => {
+                        console.log(errorData);
+                        setStatusMessage("Sorry it looks like we can't close your job");
+                        setIsAlertOpen(true);
+                        setStatusType('error');
+                    });
+                }
+                return response.json();
             })
-                .then(response => {
-                    if (!response.ok) {
-                        // If not OK, throw an error to be caught in the catch block
-                        return response.json().then(errorData => {
-                            console.log(errorData);
-                            setStatusMessage("Sorry it looks like we can't close your job");
-                            setIsAlertOpen(true);
-                            setStatusType('error');
-                        });
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    setStatusMessage("We've closed your job now");
-                    setIsAlertOpen(true);
-                    setStatusType('success');
-                })
-                .catch(error => {
-                    console.error('There was an error publish the job', error);
-                });
-        } else {
-
-        }
-    }
+            .then(data => {
+                setStatusMessage("We've closed your job now");
+                setIsAlertOpen(true);
+                setStatusType('success');
+            })
+            .catch(error => {
+                console.error('There was an error publish the job', error);
+            });
+        // }
+    };
     const handelActiveJob = () => {
         if (userDetail?.account_info?.is_staff) {
             const url = `${process.env.REACT_APP_API_BASE_URL}company/new/jobs/${id}/referral/active/`;
@@ -175,7 +159,7 @@ function ViewJobPage({userDetail, isLoading}) {
                 credentials: 'include',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Token ${localStorage.getItem('token')}`
+                    Authorization: `Token ${localStorage.getItem('token')}`,
                 },
             })
                 .then(response => {
@@ -191,8 +175,7 @@ function ViewJobPage({userDetail, isLoading}) {
                     return response.json();
                 })
                 .then(data => {
-
-                    setStatusMessage("Job is now active");
+                    setStatusMessage('Job is now active');
                     setIsAlertOpen(true);
                     setStatusType('success');
                 })
@@ -200,19 +183,25 @@ function ViewJobPage({userDetail, isLoading}) {
                     console.error('There was an error publish the job', error);
                 });
         }
-    }
+    };
 
-
-    const renderPublishCard = () => (
-        <CardContent>
-            <Typography variant="h6">Ready to publish this job?</Typography>
-            <Button variant="contained" onClick={handelPublishJob} color="primary">Publish Now</Button>
-            <Button variant="contained" onClick={handelCloseJob} color="primary">Close Job</Button>
-        </CardContent>
-    );
+    const renderPublishCard = () => {
+        return (
+            <CardContent>
+                <Typography variant="h6">Ready to publish this job?</Typography>
+                <Button variant="contained" onClick={handelPublishJob} color="primary">
+                    Publish Now
+                </Button>
+                <Button variant="contained" onClick={handelCloseJob} color="primary">
+                    Close Job
+                </Button>
+            </CardContent>
+        );
+    };
     const renderCloseCard = () => (
         <CardContent>
-            <Typography variant="h6">Thanks for Thinking of the community!</Typography>
+            <Typography variant="h6">Thanks for thinking of the community!</Typography>
+            <Typography variant="body1">This job post has been closed but your support for the community is everlasting.</Typography>
         </CardContent>
     );
 
@@ -220,28 +209,24 @@ function ViewJobPage({userDetail, isLoading}) {
         <CardContent>
             <Typography variant="h6">Admin! Do your thing!</Typography>
             <Typography variant="body1">Once you review the job, we can update this.</Typography>
-            <Button variant="contained" onClick={handelActiveJob} color="primary">Mark as Active</Button>
+            <Button variant="contained" onClick={handelActiveJob} color="primary">
+                Mark as Active
+            </Button>
         </CardContent>
     );
 
     const renderPendingCard = () => (
         <CardContent>
-            <Typography variant="h6">We're reviewing your job post</Typography>
-            <Typography variant="body1">You'll receive an email once the job is live.</Typography>
+            <Typography variant="h6">We&apos;re reviewing your job post</Typography>
+            <Typography variant="body1">You&apos;ll receive an email once the job is live.</Typography>
         </CardContent>
     );
 
     const renderActiveCard = () => (
         <CardContent>
             <Typography variant="h6">Your job is now live!</Typography>
-            <Typography variant="body1">
-                This post will be on our site for 3 months unless
-                you close the opening first
-            </Typography>
-            <ButtonGroup
-                orientation="horizontal"
-                aria-label="horizontal outlined button group"
-            >
+            <Typography variant="body1">This post will be on our site for 3 months unless you close the opening first</Typography>
+            <ButtonGroup orientation="horizontal" aria-label="horizontal outlined button group">
                 {jobData?.status === 'pause' ? (
                     <Button onClick={handelPublishJob}>Publish Job</Button>
                 ) : (
@@ -254,43 +239,39 @@ function ViewJobPage({userDetail, isLoading}) {
     );
 
     const renderJobStatusSpecificCard = () => {
+        const isStaffOrEditor = userDetail?.account_info?.is_staff || jobData?.created_by_id === userDetail?.user_info?.id;
         const isStaff = userDetail?.account_info?.is_staff;
         const jobStatus = jobData?.status;
-
-        if (jobStatus === 'pending') {
-            return isStaff ? renderAdminPendingCard() : renderPendingCard();
-        }
 
         switch (jobStatus) {
             case 'closed':
                 return renderCloseCard();
             case 'draft':
+                return renderPublishCard();
             case 'pause':
                 return renderPublishCard();
             case 'active':
                 return renderActiveCard();
+            case 'pending':
+                return isStaff ? renderAdminPendingCard() : renderPendingCard();
             default:
                 return null;
         }
     };
     const renderJobPosterCard = () => (
         <Card>
-            <CardContent>
-                {renderJobStatusSpecificCard()}
-            </CardContent>
+            <CardContent>{renderJobStatusSpecificCard()}</CardContent>
         </Card>
     );
 
     const renderApplyNowCard = () => (
         <Card>
             <CardContent>
-                <Typography variant="h6">
-                    Ready to apply?
-                </Typography>
-                <Typography variant="body1">
-                    Apply to the job today and don't for get to mention the Tech by Choice community!
-                </Typography>
-                <Button variant="contained" href={jobData?.url} color="primary">Apply Now</Button>
+                <Typography variant="h6">Ready to apply?</Typography>
+                <Typography variant="body1">Apply to the job today and don&apos;t for get to mention the Tech by Choice community!</Typography>
+                <Button variant="contained" href={jobData?.url} color="primary">
+                    Apply Now
+                </Button>
             </CardContent>
         </Card>
     );
@@ -301,9 +282,7 @@ function ViewJobPage({userDetail, isLoading}) {
                 <Typography variant="h6">Want to apply?</Typography>
                 <Typography variant="body1">
                     Learn how to apply by
-                    <Link to="/new/member/1">
-                        creating an account today
-                    </Link>.
+                    <Link to="/new/member/1">creating an account today</Link>.
                 </Typography>
             </CardContent>
         </Card>
@@ -312,21 +291,18 @@ function ViewJobPage({userDetail, isLoading}) {
     const renderApplyCard = () => {
         if (userDetail) {
             return renderApplyNowCard();
-
         } else {
-            return renderAnonymousUserCard()
+            return renderAnonymousUserCard();
         }
-        return null;
     };
-
 
     return (
         <Grid container spacing={3}>
-            {isOwnProfile && (
-                <Grid item xs={12}>
-                    {renderJobPosterCard()}
-                </Grid>
-            )}
+            {/*{isOwnProfile && (*/}
+            <Grid item xs={12}>
+                {renderJobPosterCard()}
+            </Grid>
+            {/*)}*/}
             {/* 1/3 Contact Card */}
             <Hidden smUp>
                 <Grid item md={3}>
@@ -352,52 +328,40 @@ function ViewJobPage({userDetail, isLoading}) {
                         <Grid container display="flex" direction="row" alignItems="center" spacing={5}>
                             {/*Details*/}
                             <Grid item xs={12} sm={8}>
-                                <Grid containe spacing={2} display="flex" alignItems="center" direction="row"
-                                      justifyContent="space-between">
+                                <Grid containe spacing={2} display="flex" alignItems="center" direction="row" justifyContent="space-between">
                                     <Grid item sm={12} md={4}>
-                                        <Typography variant="h4">
-                                            {jobData?.job_title}
-                                        </Typography>
+                                        <Typography variant="h4">{jobData?.job_title}</Typography>
                                     </Grid>
                                 </Grid>
 
-                                <Grid container spacing={2} display="flex" direction="row"
-                                      justifyContent="space-between">
+                                <Grid container spacing={2} display="flex" direction="row" justifyContent="space-between">
                                     <Grid item>
-                                        {jobData?.role?.name &&
-                                            <div><Chip size="small" variant="outlined"
-                                                       label={jobData?.role?.name}/></div>
-                                        }
+                                        {jobData?.role?.name && (
+                                            <div>
+                                                <Chip size="small" variant="outlined" label={jobData?.role?.name} />
+                                            </div>
+                                        )}
                                     </Grid>
                                     <Grid item>
-                                        {jobData?.location &&
+                                        {jobData?.location && (
                                             <div>
-                                                    <span>
-                                                        📍
-                                                    </span>
+                                                <span>📍</span>
                                                 {jobData?.location}
                                             </div>
-                                        }
+                                        )}
                                     </Grid>
                                     <Grid item>
-                                        {jobData?.min_compensation?.range &&
+                                        {jobData?.min_compensation?.range && (
                                             <div>
-                                                    <span>
-                                                        💰
-                                                    </span>
+                                                <span>💰</span>
                                                 {jobData?.min_compensation?.range} - {jobData?.max_compensation?.range}
                                             </div>
-                                        }
-
+                                        )}
                                     </Grid>
                                 </Grid>
-
-
                             </Grid>
                             <Grid item xs={12} sm={4}>
-                                <Grid container spacing={2} display="flex"
-                                      direction="row"
-                                      justifyContent="end" alignContent="end">
+                                <Grid container spacing={2} display="flex" direction="row" justifyContent="end" alignContent="end">
                                     <Hidden smDown>
                                         <Grid item>
                                             <Typography variant="body1" align="right">
@@ -409,56 +373,45 @@ function ViewJobPage({userDetail, isLoading}) {
                                         <Button variant="contained" href={jobData?.url}>
                                             Apply Now
                                         </Button>
-
                                     </Grid>
                                 </Grid>
                             </Grid>
                         </Grid>
-                        <Divider sx={{m: 2}} variant="middle"/>
+                        <Divider sx={{ m: 2 }} variant="middle" />
                         {/* Body Section */}
                         <section>
-                            <Typography variant="body1">
-                                {userDetail?.bio}
-                            </Typography>
-                            <Typography variant="body1">
-                                {userDetail?.bio}
-                            </Typography>
+                            <Typography variant="body1">{userDetail?.bio}</Typography>
+                            <Typography variant="body1">{userDetail?.bio}</Typography>
                             <Container variant="section">
                                 <div>
-                                    <Typography variant="h5">
-                                        Job Description:
-                                    </Typography>
-                                    <HtmlContentRenderer htmlContent={jobData?.external_description}/>
+                                    <Typography variant="h5">Job Description:</Typography>
+                                    <HtmlContentRenderer htmlContent={jobData?.external_description} />
                                 </div>
                                 <div>
-                                    <Typography variant="h5">
-                                        Interview Process:
-                                    </Typography>
-                                    <HtmlContentRenderer htmlContent={jobData?.external_interview_process}/>
+                                    <Typography variant="h5">Interview Process:</Typography>
+                                    <HtmlContentRenderer htmlContent={jobData?.external_interview_process} />
                                 </div>
                                 <div>
-                                    <Typography variant="h5">
-                                        Skills:
-                                    </Typography>
+                                    <Typography variant="h5">Skills:</Typography>
                                     {jobData?.skills && (
                                         <>
-                                            {jobData?.skills.map((skill) => {
-                                                return <><Chip key={skill.name} label={skill?.name}/></>
+                                            {jobData?.skills.map(skill => {
+                                                return (
+                                                    <>
+                                                        <Chip key={skill.name} label={skill?.name} />
+                                                    </>
+                                                );
                                             })}
                                         </>
                                     )}
                                 </div>
-
                             </Container>
                             {jobData?.data?.current_company && (
                                 <Container variant="section">
-                                    <Typography variant="h5">
-                                        Current Company
-                                    </Typography>
-                                    <CompanyCard company={jobData?.data?.current_company}/>
+                                    <Typography variant="h5">Current Company</Typography>
+                                    <CompanyCard company={jobData?.data?.current_company} />
                                 </Container>
                             )}
-
                         </section>
                     </CardContent>
                 </Card>
