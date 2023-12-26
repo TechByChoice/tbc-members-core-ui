@@ -16,10 +16,6 @@ export default function MemberDashboard() {
         elements: [],
         ts: '',
     });
-    const { user } = useAuth();
-    const userDetails = user[0];
-    // console.log(userDetails.announcement[0].blocks[0].elements, 'user');
-    // console.log(userDetails.announcement[0].blocks[0].elements[0].elements, 'user');
 
     useEffect(() => {
         const url = process.env.REACT_APP_API_BASE_URL + 'event/';
@@ -86,6 +82,7 @@ export default function MemberDashboard() {
                 setMentor(data.matching_mentors[0]);
             })
             .catch(error => {
+
                 console.error('Error fetching events:', error);
             });
 
