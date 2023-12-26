@@ -1,15 +1,22 @@
-import React, {useEffect, useState} from 'react';
-import {Button, Card, CardContent, Grid} from "@mui/material";
-import Typography from "@mui/material/Typography";
-import {Link} from "react-router-dom";
-import EventCard from "../../compoents/EventCard";
-import JobCard from "../../compoents/JobCard";
-import MentorCard from "../../compoents/MentorCard";
+import React, { useEffect, useState } from 'react';
+import { Button, Card, CardContent, Grid } from '@mui/material';
+import Typography from '@mui/material/Typography';
+import { Link } from 'react-router-dom';
+import EventCard from '../../compoents/EventCard';
+import JobCard from '../../compoents/JobCard';
+import MentorCard from '../../compoents/MentorCard';
+import SlackMessage from '../../compoents/SlackMessage';
+import { useAuth } from '../../providers/AuthProvider';
 
 export default function MemberDashboard() {
-    const [event, setEvent] = useState()
-    const [job, setJob] = useState()
-    const [mentor, setMentor] = useState()
+    const [ event, setEvent ] = useState();
+    const [ job, setJob ] = useState();
+    const [ mentor, setMentor ] = useState();
+    const { user } = useAuth();
+    const userDetails = user[0];
+    console.log(userDetails.announcement[0].blocks[0].elements, 'user');
+    console.log(userDetails.announcement[0].blocks[0].elements[0].elements, 'user');
+
     useEffect(() => {
         const url = process.env.REACT_APP_API_BASE_URL + 'event/';
 
@@ -17,19 +24,19 @@ export default function MemberDashboard() {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Token ${localStorage.getItem('token')}`
+                Authorization: `Token ${localStorage.getItem('token')}`,
             },
         })
-            .then((response) => {
+            .then(response => {
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
                 return response.json();
             })
-            .then((data) => {
+            .then(data => {
                 setEvent(data.events[0]);
             })
-            .catch((error) => {
+            .catch(error => {
                 console.error('Error fetching events:', error);
             });
 
@@ -40,19 +47,19 @@ export default function MemberDashboard() {
             method: 'get',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Token ${localStorage.getItem('token')}`,
+                Authorization: `Token ${localStorage.getItem('token')}`,
             },
         })
-            .then((response) => {
+            .then(response => {
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
                 return response.json();
             })
-            .then((data) => {
+            .then(data => {
                 setJob(data.matching_jobs[0]);
             })
-            .catch((error) => {
+            .catch(error => {
                 console.error('Error fetching events:', error);
             });
 
@@ -62,19 +69,19 @@ export default function MemberDashboard() {
             method: 'get',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Token ${localStorage.getItem('token')}`,
+                Authorization: `Token ${localStorage.getItem('token')}`,
             },
         })
-            .then((response) => {
+            .then(response => {
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
                 return response.json();
             })
-            .then((data) => {
+            .then(data => {
                 setMentor(data.matching_mentors[0]);
             })
-            .catch((error) => {
+            .catch(error => {
                 console.error('Error fetching events:', error);
             });
     }, []);
@@ -85,7 +92,9 @@ export default function MemberDashboard() {
                 <Grid item xs={12} sm={6}>
                     <Card>
                         <CardContent>
-                            <Typography variant="h6" align="center">View Events</Typography>
+                            <Typography variant="h6" align="center">
+                                View Events
+                            </Typography>
                             <Grid container display="flex" alignItems="center" justifyContent="center">
                                 <Link to="/event/all">
                                     <Button variant="outlined">View Events</Button>
@@ -98,7 +107,9 @@ export default function MemberDashboard() {
                 <Grid item xs={12} sm={6}>
                     <Card>
                         <CardContent>
-                            <Typography variant="h6" align="center">Referral a Job</Typography>
+                            <Typography variant="h6" align="center">
+                                Referral a Job
+                            </Typography>
                             <Grid container display="flex" alignItems="center" justifyContent="center">
                                 <Link to="/job/new/referral">
                                     <Button variant="outlined">Add Job</Button>
@@ -113,21 +124,22 @@ export default function MemberDashboard() {
                     <Grid container display="flex" direction="row" justifyContent="space-around">
                         <Grid item>
                             <Typography variant="h5">
-                                <span role="img" aria-label="megaphone">📣</span>
+                                <span role="img" aria-label="megaphone">
+                                    📣
+                                </span>
                             </Typography>
                         </Grid>
                         <Grid item>
-                            <Typography variant="h5">
-                                Latest's Announcement!
-                            </Typography>
-                            <Typography>
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi egestas rhoncus
-                                tristique.
-                                Quisque leo velit, finibus et diam sit ...
-                            </Typography>
+                            <Typography variant="h5">Latest&apos;s Announcement!</Typography>
+                            <SlackMessage style={{ width: '75%' }} elements={userDetails.announcement[0].blocks[0].elements[0].elements} />
                         </Grid>
                         <Grid item>
-                            <Button variant="outlined">View In Slack</Button>
+                            <Button
+                                target="_blank"
+                                href={`https://techbychoice.slack.com/archives/CELK4L5FW/p${userDetails.announcement[0].ts.replace('.', '')}`}
+                                variant="outlined">
+                                View In Slack
+                            </Button>
                         </Grid>
                     </Grid>
                 </Grid>
@@ -136,7 +148,7 @@ export default function MemberDashboard() {
                 <Grid item xs={12} sm={4}>
                     <Grid container display="flex" direction="row" justifyContent="space-between">
                         <Typography variant="h6">Top Job</Typography>
-                        <Link to='/job/all'>
+                        <Link to="/job/all">
                             <Button variant="text">View More</Button>
                         </Link>
                     </Grid>
@@ -154,7 +166,8 @@ export default function MemberDashboard() {
                                     salary={`${job?.max_compensation?.range} - ${job?.max_compensation?.range}`}
                                     description={null}
                                     applyLink={job?.url}
-                                    viewNow={job?.id}/>
+                                    viewNow={job?.id}
+                                />
                             ) : (
                                 <p>Loading events...</p>
                             )}
@@ -170,13 +183,7 @@ export default function MemberDashboard() {
                         </Link>
                     </Grid>
                     <Card>
-                        <CardContent>
-                            {event ? (
-                                <EventCard event={event}/>
-                            ) : (
-                                <p>Loading events...</p>
-                            )}
-                        </CardContent>
+                        <CardContent>{event ? <EventCard event={event} /> : <p>Loading events...</p>}</CardContent>
                     </Card>
                 </Grid>
 
@@ -188,14 +195,7 @@ export default function MemberDashboard() {
                                 <Button variant="text">View More</Button>
                             </Link>
                         </Grid>
-                        <CardContent>
-                            {mentor ? (
-                                <MentorCard mentor={mentor}/>
-                            ) : (
-                                <p>Loading mentor...</p>
-                            )}
-
-                        </CardContent>
+                        <CardContent>{mentor ? <MentorCard mentor={mentor} /> : <p>Loading mentor...</p>}</CardContent>
                     </Card>
                 </Grid>
             </Grid>
