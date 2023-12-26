@@ -12,10 +12,14 @@ export default function MemberDashboard() {
     const [ event, setEvent ] = useState();
     const [ job, setJob ] = useState();
     const [ mentor, setMentor ] = useState();
+    const [ announcement, setAnnouncement ] = useState({
+        elements: [],
+        ts: '',
+    });
     const { user } = useAuth();
     const userDetails = user[0];
-    console.log(userDetails.announcement[0].blocks[0].elements, 'user');
-    console.log(userDetails.announcement[0].blocks[0].elements[0].elements, 'user');
+    // console.log(userDetails.announcement[0].blocks[0].elements, 'user');
+    // console.log(userDetails.announcement[0].blocks[0].elements[0].elements, 'user');
 
     useEffect(() => {
         const url = process.env.REACT_APP_API_BASE_URL + 'event/';
@@ -84,6 +88,31 @@ export default function MemberDashboard() {
             .catch(error => {
                 console.error('Error fetching events:', error);
             });
+
+        const announcement_url = process.env.REACT_APP_API_BASE_URL + 'user/details/announcement';
+
+        fetch(announcement_url, {
+            method: 'get',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Token ${localStorage.getItem('token')}`,
+            },
+        })
+            .then(response => {
+                if (!response) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                setAnnouncement({
+                    elements: data.announcement[0].blocks[0].elements[0].elements,
+                    ts: data.announcement[0].ts.replace('.', ''),
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching events:', error);
+            });
     }, []);
     return (
         <>
@@ -131,13 +160,10 @@ export default function MemberDashboard() {
                         </Grid>
                         <Grid item>
                             <Typography variant="h5">Latest&apos;s Announcement!</Typography>
-                            <SlackMessage style={{ width: '75%' }} elements={userDetails.announcement[0].blocks[0].elements[0].elements} />
+                            {announcement && <SlackMessage style={{ width: '75%' }} elements={announcement.elements} />}
                         </Grid>
                         <Grid item>
-                            <Button
-                                target="_blank"
-                                href={`https://techbychoice.slack.com/archives/CELK4L5FW/p${userDetails.announcement[0].ts.replace('.', '')}`}
-                                variant="outlined">
+                            <Button target="_blank" href={`https://techbychoice.slack.com/archives/CELK4L5FW/p${announcement.ts}`} variant="outlined">
                                 View In Slack
                             </Button>
                         </Grid>
