@@ -1,13 +1,26 @@
 import React from 'react';
-import { Container, TextField, Button, Select, MenuItem, InputLabel, FormControl } from '@mui/material';
+import { Container, TextField } from '@mui/material';
 
-const JobReferralNotes = () => {
+const JobReferralNotes = ({ answers, setAnswers }) => {
     // Replace with your state and methods to handle form submission and changes
+    const handelChange = event => {
+        const { name, value } = event.target;
+        setAnswers(prevFormData => ({ ...prevFormData, [name]: value }));
+    };
 
     return (
         <Container maxWidth="md">
             <form autoComplete="off">
-                <TextField fullWidth label="Notes" variant="outlined" margin="normal" multiline rows={4} />
+                <TextField
+                    onChange={handelChange}
+                    fullWidth
+                    name="referral_note"
+                    label="Referral Notes"
+                    variant="outlined"
+                    margin="normal"
+                    multiline
+                    rows={4}
+                />
             </form>
         </Container>
     );
