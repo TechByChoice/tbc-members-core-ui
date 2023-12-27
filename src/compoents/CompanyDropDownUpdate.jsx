@@ -5,20 +5,14 @@ import { createFilterOptions } from '@mui/material/Autocomplete';
 
 const filter = createFilterOptions();
 
-export default function CompanyDropdownUpdate({ answers, setAnswers, onCompanySelect }) {
+export default function CompanyDropdownUpdate({
+    error, answers, setAnswers, onCompanySelect 
+}) {
     const [ companies, setCompanies ] = useState([]);
     const [ selectedCompany, setSelectedCompany ] = useState(answers.select_company || null);
 
-    // Create a ref to store the previous selected company
-    // const prevSelectedCompany = useRef();
-
     useEffect(() => {
-        console.log(answers, 'try here');
-        // Compare the previous selected company with the current one
-        // if (selectedCompany ) {
-        console.log(answers);
         setSelectedCompany(answers.select_company || null);
-        // }
     }, [ answers.select_company ]);
 
     useEffect(() => {
@@ -37,7 +31,7 @@ export default function CompanyDropdownUpdate({ answers, setAnswers, onCompanySe
 
     return (
         <FormControl fullWidth variant="outlined">
-            <FormLabel id="company-label">Company</FormLabel>
+            <FormLabel id="company-label">* Company</FormLabel>
             <Autocomplete
                 required
                 selectOnFocus
@@ -67,13 +61,7 @@ export default function CompanyDropdownUpdate({ answers, setAnswers, onCompanySe
                         company_id: newValue?.id,
                     }));
                 }}
-                renderInput={params => (
-                    <TextField
-                        {...params}
-                        name="company_name"
-                        inputProps={{...params.inputProps,}}
-                    />
-                )}
+                renderInput={params => <TextField {...params} name="company_name" error={!!error.company_name} inputProps={{ ...params.inputProps }} />}
             />
         </FormControl>
     );

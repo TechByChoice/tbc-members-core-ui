@@ -4,7 +4,7 @@ import { getBasicSystemInfo } from '../api-calls';
 import { createFilterOptions } from '@mui/material/Autocomplete';
 
 const filter = createFilterOptions();
-export default function DepartmentsDropdown({ setAnswers }) {
+export default function DepartmentsDropdown({ isRequired, error, setAnswers }) {
     const [ departments, setDepartments ] = useState([]);
     const [ selectedDepartment, setSelectedDepartment ] = useState('');
 
@@ -24,7 +24,10 @@ export default function DepartmentsDropdown({ setAnswers }) {
 
     return (
         <FormControl fullWidth variant="outlined">
-            <FormLabel id="departments-label">Departments</FormLabel>
+            <FormLabel id="departments-label">
+                {isRequired && <>*</>}
+                Departments
+            </FormLabel>
             <Autocomplete
                 id="departments-label"
                 multiple
@@ -70,7 +73,7 @@ export default function DepartmentsDropdown({ setAnswers }) {
                     }));
                 }}
                 renderOption={(props, option) => <li {...props}>{option.name}</li>}
-                renderInput={params => <TextField name="job_departments" {...params} />}
+                renderInput={params => <TextField error={!!error.department} name="job_departments" {...params} />}
             />
         </FormControl>
     );
