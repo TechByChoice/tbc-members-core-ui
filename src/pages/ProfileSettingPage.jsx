@@ -1,54 +1,43 @@
-import React, {useState, useEffect} from "react";
-import {
-    Avatar,
-    Button,
-    FormLabel,
-    OutlinedInput,
-    Grid,
-    Typography, FormControl, Tabs, Tab,
-} from "@mui/material";
-import styled from "@emotion/styled";
-import {useAuth} from "../providers/AuthProvider";
-import Box from "@mui/material/Box";
-import PropTypes from "prop-types";
-import ProfileBasicInfo from "../compoents/profile/ProfileBasicInfo";
-import ProfileInterests from "../compoents/profile/ProfileInterests";
-import ProfileMentorship from "../compoents/profile/ProfileMentorship";
-import ProfileNotifications from "../compoents/profile/ProfileNotifications";
-import ProfileIdentity from "../compoents/profile/ProfileIdentity";
+import React, { useState, useEffect } from 'react';
+import { Avatar, Button, FormLabel, OutlinedInput, Grid, Typography, FormControl, Tabs, Tab } from '@mui/material';
+import styled from '@emotion/styled';
+import { useAuth } from '../providers/AuthProvider';
+import Box from '@mui/material/Box';
+import PropTypes from 'prop-types';
+import ProfileBasicInfo from '../compoents/profile/ProfileBasicInfo';
+import ProfileInterests from '../compoents/profile/ProfileInterests';
+import ProfileMentorship from '../compoents/profile/ProfileMentorship';
+import ProfileNotifications from '../compoents/profile/ProfileNotifications';
+import ProfileIdentity from '../compoents/profile/ProfileIdentity';
 
 const Root = styled(Box)`
-  height: 100%;
+    height: 100%;
 `;
 
 const StyledAvatar = styled(Avatar)`
-  width: 80px;
-  height: 80px;
-  margin: 16px;
+    width: 80px;
+    height: 80px;
+    margin: 16px;
 `;
 
 const Form = styled(FormControl)`
-  width: 100%;
-  margin-top: 8px;
+    width: 100%;
+    margin-top: 8px;
 `;
 
 const SubmitButton = styled(Button)`
-  margin: 24px 0 16px;
+    margin: 24px 0 16px;
 `;
 
 function TabPanel(props) {
-    const {children, value, index, ...other} = props;
+    const {
+        children, value, index, ...other 
+    } = props;
 
     return (
-        <div
-            role="tabpanel"
-            hidden={value !== index}
-            id={`vertical-tabpanel-${index}`}
-            aria-labelledby={`vertical-tab-${index}`}
-            {...other}
-        >
+        <div role="tabpanel" hidden={value !== index} id={`vertical-tabpanel-${index}`} aria-labelledby={`vertical-tab-${index}`} {...other}>
             {value === index && (
-                <Box sx={{p: 3}}>
+                <Box sx={{ p: 3 }}>
                     <Typography>{children}</Typography>
                 </Box>
             )}
@@ -62,7 +51,6 @@ TabPanel.propTypes = {
     value: PropTypes.number.isRequired,
 };
 
-
 function a11yProps(index) {
     return {
         id: `vertical-tab-${index}`,
@@ -70,14 +58,15 @@ function a11yProps(index) {
     };
 }
 
-function ProfileSettingPage({userDetail}) {
-    const [value, setValue] = useState(0);
+function ProfileSettingPage({ userDetail }) {
+    const [ value, setValue ] = useState(0);
     const auth = useAuth();
     const profile_url = process.env.REACT_APP_STRIPE_PPROFILE_URL;
-    const formError = {}
+    const formError = {};
 
-    const [isEditing, setIsEditing] = useState(false);
-    const [questions, setQuestions] = useState({})
+    const [ isEditing, setIsEditing ] = useState(false);
+    const [ questions, setQuestions ] = useState({});
+    const [ fromData, setFormData ] = useState();
 
     useEffect(() => {
         const url = process.env.REACT_APP_API_BASE_URL + 'user/details/new-member';
@@ -86,17 +75,17 @@ function ProfileSettingPage({userDetail}) {
             credentials: 'include',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Token ${localStorage.getItem('token')}`
+                Authorization: `Token ${localStorage.getItem('token')}`,
                 // 'credentials': 'include',
             },
         })
-            .then((response) => response.json())
-            .then((data) => {
+            .then(response => response.json())
+            .then(data => {
                 if (data.status) {
                     setQuestions(data);
                     // setAnswers(initialAnswers);
                     if (data.detail === 'Invalid token.') {
-                        logout();
+                        auth.logout();
                     }
                 } else {
                     console.error(data);
@@ -104,9 +93,9 @@ function ProfileSettingPage({userDetail}) {
             });
     }, []);
 
-    const handleChange = (event) => {
-        const {name, value} = event.target;
-        setFormData((prevFormData) => ({...prevFormData, [name]: value}));
+    const handleChange = event => {
+        const { name, value } = event.target;
+        setFormData(prevFormData => ({ ...prevFormData, [name]: value }));
     };
 
     const handleEdit = () => {
@@ -129,17 +118,14 @@ function ProfileSettingPage({userDetail}) {
         return <div>Loading...</div>;
     }
     return (
-        <Root
-            sx={{flexGrow: 1, bgcolor: 'background.paper', display: 'flex'}}
-        >
+        <Root sx={{ flexGrow: 1, bgcolor: 'background.paper', display: 'flex' }}>
             <Tabs
                 orientation="vertical"
                 variant="scrollable"
                 value={value}
                 onChange={handleTabChange}
                 aria-label="Vertical tabs example"
-                sx={{borderRight: 1, minWidth: '15vw', borderColor: 'divider'}}
-            >
+                sx={{ borderRight: 1, minWidth: '15vw', borderColor: 'divider' }}>
                 <Tab label="Account Details" {...a11yProps(0)} />
                 <Tab label="Interests" {...a11yProps(1)} />
                 <Tab label="Identity" {...a11yProps(2)} />
@@ -158,7 +144,7 @@ function ProfileSettingPage({userDetail}) {
             <TabPanel value={value} index={3}>
                 <ProfileNotifications questions={questions} formErrors={formError} formData={{}} handleChange={handleChange} />
             </TabPanel>
-            <TabPanel value={value} index={4 }>
+            <TabPanel value={value} index={4}>
                 <ProfileMentorship questions={questions} formErrors={formError} formData={{}} handleChange={handleChange} />
             </TabPanel>
         </Root>
