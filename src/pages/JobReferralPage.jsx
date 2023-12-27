@@ -171,7 +171,7 @@ export default function JobReferralPage() {
             setIsAlertOpen(false);
         } else {
             setStatusType('error');
-            setStatusMessage('Please update the required fields.');
+            setStatusMessage('Please update all required fields.');
             setIsAlertOpen(true);
         }
     };

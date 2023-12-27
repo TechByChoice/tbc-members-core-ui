@@ -1,27 +1,32 @@
-import {
-    Typography,
+import {Typography,
     FormControl,
     FormLabel,
     TextField,
     Button,
-    Input, Grid, Autocomplete, InputAdornment, OutlinedInput, InputLabel, FormHelperText
-} from '@mui/material';
-import React from "react";
-import {createFilterOptions} from "@mui/material/Autocomplete";
-import Checkbox from "@mui/material/Checkbox";
-import FormControlLabel from "@mui/material/FormControlLabel";
+    Input,
+    Grid,
+    Autocomplete,
+    InputAdornment,
+    OutlinedInput,
+    InputLabel,
+    FormHelperText,} from '@mui/material';
+import React from 'react';
+import { createFilterOptions } from '@mui/material/Autocomplete';
+import Checkbox from '@mui/material/Checkbox';
+import FormControlLabel from '@mui/material/FormControlLabel';
 
 const filter = createFilterOptions();
 
-function BasicInfoStep({formErrors, handleInputChange, handleFileChange, handleAutocompleteChange, questions}) {
-    const [viewNewCompany, setViewNewCompany] = React.useState(false)
-
+function BasicInfoStep({
+    formErrors, handleInputChange, handleFileChange, handleAutocompleteChange, questions 
+}) {
+    const [ viewNewCompany, setViewNewCompany ] = React.useState(false);
 
     return (
         <Grid container spacing={3}>
             <Grid item xs={12}>
                 {/* Title */}
-                <Typography variant="h5">Let's get to know you!</Typography>
+                <Typography variant="h5">Let&apos;s get to know you!</Typography>
                 <Typography variant="subtitle1">The following questions will us help learn more about you.</Typography>
             </Grid>
             {/* Pronouns Dropdown */}
@@ -33,13 +38,13 @@ function BasicInfoStep({formErrors, handleInputChange, handleFileChange, handleA
                         selectOnFocus
                         includeInputInList
                         handleHomeEndKeys
-                        id='pronouns_identities'
+                        id="pronouns_identities"
                         aria-labelledby="pronouns-label"
                         options={questions.pronouns_identities || []} // <-- directly provide a default value here
                         isOptionEqualToValue={(option, value) =>
                             (option.inputValue && value.inputValue && option.inputValue === value.inputValue) || option === value
                         }
-                        getOptionLabel={(option) => {
+                        getOptionLabel={option => {
                             if (typeof option === 'string') {
                                 return option;
                             }
@@ -52,9 +57,9 @@ function BasicInfoStep({formErrors, handleInputChange, handleFileChange, handleA
                         filterOptions={(options, params) => {
                             const filtered = filter(options, params);
 
-                            const {inputValue} = params;
+                            const { inputValue } = params;
                             // Suggest the creation of a new value
-                            const isExisting = options.some((option) => inputValue === option.pronouns);
+                            const isExisting = options.some(option => inputValue === option.pronouns);
                             if (inputValue !== '' && !isExisting) {
                                 filtered.push({
                                     inputValue,
@@ -65,19 +70,12 @@ function BasicInfoStep({formErrors, handleInputChange, handleFileChange, handleA
                             return filtered;
                         }}
                         renderOption={(props, option) => <li {...props}>{option.pronouns || option.name}</li>}
-                        onChange={(event, value) => handleAutocompleteChange("pronouns_identities", value)}
-                        renderInput={(params) => <TextField name="pronouns_identities" {...params} />}
+                        onChange={(event, value) => handleAutocompleteChange('pronouns_identities', value)}
+                        renderInput={params => <TextField name="pronouns_identities" {...params} />}
                     />
                 </FormControl>
                 <FormControlLabel
-                    control={
-                        <Checkbox
-                            onChange={handleInputChange}
-                            name="is_pronouns_displayed"
-                            color="primary"
-                            size="small"
-                        />
-                    }
+                    control={<Checkbox onChange={handleInputChange} name="is_pronouns_displayed" color="primary" size="small" />}
                     label="Would you like your pronouns saved on your profile?"
                 />
             </Grid>
@@ -85,11 +83,9 @@ function BasicInfoStep({formErrors, handleInputChange, handleFileChange, handleA
             {/* Upload Profile Img */}
             <Grid item xs={12}>
                 <FormControl error={!!formErrors.photo}>
-                    <label htmlFor="photo">Upload your Profile Photo</label>
-                    <Button variant="contained" component="label">
-                        <Input required type="file" hidden onChange={handleFileChange}
-                               aria-label="Upload your profile photo"
-                               name="photo"/>
+                    <label htmlFor="photo">*Upload your Profile Photo</label>
+                    <Button variant="outline" component="label">
+                        <Input required type="file" hidden onChange={handleFileChange} aria-label="*Upload your profile photo" name="photo" />
                     </Button>
                     {!!formErrors.photo && <FormHelperText>{formErrors.photo}</FormHelperText>}
                 </FormControl>
@@ -98,8 +94,8 @@ function BasicInfoStep({formErrors, handleInputChange, handleFileChange, handleA
             {/* Postal Code */}
             <Grid item xs={12}>
                 <FormControl fullWidth error={!!formErrors.postal_code}>
-                    <InputLabel required htmlFor="postal_code">What's your postal code?</InputLabel>
-                    <OutlinedInput onChange={handleInputChange} name="postal_code"/>
+                    <FormLabel htmlFor="postal_code">* What&apos;s your postal code?</FormLabel>
+                    <OutlinedInput onChange={handleInputChange} name="postal_code" />
                     {!!formErrors.postal_code && <FormHelperText>{formErrors.postal_code}</FormHelperText>}
                 </FormControl>
             </Grid>
@@ -107,21 +103,20 @@ function BasicInfoStep({formErrors, handleInputChange, handleFileChange, handleA
             {/* Job Title Dropdown */}
             <Grid item xs={12}>
                 <FormControl fullWidth error={!!formErrors.job_roles}>
-                    <FormLabel id="job-title-label">What is the job title that best fits your desired or current
-                        position?</FormLabel>
+                    <FormLabel id="job-title-label">* What is the job title that best fits your desired or current position?</FormLabel>
                     <Autocomplete
                         multiple
                         required
                         selectOnFocus
                         includeInputInList
                         handleHomeEndKeys
-                        id='job_roles'
+                        id="job_roles"
                         aria-labelledby="job-title-label"
                         options={questions.job_roles || []} // <-- directly provide a default value here
                         isOptionEqualToValue={(option, value) =>
                             (option.inputValue && value.inputValue && option.inputValue === value.inputValue) || option === value
                         }
-                        getOptionLabel={(option) => {
+                        getOptionLabel={option => {
                             if (typeof option === 'string') {
                                 return option;
                             }
@@ -129,14 +124,14 @@ function BasicInfoStep({formErrors, handleInputChange, handleFileChange, handleA
                             if (option.inputValue) return option.inputValue;
 
                             // Existing logic
-                            return option.name
+                            return option.name;
                         }}
                         filterOptions={(options, params) => {
                             const filtered = filter(options, params);
 
-                            const {inputValue} = params;
+                            const { inputValue } = params;
                             // Suggest the creation of a new value
-                            const isExisting = options.some((option) => inputValue === option.name);
+                            const isExisting = options.some(option => inputValue === option.name);
                             if (inputValue !== '' && !isExisting) {
                                 filtered.push({
                                     inputValue,
@@ -147,8 +142,8 @@ function BasicInfoStep({formErrors, handleInputChange, handleFileChange, handleA
                             return filtered;
                         }}
                         renderOption={(props, option) => <li {...props}>{option.pronouns || option.name}</li>}
-                        onChange={(event, value) => handleAutocompleteChange("job_roles", value)}
-                        renderInput={(params) => <TextField name="job-title-label" {...params} />}
+                        onChange={(event, value) => handleAutocompleteChange('job_roles', value)}
+                        renderInput={params => <TextField name="job-title-label" {...params} />}
                     />
                     {!!formErrors.job_roles && <FormHelperText>{formErrors.job_roles}</FormHelperText>}
                 </FormControl>
@@ -156,23 +151,26 @@ function BasicInfoStep({formErrors, handleInputChange, handleFileChange, handleA
 
             {/* Current Company Dropdown */}
             <Grid item xs={12}>
-                <Typography variant="h6">We're do you currently work?</Typography>
+                <Typography variant="h6">We&apos;re do you currently work?</Typography>
             </Grid>
             {questions.total_companies <= 0 || viewNewCompany ? (
                 <>
                     <Grid item xs={12}>
                         <FormControl fullWidth>
                             <InputLabel htmlFor="company_name">Company Name</InputLabel>
-                            <OutlinedInput label="Company Naame" onChange={handleInputChange} name="company_name"
-                                           type="text"/>
+                            <OutlinedInput label="Company Naame" onChange={handleInputChange} name="company_name" type="text" />
                         </FormControl>
                     </Grid>
                     <Grid item xs={12}>
                         <FormControl fullWidth>
                             <InputLabel htmlFor="company_url">Company Website</InputLabel>
-                            <OutlinedInput label="Company Website" onChange={handleInputChange} name="company_url"
-                                           startAdornment={<InputAdornment position="start">https://</InputAdornment>}
-                                           type="url"/>
+                            <OutlinedInput
+                                label="Company Website"
+                                onChange={handleInputChange}
+                                name="company_url"
+                                startAdornment={<InputAdornment position="start">https://</InputAdornment>}
+                                type="url"
+                            />
                         </FormControl>
                     </Grid>
                 </>
@@ -185,13 +183,13 @@ function BasicInfoStep({formErrors, handleInputChange, handleFileChange, handleA
                             selectOnFocus
                             includeInputInList
                             handleHomeEndKeys
-                            id='company_list'
+                            id="company_list"
                             aria-labelledby="company-label"
                             options={questions.company_list || []} // <-- directly provide a default value here
                             isOptionEqualToValue={(option, value) =>
                                 (option.inputValue && value.inputValue && option.inputValue === value.inputValue) || option === value
                             }
-                            getOptionLabel={(option) => {
+                            getOptionLabel={option => {
                                 if (typeof option === 'string') {
                                     return option;
                                 }
@@ -199,14 +197,14 @@ function BasicInfoStep({formErrors, handleInputChange, handleFileChange, handleA
                                 if (option.inputValue) return option.inputValue;
 
                                 // Existing logic
-                                return option.company_name
+                                return option.company_name;
                             }}
                             filterOptions={(options, params) => {
                                 const filtered = filter(options, params);
 
-                                const {inputValue} = params;
+                                const { inputValue } = params;
                                 // Suggest the creation of a new value
-                                const isExisting = options.some((option) => inputValue === option.company_name);
+                                const isExisting = options.some(option => inputValue === option.company_name);
                                 if (inputValue !== '' && !isExisting) {
                                     filtered.push({
                                         inputValue,
@@ -217,8 +215,8 @@ function BasicInfoStep({formErrors, handleInputChange, handleFileChange, handleA
                                 return filtered;
                             }}
                             renderOption={(props, option) => <li {...props}>{option.company_name}</li>}
-                            onChange={(event, value) => handleAutocompleteChange("company_name", value)}
-                            renderInput={(params) => <TextField name="company_name" {...params} />}
+                            onChange={(event, value) => handleAutocompleteChange('company_name', value)}
+                            renderInput={params => <TextField name="company_name" {...params} />}
                         />
                     </FormControl>
                 </Grid>
@@ -226,28 +224,27 @@ function BasicInfoStep({formErrors, handleInputChange, handleFileChange, handleA
             {questions.total_companies > 0 && (
                 <Grid item xs={12}>
                     <FormControl>
-                        <FormControlLabel onChange={(event, checked) => setViewNewCompany(checked)}
-                                          control={<Checkbox/>} label="Add a company"/>
+                        <FormControlLabel onChange={(event, checked) => setViewNewCompany(checked)} control={<Checkbox />} label="Add a company" />
                     </FormControl>
                 </Grid>
             )}
             {/* Tech Journey Dropdown */}
             <Grid item xs={12}>
                 <FormControl fullWidth error={!!formErrors.tech_journey}>
-                    <FormLabel id="tech-journey-label">How long have you been on your tech journey?</FormLabel>
+                    <FormLabel id="tech-journey-label">* How long have you been on your tech journey?</FormLabel>
                     <Autocomplete
                         multiple
                         required
                         selectOnFocus
                         includeInputInList
                         handleHomeEndKeys
-                        id='career_journey_choices'
+                        id="career_journey_choices"
                         aria-labelledby="tech-journey-label"
                         options={questions.career_journey_choices || []} // <-- directly provide a default value here
                         isOptionEqualToValue={(option, value) =>
                             (option.inputValue && value.inputValue && option.inputValue === value.inputValue) || option === value
                         }
-                        getOptionLabel={(option) => {
+                        getOptionLabel={option => {
                             if (typeof option === 'string') {
                                 return option;
                             }
@@ -255,7 +252,7 @@ function BasicInfoStep({formErrors, handleInputChange, handleFileChange, handleA
                             if (option.inputValue) return option.inputValue;
 
                             // Existing logic
-                            return option.name
+                            return option.name;
                         }}
                         filterOptions={(options, params) => {
                             const filtered = filter(options, params);
@@ -266,68 +263,92 @@ function BasicInfoStep({formErrors, handleInputChange, handleFileChange, handleA
                         onChange={(event, value) => {
                             // Update the value to be the index + 1
                             value = value.map((item, index) => index + 1);
-                            handleAutocompleteChange("tech_journey", value);
+                            handleAutocompleteChange('tech_journey', value);
                         }}
-                        renderInput={(params) => <TextField name="tech_journey" {...params} />}
+                        renderInput={params => <TextField name="tech_journey" {...params} />}
                     />
+                    {!!formErrors.tech_journey && <FormHelperText>{formErrors.tech_journey}</FormHelperText>}
                 </FormControl>
-                {!!formErrors.tech_journey && <FormHelperText>{formErrors.tech_journey}</FormHelperText>}
             </Grid>
             <Grid item xs={12}>
                 {/* Social Connections Header */}
-                <Typography variant="h6">Let's connect</Typography>
+                <Typography variant="h6">Let&apos;s connect</Typography>
                 <Typography variant="subtitle2">Add your social to help you connect with the community.</Typography>
             </Grid>
 
             {/* Social Profiles */}
             <Grid item xs={12}>
                 <FormControl fullWidth>
-                    <InputLabel htmlFor="linkedin">Your Linkedin Profile"</InputLabel>
-                    <OutlinedInput label="Your Linkedin Profile" onChange={handleInputChange} name="linkedin"
-                                   startAdornment={<InputAdornment position="start">https://</InputAdornment>}
-                                   type="url"/>
+                    <InputLabel htmlFor="linkedin">Your Linkedin Profile</InputLabel>
+                    <OutlinedInput
+                        label="Your Linkedin Profile"
+                        onChange={handleInputChange}
+                        name="linkedin"
+                        startAdornment={<InputAdornment position="start">https://</InputAdornment>}
+                        type="url"
+                    />
                 </FormControl>
             </Grid>
             <Grid item xs={12}>
                 <FormControl fullWidth>
                     <InputLabel htmlFor="instagram">Instagram handle</InputLabel>
-                    <OutlinedInput label="Instagram handle" onChange={handleInputChange} name="instagram"
-                                   startAdornment={<InputAdornment position="start">@</InputAdornment>}
-                                   type="text"
-                                   helpertext="It should be @YourUserName"/>
+                    <OutlinedInput
+                        label="Instagram handle"
+                        onChange={handleInputChange}
+                        name="instagram"
+                        startAdornment={<InputAdornment position="start">@</InputAdornment>}
+                        type="text"
+                        helpertext="It should be @YourUserName"
+                    />
                 </FormControl>
             </Grid>
             <Grid item xs={12}>
                 <FormControl fullWidth>
                     <InputLabel htmlFor="github">Your Github Profile</InputLabel>
-                    <OutlinedInput label="Your Github Profile" onChange={handleInputChange} name="github"
-                                   startAdornment={<InputAdornment position="start">https://</InputAdornment>}
-                                   type="url"/>
+                    <OutlinedInput
+                        label="Your Github Profile"
+                        onChange={handleInputChange}
+                        name="github"
+                        startAdornment={<InputAdornment position="start">https://</InputAdornment>}
+                        type="url"
+                    />
                 </FormControl>
             </Grid>
             <Grid item xs={12}>
                 <FormControl fullWidth>
                     <InputLabel htmlFor="twitter">Your Twitter Handle</InputLabel>
-                    <OutlinedInput label="Your Twitter Handle" onChange={handleInputChange} name="twitter"
-                                   startAdornment={<InputAdornment position="start">@</InputAdornment>}
-                                   type="text"
-                                   helpertext="It should be @YourUserName"/>
+                    <OutlinedInput
+                        label="Your Twitter Handle"
+                        onChange={handleInputChange}
+                        name="twitter"
+                        startAdornment={<InputAdornment position="start">@</InputAdornment>}
+                        type="text"
+                        helpertext="It should be @YourUserName"
+                    />
                 </FormControl>
             </Grid>
             <Grid item xs={12}>
                 <FormControl fullWidth>
                     <InputLabel htmlFor="youtube">Your Youtube Profile</InputLabel>
-                    <OutlinedInput label="Your Youtube Profile" onChange={handleInputChange} name="youtube"
-                                   startAdornment={<InputAdornment position="start">https://</InputAdornment>}
-                                   type="url"/>
+                    <OutlinedInput
+                        label="Your Youtube Profile"
+                        onChange={handleInputChange}
+                        name="youtube"
+                        startAdornment={<InputAdornment position="start">https://</InputAdornment>}
+                        type="url"
+                    />
                 </FormControl>
             </Grid>
             <Grid item xs={12}>
                 <FormControl fullWidth>
                     <InputLabel htmlFor="personal">Your Personal Website</InputLabel>
-                    <OutlinedInput label="Your Personal Website" onChange={handleInputChange} name="personal"
-                                   startAdornment={<InputAdornment position="start">https://</InputAdornment>}
-                                   type="url"/>
+                    <OutlinedInput
+                        label="Your Personal Website"
+                        onChange={handleInputChange}
+                        name="personal"
+                        startAdornment={<InputAdornment position="start">https://</InputAdornment>}
+                        type="url"
+                    />
                 </FormControl>
             </Grid>
         </Grid>
