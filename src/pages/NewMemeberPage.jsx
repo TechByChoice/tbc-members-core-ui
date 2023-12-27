@@ -1,6 +1,6 @@
 import * as React from 'react';
-import {useEffect} from 'react';
-import {useNavigate} from "react-router-dom";
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import CssBaseline from '@mui/material/CssBaseline';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -11,35 +11,33 @@ import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import {useStatus} from "../providers/MsgStatusProvider";
-import BasicInfo from "../compoents/onboarding/BasicInfo";
-import SkillsQuestionStep from "../compoents/onboarding/SkillsQuestionStep";
-import IdentityQuestionsStep from "../compoents/onboarding/IdentityQuestionsStep";
-import CommunityQuestionsStep from "../compoents/onboarding/CommunityQuestionsStep";
-import MarketingQuestionsStep from "../compoents/onboarding/MarketingQuestionsSteps";
-import getCookie from "../helpers"
-import {useAuth} from "../providers/AuthProvider";
-
+import { useStatus } from '../providers/MsgStatusProvider';
+import BasicInfo from '../compoents/onboarding/BasicInfo';
+import SkillsQuestionStep from '../compoents/onboarding/SkillsQuestionStep';
+import IdentityQuestionsStep from '../compoents/onboarding/IdentityQuestionsStep';
+import CommunityQuestionsStep from '../compoents/onboarding/CommunityQuestionsStep';
+import MarketingQuestionsStep from '../compoents/onboarding/MarketingQuestionsSteps';
+import getCookie from '../helpers';
+import { useAuth } from '../providers/AuthProvider';
 
 const steps = [
     'Basic Info',
     'Skills & Experiences',
     'You Identity',
     'Support Needed',
-    'Communication',
+    'Communication'
 ];
 
 export default function NewMemberPage() {
-    const [activeStep, setActiveStep] = React.useState(0);
-    const [questions, setQuestions] = React.useState(0);
-    const {setStatusType, setStatusMessage, setIsAlertOpen} = useStatus();
-    const [answers, setAnswers] = React.useState({});
-    const [formErrors, setFormErrors] = React.useState({});
+    const [ activeStep, setActiveStep ] = React.useState(0);
+    const [ questions, setQuestions ] = React.useState(0);
+    const { setStatusType, setStatusMessage, setIsAlertOpen } = useStatus();
+    const [ answers, setAnswers ] = React.useState({});
+    const [ formErrors, setFormErrors ] = React.useState({});
 
     const history = useNavigate();
-    const {token} = useAuth()
-    useEffect(() => {
-    }, [answers]);
+    const { token, logout } = useAuth();
+    useEffect(() => {}, [ answers ]);
 
     useEffect(() => {
         const url = process.env.REACT_APP_API_BASE_URL + 'user/details/new-member';
@@ -48,17 +46,15 @@ export default function NewMemberPage() {
             credentials: 'include',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Token ${localStorage.getItem('token')}`
+                Authorization: `Token ${localStorage.getItem('token')}`,
                 // 'credentials': 'include'
             },
         })
-            .then((response) => response.json())
-            .then((data) => {
+            .then(response => response.json())
+            .then(data => {
                 if (data.status) {
                     setQuestions(data);
-                    // setAnswers(initialAnswers);
                     if (data.detail === 'Invalid token.') {
-
                         logout();
                     }
                 } else {
@@ -67,27 +63,17 @@ export default function NewMemberPage() {
             });
     }, []);
 
-    if (activeStep === steps.length) {
-        // const key = localStorage.getItem("token");
-        //
-        // if (!key) {
-        //     console.error("Missing reportId or CSRF token.");
-        //     return;
-        // }
-
-    }
-
     function validateBasicInfo() {
         let errors = {};
 
         // Check photo
         if (!answers.photo) {
-            errors.photo = "Please upload your profile photo.";
+            errors.photo = 'Please upload your profile photo.';
         }
 
         // Check postal code
         if (!answers.postal_code) {
-            errors.postal_code = "Please enter your postal code.";
+            errors.postal_code = 'Please enter your postal code.';
         }
 
         // Check tech journey
@@ -97,118 +83,129 @@ export default function NewMemberPage() {
 
         // Check tech journey
         if (!answers.job_roles || answers.job_roles.length === 0) {
-            errors.job_roles = "Please specify titles that best fit you.";
+            errors.job_roles = 'Please specify titles that best fit you.';
         }
-        const isValid = Object.keys(errors).length === 0
+        const isValid = Object.keys(errors).length === 0;
         if (!isValid) {
-            setFormErrors(errors);  // Save the errors into the state
+            setFormErrors(errors); // Save the errors into the state
         }
 
-        return isValid;  // Return true if no errors found, else false
+        return isValid; // Return true if no errors found, else false
     }
 
     function validateSkillsQuestionStep() {
         let errors = {};
 
-        // Validate job_skills
-        // if (!answers.job_skills || answers.job_skills.length === 0) {
-        //     errors.job_skills = "Job skills are required.";
-        // }
-
         // Validate talent_status
         if (!answers.talent_status || answers.talent_status.length === 0) {
-            errors.talent_status = "Job skills are required.";
+            errors.talent_status = 'Job skills are required.';
         }
-
-        // Validate job_skills
-        // if (!answers.resume || answers.resume.length === 0) {
-        //     errors.resume = "Please upload your resume.";
-        // }
 
         // Validate job_department
         if (!answers.job_department || answers.job_department.length === 0) {
-            errors.job_department = "Job department is required.";
+            errors.job_department = 'Job department is required.';
         }
-        //
-        // // Validate company_types
-        // if (!answers.company_types || answers.company_types.length === 0) {
-        //     errors.company_types = "Company types are required.";
-        // }
-        //
-        // // Validate job_salary_range (Min and Max)
-        // if (!answers.job_salary_range_min || answers.job_salary_range_min.length === 0) {
-        //     errors.job_salary_range_min = "Min salary range is required.";
-        // }
-        // if (!answers.job_salary_range_max || answers.job_salary_range_max.length === 0) {
-        //     errors.job_salary_range_max = "Max salary range is required.";
-        // }
-        const isValid = Object.keys(errors).length === 0
+
+        const isValid = Object.keys(errors).length === 0;
         if (!isValid) {
-            setFormErrors(errors);  // Save the errors into the state
+            setFormErrors(errors); // Save the errors into the state
         }
-        console.log(errors)
+        console.log(errors);
 
         return isValid;
     }
 
-    const handleInputChange = (e) => {
-        const {name, value} = e.target;
-        setAnswers(prev => ({...prev, [name]: value}));
+    const handleInputChange = e => {
+        const { name, value } = e.target;
+        setAnswers(prev => ({ ...prev, [name]: value }));
     };
 
-    const handleFileChange = (e) => {
+    const handleFileChange = e => {
         if (e) {
-            const {name} = e.target;
+            const { name } = e.target;
             const file = e.target.files[0];
-            setAnswers(prev => ({...prev, [name]: file}));
+            setAnswers(prev => ({ ...prev, [name]: file }));
         }
-
     };
 
     const handleAutocompleteChange = (name, value) => {
         // Check if the value is an array (since Autocomplete can be multiple)
         if (Array.isArray(value)) {
-            value = value.map(item =>
-                item.pronouns || item.name || item.range || item.gender || item.identity || item.ethnicity || item // the 'item' fallback is in case you have other Autocomplete instances with string values
+            value = value.map(
+                item => item.pronouns || item.name || item.range || item.gender || item.identity || item.ethnicity || item, // the 'item' fallback is in case you have other Autocomplete instances with string values
             );
-        } else {
-            value = item.inputValue || item[name] || item;
         }
-        setAnswers(prev => ({...prev, [name]: value}));
+        setAnswers(prev => ({ ...prev, [name]: value }));
     };
 
-    const getStepContent = (step) => {
+    const getStepContent = step => {
         switch (step) {
             case 0:
-                return <BasicInfo formErrors={formErrors} handleAutocompleteChange={handleAutocompleteChange}
-                                  handleInputChange={handleInputChange} handleFileChange={handleFileChange}
-                                  questions={questions} answers={answers} setAnswers={setAnswers}/>;
+                return (
+                    <BasicInfo
+                        formErrors={formErrors}
+                        handleAutocompleteChange={handleAutocompleteChange}
+                        handleInputChange={handleInputChange}
+                        handleFileChange={handleFileChange}
+                        questions={questions}
+                        answers={answers}
+                        setAnswers={setAnswers}
+                    />
+                );
             case 1:
-                return <SkillsQuestionStep formErrors={formErrors} handleAutocompleteChange={handleAutocompleteChange}
-                                           handleInputChange={handleInputChange} handleFileChange={handleFileChange}
-                                           questions={questions} answers={answers} setAnswers={setAnswers}/>;
+                return (
+                    <SkillsQuestionStep
+                        formErrors={formErrors}
+                        handleAutocompleteChange={handleAutocompleteChange}
+                        handleInputChange={handleInputChange}
+                        handleFileChange={handleFileChange}
+                        questions={questions}
+                        answers={answers}
+                        setAnswers={setAnswers}
+                    />
+                );
             case 2:
-                return <IdentityQuestionsStep formErrors={formErrors}
-                                              handleAutocompleteChange={handleAutocompleteChange}
-                                              handleInputChange={handleInputChange} handleFileChange={handleFileChange}
-                                              questions={questions} answers={answers} setAnswers={setAnswers}/>;
+                return (
+                    <IdentityQuestionsStep
+                        formErrors={formErrors}
+                        handleAutocompleteChange={handleAutocompleteChange}
+                        handleInputChange={handleInputChange}
+                        handleFileChange={handleFileChange}
+                        questions={questions}
+                        answers={answers}
+                        setAnswers={setAnswers}
+                    />
+                );
             case 3:
-                return <CommunityQuestionsStep formErrors={formErrors}
-                                               handleAutocompleteChange={handleAutocompleteChange}
-                                               handleInputChange={handleInputChange} handleFileChange={handleFileChange}
-                                               questions={questions} answers={answers} setAnswers={setAnswers}/>;
+                return (
+                    <CommunityQuestionsStep
+                        formErrors={formErrors}
+                        handleAutocompleteChange={handleAutocompleteChange}
+                        handleInputChange={handleInputChange}
+                        handleFileChange={handleFileChange}
+                        questions={questions}
+                        answers={answers}
+                        setAnswers={setAnswers}
+                    />
+                );
             case 4:
-                return <MarketingQuestionsStep formErrors={formErrors}
-                                               handleAutocompleteChange={handleAutocompleteChange}
-                                               handleInputChange={handleInputChange}
-                                               questions={questions} answers={answers} setAnswers={setAnswers}/>;
+                return (
+                    <MarketingQuestionsStep
+                        formErrors={formErrors}
+                        handleAutocompleteChange={handleAutocompleteChange}
+                        handleInputChange={handleInputChange}
+                        questions={questions}
+                        answers={answers}
+                        setAnswers={setAnswers}
+                    />
+                );
             default:
                 throw new Error('Unknown step');
         }
     };
 
     const handleNext = () => {
-        let validationResult = {isValid: true, errorMessage: ""};
+        let validationResult = { isValid: true, errorMessage: '' };
         switch (activeStep) {
             case 0: // For the BasicInfoStep
                 validationResult.isValid = validateBasicInfo();
@@ -216,19 +213,17 @@ export default function NewMemberPage() {
             case 1:
                 validationResult.isValid = validateSkillsQuestionStep();
                 break;
-            // ... add cases for other steps ...
-
             default:
                 break;
         }
         if (validationResult.isValid) {
             setActiveStep(activeStep + 1);
-            setStatusType("");
+            setStatusType('');
             setStatusMessage();
             setIsAlertOpen(false);
         } else {
-            setStatusType("error");
-            setStatusMessage(validationResult.errorMessage);
+            setStatusType('error');
+            setStatusMessage('Please update all required fields.');
             setIsAlertOpen(true);
         }
     };
@@ -237,7 +232,7 @@ export default function NewMemberPage() {
         setActiveStep(activeStep - 1);
     };
 
-    const handleFormSubmit = (e) => {
+    const handleFormSubmit = e => {
         e.preventDefault();
         const url = `${process.env.REACT_APP_API_BASE_URL}user/new-member/profile/create`;
 
@@ -251,9 +246,7 @@ export default function NewMemberPage() {
             method: 'PATCH',
             credentials: 'include',
             body: formData,
-            headers: {
-                'Authorization': `Token ${token}`
-            }
+            headers: {Authorization: `Token ${token}`,},
         })
             .then(response => {
                 if (!response.ok) {
@@ -269,31 +262,29 @@ export default function NewMemberPage() {
                 history('/');
             })
             .catch(error => {
-                console.error("Fetch error:", error);
+                console.error('Fetch error:', error);
                 setStatusMessage('We ran into an error saving your profile');
                 setIsAlertOpen(true);
                 setStatusType('error');
             });
-    }
+    };
 
     return (
         <React.Fragment>
-            <CssBaseline/>
+            <CssBaseline />
             <AppBar
                 position="absolute"
                 color="default"
                 elevation={0}
                 sx={{
                     position: 'relative',
-                    borderBottom: (t) => `1px solid ${t.palette.divider}`,
-                }}
-            >
-            </AppBar>
+                    borderBottom: t => `1px solid ${t.palette.divider}`,
+                }}></AppBar>
             <Container component="main">
-                <Paper variant="outlined" sx={{my: {xs: 3, md: 6}, p: {xs: 2, md: 3}}}>
-                    <Stepper activeStep={activeStep} sx={{pt: 3, pb: 5}}>
+                <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
+                    <Stepper activeStep={activeStep} sx={{ pt: 3, pb: 5 }}>
                         {steps.map((step, index) => (
-                            <Step key={step} onClick={() => setActiveStep(index)} style={{cursor: "pointer"}}>
+                            <Step key={step} onClick={() => setActiveStep(index)} style={{ cursor: 'pointer' }}>
                                 <StepLabel>{step}</StepLabel>
                             </Step>
                         ))}
@@ -305,16 +296,15 @@ export default function NewMemberPage() {
                                     Thanks for letting us get to know you!
                                 </Typography>
                                 <Typography variant="subtitle1">
-                                    Now that you're in our community, make sure you check your eamil to get access to
-                                    our Slack group!
+                                    Now that you&apos;re in our community, make sure you check your eamil to get access to our Slack group!
                                 </Typography>
                             </React.Fragment>
                         ) : (
                             <React.Fragment>
                                 {getStepContent(activeStep)}
-                                <Box sx={{display: 'flex', justifyContent: 'flex-end'}}>
+                                <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
                                     {activeStep !== 0 && (
-                                        <Button onClick={handleBack} sx={{mt: 3, ml: 1}}>
+                                        <Button onClick={handleBack} sx={{ mt: 3, ml: 1 }}>
                                             Back
                                         </Button>
                                     )}
@@ -323,8 +313,7 @@ export default function NewMemberPage() {
                                         variant="contained"
                                         onClick={activeStep === steps.length - 1 ? null : handleNext}
                                         type={activeStep === steps.length - 1 ? 'submit' : 'button'}
-                                        sx={{mt: 3, ml: 1}}
-                                    >
+                                        sx={{ mt: 3, ml: 1 }}>
                                         {activeStep === steps.length - 1 ? 'Submit Details' : 'Next'}
                                     </Button>
                                 </Box>
