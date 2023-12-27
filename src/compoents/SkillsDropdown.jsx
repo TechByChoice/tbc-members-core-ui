@@ -1,12 +1,12 @@
-import React, {useState, useEffect} from 'react';
-import {Autocomplete, FormControl, FormLabel, TextField} from '@mui/material';
-import {getBasicSystemInfo} from "../api-calls";
-import {createFilterOptions} from "@mui/material/Autocomplete";
+import React, { useState, useEffect } from 'react';
+import { Autocomplete, FormControl, FormLabel, TextField } from '@mui/material';
+import { getBasicSystemInfo } from '../api-calls';
+import { createFilterOptions } from '@mui/material/Autocomplete';
 
 const filter = createFilterOptions();
-export default function SkillsDropdown({setAnswers}) {
-    const [skills, setSkills] = useState([]);
-    const [selectedSkill, setSelectedSkill] = useState('');
+export default function SkillsDropdown({ isRequired, error, setAnswers }) {
+    const [ skills, setSkills ] = useState([]);
+    const [ selectedSkill, setSelectedSkill ] = useState('');
 
     useEffect(() => {
         // Fetch the list of companies when the component mounts
@@ -15,7 +15,7 @@ export default function SkillsDropdown({setAnswers}) {
                 const response = await getBasicSystemInfo();
                 setSkills(response.job_skills);
             } catch (error) {
-                console.error("Error fetching skills:", error);
+                console.error('Error fetching skills:', error);
             }
         }
 
@@ -24,7 +24,10 @@ export default function SkillsDropdown({setAnswers}) {
 
     return (
         <FormControl fullWidth variant="outlined">
-            <FormLabel id="skills-label">Skills</FormLabel>
+            <FormLabel id="skills-label">
+                {isRequired && <>*</>}
+                Skills
+            </FormLabel>
             <Autocomplete
                 id="skills-label"
                 multiple
@@ -41,7 +44,7 @@ export default function SkillsDropdown({setAnswers}) {
                         {option.name}
                     </li>
                 )}
-                getOptionLabel={(option) => {
+                getOptionLabel={option => {
                     if (typeof option === 'string') {
                         return option;
                     }
@@ -54,9 +57,9 @@ export default function SkillsDropdown({setAnswers}) {
                 filterOptions={(options, params) => {
                     const filtered = filter(options, params);
 
-                    const {inputValue} = params;
+                    const { inputValue } = params;
                     // Suggest the creation of a new value
-                    const isExisting = options.some((option) => inputValue === option.name);
+                    const isExisting = options.some(option => inputValue === option.name);
                     if (inputValue !== '' && !isExisting) {
                         filtered.push({
                             inputValue,
@@ -74,8 +77,7 @@ export default function SkillsDropdown({setAnswers}) {
                         skills: newValue,
                     }));
                 }}
-                renderOption={(props, option) => <li {...props}>{option.name }</li>}
-                renderInput={(params) => <TextField name="job_skills" {...params} />}
+                renderInput={params => <TextField error={!!error.skills} name="job_skills" {...params} />}
             />
         </FormControl>
     );

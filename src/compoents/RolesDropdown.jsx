@@ -1,12 +1,12 @@
-import React, {useState, useEffect} from 'react';
-import {Autocomplete, FormControl, FormLabel, TextField} from '@mui/material';
-import {getBasicSystemInfo} from "../api-calls";
-import {createFilterOptions} from "@mui/material/Autocomplete";
+import React, { useState, useEffect } from 'react';
+import { Autocomplete, FormControl, FormLabel, TextField } from '@mui/material';
+import { getBasicSystemInfo } from '../api-calls';
+import { createFilterOptions } from '@mui/material/Autocomplete';
 
 const filter = createFilterOptions();
-export default function RolesDropdown({setAnswers}) {
-    const [roles, setRoles] = useState([]);
-    const [selectedRoles, setSelectedRoles] = useState('');
+export default function RolesDropdown({ isRequired, error, setAnswers }) {
+    const [ roles, setRoles ] = useState([]);
+    const [ selectedRoles, setSelectedRoles ] = useState('');
 
     useEffect(() => {
         // Fetch the list of companies when the component mounts
@@ -15,7 +15,7 @@ export default function RolesDropdown({setAnswers}) {
                 const response = await getBasicSystemInfo();
                 setRoles(response.job_roles);
             } catch (error) {
-                console.error("Error fetching roles:", error);
+                console.error('Error fetching roles:', error);
             }
         }
 
@@ -24,7 +24,10 @@ export default function RolesDropdown({setAnswers}) {
 
     return (
         <FormControl fullWidth variant="outlined">
-            <FormLabel id="roles-label">Roles</FormLabel>
+            <FormLabel id="roles-label">
+                {isRequired && <>*</>}
+                Roles
+            </FormLabel>
             <Autocomplete
                 multiple
                 required
@@ -36,7 +39,7 @@ export default function RolesDropdown({setAnswers}) {
                 isOptionEqualToValue={(option, value) =>
                     (option.inputValue && value.inputValue && option.inputValue === value.inputValue) || option === value
                 }
-                getOptionLabel={(option) => {
+                getOptionLabel={option => {
                     if (typeof option === 'string') {
                         return option;
                     }
@@ -49,11 +52,10 @@ export default function RolesDropdown({setAnswers}) {
                 filterOptions={(options, params) => {
                     const filtered = filter(options, params);
 
-                    const {inputValue} = params;
+                    const { inputValue } = params;
 
-                    console.log(options, 'roles: options')
                     // Suggest the creation of a new value
-                    const isExisting = options.some((option) => inputValue === option.name);
+                    const isExisting = options.some(option => inputValue === option.name);
                     if (inputValue !== '' && !isExisting) {
                         filtered.push({
                             inputValue,
@@ -71,8 +73,8 @@ export default function RolesDropdown({setAnswers}) {
                         role: newValue,
                     }));
                 }}
-                renderOption={(props, option) => <li {...props}>{option.name }</li>}
-                renderInput={(params) => <TextField name="job_roles" {...params} />}
+                renderOption={(props, option) => <li {...props}>{option.name}</li>}
+                renderInput={params => <TextField error={!!error.roles} name="job_roles" {...params} />}
             />
         </FormControl>
     );

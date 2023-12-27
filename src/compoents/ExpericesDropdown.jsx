@@ -4,7 +4,7 @@ import { getBasicSystemInfo } from '../api-calls';
 import { createFilterOptions } from '@mui/material/Autocomplete';
 
 const filter = createFilterOptions();
-export default function ExperiencesDropdown({ setAnswers }) {
+export default function ExperiencesDropdown({ isRequired, setAnswers, error }) {
     const [ experiences, setExperiences ] = useState([]);
     const [ experiencesSkill, setExperiencesSkill ] = useState('');
 
@@ -24,7 +24,10 @@ export default function ExperiencesDropdown({ setAnswers }) {
 
     return (
         <FormControl fullWidth variant="outlined">
-            <FormLabel id="skills-label">What level of experiences are you looking for?</FormLabel>
+            <FormLabel id="skills-label">
+                {isRequired && <>*</>}
+                What level of experiences are you looking for?
+            </FormLabel>
             <Autocomplete
                 id="experiences-label"
                 multiple
@@ -74,7 +77,7 @@ export default function ExperiencesDropdown({ setAnswers }) {
                         years_of_experience: newValue,
                     }));
                 }}
-                renderInput={params => <TextField name="years_of_experience" {...params} />}
+                renderInput={params => <TextField error={!!error.years_of_experience} name="years_of_experience" {...params} />}
             />
         </FormControl>
     );
