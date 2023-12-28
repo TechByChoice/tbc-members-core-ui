@@ -1,34 +1,44 @@
-import {
-    Autocomplete,
-    Button,
-    FormControl,
-    FormHelperText,
-    FormLabel,
-    Grid,
-    OutlinedInput,
-    TextField,
-    Typography
-} from "@mui/material";
-import React, {useEffect, useState} from "react";
-import {createFilterOptions} from "@mui/material/Autocomplete";
-import FormMentorApplication from "../mentorship/FormMentorApplication";
-import FormMentorshipValues from "../mentorship/FormMentorshipValues";
+import { Autocomplete, Button, FormControl, FormHelperText, FormLabel, Grid, OutlinedInput, TextField, Typography } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { createFilterOptions } from '@mui/material/Autocomplete';
+import FormMentorApplication from '../mentorship/FormMentorApplication';
+import FormMentorshipValues from '../mentorship/FormMentorshipValues';
+import TipTapEditor from '../TipTapEditor';
+import FormMentorCareer from '../mentorship/FormMentorCareer';
+import FormMentorProfile from '../mentorship/FormMentorProfile';
+import ProfileMentorDetails from './ProfileMentorDetails';
+import { useAuth } from '../../providers/AuthProvider';
 
 const filter = createFilterOptions();
 
-export default function ProfileMentorship({handleChange, questions, formErrors, formData}) {
+export default function ProfileMentorship({ questions }) {
+    const { user } = useAuth();
+    const [ formData, setFormData ] = useState({});
 
-    function handleSave() {
-        console.log('saved')
-    }
-
+    const handleEditorUpdate = (editorId, content) => {
+        formData(prevFormData => ({
+            ...prevFormData,
+            [editorId]: content,
+        }));
+    };
 
     return (
         <>
             <Grid container>
-                <FormMentorApplication questions={questions}/>
-                <FormMentorshipValues questions={questions}/>
+                {user.is_mentor_application_submitted ? (
+                    <>
+                        <FormMentorApplication questions={questions} />
+                        <ProfileMentorDetails />
+                    </>
+                ) : (
+                    <>
+                        <Typography variant="h6">We&apos;re currently not taking applications for our mentorship program.</Typography>
+                        <Typography variant="body1">
+                            We&apos;re currently at our reviewing capacity. Once we address these we will open the application back up.
+                        </Typography>
+                    </>
+                )}
             </Grid>
         </>
-    )
+    );
 }
