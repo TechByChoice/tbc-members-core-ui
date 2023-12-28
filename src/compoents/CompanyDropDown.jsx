@@ -6,14 +6,15 @@ import { createFilterOptions } from '@mui/material/Autocomplete';
 const filter = createFilterOptions();
 
 export default function CompanyDropdownUpdate({
-    error, answers, setAnswers, onCompanySelect, defaultValue 
+    error, answers, setAnswers, onCompanySelect, isRequired 
 }) {
     const [ companies, setCompanies ] = useState([]);
-    const [ selectedCompany, setSelectedCompany ] = useState(answers.select_company || answers.company[0] || null);
+    const [ selectedCompany, setSelectedCompany ] = useState(null);
 
     useEffect(() => {
-        setSelectedCompany(answers.select_company || answers.company[0] || null);
-    }, [ answers.select_company || answers.company ]);
+        const firstCompany = Array.isArray(answers?.company) ? answers?.company[0] : null;
+        setSelectedCompany(answers.select_company || firstCompany || null);
+    }, [ answers?.select_company || answers?.company ]);
 
     useEffect(() => {
         // Fetch the list of companies when the component mounts
@@ -31,7 +32,7 @@ export default function CompanyDropdownUpdate({
 
     return (
         <FormControl fullWidth variant="outlined">
-            <FormLabel id="company-label">* Company</FormLabel>
+            <FormLabel id="company-label">{isRequired && <>*</>} Company</FormLabel>
             <Autocomplete
                 required
                 selectOnFocus
@@ -42,6 +43,7 @@ export default function CompanyDropdownUpdate({
                 getOptionLabel={option => {
                     return typeof option === 'object' ? option.company_name : '';
                 }}
+                isOptionEqualToValue={(option, value) => option?.id === value?.id}
                 renderOption={(props, option) => (
                     <li {...props} key={option.id}>
                         {option.company_name}
