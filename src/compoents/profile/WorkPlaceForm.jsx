@@ -64,7 +64,6 @@ export default function WorkPlaceForm({ questions }) {
     };
     useEffect(() => {
         const defaultValues = extractDefaultValues();
-        console.log(defaultValues, defaultValues.company[0].company_name);
         if (userDetails) {
             setFormData({
                 company_name: defaultValues.company[0].company_name,
@@ -129,7 +128,7 @@ export default function WorkPlaceForm({ questions }) {
             value = value.map(item => item.name || item);
         }
         setFormData(prev => ({ ...prev, [name]: value }));
-        console.log(value, 'value role', value.length);
+
         if (value.length === 0) {
             setFormErrors({ job_roles: 'Please select a role that best represents   what you do.' });
         } else {
