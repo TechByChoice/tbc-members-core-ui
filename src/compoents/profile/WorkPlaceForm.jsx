@@ -4,7 +4,6 @@ import { useAuth } from '../../providers/AuthProvider';
 import { createFilterOptions } from '@mui/material/Autocomplete';
 import { useStatus } from '../../providers/MsgStatusProvider';
 import CompanyDropdown from '../CompanyDropDown';
-import CompanyDropdownUpdate from '../CompanyDropDownUpdate';
 
 const filter = createFilterOptions();
 export default function WorkPlaceForm({ questions }) {
@@ -12,9 +11,7 @@ export default function WorkPlaceForm({ questions }) {
     const { viewNewCompany, setViewNewCompany } = useState();
     const userDetails = user[0];
     const [ formErrors, setFormErrors ] = useState({});
-    const {
-        statusType, setStatusMessage, setIsAlertOpen, setStatusType 
-    } = useStatus();
+    const { setStatusMessage, setIsAlertOpen, setStatusType } = useStatus();
 
     const [ formData, setFormData ] = useState({
         company: [],
@@ -67,7 +64,6 @@ export default function WorkPlaceForm({ questions }) {
     };
     useEffect(() => {
         const defaultValues = extractDefaultValues();
-        console.log(defaultValues, defaultValues.company[0].company_name);
         if (userDetails) {
             setFormData({
                 company_name: defaultValues.company[0].company_name,
@@ -80,31 +76,36 @@ export default function WorkPlaceForm({ questions }) {
 
     const handelAccountDetails = e => {
         e.preventDefault();
-
-        const url = process.env.REACT_APP_API_BASE_URL + 'user/profile/update/work-place';
-        fetch(url, {
-            method: 'POST',
-            credentials: 'include',
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Token ${localStorage.getItem('token')}`,
-                // 'credentials': 'include',
-            },
-            body: JSON.stringify(formData),
-        })
-            .then(response => response.json())
-            .then(data => {
-                if (data.status) {
-                    setIsAlertOpen(true);
-                    setStatusType('success');
-                    setStatusMessage('Updates have been saved');
-                }
+        if (formErrors.job_roles) {
+            setIsAlertOpen(true);
+            setStatusType('error');
+            setStatusMessage('Please update all required fields.');
+        } else {
+            const url = process.env.REACT_APP_API_BASE_URL + 'user/profile/update/work-place';
+            fetch(url, {
+                method: 'POST',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Token ${localStorage.getItem('token')}`,
+                    // 'credentials': 'include',
+                },
+                body: JSON.stringify(formData),
             })
-            .catch(error => {
-                setIsAlertOpen(true);
-                setStatusType('error');
-                setStatusMessage('error');
-            });
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status) {
+                        setIsAlertOpen(true);
+                        setStatusType('success');
+                        setStatusMessage('Updates have been saved');
+                    }
+                })
+                .catch(error => {
+                    setIsAlertOpen(true);
+                    setStatusType('error');
+                    setStatusMessage('error');
+                });
+        }
     };
 
     const handleChange = e => {
@@ -127,14 +128,14 @@ export default function WorkPlaceForm({ questions }) {
             value = value.map(item => item.name || item);
         }
         setFormData(prev => ({ ...prev, [name]: value }));
+
+        if (value.length === 0) {
+            setFormErrors({ job_roles: 'Please select a role that best represents   what you do.' });
+        } else {
+            setFormErrors({});
+        }
     };
-    // const handleCompanyChange = (e) => {
-    //
-    //     setFormData(prev => ({
-    //         ...prev,
-    //         company: e
-    //     }));
-    // };
+
     const handleCompanyChange = e => {
         let { name, value } = e.target;
         // Check if the value is an array (since Autocomplete can be multiple)
@@ -187,6 +188,7 @@ export default function WorkPlaceForm({ questions }) {
                                         error={formErrors}
                                         answers={formData}
                                         setAnswers={setFormData}
+                                        isRequired={false}
                                         onCompanySelect={handleCompanyChange}
                                     />
                                 </FormControl>
@@ -204,7 +206,7 @@ export default function WorkPlaceForm({ questions }) {
                                     includeInputInList
                                     handleHomeEndKeys
                                     id="job_roles"
-                                    aria-labelledby="job-title-label"
+                                    aria-labelledby="job-roles"
                                     options={questions?.job_roles || []} // <-- directly provide a default value here
                                     isOptionEqualToValue={(option, value) =>
                                         (option.inputValue && value.inputValue && option.inputValue === value.inputValue) || option === value
@@ -236,13 +238,13 @@ export default function WorkPlaceForm({ questions }) {
                                     }}
                                     renderOption={(props, option) => <li {...props}>{option.pronouns || option.name}</li>}
                                     onChange={(event, value) => handleAutocompleteChange('job_roles', value)}
-                                    renderInput={params => <TextField name="job-title-label" {...params} />}
+                                    renderInput={params => <TextField name="job-roles" {...params} />}
                                 />
                                 {!!formErrors.job_roles && <FormHelperText>{formErrors.job_roles}</FormHelperText>}
                             </FormControl>
                         </Grid>
                         <Grid item xs={12} sm={8}>
-                            <Button variant="contained" color="primary" type="submit">
+                            <Button disabled={formErrors.job_roles} variant="contained" color="primary" type="submit">
                                 Save
                             </Button>
                         </Grid>
