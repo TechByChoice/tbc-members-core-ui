@@ -25,39 +25,6 @@ export default function ProfileInterests({ handleChange, questions }) {
         setSkillsRolesFormData(prev => ({ ...prev, [name]: value }));
     };
 
-    const extractDefaultValues = () => {
-        // Extract the skills and roles from userDetails and map them to the corresponding objects in questions.
-        // The method to do this depends on the structure of userDetails and questions.
-        // Assuming that userDetails contains an array of strings like "role: 20"
-
-        const defaults = {
-            skills: [],
-            department: [],
-        };
-
-        if (userDetails && userDetails?.user_info?.talentprofile.skills) {
-            userDetails?.user_info?.talentprofile.skills.forEach(role => {
-                const index = parseInt(role) - 1; // extracting the index from the role string
-                if (questions.job_skills[index]) {
-                    defaults.skills.push(questions.job_skills[index]);
-                }
-            });
-        }
-
-        if (userDetails && userDetails?.user_info?.talentprofile.department) {
-            userDetails?.user_info?.talentprofile.department.forEach(dep => {
-                const departmentId = parseInt(dep);
-
-                const departmentItem = questions.job_department.find(item => item.id === departmentId);
-                if (departmentItem) {
-                    defaults.department.push(departmentItem);
-                }
-            });
-        }
-
-        return defaults;
-    };
-
     useEffect(() => {
         if (userDetails && questions.job_skills && questions.job_department) {
             const defaultSkills = userDetails.user_info.talentprofile.skills
