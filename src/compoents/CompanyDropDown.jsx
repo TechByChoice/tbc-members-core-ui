@@ -6,14 +6,14 @@ import { createFilterOptions } from '@mui/material/Autocomplete';
 const filter = createFilterOptions();
 
 export default function CompanyDropdownUpdate({
-    error, answers, setAnswers, onCompanySelect 
+    error, answers, setAnswers, onCompanySelect, defaultValue 
 }) {
     const [ companies, setCompanies ] = useState([]);
-    const [ selectedCompany, setSelectedCompany ] = useState(answers.select_company || null);
+    const [ selectedCompany, setSelectedCompany ] = useState(answers.select_company || answers.company[0] || null);
 
     useEffect(() => {
-        setSelectedCompany(answers.select_company || null);
-    }, [ answers.select_company ]);
+        setSelectedCompany(answers.select_company || answers.company[0] || null);
+    }, [ answers.select_company || answers.company ]);
 
     useEffect(() => {
         // Fetch the list of companies when the component mounts

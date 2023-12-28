@@ -39,40 +39,39 @@ export default function WorkPlaceForm({ questions }) {
         if (userDetails && userDetails?.user_info?.talentprofile?.role) {
             userDetails?.user_info?.talentprofile?.role.map((role, index) => {
                 // Parse the role to an integer (if it's a string)
-                // const roleId = parseInt(role, 10);
+                const roleId = parseInt(role.id);
                 //
                 // // Find the item in the sexual_identities array where the id matches the roleId
-                // const identityItem = questions.job_roles.find(item => item.id === roleId);
+                const identityItem = questions.job_roles.find(item => item.id === roleId);
                 //
-                // if (identityItem) {
-                //     console.log(identityItem, 'item');
-                //     // If a match is found, add it to the defaults.identity_sexuality array
-                //     defaults.job_roles.push(identityItem);
-                // }
-                // defaults.job_roles.push(role.name);
+                if (identityItem) {
+                    // If a match is found, add it to the defaults.identity_sexuality array
+                    defaults.job_roles.push(identityItem);
+                }
             });
         }
 
-        // if (userDetails && userDetails?.user_info?.current_company) {
-        //     const companyId = parseInt(userDetails.user_info.current_company.id);
-        //
-        //     // Find the item in the companies array where the id matches the companyId
-        //     const identityItem = questions.company_list.find(item => item.id === companyId);
-        //
-        //     if (identityItem) {
-        //         console.log(identityItem, 'item');
-        //         // If a match is found, add it to the defaults.identity_sexuality array
-        //         defaults.company.push(identityItem);
-        //     }
-        // }
+        if (userDetails && userDetails?.user_info?.current_company) {
+            const companyId = parseInt(userDetails.user_info.current_company.id);
+
+            // Find the item in the companies array where the id matches the companyId
+            const identityItem = questions.company_list.find(item => item.id === companyId);
+
+            if (identityItem) {
+                // If a match is found, add it to the defaults.identity_sexuality array
+                defaults.company.push(identityItem);
+            }
+        }
 
         return defaults;
     };
     useEffect(() => {
         const defaultValues = extractDefaultValues();
+        console.log(defaultValues, defaultValues.company[0].company_name);
         if (userDetails) {
             setFormData({
-                company_name: userDetails?.user_info?.userprofile.company_name || '',
+                company_name: defaultValues.company[0].company_name,
+                company_id: defaultValues.company[0].id,
                 job_roles: defaultValues.job_roles,
                 company: defaultValues.company,
             });
