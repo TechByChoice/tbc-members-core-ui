@@ -1,10 +1,19 @@
-import React, { useState, useEffect } from 'react';
-import { Select, MenuItem, FormControl, InputLabel } from '@mui/material';
-import { getBasicSystemInfo, getCompanyList, getMemberData } from '../api-calls';
+import React, { useState, useEffect, useRef } from 'react';
+import { FormControl, FormLabel, TextField, Autocomplete } from '@mui/material';
+import { getBasicSystemInfo } from '../api-calls';
+import { createFilterOptions } from '@mui/material/Autocomplete';
 
-export default function CompanyDropdown({ onCompanySelect }) {
+const filter = createFilterOptions();
+
+export default function CompanyDropdownUpdate({
+    error, answers, setAnswers, onCompanySelect 
+}) {
     const [ companies, setCompanies ] = useState([]);
-    const [ selectedCompany, setSelectedCompany ] = useState('');
+    const [ selectedCompany, setSelectedCompany ] = useState(answers.select_company || null);
+
+    useEffect(() => {
+        setSelectedCompany(answers.select_company || null);
+    }, [ answers.select_company ]);
 
     useEffect(() => {
         // Fetch the list of companies when the component mounts
@@ -22,20 +31,38 @@ export default function CompanyDropdown({ onCompanySelect }) {
 
     return (
         <FormControl fullWidth variant="outlined">
-            <InputLabel id="company-label">Company</InputLabel>
-            <Select
+            <FormLabel id="company-label">* Company</FormLabel>
+            <Autocomplete
+                required
+                selectOnFocus
+                includeInputInList
+                handleHomeEndKeys
                 value={selectedCompany}
-                onChange={e => {
-                    setSelectedCompany(e.target.value);
-                    onCompanySelect(e.target.value);
+                options={companies}
+                getOptionLabel={option => {
+                    return typeof option === 'object' ? option.company_name : '';
                 }}
-                label="Company">
-                {companies.map(company => (
-                    <MenuItem key={company.id} value={company.id}>
-                        {company.company_name}
-                    </MenuItem>
-                ))}
-            </Select>
+                renderOption={(props, option) => (
+                    <li {...props} key={option.id}>
+                        {option.company_name}
+                        <br />
+                        {option.company_url}
+                    </li>
+                )}
+                filterOptions={(options, params) => {
+                    return filter(options, params);
+                }}
+                onChange={(event, newValue) => {
+                    setSelectedCompany(newValue);
+                    setAnswers(prevState => ({
+                        ...prevState,
+                        select_company: newValue,
+                        company: newValue,
+                        company_id: newValue?.id,
+                    }));
+                }}
+                renderInput={params => <TextField {...params} name="company_name" error={!!error.company_name} inputProps={{ ...params.inputProps }} />}
+            />
         </FormControl>
     );
 }
