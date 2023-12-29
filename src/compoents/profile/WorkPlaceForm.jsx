@@ -26,11 +26,11 @@ export default function WorkPlaceForm({ questions }) {
         // Assuming that userDetails contains an array of strings like "role: 20"
 
         const defaults = {
+            company: [],
+            company_id: '',
             company_name: '',
             company_url: '',
             job_roles: [],
-            company_id: '',
-            company: [],
         };
 
         if (userDetails && userDetails?.user_info?.talentprofile?.role) {
@@ -66,10 +66,10 @@ export default function WorkPlaceForm({ questions }) {
         const defaultValues = extractDefaultValues();
         if (userDetails) {
             setFormData({
-                company_name: defaultValues.company[0].company_name,
-                company_id: defaultValues.company[0].id,
+                company_name: defaultValues?.company[0]?.company_name,
+                company_id: defaultValues?.company[0]?.id,
                 job_roles: defaultValues.job_roles,
-                company: defaultValues.company,
+                company: defaultValues?.company,
             });
         }
     }, [ userDetails ]);
