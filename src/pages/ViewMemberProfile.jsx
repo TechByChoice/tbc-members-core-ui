@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Grid, Card, CardContent, Typography, Button, Hidden, IconButton, CircularProgress, Chip, CardMedia, Divider } from '@mui/material';
+import { Grid, Card, CardContent, Typography, Button, Hidden, IconButton, CircularProgress, Chip, CardMedia, Divider, Box, Modal } from '@mui/material';
 import { LinkedIn, Instagram, GitHub, Twitter, YouTube, Web, Language } from '@mui/icons-material';
 import { useParams } from 'react-router';
 import { getBasicSystemInfo, getCompanyList, getMemberData } from '../api-calls';
@@ -9,11 +9,15 @@ import { Global } from '@emotion/react';
 import HtmlContentRenderer from '../compoents/utils/HtmlContentRenderer';
 import { useAuth } from '../providers/AuthProvider';
 import Link from '@mui/material/Link';
+import ReviewCard from '../compoents/ReviewCard';
+import AddMemberNoteCard from '../compoents/AddMemberNoteCard';
 
 function ViewMemberProfile() {
     const { id } = useParams();
     const [ memberData, setMemberData ] = useState();
     const [ basicData, setBasicData ] = useState();
+    const [ open, setOpen ] = React.useState(false);
+    const [ isUserConnectedWithMentor, setIsUserConnedtedWithMentor ] = useState(false);
     const { user, isLoading, token } = useAuth();
     const loggedInUser = user[0];
     const mentor_roster = loggedInUser?.mentor_roster_data;
@@ -34,6 +38,16 @@ function ViewMemberProfile() {
 
         fetchData();
     }, []);
+
+    useEffect(() => {
+        if (mentor_roster) {
+            const isUserConnectedWithMentor = mentor_roster.some(
+                match => match.mentor === memberData?.data?.mentorship_program?.id && match.mentee === loggedInUser?.mentee_details?.id,
+            );
+
+            setIsUserConnedtedWithMentor(isUserConnectedWithMentor);
+        }
+    }, [ memberData ]);
 
     function handelConnectWithMentor() {
         const url = process.env.REACT_APP_API_BASE_URL + `mentorship/mentor/${id}/connect/roster/add`;
@@ -89,7 +103,9 @@ function ViewMemberProfile() {
     const renderConnectWithMentorCard = () => (
         <Card>
             <CardContent>
-                <Typography variant="h6">Connect with XYZ mentor</Typography>
+                <Typography variant="h6">
+                    Connect with <span style={{ textTransform: 'capitalize' }}>{memberData?.data?.user?.first_name}</span> mentor
+                </Typography>
                 <Button onClick={handelConnectWithMentor} variant="contained" color="primary">
                     Connect Now
                 </Button>
@@ -101,7 +117,17 @@ function ViewMemberProfile() {
         <Card>
             <CardContent>
                 <Typography variant="h6">You&apos;ve connected with this mentor!</Typography>
-                {/*<Button variant="contained" color="primary">Connect Now</Button>*/}
+                <Button
+                    variant="contained"
+                    onClick={() => {
+                        setOpen(true);
+                    }}
+                    color="primary">
+                    Leave a Review
+                </Button>
+                <Button variant="contained" color="primary">
+                    Book Time
+                </Button>
             </CardContent>
         </Card>
     );
@@ -118,7 +144,9 @@ function ViewMemberProfile() {
     const renderPausePublicMentorCard = () => (
         <Card>
             <CardContent>
-                <Typography variant="h6">{memberData?.data?.user?.first_name} stepped away from mentoring to fill their cup.</Typography>
+                <Typography style={{ textTransform: 'capitalize' }} variant="h6">
+                    {memberData?.data?.user?.first_name} stepped away from mentoring to fill their cup.
+                </Typography>
                 <Typography variant="body1">Please check back later to see when they are active.</Typography>
             </CardContent>
         </Card>
@@ -199,18 +227,17 @@ function ViewMemberProfile() {
     );
     const renderIdentityBadges = () => (
         <Grid display="flex" direction="row" justifyContent="end">
-            {memberData?.data?.user_profile?.disability}
-            {memberData?.data?.user_profile?.care_giver && (
+            {memberData?.data?.user_profile?.care_giver && memberData?.data?.user_profile?.is_care_giver_displayed && (
                 <div>
                     <Chip size="small" variant="outlined" label="Caregiver" />
                 </div>
             )}
-            {memberData?.data?.user_profile?.disability && (
+            {memberData?.data?.user_profile?.disability && memberData?.data?.user_profile?.is_disability_displayed && (
                 <div>
                     <Chip size="small" variant="outlined" label="Disability" />
                 </div>
             )}
-            {memberData?.data?.user_profile?.identity_gender && (
+            {memberData?.data?.user_profile?.identity_gender && memberData?.data?.user_profile?.is_identity_gender_displayed && (
                 <>
                     {memberData?.data?.user_profile?.identity_gender.map(identity => {
                         const identityItem = basicData.gender_identities.find(item => item.id === identity);
@@ -222,15 +249,18 @@ function ViewMemberProfile() {
                     })}
                 </>
             )}
-
-            {memberData?.data?.user_profile?.identity_sexuality.map(identity => {
-                const identityItem = basicData.sexual_identities.find(item => item.id === identity);
-                return (
-                    <>
-                        <Chip size="small" variant="outlined" label={identityItem?.identity} />
-                    </>
-                );
-            })}
+            {memberData?.data?.user_profile?.identity_sexuality && memberData?.data?.user_profile?.is_identity_sexuality_displayed && (
+                <>
+                    {memberData?.data?.user_profile?.identity_sexuality.map(identity => {
+                        const identityItem = basicData.sexual_identities.find(item => item.id === identity);
+                        return (
+                            <>
+                                <Chip size="small" variant="outlined" label={identityItem?.identity} />
+                            </>
+                        );
+                    })}
+                </>
+            )}
         </Grid>
     );
     const renderUserSpecificCard = () => {
@@ -244,9 +274,6 @@ function ViewMemberProfile() {
             }
         } else {
             if (memberData?.data?.user?.is_mentor) {
-                const isUserConnectedWithMentor = mentor_roster.some(
-                    match => match.mentor === memberData?.data?.mentorship_program?.id && match.mentee === loggedInUser?.mentee_details?.id,
-                );
                 if (isUserConnectedWithMentor) {
                     return renderMatchedWithThisMentorCard();
                 } else {
@@ -345,8 +372,11 @@ function ViewMemberProfile() {
                                 <Grid container>
                                     <Grid item xs={4}>
                                         <Typography variant="h4">
-                                            {memberData?.data?.user?.first_name} {memberData?.data?.user?.last_name.slice(0, 1)}.{' '}
-                                            {memberData?.data?.user_profile?.identity_pronouns && (
+                                            <span style={{ textTransform: 'capitalize' }}>
+                                                {memberData?.data?.user?.first_name} {memberData?.data?.user?.last_name.slice(0, 1)}.{' '}
+                                            </span>
+                                            {memberData?.data?.user_profile?.identity_pronouns &&
+                                                memberData?.data?.user_profile?.is_pronouns_displayed && (
                                                 <>
                                                     {memberData?.data?.user_profile?.identity_pronouns.map(pronoun => {
                                                         const identityItem = basicData.pronouns_identities.find(item => item.id === pronoun);
@@ -399,6 +429,12 @@ function ViewMemberProfile() {
                                     <CompanyCard company={memberData?.data?.current_company} />
                                 </Container>
                             )}
+                            {isUserConnectedWithMentor && (
+                                <>
+                                    <hr />
+                                    <AddMemberNoteCard />
+                                </>
+                            )}
                         </section>
                     </CardContent>
                 </Card>
@@ -410,6 +446,33 @@ function ViewMemberProfile() {
                     {renderMentorContactSpecificCard()}
                 </Grid>
             </Hidden>
+            <Modal
+                open={open}
+                onClose={() => {
+                    setOpen(false);
+                }}
+                style={{padding: '20px',}}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description">
+                <Box
+                    style={{
+                        position: 'absolute',
+                        top: '50%',
+                        left: '50%',
+                        transform: 'translate(-50%, -50%)',
+                        width: 400,
+                        backgroundColor: '#fff',
+                        boxShadow: 24,
+                        padding: 15,
+                    }}>
+                    <Typography id="modal-modal-title" variant="h6" component="h2">
+                        Leave a Review for {memberData?.data?.user?.first_name}
+                    </Typography>
+                    <div>
+                        <ReviewCard talentDetails={memberData?.data} setOpen={setOpen} />
+                    </div>
+                </Box>
+            </Modal>
         </Grid>
     );
 }
