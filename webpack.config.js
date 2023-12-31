@@ -51,14 +51,14 @@ module.exports = (_, argv) => {
                 {
                     test: /\.m?js/,
                     type: 'javascript/auto',
-                    resolve: {fullySpecified: false,},
+                    resolve: { fullySpecified: false },
                 },
                 {
                     test: /\.(png|jpe?g|gif|svg)$/i,
                     use: [
                         {
                             loader: 'file-loader',
-                            options: {name: '[path][name].[ext]',},
+                            options: { name: '[path][name].[ext]' },
                         },
                     ],
                 },
@@ -84,7 +84,7 @@ module.exports = (_, argv) => {
                     use: getStyleLoaders({
                         importLoaders: 1,
                         sourceMap: isEnvProduction ? isEnvDevelopment : isEnvDevelopment,
-                        modules: {mode: 'icss',},
+                        modules: { mode: 'icss' },
                     }),
                     // Don't consider CSS imports dead code even if the
                     // containing package claims to have no side effects.
@@ -98,7 +98,7 @@ module.exports = (_, argv) => {
                     test: cssModuleRegex,
                     use: getStyleLoaders({
                         importLoaders: 1,
-                        sourceMap: isEnvProduction ? shouldUseSourceMap : isEnvDevelopment,
+                        sourceMap: isEnvDevelopment,
                         modules: {
                             mode: 'local',
                             getLocalIdent: getCSSModuleLocalIdent,
@@ -111,7 +111,7 @@ module.exports = (_, argv) => {
                     // exclude: [/node_modules(?!\/quill)/],
                     use: {
                         loader: 'babel-loader',
-                        options: {presets: [ '@babel/preset-env', '@babel/preset-react' ],},
+                        options: { presets: [ '@babel/preset-env', '@babel/preset-react' ] },
                     },
                 },
                 {
@@ -119,7 +119,7 @@ module.exports = (_, argv) => {
                     use: [
                         {
                             loader: 'html-loader',
-                            options: {minimize: true,},
+                            options: { minimize: true },
                         },
                     ],
                 },
@@ -134,7 +134,7 @@ module.exports = (_, argv) => {
             new ModuleFederationPlugin({
                 name: 'host',
                 filename: 'remoteEntry.js',
-                remotes: {open_doors: 'open_doors@http://localhost:8080/remoteEntry.js',},
+                remotes: { open_doors: 'open_doors@http://localhost:8080/remoteEntry.js' },
                 exposes: {},
                 shared: {
                     ...deps,
@@ -148,9 +148,9 @@ module.exports = (_, argv) => {
                     },
                 },
             }),
-            new HtmlWebPackPlugin({template: './src/index.html',}),
-            new Dotenv({path: '.env',}),
+            new HtmlWebPackPlugin({ template: './src/index.html' }),
+            new Dotenv({ path: '.env' }),
         ],
-        devtool: isEnvDevelopment ? 'eval-source-map' : 'none',
+        devtool: isEnvDevelopment ? 'cheap-module-source-map' : 'source-map',
     };
 };
