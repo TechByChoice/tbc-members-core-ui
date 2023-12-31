@@ -25,9 +25,9 @@ export default function ProfileMentorship({ questions }) {
     return (
         <>
             <Grid container>
-                {user.is_mentor_application_submitted ? (
+                {user[0]?.account_info?.is_mentor_application_submitted ? (
                     <>
-                        <FormMentorApplication questions={questions} />
+                        <FormMentorApplication defaultValues={user[0]?.mentor_details} questions={questions} />
                         <ProfileMentorDetails />
                     </>
                 ) : (

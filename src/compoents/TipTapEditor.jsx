@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { EditorContent, useEditor } from '@tiptap/react';
 import Button from '@mui/material/Button';
 import StarterKit from '@tiptap/starter-kit';
@@ -17,7 +17,9 @@ const EditorButton = styled(Button)`
     margin: 2px;
     font-size: 12px;
 `;
-export default function TipTapEditor({ id, onFormDataChange, error }) {
+export default function TipTapEditor({
+    id, onFormDataChange, error, value 
+}) {
     const editor = useEditor({
         extensions: [
             StarterKit,
@@ -33,7 +35,12 @@ export default function TipTapEditor({ id, onFormDataChange, error }) {
             onFormDataChange(id, editor.getHTML());
         },
     });
-
+    // Set editor content when `value` prop changes
+    useEffect(() => {
+        if (editor && value) {
+            editor.commands.setContent(value);
+        }
+    }, [ editor, value ]);
     const applyFormat = format => {
         switch (format) {
             case 'h1':

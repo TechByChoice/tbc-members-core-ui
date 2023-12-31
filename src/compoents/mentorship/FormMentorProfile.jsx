@@ -4,7 +4,7 @@ import React from 'react';
 import TipTapEditor from '../TipTapEditor';
 
 export default function FormMentorProfile({
-    questions, formErrors, formData, setFormData 
+    questions, formErrors, formData, setFormData, defaultData 
 }) {
     const handleQuillChange = (editorId, content) => {
         const newFormData = { ...formData, [editorId]: content };
@@ -32,7 +32,7 @@ export default function FormMentorProfile({
                                 <FormLabel id="mentorship_goals">
                                     What goals do you have as a mentor and how do you see yourself making a positive impact?
                                 </FormLabel>
-                                <TipTapEditor id="mentorship_goals" onFormDataChange={handleQuillChange} />
+                                <TipTapEditor value={defaultData?.mentorship_goals} id="mentorship_goals" onFormDataChange={handleQuillChange} />
                             </FormControl>
                         </Grid>
 
@@ -41,7 +41,7 @@ export default function FormMentorProfile({
                                 <FormLabel id="mentor_how_to_help">
                                     In what ways would you like to contribute and support your mentee&apos;s growth and development?
                                 </FormLabel>
-                                <TipTapEditor id="mentor_how_to_help" onFormDataChange={handleQuillChange} />
+                                <TipTapEditor value={defaultData?.mentor_how_to_help} id="mentor_how_to_help" onFormDataChange={handleQuillChange} />
                             </FormControl>
                         </Grid>
                     </Grid>

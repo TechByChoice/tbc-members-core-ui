@@ -264,7 +264,7 @@ function ViewMemberProfile() {
         </Grid>
     );
     const renderUserSpecificCard = () => {
-        if (isOwnProfile) {
+        if (isOwnProfile && memberData?.data?.user?.is_mentor) {
             if (memberData?.data?.user?.is_mentor_training_complete && memberData?.data?.user?.is_mentor_profile_active) {
                 return renderPauseMentoringCard();
             } else if (memberData?.data?.user?.is_mentor_application_submitted) {
@@ -283,11 +283,6 @@ function ViewMemberProfile() {
         }
         return null;
     };
-    if (memberData?.data?.talent_profile?.skills) {
-        memberData.data.talent_profile.skills.forEach((skill, index) => {
-            // const skillItem = basicData.job_skills.find(item => item.id === skill);
-        });
-    }
 
     const renderMentorProfileSection = () => (
         <>
@@ -451,7 +446,7 @@ function ViewMemberProfile() {
                 onClose={() => {
                     setOpen(false);
                 }}
-                style={{padding: '20px',}}
+                style={{ padding: '20px' }}
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description">
                 <Box

@@ -70,6 +70,7 @@ export default function WorkPlaceForm({ questions }) {
                 company_id: defaultValues?.company[0]?.id,
                 job_roles: defaultValues.job_roles,
                 company: defaultValues?.company,
+                select_company: defaultValues?.company[0] || null,
             });
         }
     }, [ userDetails ]);

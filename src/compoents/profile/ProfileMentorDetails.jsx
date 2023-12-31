@@ -35,20 +35,14 @@ export default function ProfileMentorDetails() {
 
     return (
         <>
-            {user.is_mentor_application_submitted ? (
-                <>
-                    <FormMentorProfile formData={formData} setFormData={setFormData} />
-                    <Grid item xs={12} sm={8}>
-                        <Button variant="contained" color="primary" onClick={handleSave}>
-                            Update
-                        </Button>
-                    </Grid>
-                </>
-            ) : (
-                <>
-                    <h1>Would you like to build a snowman</h1>
-                </>
-            )}
+            <>
+                <FormMentorProfile defaultData={user[0]?.mentor_details?.mentor_profile} formData={formData} setFormData={setFormData} />
+                <Grid item xs={12} sm={8}>
+                    <Button variant="contained" color="primary" onClick={handleSave}>
+                        Update
+                    </Button>
+                </Grid>
+            </>
         </>
     );
 }
