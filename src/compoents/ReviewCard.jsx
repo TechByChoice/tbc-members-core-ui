@@ -6,7 +6,7 @@ import { useAuth } from '../providers/AuthProvider';
 import { useStatus } from '../providers/MsgStatusProvider';
 
 function ReviewCard({ talentDetails, setOpen }) {
-    const [ formData, setFormData ] = useState();
+    const [ formData, setFormData ] = useState({});
     const { token } = useAuth();
     const { setStatusMessage, setIsAlertOpen, setStatusType } = useStatus();
 
@@ -27,6 +27,9 @@ function ReviewCard({ talentDetails, setOpen }) {
         })
             .then(response => {
                 if (!response.ok) {
+                    setStatusMessage('Sorry, we ran into an issue, please try again');
+                    setIsAlertOpen(true);
+                    setStatusType('error');
                     throw new Error('Network response was not ok');
                 }
                 return response.json();
@@ -39,6 +42,9 @@ function ReviewCard({ talentDetails, setOpen }) {
             })
             .catch(error => {
                 console.error('Fetch error:', error);
+                setStatusMessage('Sorry, we ran into an issue, please try again');
+                setIsAlertOpen(true);
+                setStatusType('error');
             });
     };
 
