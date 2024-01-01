@@ -1,5 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import { Grid, Card, CardContent, Typography, Button, Hidden, IconButton, CircularProgress, Chip, CardMedia, Divider, Box, Modal } from '@mui/material';
+import {Grid,
+    Card,
+    CardContent,
+    Typography,
+    Button,
+    Hidden,
+    IconButton,
+    CircularProgress,
+    Chip,
+    CardMedia,
+    Divider,
+    Box,
+    Modal,
+    FormLabel,
+    FormControl,
+    FormControlLabel,} from '@mui/material';
 import { LinkedIn, Instagram, GitHub, Twitter, YouTube, Web, Language } from '@mui/icons-material';
 import { useParams } from 'react-router';
 import { getBasicSystemInfo, getCompanyList, getMemberData } from '../api-calls';
@@ -11,13 +26,17 @@ import { useAuth } from '../providers/AuthProvider';
 import Link from '@mui/material/Link';
 import ReviewCard from '../compoents/ReviewCard';
 import AddMemberNoteCard from '../compoents/AddMemberNoteCard';
+import RadioGroup from '@mui/material/RadioGroup/RadioGroup';
+import Radio from '@mui/material/Radio/Radio';
 
 function ViewMemberProfile() {
     const { id } = useParams();
     const [ memberData, setMemberData ] = useState();
     const [ basicData, setBasicData ] = useState();
-    const [ open, setOpen ] = React.useState(false);
-    const [ isUserConnectedWithMentor, setIsUserConnedtedWithMentor ] = useState(false);
+    const [ open, setOpen ] = useState(false);
+    const [ openRejectModal, setOpenRejectModal ] = useState(false);
+    const [ isUserConnectedWithMentor, setIsUserConnectedWithMentor ] = useState(false);
+    const [ rejectionForm, setRejectionForm ] = useState({});
     const { user, isLoading, token } = useAuth();
     const loggedInUser = user[0];
     const mentor_roster = loggedInUser?.mentor_roster_data;
@@ -40,12 +59,12 @@ function ViewMemberProfile() {
     }, []);
 
     useEffect(() => {
-        if (mentor_roster) {
-            const isUserConnectedWithMentor = mentor_roster.some(
+        if (Array.isArray(mentor_roster)) {
+            const isUserConnectedWithMentor = mentor_roster?.some(
                 match => match.mentor === memberData?.data?.mentorship_program?.id && match.mentee === loggedInUser?.mentee_details?.id,
             );
 
-            setIsUserConnedtedWithMentor(isUserConnectedWithMentor);
+            setIsUserConnectedWithMentor(isUserConnectedWithMentor);
         }
     }, [ memberData ]);
 
@@ -113,6 +132,30 @@ function ViewMemberProfile() {
         </Card>
     );
 
+    const renderStaffReviewCard = () => (
+        <Card>
+            <CardContent>
+                <Typography variant="h4" component="h1">
+                    Did they pass?
+                </Typography>
+                <Typography variant="body1" component="p">
+                    After reviewing the application, either approve or reject the mentor application.
+                </Typography>
+                <Button onClick={handelInterviewRequest} variant="contained" color="primary">
+                    Send Interview Request
+                </Button>
+                <Button
+                    onClick={() => {
+                        setOpenRejectModal(true);
+                    }}
+                    variant="contained"
+                    color="primary">
+                    Reject The Application
+                </Button>
+            </CardContent>
+        </Card>
+    );
+
     const renderMatchedWithThisMentorCard = () => (
         <Card>
             <CardContent>
@@ -151,6 +194,34 @@ function ViewMemberProfile() {
             </CardContent>
         </Card>
     );
+
+    const handelInterviewRequest = () => {
+        console.log('hey');
+    };
+
+    const handelMentorAppRejection = () => {
+        const url = process.env.REACT_APP_API_BASE_URL + `mentorship/mentor/${id}/update-status/`;
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                Authorization: `Token ${token}`,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(rejectionForm),
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log(data, 'saved');
+            })
+            .catch(error => {
+                console.error('Fetch error:', error);
+            });
+    };
 
     const renderSocialIcons = () => (
         <Grid container spacing={1}>
@@ -264,6 +335,11 @@ function ViewMemberProfile() {
         </Grid>
     );
     const renderUserSpecificCard = () => {
+        if (loggedInUser.account_info.is_staff) {
+            if (memberData?.data?.user?.is_mentor_application_submitted) {
+                return renderStaffReviewCard();
+            }
+        }
         if (isOwnProfile && memberData?.data?.user?.is_mentor) {
             if (memberData?.data?.user?.is_mentor_training_complete && memberData?.data?.user?.is_mentor_profile_active) {
                 return renderPauseMentoringCard();
@@ -466,6 +542,52 @@ function ViewMemberProfile() {
                     <div>
                         <ReviewCard talentDetails={memberData?.data} setOpen={setOpen} />
                     </div>
+                </Box>
+            </Modal>
+
+            <Modal
+                open={openRejectModal}
+                onClose={() => {
+                    setOpenRejectModal(false);
+                }}
+                style={{ padding: '20px' }}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description">
+                <Box
+                    style={{
+                        position: 'absolute',
+                        top: '50%',
+                        left: '50%',
+                        transform: 'translate(-50%, -50%)',
+                        width: 400,
+                        backgroundColor: '#fff',
+                        boxShadow: 24,
+                        padding: 15,
+                    }}>
+                    <Typography id="modal-modal-title" variant="h6" component="h2">
+                        Why are we rejecting {memberData?.data?.user?.first_name}?
+                    </Typography>
+                    <Box>
+                        <FormControl>
+                            <FormLabel id="mentor-rejection-reason-label">Why are we rejecting </FormLabel>
+                            <RadioGroup
+                                aria-labelledby="demo-mentor-rejection-reason-label"
+                                name="mentor-rejection-reason"
+                                onChange={e => {
+                                    setRejectionForm({ 'mentor-rejection-reason': e.target.value });
+                                }}>
+                                <FormControlLabel value="removed_coc_issues" control={<Radio />} label="Rejected for COC Issues" />
+                                <FormControlLabel value="incomplete_application" control={<Radio />} label="Incomplete Application" />
+                                <FormControlLabel value="lacking_experience" control={<Radio />} label="Lacking Experience" />
+                                <FormControlLabel value="rejected_other" control={<Radio />} label="Other" />
+                            </RadioGroup>
+                        </FormControl>
+                    </Box>
+                    <Box>
+                        <Button type="button" onClick={handelMentorAppRejection} variant="solid">
+                            Submit
+                        </Button>
+                    </Box>
                 </Box>
             </Modal>
         </Grid>
