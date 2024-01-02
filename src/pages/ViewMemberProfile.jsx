@@ -156,6 +156,26 @@ function ViewMemberProfile() {
         </Card>
     );
 
+    const renderStaffInterviewApprovalCard = () => (
+        <Card>
+            <CardContent>
+                <Typography variant="h4" component="h1">
+                    Ready to Approve this Mentor?
+                </Typography>
+                <Typography variant="body1" component="p">
+                    We&apos;ve requested an the mentor to schedule an interview on{' '}
+                    {memberData?.data?.mentorship_program?.mentor_profile?.interview_requested_at_date}. Once passed we can approve or reject them.
+                </Typography>
+                <Button onClick={handelApproveMentor} variant="contained" color="primary">
+                    Approve Mentor
+                </Button>
+                <Button onClick={handelSendReminderMentor} variant="contained" color="primary">
+                    Send Interview Reminder
+                </Button>
+            </CardContent>
+        </Card>
+    );
+
     const renderMatchedWithThisMentorCard = () => (
         <Card>
             <CardContent>
@@ -203,7 +223,56 @@ function ViewMemberProfile() {
                 Authorization: `Token ${token}`,
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({'mentor-update-status': 'send-invite',}),
+            body: JSON.stringify({ 'mentor-update-status': 'send-invite' }),
+        })
+            .then(response => {
+                console.log(response, 'response');
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log(data, 'saved');
+            })
+            .catch(error => {
+                console.error('Fetch error:', error);
+            });
+    };
+
+    const handelApproveMentor = () => {
+        const url = process.env.REACT_APP_API_BASE_URL + `mentorship/mentor/${id}/update-status/`;
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                Authorization: `Token ${token}`,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ 'mentor-update-status': 'approve-mentor' }),
+        })
+            .then(response => {
+                console.log(response, 'response');
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log(data, 'saved');
+            })
+            .catch(error => {
+                console.error('Fetch error:', error);
+            });
+    };
+    const handelSendReminderMentor = () => {
+        const url = process.env.REACT_APP_API_BASE_URL + `mentorship/mentor/${id}/update-status/`;
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                Authorization: `Token ${token}`,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ 'mentor-update-status': 'interview-reminder' }),
         })
             .then(response => {
                 console.log(response, 'response');
@@ -357,6 +426,9 @@ function ViewMemberProfile() {
     );
     const renderUserSpecificCard = () => {
         if (loggedInUser.account_info.is_staff) {
+            if (memberData?.data?.user?.is_mentor_interviewing) {
+                return renderStaffInterviewApprovalCard();
+            }
             if (memberData?.data?.user?.is_mentor_application_submitted) {
                 return renderStaffReviewCard();
             }
