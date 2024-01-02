@@ -1,8 +1,6 @@
-import { Autocomplete, Button, FormControl, FormHelperText, FormLabel, Grid, TextField, Typography } from '@mui/material';
+import { Autocomplete, FormControl, FormHelperText, FormLabel, Grid, TextField, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { createFilterOptions } from '@mui/material/Autocomplete';
-// import ReactQuill from 'react-quill';
-// import 'react-quill/dist/quill.snow.css';
 import { useAuth } from '../../providers/AuthProvider';
 
 const filter = createFilterOptions();
@@ -135,7 +133,7 @@ export default function FormMentorApplication({
                                         selectOnFocus
                                         includeInputInList
                                         handleHomeEndKeys
-                                        value={defaultValues?.mentor_profile.mentor_support_areas}
+                                        value={defaultValues?.mentor_profile?.mentor_support_areas}
                                         id="mentor_support_areas"
                                         aria-labelledby="mentor_support_areas-label"
                                         options={supportAreas || []} // <-- directly provide a default value here
