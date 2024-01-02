@@ -196,7 +196,28 @@ function ViewMemberProfile() {
     );
 
     const handelInterviewRequest = () => {
-        console.log('hey');
+        const url = process.env.REACT_APP_API_BASE_URL + `mentorship/mentor/${id}/update-status/`;
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                Authorization: `Token ${token}`,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({'mentor-update-status': 'send-invite',}),
+        })
+            .then(response => {
+                console.log(response, 'response');
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log(data, 'saved');
+            })
+            .catch(error => {
+                console.error('Fetch error:', error);
+            });
     };
 
     const handelMentorAppRejection = () => {
@@ -487,7 +508,7 @@ function ViewMemberProfile() {
                                         {memberData?.data?.talent_profile?.skills.map(skill => {
                                             return (
                                                 <>
-                                                    <Chip label={skill?.name} />
+                                                    <Chip key={skill.id} label={skill?.name} />
                                                 </>
                                             );
                                         })}
