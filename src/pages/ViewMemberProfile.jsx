@@ -198,6 +198,22 @@ function ViewMemberProfile() {
             </CardContent>
         </Card>
     );
+    const renderPauseApplicationCard = () => (
+        <Card>
+            <CardContent>
+                <Typography variant="h4" component="h1">
+                    Do you need to paused mentoring?
+                </Typography>
+                <Typography variant="body1" component="p">
+                    We don&apos;t want you to burnout, so we make it easy for you to pause your mentoring because life happens and we get it. When
+                    you&apos;re ready you can come back to your account and reactivate it later.
+                </Typography>
+                <Button onClick={handelPauseMentorApplication} variant="contained" color="primary">
+                    Pause Mentor Application
+                </Button>
+            </CardContent>
+        </Card>
+    );
 
     const renderMatchedWithThisMentorCard = () => (
         <Card>
@@ -272,6 +288,31 @@ function ViewMemberProfile() {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({ 'mentor-update-status': 'approve-mentor' }),
+        })
+            .then(response => {
+                console.log(response, 'response');
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log(data, 'saved');
+            })
+            .catch(error => {
+                console.error('Fetch error:', error);
+            });
+    };
+
+    const handelPauseMentorApplication = () => {
+        const url = process.env.REACT_APP_API_BASE_URL + `mentorship/mentor/${id}/update-status/`;
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                Authorization: `Token ${token}`,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ 'mentor-update-status': 'pause' }),
         })
             .then(response => {
                 console.log(response, 'response');
@@ -449,6 +490,13 @@ function ViewMemberProfile() {
     );
     const renderUserSpecificCard = () => {
         if (loggedInUser?.account_info?.is_staff) {
+            if (memberData?.data?.user?.is_mentor_profile_active) {
+                return renderPauseMentoringCard();
+            }
+
+            if (!memberData?.data?.user?.is_mentor_profile_active && memberData?.data?.user?.is_mentor_profile_approved) {
+                return renderPauseMentoringCard();
+            }
             if (memberData?.data?.user?.is_mentor_interviewing) {
                 return renderStaffInterviewApprovalCard();
             }
@@ -456,11 +504,13 @@ function ViewMemberProfile() {
                 return renderStaffReviewCard();
             }
         }
+
         if (isOwnProfile && memberData?.data?.user?.is_mentor) {
             if (memberData?.data?.user?.is_mentor_profile_approved && !memberData?.data?.user?.is_mentor_profile_active) {
                 return renderSetBookingLinkCard();
             }
-            if (memberData?.data?.user?.is_mentor_training_complete && memberData?.data?.user?.is_mentor_profile_active) {
+            // data.mentorship_program.calendar_link
+            if (memberData?.data?.mentorship_program?.calendar_link && memberData?.data?.user?.is_mentor_profile_active) {
                 return renderPauseMentoringCard();
             } else if (memberData?.data?.user?.is_mentor_application_submitted && !memberData?.data?.user?.is_mentor_interviewing) {
                 return renderApplicationReviewCard();
@@ -470,7 +520,7 @@ function ViewMemberProfile() {
                 return renderMentorEdgeCaseStateCard();
             }
         } else {
-            if (memberData?.data?.user?.is_mentor) {
+            if (memberData?.data?.user?.is_mentor && !loggedInUser?.account_info?.is_staff) {
                 if (isUserConnectedWithMentor) {
                     return renderMatchedWithThisMentorCard();
                 } else {
@@ -478,6 +528,7 @@ function ViewMemberProfile() {
                 }
             }
         }
+
         return null;
     };
 
@@ -516,7 +567,7 @@ function ViewMemberProfile() {
                     We don&apos;t want you to burnout, so we make it easy for you to pause your mentoring because life happens and we get it. When
                     you&apos;re ready you can come back to your account and reactivate it later.
                 </Typography>
-                <Button variant="contained" color="primary">
+                <Button onClick={handelPauseMentorApplication} variant="contained" color="primary">
                     Pause Mentorship
                 </Button>
             </CardContent>
