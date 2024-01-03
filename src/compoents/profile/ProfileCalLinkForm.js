@@ -4,46 +4,45 @@ import { useAuth } from '../../providers/AuthProvider';
 import { useStatus } from '../../providers/MsgStatusProvider';
 
 export default function ProfileCalLinkForm() {
-    const { user } = useAuth();
+    const { user, token } = useAuth();
     const userDetails = user[0];
-    const [ formErrors, setFormErrors ] = useState({});
-    const {
-        statusType, setStatusMessage, setIsAlertOpen, setStatusType 
-    } = useStatus();
 
-    const [ socialMediaFormData, setSocialMediaFormData ] = useState({calendar_link: '',});
+    const { setStatusMessage, setIsAlertOpen, setStatusType } = useStatus();
+
+    const [ socialMediaFormData, setSocialMediaFormData ] = useState({ calendar_link: '' });
 
     useEffect(() => {
         if (userDetails) {
-            setSocialMediaFormData({calendar_link: userDetails?.user_info?.userprofile?.calendar_link?.replace(/https:\/\//g, '') || '',});
+            setSocialMediaFormData({ calendar_link: userDetails?.mentor_details?.calendar_link?.replace(/https:\/\//g, '') || '' });
         }
     }, [ userDetails ]);
 
     const handelSocialAccountSave = e => {
         e.preventDefault();
-        const url = process.env.REACT_APP_API_BASE_URL + 'user/profile/update/social-accounts';
+        const url = process.env.REACT_APP_API_BASE_URL + `mentorship/update/calendar-link/`;
         fetch(url, {
             method: 'POST',
-            credentials: 'include',
             headers: {
+                Authorization: `Token ${token}`,
                 'Content-Type': 'application/json',
-                Authorization: `Token ${localStorage.getItem('token')}`,
             },
-            body: JSON.stringify(socialMediaFormData),
+            body: JSON.stringify({
+                'mentor-update-status': 'active',
+                calendar_link: socialMediaFormData.calendar_link,
+            }),
         })
-            .then(response => response.json())
-            .then(data => {
-                if (data.status) {
-                    setIsAlertOpen(true);
-                    setStatusType('success');
-                    setStatusMessage('Updates have been saved');
+            .then(response => {
+                console.log(response, 'response');
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
                 }
+                return response.json();
+            })
+            .then(data => {
+                console.log(data, 'saved');
             })
             .catch(error => {
-                console.error('Error:', error);
-                setIsAlertOpen(true);
-                setStatusType('error');
-                setStatusMessage('error');
+                console.error('Fetch error:', error);
             });
     };
 
@@ -51,14 +50,15 @@ export default function ProfileCalLinkForm() {
         const { name, value } = e.target;
 
         let updatedValue = value;
-        if (name === 'company_url' && !value.startsWith('https://')) {
-            updatedValue = `https://${value}`;
-        }
+        // if (!value.startsWith('https://')) {
+        //     updatedValue = `https://${value}`;
+        // }
 
         setSocialMediaFormData({
             ...socialMediaFormData,
             [name]: updatedValue,
         });
+        console.log(socialMediaFormData);
     };
     return (
         <>
@@ -73,11 +73,11 @@ export default function ProfileCalLinkForm() {
                 <Grid container>
                     <Grid item xs={12}>
                         <FormControl fullWidth>
-                            <FormLabel htmlFor="calendly_link">Your Calendly Link</FormLabel>
+                            <FormLabel htmlFor="calendar_link">Your Calendly Link</FormLabel>
                             <OutlinedInput
                                 onChange={handleChange}
-                                name="calendly_link"
-                                value={socialMediaFormData.calendly_link}
+                                name="calendar_link"
+                                value={socialMediaFormData.calendar_link}
                                 startAdornment={<InputAdornment position="start">https://</InputAdornment>}
                                 type="url"
                             />

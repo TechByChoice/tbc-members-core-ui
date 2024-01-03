@@ -1,29 +1,28 @@
 import React, { useEffect, useState } from 'react';
-import {Grid,
+import {Box,
+    Button,
     Card,
     CardContent,
-    Typography,
-    Button,
+    CardMedia,
+    Chip,
+    CircularProgress,
+    Divider,
+    FormControl,
+    FormControlLabel,
+    FormLabel,
+    Grid,
     Hidden,
     IconButton,
-    CircularProgress,
-    Chip,
-    CardMedia,
-    Divider,
-    Box,
     Modal,
-    FormLabel,
-    FormControl,
-    FormControlLabel,} from '@mui/material';
-import { LinkedIn, Instagram, GitHub, Twitter, YouTube, Web, Language } from '@mui/icons-material';
+    Typography,} from '@mui/material';
+import { GitHub, Instagram, Language, LinkedIn, Twitter, YouTube } from '@mui/icons-material';
 import { useParams } from 'react-router';
-import { getBasicSystemInfo, getCompanyList, getMemberData } from '../api-calls';
+import { getBasicSystemInfo, getMemberData } from '../api-calls';
 import Container from '@mui/material/Container';
 import CompanyCard from '../compoents/CompanyCard';
-import { Global } from '@emotion/react';
 import HtmlContentRenderer from '../compoents/utils/HtmlContentRenderer';
 import { useAuth } from '../providers/AuthProvider';
-import Link from '@mui/material/Link';
+import { Link } from 'react-router-dom';
 import ReviewCard from '../compoents/ReviewCard';
 import AddMemberNoteCard from '../compoents/AddMemberNoteCard';
 import RadioGroup from '@mui/material/RadioGroup/RadioGroup';
@@ -104,6 +103,30 @@ function ViewMemberProfile() {
         <Card>
             <CardContent>
                 <Typography variant="h6">We&apos;re reviewing your application now!</Typography>
+            </CardContent>
+        </Card>
+    );
+
+    const renderSentInterviewCard = () => (
+        <Card>
+            <CardContent>
+                <Typography variant="h6">Grate news! You&apos;ve moved on to the next stage!</Typography>
+                <Typography variant="body1">Make sure you check you email that has all the details about setting up time for your interview!</Typography>
+            </CardContent>
+        </Card>
+    );
+    const renderSetBookingLinkCard = () => (
+        <Card>
+            <CardContent>
+                <Typography variant="h6">Make sure you update your booking link to make your profile active!</Typography>
+                <Typography variant="body1">
+                    Head over to the
+                    <Link to="/profile">
+                        {' '}
+                        <strong>mentorship</strong> section of the profile page
+                    </Link>
+                    to set your Calendly link so people can book time to chat with you!
+                </Typography>
             </CardContent>
         </Card>
     );
@@ -425,7 +448,7 @@ function ViewMemberProfile() {
         </Grid>
     );
     const renderUserSpecificCard = () => {
-        if (loggedInUser.account_info.is_staff) {
+        if (loggedInUser?.account_info?.is_staff) {
             if (memberData?.data?.user?.is_mentor_interviewing) {
                 return renderStaffInterviewApprovalCard();
             }
@@ -434,10 +457,15 @@ function ViewMemberProfile() {
             }
         }
         if (isOwnProfile && memberData?.data?.user?.is_mentor) {
+            if (memberData?.data?.user?.is_mentor_profile_approved && !memberData?.data?.user?.is_mentor_profile_active) {
+                return renderSetBookingLinkCard();
+            }
             if (memberData?.data?.user?.is_mentor_training_complete && memberData?.data?.user?.is_mentor_profile_active) {
                 return renderPauseMentoringCard();
-            } else if (memberData?.data?.user?.is_mentor_application_submitted) {
+            } else if (memberData?.data?.user?.is_mentor_application_submitted && !memberData?.data?.user?.is_mentor_interviewing) {
                 return renderApplicationReviewCard();
+            } else if (memberData?.data?.user?.is_mentor_interviewing && !memberData?.data?.is_mentor_profile_approved) {
+                return renderSentInterviewCard();
             } else {
                 return renderMentorEdgeCaseStateCard();
             }
