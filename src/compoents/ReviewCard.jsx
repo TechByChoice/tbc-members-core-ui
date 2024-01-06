@@ -16,7 +16,7 @@ function ReviewCard({ talentDetails, setOpen }) {
     };
 
     const handleSubmit = () => {
-        const url = process.env.REACT_APP_API_BASE_URL + `mentorship/reviews/${talentDetails?.mentorship_program?.id}/`;
+        const url = import.meta.env.VITE_APP_API_BASE_URL + `mentorship/reviews/${talentDetails?.mentorship_program?.id}/`;
         fetch(url, {
             method: 'POST',
             headers: {

@@ -18,7 +18,7 @@ export default function MemberDashboard() {
     });
 
     useEffect(() => {
-        const url = process.env.REACT_APP_API_BASE_URL + 'event/';
+        const url = import.meta.env.VITE_APP_API_BASE_URL + 'event/';
 
         fetch(url, {
             method: 'GET',
@@ -40,8 +40,8 @@ export default function MemberDashboard() {
                 console.error('Error fetching events:', error);
             });
 
-        // const job_match_url = process.env.REACT_APP_API_BASE_URL + 'company/job/matches';
-        const job_match_url = process.env.REACT_APP_API_BASE_URL + 'company/new/jobs/job-match/';
+        // const job_match_url = import.meta.env.VITE_APP_API_BASE_URL + 'company/job/matches';
+        const job_match_url = import.meta.env.VITE_APP_API_BASE_URL + 'company/new/jobs/job-match/';
 
         fetch(job_match_url, {
             method: 'get',
@@ -63,7 +63,7 @@ export default function MemberDashboard() {
                 console.error('Error fetching events:', error);
             });
 
-        const mentor_match_url = process.env.REACT_APP_API_BASE_URL + 'mentorship/mentor-match/';
+        const mentor_match_url = import.meta.env.VITE_APP_API_BASE_URL + 'mentorship/mentor-match/';
 
         fetch(mentor_match_url, {
             method: 'get',
@@ -82,11 +82,10 @@ export default function MemberDashboard() {
                 setMentor(data.matching_mentors[0]);
             })
             .catch(error => {
-
                 console.error('Error fetching events:', error);
             });
 
-        const announcement_url = process.env.REACT_APP_API_BASE_URL + 'user/details/announcement';
+        const announcement_url = import.meta.env.VITE_APP_API_BASE_URL + 'user/details/announcement';
 
         fetch(announcement_url, {
             method: 'get',

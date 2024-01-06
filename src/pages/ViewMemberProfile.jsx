@@ -50,7 +50,7 @@ function ViewMemberProfile() {
     }, [ memberData ]);
 
     function handelConnectWithMentor() {
-        const url = process.env.REACT_APP_API_BASE_URL + `mentorship/mentor/${id}/connect/roster/add`;
+        const url = import.meta.env.VITE_APP_API_BASE_URL + `mentorship/mentor/${id}/connect/roster/add`;
         fetch(url, {
             method: 'post',
             headers: {

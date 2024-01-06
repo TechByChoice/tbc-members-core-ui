@@ -52,7 +52,7 @@ function ViewJobPage({ userDetail, isLoading }) {
 
     const handelPublishJob = () => {
         // if () {
-        const url = `${process.env.REACT_APP_API_BASE_URL}company/new/jobs/${id}/referral/publish/`;
+        const url = `${import.meta.env.VITE_APP_API_BASE_URL}company/new/jobs/${id}/referral/publish/`;
         fetch(url, {
             method: 'GET',
             credentials: 'include',
@@ -86,7 +86,7 @@ function ViewJobPage({ userDetail, isLoading }) {
     };
     const handelPauseJob = () => {
         // if (isOwnProfile) {
-        const url = `${process.env.REACT_APP_API_BASE_URL}company/new/jobs/${id}/referral/pause/`;
+        const url = `${import.meta.env.VITE_APP_API_BASE_URL}company/new/jobs/${id}/referral/pause/`;
         fetch(url, {
             method: 'GET',
             credentials: 'include',
@@ -120,7 +120,7 @@ function ViewJobPage({ userDetail, isLoading }) {
     };
     const handelCloseJob = () => {
         // if (isOwnProfile) {
-        const url = `${process.env.REACT_APP_API_BASE_URL}company/new/jobs/${id}/referral/closed/`;
+        const url = `${import.meta.env.VITE_APP_API_BASE_URL}company/new/jobs/${id}/referral/closed/`;
         fetch(url, {
             method: 'GET',
             credentials: 'include',
@@ -153,7 +153,7 @@ function ViewJobPage({ userDetail, isLoading }) {
     };
     const handelActiveJob = () => {
         if (userDetail?.account_info?.is_staff) {
-            const url = `${process.env.REACT_APP_API_BASE_URL}company/new/jobs/${id}/referral/active/`;
+            const url = `${import.meta.env.VITE_APP_API_BASE_URL}company/new/jobs/${id}/referral/active/`;
             fetch(url, {
                 method: 'GET',
                 credentials: 'include',

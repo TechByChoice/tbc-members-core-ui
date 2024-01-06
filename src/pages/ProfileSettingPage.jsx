@@ -61,7 +61,7 @@ function a11yProps(index) {
 function ProfileSettingPage({ userDetail }) {
     const [ value, setValue ] = useState(0);
     const auth = useAuth();
-    const profile_url = process.env.REACT_APP_STRIPE_PPROFILE_URL;
+    const profile_url = import.meta.env.VITE_APP_STRIPE_PPROFILE_URL;
     const formError = {};
 
     const [ isEditing, setIsEditing ] = useState(false);
@@ -69,7 +69,7 @@ function ProfileSettingPage({ userDetail }) {
     const [ fromData, setFormData ] = useState();
 
     useEffect(() => {
-        const url = process.env.REACT_APP_API_BASE_URL + 'user/details/new-member';
+        const url = import.meta.env.VITE_APP_API_BASE_URL + 'user/details/new-member';
         fetch(url, {
             method: 'GET',
             credentials: 'include',

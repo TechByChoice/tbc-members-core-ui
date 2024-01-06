@@ -40,7 +40,7 @@ export default function NewMemberPage() {
     useEffect(() => {}, [ answers ]);
 
     useEffect(() => {
-        const url = process.env.REACT_APP_API_BASE_URL + 'user/details/new-member';
+        const url = import.meta.env.VITE_APP_API_BASE_URL + 'user/details/new-member';
         fetch(url, {
             method: 'GET',
             credentials: 'include',
@@ -234,7 +234,7 @@ export default function NewMemberPage() {
 
     const handleFormSubmit = e => {
         e.preventDefault();
-        const url = `${process.env.REACT_APP_API_BASE_URL}user/new-member/profile/create`;
+        const url = `${import.meta.env.VITE_APP_API_BASE_URL}user/new-member/profile/create`;
 
         const formData = new FormData();
 
@@ -246,7 +246,7 @@ export default function NewMemberPage() {
             method: 'PATCH',
             credentials: 'include',
             body: formData,
-            headers: {Authorization: `Token ${token}`,},
+            headers: { Authorization: `Token ${token}` },
         })
             .then(response => {
                 if (!response.ok) {

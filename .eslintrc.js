@@ -35,7 +35,8 @@ module.exports = {
         'no-eval': 'error',
         'no-var': 'error',
         'no-unused-vars': 'off',
+        'no-empty-pattern': 'off',
         'object-curly-newline': [ 'warn', { ObjectExpression: { multiline: true, minProperties: 4 }, ObjectPattern: { multiline: true, minProperties: 4 }, ImportDeclaration: 'never' },],
-        'sort-keys': [ 'warn', 'asc', { caseSensitive: false, minKeys: 5, natural: true }],
+        'sort-keys': 'off',
     },
 };

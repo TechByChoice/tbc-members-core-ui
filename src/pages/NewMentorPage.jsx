@@ -71,7 +71,7 @@ export default function NewMentorPage() {
     };
     const saveCommitmentLevel = async data => {
         try {
-            const url = process.env.REACT_APP_API_BASE_URL + 'mentorship/update/support/';
+            const url = import.meta.env.VITE_APP_API_BASE_URL + 'mentorship/update/support/';
             const response = await fetch(url, {
                 method: 'POST',
                 headers: {
@@ -94,7 +94,7 @@ export default function NewMentorPage() {
 
     const saveCareerQuestions = async data => {
         try {
-            const url = process.env.REACT_APP_API_BASE_URL + 'mentorship/update/career/';
+            const url = import.meta.env.VITE_APP_API_BASE_URL + 'mentorship/update/career/';
             const response = await fetch(url, {
                 method: 'POST',
                 headers: {
@@ -117,7 +117,7 @@ export default function NewMentorPage() {
 
     const saveValues = async data => {
         try {
-            const url = process.env.REACT_APP_API_BASE_URL + 'mentorship/update/value/';
+            const url = import.meta.env.VITE_APP_API_BASE_URL + 'mentorship/update/value/';
             const response = await fetch(url, {
                 method: 'POST',
                 headers: {
@@ -140,7 +140,7 @@ export default function NewMentorPage() {
 
     const saveProfile = async data => {
         try {
-            const url = process.env.REACT_APP_API_BASE_URL + 'mentorship/update/profile/';
+            const url = import.meta.env.VITE_APP_API_BASE_URL + 'mentorship/update/profile/';
             const response = await fetch(url, {
                 method: 'POST',
                 headers: {

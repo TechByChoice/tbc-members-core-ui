@@ -16,7 +16,7 @@ export default function FormMentorApplication({
 
     useEffect(() => {
         // This should be replaced with the appropriate API call
-        const url = process.env.REACT_APP_API_BASE_URL + 'mentorship/details/?fields=commitment_level&fields=mentor_support_areas';
+        const url = import.meta.env.VITE_APP_API_BASE_URL + 'mentorship/details/?fields=commitment_level&fields=mentor_support_areas';
         fetch(url)
             .then(response => {
                 if (!response.ok) {
