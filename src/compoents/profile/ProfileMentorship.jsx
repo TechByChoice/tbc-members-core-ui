@@ -10,21 +10,24 @@ const filter = createFilterOptions();
 
 export default function ProfileMentorship({ questions }) {
     const { user } = useAuth();
-    const [ formData, setFormData ] = useState({});
-
-    const handleEditorUpdate = (editorId, content) => {
-        formData(prevFormData => ({
-            ...prevFormData,
-            [editorId]: content,
-        }));
-    };
+    let userData = user[0];
+    const [ formData, setFormData ] = useState({
+        commitment_level: userData.menor_program,
+        mentee_support_areas: userData.menor_program,
+        mentor_support_areas: userData.menor_program,
+    });
 
     return (
         <>
             <Grid container>
                 {user[0]?.account_info?.is_mentor_application_submitted ? (
                     <>
-                        <FormMentorApplication defaultValues={user[0]?.mentor_details} questions={questions} />
+                        <FormMentorApplication
+                            defaultValues={user[0]?.mentor_details}
+                            formData={formData}
+                            setFormData={setFormData}
+                            questions={questions}
+                        />
                         <ProfileMentorDetails />
                         {!user[0]?.account_info?.is_mentor_profile_active && user[0]?.account_info?.is_mentor_profile_approved && (
                             <>

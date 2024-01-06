@@ -32,7 +32,7 @@ export default function FormMentorApplication({
     }, []);
 
     const handleCommitmentLevelChange = (event, newValue) => {
-        console.log(formData, 'formData');
+        console.log(formData, 'formData', newValue);
         // Call the function passed from the parent component to update the formData state
         setFormData(preValue => ({
             ...preValue,
@@ -87,7 +87,7 @@ export default function FormMentorApplication({
                                         selectOnFocus
                                         includeInputInList
                                         handleHomeEndKeys
-                                        value={defaultValues?.commitment_level}
+                                        value={formData?.commitment_level}
                                         id="company_list"
                                         name="company_list"
                                         aria-labelledby="commitment_level"
@@ -133,7 +133,7 @@ export default function FormMentorApplication({
                                         selectOnFocus
                                         includeInputInList
                                         handleHomeEndKeys
-                                        value={defaultValues?.mentor_profile?.mentor_support_areas}
+                                        value={defaultValues?.formData?.mentor_support_areas}
                                         id="mentor_support_areas"
                                         aria-labelledby="mentor_support_areas-label"
                                         options={supportAreas || []} // <-- directly provide a default value here
@@ -178,7 +178,7 @@ export default function FormMentorApplication({
                                             selectOnFocus
                                             includeInputInList
                                             handleHomeEndKeys
-                                            value={defaultValues?.mentee_support_areas}
+                                            value={formData?.mentee_support_areas}
                                             id="mentee_support_areas"
                                             aria-labelledby="mentee_support_areas-label"
                                             options={supportAreas || []} // <-- directly provide a default value here
@@ -207,12 +207,7 @@ export default function FormMentorApplication({
 
                                                 return filtered;
                                             }}
-                                            renderOption={(props, option) => (
-                                                <li {...props}>
-                                                    {option.id}
-                                                    {option.name}
-                                                </li>
-                                            )}
+                                            renderOption={(props, option) => <li {...props}>{option.name}</li>}
                                             onChange={handleMenteeSupportAreasChange}
                                             renderInput={params => <TextField name="mentee_support_areas" {...params} />}
                                         />

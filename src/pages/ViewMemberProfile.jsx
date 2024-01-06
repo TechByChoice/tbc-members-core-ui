@@ -27,12 +27,14 @@ import ReviewCard from '../compoents/ReviewCard';
 import AddMemberNoteCard from '../compoents/AddMemberNoteCard';
 import RadioGroup from '@mui/material/RadioGroup/RadioGroup';
 import Radio from '@mui/material/Radio/Radio';
+import BookMentorForm from '../compoents/BookMentorForm';
 
 function ViewMemberProfile() {
     const { id } = useParams();
     const [ memberData, setMemberData ] = useState();
     const [ basicData, setBasicData ] = useState();
     const [ open, setOpen ] = useState(false);
+    const [ openBookMentorModal, setOpenBookMentorModal ] = useState(false);
     const [ openRejectModal, setOpenRejectModal ] = useState(false);
     const [ isUserConnectedWithMentor, setIsUserConnectedWithMentor ] = useState(false);
     const [ rejectionForm, setRejectionForm ] = useState({});
@@ -146,9 +148,9 @@ function ViewMemberProfile() {
         <Card>
             <CardContent>
                 <Typography variant="h6">
-                    Connect with <span style={{ textTransform: 'capitalize' }}>{memberData?.data?.user?.first_name}</span> mentor
+                    Connect with <span style={{ textTransform: 'capitalize' }}>{memberData?.data?.user?.first_name}</span>!
                 </Typography>
-                <Button onClick={handelConnectWithMentor} variant="contained" color="primary">
+                <Button onClick={() => setOpenBookMentorModal(true)} variant="contained" color="primary">
                     Connect Now
                 </Button>
             </CardContent>
@@ -227,7 +229,7 @@ function ViewMemberProfile() {
                     color="primary">
                     Leave a Review
                 </Button>
-                <Button variant="contained" color="primary">
+                <Button onClick={() => setOpenBookMentorModal(true)} variant="contained" color="primary">
                     Book Time
                 </Button>
             </CardContent>
@@ -713,6 +715,34 @@ function ViewMemberProfile() {
                     </Typography>
                     <div>
                         <ReviewCard talentDetails={memberData?.data} setOpen={setOpen} />
+                    </div>
+                </Box>
+            </Modal>
+            {/* book time with mentor */}
+            <Modal
+                open={openBookMentorModal}
+                onClose={() => {
+                    setOpenBookMentorModal(false);
+                }}
+                style={{ padding: '20px' }}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description">
+                <Box
+                    style={{
+                        position: 'absolute',
+                        top: '50%',
+                        left: '50%',
+                        transform: 'translate(-50%, -50%)',
+                        width: 400,
+                        backgroundColor: '#fff',
+                        boxShadow: 24,
+                        padding: 15,
+                    }}>
+                    <Typography id="modal-modal-title" variant="h6" component="h2">
+                        Leave a note before you book!
+                    </Typography>
+                    <div>
+                        <BookMentorForm talentDetails={memberData?.data} setOpen={setOpenBookMentorModal} />
                     </div>
                 </Box>
             </Modal>
