@@ -18,6 +18,7 @@ export default defineConfig({
     ],
     resolve: { alias: { '@': resolve('.', '/src') } },
     server: {
+        port: 3000,
         watch: {
             ignored: [
                 './node_modules/**',
