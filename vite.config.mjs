@@ -1,7 +1,7 @@
-import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
-import federation from '@originjs/vite-plugin-federation';
 import { resolve } from 'node:path';
+import { defineConfig } from 'vite';
+// import federation from '@originjs/vite-plugin-federation';
 
 export default defineConfig({
     plugins: [
@@ -20,49 +20,28 @@ export default defineConfig({
     server: {
         watch: {
             ignored: [
-                '**/vendor/**',
-                './public/**',
-                './app/**',
-                './storage/**',
+                './node_modules/**',
                 '.git/**',
-                './node_modules/**'
+                '**/vendor/**',
             ],
             usePolling: true,
         },
-        proxy: { '/app': 'http://localhost' },
     },
     build: {
         target: 'esnext',
-        outDir: '..dist',
+        outDir: 'dist',
         include: [
             './src/**/*.jsx',
             './src/**/*.js',
             './src/index.css',
             './index.html'
         ],
-        output: {
-            // format: 'umd',
-            // name: 'MyLibrary',
-            // globals: {
-            //     react: 'React',
-            //     'react-dom': 'ReactDOM',
-            //     preact: 'preact',
-            //     alpinejs: 'alpinejs',
-            // },
-        },
-
         rollupOptions: {
-            external: [], //'react', 'react-dom', 'preact', 'alpinejs'],
+            external: [],
             treeshake: 'recommended',
             input: {
                 main: resolve('.', '/index.html'),
-                // './src/index.css',
-                // './src/index.html',
             },
-            // output: {
-            // format: 'iife',
-            // esModule: false,
-            // },
         },
     },
 });
