@@ -33,7 +33,7 @@ export default function AccountDetailsForm() {
 
     const handelAccountDetails = e => {
         e.preventDefault();
-        const url = process.env.REACT_APP_API_BASE_URL + 'user/profile/update/account-details';
+        const url = import.meta.env.VITE_APP_API_BASE_URL + 'user/profile/update/account-details';
         fetch(url, {
             method: 'POST',
             credentials: 'include',

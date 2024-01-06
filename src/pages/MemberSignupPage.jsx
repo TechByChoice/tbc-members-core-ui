@@ -1,40 +1,42 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import {useAuth} from "../providers/AuthProvider";
-import {useNavigate} from "react-router";
-import Typography from "@mui/material/Typography";
-import Grid from "@mui/material/Grid";
-import {useStatus} from "../providers/MsgStatusProvider";
-import Link from "@mui/material/Link";
+import { useAuth } from '../providers/AuthProvider';
+import { useNavigate } from 'react-router';
+import Typography from '@mui/material/Typography';
+import Grid from '@mui/material/Grid';
+import { useStatus } from '../providers/MsgStatusProvider';
+import Link from '@mui/material/Link';
 import styled from '@emotion/styled';
-import Alert from "@mui/material/Alert";
+import Alert from '@mui/material/Alert';
 
 const CenteredContent = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 75vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 75vh;
 `;
 
 const FormContainer = styled.div`
-  width: 80%;
-  max-width: 500px;
+    width: 80%;
+    max-width: 500px;
 `;
 
 const ImageBG = styled.div`
-  width: 100%;
-  height: 100%;
-  background-image: url('https://uploads-ssl.webflow.com/5fc4802f4edc553647330622/5fd04d6d1ea5ad04a37db102_pexels-jopwell-2422290-p-1600.jpeg');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+    width: 100%;
+    height: 100%;
+    background-image: url('https://uploads-ssl.webflow.com/5fc4802f4edc553647330622/5fd04d6d1ea5ad04a37db102_pexels-jopwell-2422290-p-1600.jpeg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
 `;
 
 function LoginPage() {
     const auth = useAuth();
-    const {statusType, setStatusMessage, setIsAlertOpen, setStatusType} = useStatus();
-    const [formData, setFormData] = useState({
+    const {
+        statusType, setStatusMessage, setIsAlertOpen, setStatusType 
+    } = useStatus();
+    const [ formData, setFormData ] = useState({
         first_name: '',
         last_name: '',
         email: '',
@@ -42,29 +44,29 @@ function LoginPage() {
     });
     const navigate = useNavigate();
     const isAuthenticated = false;
-    const {setToken} = useAuth();
+    const { setToken } = useAuth();
 
-    const handleSubmit = async (event) => {
+    const handleSubmit = async event => {
         event.preventDefault();
-        const url = process.env.REACT_APP_API_BASE_URL + 'user/new/';
+        const url = import.meta.env.VITE_APP_API_BASE_URL + 'user/new/';
 
         fetch(url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Token ${localStorage.getItem('token')}`
+                Authorization: `Token ${localStorage.getItem('token')}`,
             },
-            body: JSON.stringify(formData)
+            body: JSON.stringify(formData),
         })
             .then(response => response.json())
             .then(data => {
                 if (data.status) {
-                    setToken(data.token)
+                    setToken(data.token);
                     localStorage.setItem('token', data.token);
                     setIsAlertOpen(true);
                     setStatusType('success');
                     setStatusMessage('Welcome to Tech by Choice');
-                    navigate('/new/member/2')
+                    navigate('/new/member/2');
                 } else {
                     console.error('Error:', data.message);
                     setIsAlertOpen(true);
@@ -72,39 +74,37 @@ function LoginPage() {
                     setStatusMessage(data.message);
                 }
             })
-            .catch((error) => {
+            .catch(error => {
                 console.error('Error:', error);
                 setIsAlertOpen(true);
                 setStatusType('error');
                 setStatusMessage(error.message);
             });
-
     };
 
-    const handleChange = (event) => {
-        const {name, value} = event.target;
-        setFormData((prevFormData) => ({...prevFormData, [name]: value}));
+    const handleChange = event => {
+        const { name, value } = event.target;
+        setFormData(prevFormData => ({ ...prevFormData, [name]: value }));
     };
 
     useEffect(() => {
         if (auth?.user?.length > 0) {
-            navigate('/', {replace: true});
+            navigate('/', { replace: true });
         }
-    }, [auth.user]);
+    }, [ auth.user ]);
 
     useEffect(() => {
         if (auth.errorMessage) {
             if (auth.errorMessage['non_field_errors']) {
-                setStatusMessage(auth.errorMessage['non_field_errors'][0])
+                setStatusMessage(auth.errorMessage['non_field_errors'][0]);
                 setStatusType('error');
-                setIsAlertOpen(true)
+                setIsAlertOpen(true);
             }
-
         } else {
             setStatusMessage('');
             setIsAlertOpen(false);
         }
-    }, [auth.errorMessage]);
+    }, [ auth.errorMessage ]);
 
     return (
         <Grid container id="top">
@@ -116,7 +116,8 @@ function LoginPage() {
                             <Typography variant="h3" align="center">
                                 You are already logged in
                             </Typography>
-                        ) : (<>
+                        ) : (
+                            <>
                                 <Typography variant="h3" component="h1" align="center">
                                     Join Today
                                 </Typography>
@@ -173,12 +174,7 @@ function LoginPage() {
                                         fullWidth
                                     />
 
-                                    <Button
-                                        variant="contained"
-                                        color="primary"
-                                        fullWidth={true}
-                                        type="submit"
-                                    >
+                                    <Button variant="contained" color="primary" fullWidth={true} type="submit">
                                         Create Account
                                     </Button>
                                     <Link href="/login" variant="body2">
@@ -193,8 +189,13 @@ function LoginPage() {
                 {/*    */}
             </Grid>
             <Grid item xs={12} sm={6}>
-                <ImageBG id="right"
-                         style={{backgroundImage: 'https://uploads-ssl.webflow.com/5fc4802f4edc553647330622/5fd04d6d1ea5ad04a37db102_pexels-jopwell-2422290-p-1600.jpeg'}}/>
+                <ImageBG
+                    id="right"
+                    style={{
+                        backgroundImage:
+                            'https://uploads-ssl.webflow.com/5fc4802f4edc553647330622/5fd04d6d1ea5ad04a37db102_pexels-jopwell-2422290-p-1600.jpeg',
+                    }}
+                />
             </Grid>
         </Grid>
     );

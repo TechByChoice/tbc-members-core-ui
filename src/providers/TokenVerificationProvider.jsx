@@ -20,7 +20,7 @@ export const TokenVerificationProvider = ({ children }) => {
         fetch(fetchUrl, {
             method: 'POST',
             credentials: 'include',
-            headers: {'Content-Type': 'application/json',},
+            headers: { 'Content-Type': 'application/json' },
         })
             .then(response => response.json())
             .then(data => {
@@ -28,7 +28,7 @@ export const TokenVerificationProvider = ({ children }) => {
                     setTokenStatus(true);
                     localStorage.setItem('token', data.key);
                     setToken(data.key);
-                    window.location.href = process.env.REACT_APP_BASE_URL + 'reviews';
+                    window.location.href = import.meta.env.VITE_APP_BASE_URL + 'reviews';
                 } else {
                     setStatusMessage("We can't validate your request");
                     setIsAlertOpen(true);
@@ -59,11 +59,11 @@ export const TokenVerificationProvider = ({ children }) => {
             //  check if the token is still valid
             console.info('found token need to check if active');
             console.info('local token: ', localToken);
-            const fetchUrl = `${process.env.REACT_APP_API_BASE_URL}reviews/check/${localToken}/`;
+            const fetchUrl = `${import.meta.env.VITE_APP_API_BASE_URL}reviews/check/${localToken}/`;
             fetch(fetchUrl, {
                 method: 'GET',
                 credentials: 'include',
-                headers: {'Content-Type': 'application/json',},
+                headers: { 'Content-Type': 'application/json' },
             })
                 .then(response => response.json())
                 .then(data => {
@@ -91,7 +91,7 @@ export const TokenVerificationProvider = ({ children }) => {
         } else {
             console.info('NO localstorge tokenfound');
             if (isValidToken) {
-                const fetchUrl = `${process.env.REACT_APP_API_BASE_URL}reviews/verify-token/${urlToken}/`;
+                const fetchUrl = `${import.meta.env.VITE_APP_API_BASE_URL}reviews/verify-token/${urlToken}/`;
                 verifyTokenCall(fetchUrl);
             } else {
                 setLoading(false);
@@ -105,9 +105,9 @@ export const TokenVerificationProvider = ({ children }) => {
         if (isValidToken) {
             if (tokenStatus) {
                 if (localReviewSaved) {
-                    window.location.href = process.env.REACT_APP_BASE_URL + 'questions';
+                    window.location.href = import.meta.env.VITE_APP_BASE_URL + 'questions';
                 } else {
-                    window.location.href = process.env.REACT_APP_BASE_URL + 'reviews';
+                    window.location.href = import.meta.env.VITE_APP_BASE_URL + 'reviews';
                 }
             }
         }

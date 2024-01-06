@@ -49,7 +49,7 @@ export default function ProfileInterests({ handleChange, questions }) {
 
     function handleSave(e) {
         e.preventDefault();
-        const url = process.env.REACT_APP_API_BASE_URL + 'user/profile/update/skills-roles';
+        const url = import.meta.env.VITE_APP_API_BASE_URL + 'user/profile/update/skills-roles';
         fetch(url, {
             method: 'POST',
             credentials: 'include',

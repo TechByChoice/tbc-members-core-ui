@@ -12,7 +12,7 @@ export const AuthProvider = ({ children }) => {
     const [ isLoading, setIsLoading ] = useState(true);
     // get user details
     useEffect(() => {
-        const url = process.env.REACT_APP_API_BASE_URL + 'user/details/';
+        const url = import.meta.env.VITE_APP_API_BASE_URL + 'user/details/';
         console.log('Before fetch call', url);
         if (localStorage.getItem('token')) {
             fetch(url, {
@@ -29,7 +29,6 @@ export const AuthProvider = ({ children }) => {
                         setUser([ data ]);
                         setAccountDetails([ data.account_info ]);
                         if (data.detail === 'Invalid token.') {
-
                             logout();
                         }
                     } else {
@@ -48,12 +47,15 @@ export const AuthProvider = ({ children }) => {
     }, []);
 
     const login = useCallback((username, email, password, timezone) => {
-        const url = process.env.REACT_APP_API_BASE_URL + 'user/login/';
+        const url = import.meta.env.VITE_APP_API_BASE_URL + 'user/login/';
         fetch(url, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                username, email, password, timezone
+                username,
+                email,
+                password,
+                timezone,
             }),
         })
             .then(response => response.json())
@@ -82,7 +84,7 @@ export const AuthProvider = ({ children }) => {
     }, []);
 
     const logout = useCallback(() => {
-        const url = process.env.REACT_APP_API_BASE_URL + 'logout/';
+        const url = import.meta.env.VITE_APP_API_BASE_URL + 'logout/';
 
         fetch(url, {
             method: 'POST',
@@ -98,7 +100,7 @@ export const AuthProvider = ({ children }) => {
                 setUser([]);
                 setToken('');
                 localStorage.removeItem('token');
-                window.location.href = process.env.REACT_APP_BASE_URL + 'login';
+                window.location.href = import.meta.env.VITE_APP_BASE_URL + 'login';
             } else {
                 setErrorMessage(response.data);
                 console.error(response.data);

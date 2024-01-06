@@ -52,7 +52,7 @@ export default function JobReferralPage() {
 
     useEffect(() => {
         if (activeStep === steps.length) {
-            const url = `${process.env.REACT_APP_API_BASE_URL}company/new/jobs/create-referral/`;
+            const url = `${import.meta.env.VITE_APP_API_BASE_URL}company/new/jobs/create-referral/`;
 
             fetch(url, {
                 method: 'POST',
