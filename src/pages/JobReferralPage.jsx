@@ -15,6 +15,7 @@ import PickCompany from '../compoents/PickCompany';
 import { useStatus } from '../providers/MsgStatusProvider';
 import JobForm from '../compoents/JobDetails';
 import JobReferralNotes from '../compoents/JobReferralNotes';
+import { useStatusMessage } from '../hooks/useStatusMessage';
 
 const steps = [
     'Company Details',
@@ -24,7 +25,8 @@ const steps = [
 
 export default function JobReferralPage() {
     const [ activeStep, setActiveStep ] = React.useState(0);
-    const { setStatusType, setStatusMessage, setIsAlertOpen } = useStatus();
+    const statusMessage = useStatusMessage();
+
     const [ answers, setAnswers ] = React.useState({
         department: null,
         department_size: null,
@@ -67,18 +69,14 @@ export default function JobReferralPage() {
                     if (!response.ok) {
                         // If not OK, throw an error to be caught in the catch block
                         return response.json().then(errorData => {
-                            setStatusMessage("We can't validate your request. Please try again");
-                            setIsAlertOpen(true);
-                            setStatusType('error');
+                            statusMessage.error("We can't validate your request. Please try again");
                             handleBack();
                         });
                     }
                     return response.json();
                 })
                 .then(data => {
-                    setStatusMessage('Your job post is in!');
-                    setIsAlertOpen(true);
-                    setStatusType('success');
+                    statusMessage.success('Your job post is in!');
                     history(`/job/${data.id}`);
                 })
                 .catch(error => {
@@ -166,13 +164,9 @@ export default function JobReferralPage() {
         }
         if (validationResult.isValid) {
             setActiveStep(activeStep + 1);
-            setStatusType('');
-            setStatusMessage('');
-            setIsAlertOpen(false);
+            statusMessage.hide();
         } else {
-            setStatusType('error');
-            setStatusMessage('Please update all required fields.');
-            setIsAlertOpen(true);
+            statusMessage.error('Please update all required fields.');
         }
     };
 

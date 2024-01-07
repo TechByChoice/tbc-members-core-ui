@@ -14,6 +14,7 @@ import FormMentorCareer from '../compoents/mentorship/FormMentorCareer';
 import FormMentorProfile from '../compoents/mentorship/FormMentorProfile';
 import FormMentorshipValues from '../compoents/mentorship/FormMentorshipValues';
 import { useStatus } from '../providers/MsgStatusProvider';
+import { useStatusMessage } from '../hooks/useStatusMessage';
 
 const steps = [
     'Commitment Level',
@@ -77,7 +78,7 @@ const NextBackButtons = ({ activeStep, handleBack, handleNext }) => (
 export default function NewMentorPage() {
     const [ hasCompleted, setHasCompleted ] = React.useState(false);
     const [ activeStep, setActiveStep ] = React.useState(0);
-    const { setStatusType, setStatusMessage, setIsAlertOpen } = useStatus();
+    const statusMessage = useStatusMessage();
 
     const [ formData, setFormData ] = React.useState({
         commitmentLevel: null,
@@ -171,10 +172,7 @@ export default function NewMentorPage() {
                 setActiveStep(activeStep + 1);
             }
         } catch (error) {
-            setStatusType('error');
-            setStatusMessage(error.message);
-            setIsAlertOpen(true);
-
+            statusMessage.error(error.message);
             console.error('Save failed');
         }
     };
