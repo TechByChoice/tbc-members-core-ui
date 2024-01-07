@@ -1,14 +1,13 @@
+import { Box, Button, Card, CardContent, Rating, Typography } from '@mui/material';
 import React, { useState } from 'react';
-import { Card, CardMedia, CardContent, Typography, Button, Chip, Box, Rating } from '@mui/material';
-
-import TipTapEditor from './TipTapEditor';
+import { useStatusMessage } from '../hooks/useStatusMessage';
 import { useAuth } from '../providers/AuthProvider';
-import { useStatus } from '../providers/MsgStatusProvider';
+import TipTapEditor from './TipTapEditor';
 
 function ReviewCard({ talentDetails, setOpen }) {
     const [ formData, setFormData ] = useState({});
     const { token } = useAuth();
-    const { setStatusMessage, setIsAlertOpen, setStatusType } = useStatus();
+    const statusMessage = useStatusMessage();
 
     const handleQuillChange = (editorId, content) => {
         const newFormData = { ...formData, [editorId]: content };
@@ -27,24 +26,18 @@ function ReviewCard({ talentDetails, setOpen }) {
         })
             .then(response => {
                 if (!response.ok) {
-                    setStatusMessage('Sorry, we ran into an issue, please try again');
-                    setIsAlertOpen(true);
-                    setStatusType('error');
+                    statusMessage.error('Sorry, we ran into an issue, please try again');
                     throw new Error('Network response was not ok');
                 }
                 return response.json();
             })
             .then(data => {
                 setOpen(false);
-                setStatusMessage('Saved your review');
-                setIsAlertOpen(true);
-                setStatusType('success');
+                statusMessage.success('Saved your review');
             })
             .catch(error => {
                 console.error('Fetch error:', error);
-                setStatusMessage('Sorry, we ran into an issue, please try again');
-                setIsAlertOpen(true);
-                setStatusType('error');
+                statusMessage.error('Sorry, we ran into an issue, please try again');
             });
     };
 
