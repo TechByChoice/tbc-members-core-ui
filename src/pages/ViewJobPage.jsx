@@ -6,6 +6,7 @@ import Container from '@mui/material/Container';
 import CompanyCard from '../compoents/CompanyCard';
 import { Link } from 'react-router-dom';
 import { useStatus } from '../providers/MsgStatusProvider';
+import { useStatusMessage } from '../hooks/useStatusMessage';
 
 const HtmlContentRenderer = ({ htmlContent }) => {
     return <div dangerouslySetInnerHTML={{ __html: htmlContent }} />;
@@ -21,6 +22,8 @@ function ViewJobPage({ userDetail, isLoading }) {
     const [ jobData, setJobData ] = useState();
     const [ jobStatusCard, setJobStatusCard ] = useState(null);
     const { setStatusMessage, setIsAlertOpen, setStatusType } = useStatus();
+    const statusMessage = useStatusMessage();
+
     const isOwnProfile = userDetail?.user_info.id === jobData?.created_by_id;
     const isStaffOrEditor = userDetail?.account_info?.is_staff || jobData?.created_by_id === userDetail?.user_info?.id;
 
@@ -65,17 +68,13 @@ function ViewJobPage({ userDetail, isLoading }) {
                 if (!response.ok) {
                     // If not OK, throw an error to be caught in the catch block
                     return response.json().then(errorData => {
-                        setStatusMessage("Sorry it looks like we can't publish your job");
-                        setIsAlertOpen(true);
-                        setStatusType('error');
+                        statusMessage.error("Sorry it looks like we can't publish your job");
                     });
                 }
                 return response.json();
             })
             .then(data => {
-                setStatusMessage("We're reviewing your job now");
-                setIsAlertOpen(true);
-                setStatusType('success');
+                statusMessage.success("We're reviewing your job now");
             })
             .catch(error => {
                 console.error('There was an error publish the job', error);
@@ -99,17 +98,13 @@ function ViewJobPage({ userDetail, isLoading }) {
                 if (!response.ok) {
                     // If not OK, throw an error to be caught in the catch block
                     return response.json().then(errorData => {
-                        setStatusMessage("Sorry it looks like we can't pause your job");
-                        setIsAlertOpen(true);
-                        setStatusType('error');
+                        statusMessage.error("Sorry it looks like we can't pause your job");
                     });
                 }
                 return response.json();
             })
             .then(data => {
-                setStatusMessage("We've paused your job");
-                setIsAlertOpen(true);
-                setStatusType('success');
+                statusMessage.success("We've paused your job");
             })
             .catch(error => {
                 console.error('There was an error publish the job', error);
@@ -134,17 +129,13 @@ function ViewJobPage({ userDetail, isLoading }) {
                     // If not OK, throw an error to be caught in the catch block
                     return response.json().then(errorData => {
                         console.log(errorData);
-                        setStatusMessage("Sorry it looks like we can't close your job");
-                        setIsAlertOpen(true);
-                        setStatusType('error');
+                        statusMessage.error("Sorry it looks like we can't close your job");
                     });
                 }
                 return response.json();
             })
             .then(data => {
-                setStatusMessage("We've closed your job now");
-                setIsAlertOpen(true);
-                setStatusType('success');
+                statusMessage.success("We've closed your job now");
             })
             .catch(error => {
                 console.error('There was an error publish the job', error);
@@ -167,17 +158,13 @@ function ViewJobPage({ userDetail, isLoading }) {
                         // If not OK, throw an error to be caught in the catch block
                         return response.json().then(errorData => {
                             console.log(errorData);
-                            setStatusMessage("Sorry it looks like we can't publish your job");
-                            setIsAlertOpen(true);
-                            setStatusType('error');
+                            statusMessage.error("Sorry it looks like we can't publish your job");
                         });
                     }
                     return response.json();
                 })
                 .then(data => {
-                    setStatusMessage('Job is now active');
-                    setIsAlertOpen(true);
-                    setStatusType('success');
+                    statusMessage.success('Job is now active');
                 })
                 .catch(error => {
                     console.error('There was an error publish the job', error);
