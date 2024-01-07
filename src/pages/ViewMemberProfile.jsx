@@ -1,23 +1,41 @@
 import React, { useEffect, useState } from 'react';
-import { Grid, Card, CardContent, Typography, Button, Hidden, IconButton, CircularProgress, Chip, CardMedia, Divider, Box, Modal } from '@mui/material';
-import { LinkedIn, Instagram, GitHub, Twitter, YouTube, Web, Language } from '@mui/icons-material';
+import {Box,
+    Button,
+    Card,
+    CardContent,
+    CardMedia,
+    Chip,
+    CircularProgress,
+    Divider,
+    FormControl,
+    FormControlLabel,
+    FormLabel,
+    Grid,
+    Hidden,
+    IconButton,
+    Modal,
+    Typography,} from '@mui/material';
+import { GitHub, Instagram, Language, LinkedIn, Twitter, YouTube } from '@mui/icons-material';
 import { useParams } from 'react-router';
-import { getBasicSystemInfo, getCompanyList, getMemberData } from '../api-calls';
+import { getBasicSystemInfo, getMemberData } from '../api-calls';
 import Container from '@mui/material/Container';
 import CompanyCard from '../compoents/CompanyCard';
-import { Global } from '@emotion/react';
 import HtmlContentRenderer from '../compoents/utils/HtmlContentRenderer';
 import { useAuth } from '../providers/AuthProvider';
-import Link from '@mui/material/Link';
+import { Link } from 'react-router-dom';
 import ReviewCard from '../compoents/ReviewCard';
 import AddMemberNoteCard from '../compoents/AddMemberNoteCard';
+import RadioGroup from '@mui/material/RadioGroup/RadioGroup';
+import Radio from '@mui/material/Radio/Radio';
 
 function ViewMemberProfile() {
     const { id } = useParams();
     const [ memberData, setMemberData ] = useState();
     const [ basicData, setBasicData ] = useState();
-    const [ open, setOpen ] = React.useState(false);
-    const [ isUserConnectedWithMentor, setIsUserConnedtedWithMentor ] = useState(false);
+    const [ open, setOpen ] = useState(false);
+    const [ openRejectModal, setOpenRejectModal ] = useState(false);
+    const [ isUserConnectedWithMentor, setIsUserConnectedWithMentor ] = useState(false);
+    const [ rejectionForm, setRejectionForm ] = useState({});
     const { user, isLoading, token } = useAuth();
     const loggedInUser = user[0];
     const mentor_roster = loggedInUser?.mentor_roster_data;
@@ -40,12 +58,12 @@ function ViewMemberProfile() {
     }, []);
 
     useEffect(() => {
-        if (mentor_roster) {
-            const isUserConnectedWithMentor = mentor_roster.some(
+        if (Array.isArray(mentor_roster)) {
+            const isUserConnectedWithMentor = mentor_roster?.some(
                 match => match.mentor === memberData?.data?.mentorship_program?.id && match.mentee === loggedInUser?.mentee_details?.id,
             );
 
-            setIsUserConnedtedWithMentor(isUserConnectedWithMentor);
+            setIsUserConnectedWithMentor(isUserConnectedWithMentor);
         }
     }, [ memberData ]);
 
@@ -89,6 +107,30 @@ function ViewMemberProfile() {
         </Card>
     );
 
+    const renderSentInterviewCard = () => (
+        <Card>
+            <CardContent>
+                <Typography variant="h6">Grate news! You&apos;ve moved on to the next stage!</Typography>
+                <Typography variant="body1">Make sure you check you email that has all the details about setting up time for your interview!</Typography>
+            </CardContent>
+        </Card>
+    );
+    const renderSetBookingLinkCard = () => (
+        <Card>
+            <CardContent>
+                <Typography variant="h6">Make sure you update your booking link to make your profile active!</Typography>
+                <Typography variant="body1">
+                    Head over to the
+                    <Link to="/profile">
+                        {' '}
+                        <strong>mentorship</strong> section of the profile page
+                    </Link>
+                    to set your Calendly link so people can book time to chat with you!
+                </Typography>
+            </CardContent>
+        </Card>
+    );
+
     const renderOnboardingCard = () => (
         <Card>
             <CardContent>
@@ -108,6 +150,66 @@ function ViewMemberProfile() {
                 </Typography>
                 <Button onClick={handelConnectWithMentor} variant="contained" color="primary">
                     Connect Now
+                </Button>
+            </CardContent>
+        </Card>
+    );
+
+    const renderStaffReviewCard = () => (
+        <Card>
+            <CardContent>
+                <Typography variant="h4" component="h1">
+                    Did they pass?
+                </Typography>
+                <Typography variant="body1" component="p">
+                    After reviewing the application, either approve or reject the mentor application.
+                </Typography>
+                <Button onClick={handelInterviewRequest} variant="contained" color="primary">
+                    Send Interview Request
+                </Button>
+                <Button
+                    onClick={() => {
+                        setOpenRejectModal(true);
+                    }}
+                    variant="contained"
+                    color="primary">
+                    Reject The Application
+                </Button>
+            </CardContent>
+        </Card>
+    );
+
+    const renderStaffInterviewApprovalCard = () => (
+        <Card>
+            <CardContent>
+                <Typography variant="h4" component="h1">
+                    Ready to Approve this Mentor?
+                </Typography>
+                <Typography variant="body1" component="p">
+                    We&apos;ve requested an the mentor to schedule an interview on{' '}
+                    {memberData?.data?.mentorship_program?.mentor_profile?.interview_requested_at_date}. Once passed we can approve or reject them.
+                </Typography>
+                <Button onClick={handelApproveMentor} variant="contained" color="primary">
+                    Approve Mentor
+                </Button>
+                <Button onClick={handelSendReminderMentor} variant="contained" color="primary">
+                    Send Interview Reminder
+                </Button>
+            </CardContent>
+        </Card>
+    );
+    const renderPauseApplicationCard = () => (
+        <Card>
+            <CardContent>
+                <Typography variant="h4" component="h1">
+                    Do you need to paused mentoring?
+                </Typography>
+                <Typography variant="body1" component="p">
+                    We don&apos;t want you to burnout, so we make it easy for you to pause your mentoring because life happens and we get it. When
+                    you&apos;re ready you can come back to your account and reactivate it later.
+                </Typography>
+                <Button onClick={handelPauseMentorApplication} variant="contained" color="primary">
+                    Pause Mentor Application
                 </Button>
             </CardContent>
         </Card>
@@ -151,6 +253,129 @@ function ViewMemberProfile() {
             </CardContent>
         </Card>
     );
+
+    const handelInterviewRequest = () => {
+        const url = process.env.REACT_APP_API_BASE_URL + `mentorship/mentor/${id}/update-status/`;
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                Authorization: `Token ${token}`,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ 'mentor-update-status': 'send-invite' }),
+        })
+            .then(response => {
+                console.log(response, 'response');
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log(data, 'saved');
+            })
+            .catch(error => {
+                console.error('Fetch error:', error);
+            });
+    };
+
+    const handelApproveMentor = () => {
+        const url = process.env.REACT_APP_API_BASE_URL + `mentorship/mentor/${id}/update-status/`;
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                Authorization: `Token ${token}`,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ 'mentor-update-status': 'approve-mentor' }),
+        })
+            .then(response => {
+                console.log(response, 'response');
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log(data, 'saved');
+            })
+            .catch(error => {
+                console.error('Fetch error:', error);
+            });
+    };
+
+    const handelPauseMentorApplication = () => {
+        const url = process.env.REACT_APP_API_BASE_URL + `mentorship/mentor/${id}/update-status/`;
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                Authorization: `Token ${token}`,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ 'mentor-update-status': 'pause' }),
+        })
+            .then(response => {
+                console.log(response, 'response');
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log(data, 'saved');
+            })
+            .catch(error => {
+                console.error('Fetch error:', error);
+            });
+    };
+    const handelSendReminderMentor = () => {
+        const url = process.env.REACT_APP_API_BASE_URL + `mentorship/mentor/${id}/update-status/`;
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                Authorization: `Token ${token}`,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ 'mentor-update-status': 'interview-reminder' }),
+        })
+            .then(response => {
+                console.log(response, 'response');
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log(data, 'saved');
+            })
+            .catch(error => {
+                console.error('Fetch error:', error);
+            });
+    };
+
+    const handelMentorAppRejection = () => {
+        const url = process.env.REACT_APP_API_BASE_URL + `mentorship/mentor/${id}/update-status/`;
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                Authorization: `Token ${token}`,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(rejectionForm),
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log(data, 'saved');
+            })
+            .catch(error => {
+                console.error('Fetch error:', error);
+            });
+    };
 
     const renderSocialIcons = () => (
         <Grid container spacing={1}>
@@ -264,16 +489,38 @@ function ViewMemberProfile() {
         </Grid>
     );
     const renderUserSpecificCard = () => {
-        if (isOwnProfile && memberData?.data?.user?.is_mentor) {
-            if (memberData?.data?.user?.is_mentor_training_complete && memberData?.data?.user?.is_mentor_profile_active) {
+        if (loggedInUser?.account_info?.is_staff) {
+            if (memberData?.data?.user?.is_mentor_profile_active) {
                 return renderPauseMentoringCard();
-            } else if (memberData?.data?.user?.is_mentor_application_submitted) {
+            }
+
+            if (!memberData?.data?.user?.is_mentor_profile_active && memberData?.data?.user?.is_mentor_profile_approved) {
+                return renderPauseMentoringCard();
+            }
+            if (memberData?.data?.user?.is_mentor_interviewing) {
+                return renderStaffInterviewApprovalCard();
+            }
+            if (memberData?.data?.user?.is_mentor_application_submitted) {
+                return renderStaffReviewCard();
+            }
+        }
+
+        if (isOwnProfile && memberData?.data?.user?.is_mentor) {
+            if (memberData?.data?.user?.is_mentor_profile_approved && !memberData?.data?.user?.is_mentor_profile_active) {
+                return renderSetBookingLinkCard();
+            }
+            // data.mentorship_program.calendar_link
+            if (memberData?.data?.mentorship_program?.calendar_link && memberData?.data?.user?.is_mentor_profile_active) {
+                return renderPauseMentoringCard();
+            } else if (memberData?.data?.user?.is_mentor_application_submitted && !memberData?.data?.user?.is_mentor_interviewing) {
                 return renderApplicationReviewCard();
+            } else if (memberData?.data?.user?.is_mentor_interviewing && !memberData?.data?.is_mentor_profile_approved) {
+                return renderSentInterviewCard();
             } else {
                 return renderMentorEdgeCaseStateCard();
             }
         } else {
-            if (memberData?.data?.user?.is_mentor) {
+            if (memberData?.data?.user?.is_mentor && !loggedInUser?.account_info?.is_staff) {
                 if (isUserConnectedWithMentor) {
                     return renderMatchedWithThisMentorCard();
                 } else {
@@ -281,6 +528,7 @@ function ViewMemberProfile() {
                 }
             }
         }
+
         return null;
     };
 
@@ -319,7 +567,7 @@ function ViewMemberProfile() {
                     We don&apos;t want you to burnout, so we make it easy for you to pause your mentoring because life happens and we get it. When
                     you&apos;re ready you can come back to your account and reactivate it later.
                 </Typography>
-                <Button variant="contained" color="primary">
+                <Button onClick={handelPauseMentorApplication} variant="contained" color="primary">
                     Pause Mentorship
                 </Button>
             </CardContent>
@@ -411,7 +659,7 @@ function ViewMemberProfile() {
                                         {memberData?.data?.talent_profile?.skills.map(skill => {
                                             return (
                                                 <>
-                                                    <Chip label={skill?.name} />
+                                                    <Chip key={skill.id} label={skill?.name} />
                                                 </>
                                             );
                                         })}
@@ -466,6 +714,52 @@ function ViewMemberProfile() {
                     <div>
                         <ReviewCard talentDetails={memberData?.data} setOpen={setOpen} />
                     </div>
+                </Box>
+            </Modal>
+
+            <Modal
+                open={openRejectModal}
+                onClose={() => {
+                    setOpenRejectModal(false);
+                }}
+                style={{ padding: '20px' }}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description">
+                <Box
+                    style={{
+                        position: 'absolute',
+                        top: '50%',
+                        left: '50%',
+                        transform: 'translate(-50%, -50%)',
+                        width: 400,
+                        backgroundColor: '#fff',
+                        boxShadow: 24,
+                        padding: 15,
+                    }}>
+                    <Typography id="modal-modal-title" variant="h6" component="h2">
+                        Why are we rejecting {memberData?.data?.user?.first_name}?
+                    </Typography>
+                    <Box>
+                        <FormControl>
+                            <FormLabel id="mentor-rejection-reason-label">Why are we rejecting </FormLabel>
+                            <RadioGroup
+                                aria-labelledby="demo-mentor-rejection-reason-label"
+                                name="mentor-rejection-reason"
+                                onChange={e => {
+                                    setRejectionForm({ 'mentor-rejection-reason': e.target.value });
+                                }}>
+                                <FormControlLabel value="removed_coc_issues" control={<Radio />} label="Rejected for COC Issues" />
+                                <FormControlLabel value="incomplete_application" control={<Radio />} label="Incomplete Application" />
+                                <FormControlLabel value="lacking_experience" control={<Radio />} label="Lacking Experience" />
+                                <FormControlLabel value="rejected_other" control={<Radio />} label="Other" />
+                            </RadioGroup>
+                        </FormControl>
+                    </Box>
+                    <Box>
+                        <Button type="button" onClick={handelMentorAppRejection} variant="solid">
+                            Submit
+                        </Button>
+                    </Box>
                 </Box>
             </Modal>
         </Grid>
