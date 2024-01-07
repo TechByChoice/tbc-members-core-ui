@@ -9,6 +9,7 @@ import { useStatus } from '../providers/MsgStatusProvider';
 import Link from '@mui/material/Link';
 import styled from '@emotion/styled';
 import Alert from '@mui/material/Alert';
+import { useStatusMessage } from '../hooks/useStatusMessage';
 
 const CenteredContent = styled.div`
     display: flex;
@@ -33,9 +34,9 @@ const ImageBG = styled.div`
 
 function LoginPage() {
     const auth = useAuth();
-    const {
-        statusType, setStatusMessage, setIsAlertOpen, setStatusType 
-    } = useStatus();
+    const { statusType } = useStatus();
+    const statusMessage = useStatusMessage();
+
     const [ formData, setFormData ] = useState({
         first_name: '',
         last_name: '',
@@ -63,22 +64,16 @@ function LoginPage() {
                 if (data.status) {
                     setToken(data.token);
                     localStorage.setItem('token', data.token);
-                    setIsAlertOpen(true);
-                    setStatusType('success');
-                    setStatusMessage('Welcome to Tech by Choice');
+                    statusMessage.success('Welcome to Tech by Choice');
                     navigate('/new/member/2');
                 } else {
                     console.error('Error:', data.message);
-                    setIsAlertOpen(true);
-                    setStatusType('error');
-                    setStatusMessage(data.message);
+                    statusMessage.error(data.message);
                 }
             })
             .catch(error => {
                 console.error('Error:', error);
-                setIsAlertOpen(true);
-                setStatusType('error');
-                setStatusMessage(error.message);
+                statusMessage.error(error.message);
             });
     };
 
@@ -94,15 +89,13 @@ function LoginPage() {
     }, [ auth.user ]);
 
     useEffect(() => {
-        if (auth.errorMessage) {
-            if (auth.errorMessage['non_field_errors']) {
-                setStatusMessage(auth.errorMessage['non_field_errors'][0]);
-                setStatusType('error');
-                setIsAlertOpen(true);
-            }
-        } else {
-            setStatusMessage('');
-            setIsAlertOpen(false);
+        if (!auth.errorMessage) {
+            statusMessage.hide();
+            return;
+        }
+
+        if (auth.errorMessage['non_field_errors']) {
+            statusMessage.error(auth.errorMessage['non_field_errors'][0]);
         }
     }, [ auth.errorMessage ]);
 
