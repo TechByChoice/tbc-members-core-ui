@@ -19,6 +19,7 @@ import CommunityQuestionsStep from '../compoents/onboarding/CommunityQuestionsSt
 import MarketingQuestionsStep from '../compoents/onboarding/MarketingQuestionsSteps';
 import getCookie from '../helpers';
 import { useAuth } from '../providers/AuthProvider';
+import { useStatusMessage } from '../hooks/useStatusMessage';
 
 const steps = [
     'Basic Info',
@@ -31,12 +32,13 @@ const steps = [
 export default function NewMemberPage() {
     const [ activeStep, setActiveStep ] = React.useState(0);
     const [ questions, setQuestions ] = React.useState(0);
-    const { setStatusType, setStatusMessage, setIsAlertOpen } = useStatus();
     const [ answers, setAnswers ] = React.useState({});
     const [ formErrors, setFormErrors ] = React.useState({});
 
+    const statusMessage = useStatusMessage();
     const history = useNavigate();
     const { token, logout } = useAuth();
+
     useEffect(() => {}, [ answers ]);
 
     useEffect(() => {
@@ -218,13 +220,9 @@ export default function NewMemberPage() {
         }
         if (validationResult.isValid) {
             setActiveStep(activeStep + 1);
-            setStatusType('');
-            setStatusMessage();
-            setIsAlertOpen(false);
+            statusMessage.hide();
         } else {
-            setStatusType('error');
-            setStatusMessage('Please update all required fields.');
-            setIsAlertOpen(true);
+            statusMessage.error('Please update all required fields.');
         }
     };
 
@@ -256,16 +254,12 @@ export default function NewMemberPage() {
             })
             .then(data => {
                 // Handle the successful JSON response here, e.g.:
-                setStatusMessage("You're in!");
-                setIsAlertOpen(true);
-                setStatusType('success');
+                statusMessage.success("You're in!");
                 history('/');
             })
             .catch(error => {
                 console.error('Fetch error:', error);
-                setStatusMessage('We ran into an error saving your profile');
-                setIsAlertOpen(true);
-                setStatusType('error');
+                statusMessage.error('We ran into an error saving your profile');
             });
     };
 
