@@ -76,7 +76,7 @@ const NextBackButtons = ({ activeStep, handleBack, handleNext }) => (
 
 export default function NewMentorPage() {
     const [ hasCompleted, setHasCompleted ] = React.useState(false);
-    const [ activeStep, setActiveStep ] = React.useState(1);
+    const [ activeStep, setActiveStep ] = React.useState(0);
     const { setStatusType, setStatusMessage, setIsAlertOpen } = useStatus();
 
     const [ formData, setFormData ] = React.useState({
