@@ -81,6 +81,12 @@ function validateSkillsQuestionStep(answers, setFormErrors) {
     return isValid;
 }
 
+const validationFunctionMap = {
+    [StepDefinitions.BasicInfo.index]: validateBasicInfo,
+    [StepDefinitions.Skills.index]: validateSkillsQuestionStep,
+    default: (...args) => true,
+};
+
 export default function NewMemberPage() {
     const [ activeStep, setActiveStep ] = useState(0);
     const [ answers, setAnswers ] = useState({});
@@ -196,12 +202,6 @@ export default function NewMemberPage() {
     ]);
 
     const handleNext = () => {
-        const validationFunctionMap = {
-            [StepDefinitions.BasicInfo.index]: validateBasicInfo,
-            [StepDefinitions.Skills.index]: validateSkillsQuestionStep,
-            default: (...args) => true,
-        };
-
         const isValid = (validationFunctionMap[activeStep] ?? validationFunctionMap.default)(answers, setFormErrors);
 
         if (!isValid) {
@@ -262,6 +262,10 @@ export default function NewMemberPage() {
     useEffect(() => {
         setIsComplete(activeStep === steps.length);
     }, [ activeStep ]);
+
+    useEffect(() => {
+        validationFunctionMap[activeStep]?.(answers, setFormErrors);
+    }, [ answers ]);
 
     useEffect(() => {
         const url = import.meta.env.VITE_APP_API_BASE_URL + 'user/details/new-member';
