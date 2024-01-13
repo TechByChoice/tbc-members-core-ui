@@ -24,7 +24,7 @@ export default function AllJobsPage({}) {
 
         fetch(url, {
             method: 'GET',
-            headers: {'Content-Type': 'application/json',},
+            headers: { 'Content-Type': 'application/json' },
         })
             .then(response => {
                 if (!response.ok) {
@@ -81,8 +81,6 @@ export default function AllJobsPage({}) {
                                     location={job?.location}
                                     salary={`${job?.max_compensation?.range} - ${job?.max_compensation?.range}`}
                                     description={null}
-                                    applyLink={job?.url}
-                                    viewNow={job?.id}
                                 />
                             </Grid>
                         ))
@@ -104,8 +102,7 @@ export default function AllJobsPage({}) {
                                 location={job?.location}
                                 salary={`${job?.max_compensation?.range} - ${job?.max_compensation?.range}`}
                                 description={null}
-                                applyLink={job?.url}
-                                viewNow={job?.id}
+                                match={false}
                             />
                         </Grid>
                     ))

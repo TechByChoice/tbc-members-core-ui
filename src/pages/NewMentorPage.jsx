@@ -113,13 +113,14 @@ export default function NewMentorPage() {
                 <FormMentorApplication
                     setFormData={setFormData}
                     formData={formData}
+                    defaultValues={null}
                     onFormDataChange={newData => onFormDataChange(STEP_COMMITMENT_LEVEL, newData)}
                 />
             ),
             [STEP_CAREER_QUESTIONS]: () => <FormMentorCareer onFormDataChange={newData => onFormDataChange(STEP_CAREER_QUESTIONS, newData)} />,
             [STEP_VALUES]: () => <FormMentorshipValues onFormDataChange={newData => onFormDataChange(STEP_VALUES, newData)} />,
             [STEP_PROFILE]: () => (
-                <FormMentorProfile setFormData={setFormData} formData={formData} onFormDataChange={newData => onFormDataChange(STEP_PROFILE, newData)} />
+                <FormMentorProfile questions={null} defaultData={null} setFormData={setFormData} formData={formData} formErrors={null} />
             ),
         };
 

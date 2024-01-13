@@ -10,6 +10,7 @@ import { useAuth } from '../../providers/AuthProvider';
 
 export default function MemberDashboard() {
     const [ event, setEvent ] = useState();
+    /** @type {any} job */
     const [ job, setJob ] = useState();
     const [ mentor, setMentor ] = useState();
     const [ announcement, setAnnouncement ] = useState({
@@ -156,6 +157,8 @@ export default function MemberDashboard() {
                         </Grid>
                         <Grid item>
                             <Typography variant="h5">Latest&apos;s Announcement!</Typography>
+                            {/*
+                            // @ts-ignore */}
                             {announcement && <SlackMessage style={{ width: '75%' }} elements={announcement.elements} />}
                         </Grid>
                         <Grid item>
@@ -187,8 +190,6 @@ export default function MemberDashboard() {
                                     location={job?.location}
                                     salary={`${job?.max_compensation?.range} - ${job?.max_compensation?.range}`}
                                     description={null}
-                                    applyLink={job?.url}
-                                    viewNow={job?.id}
                                 />
                             ) : (
                                 <p>Loading events...</p>

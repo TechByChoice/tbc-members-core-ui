@@ -1,6 +1,6 @@
 import React from 'react';
 
-const SlackMessage = ({ elements }) => {
+const SlackMessage = ({ elements }, props) => {
     const renderElement = element => {
         switch (element.type) {
             case 'text':
@@ -29,7 +29,7 @@ const SlackMessage = ({ elements }) => {
     };
 
     return (
-        <div>
+        <div {...props}>
             {elements.map((element, index) => (
                 <React.Fragment key={index}>{renderElement(element)}</React.Fragment>
             ))}
