@@ -1,5 +1,5 @@
-import React, { createContext, useCallback, useContext, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { createContext, useCallback, useContext, useEffect, useState } from 'react';
+import * as React from 'react';
 
 const AuthContext = createContext([]);
 
@@ -10,6 +10,7 @@ export const AuthProvider = ({ children }) => {
     const [ accountDetails, setAccountDetails ] = useState([]);
     const [ errorMessage, setErrorMessage ] = useState([]);
     const [ isLoading, setIsLoading ] = useState(true);
+
     // get user details
     useEffect(() => {
         const url = import.meta.env.VITE_APP_API_BASE_URL + 'user/details/';
@@ -92,25 +93,28 @@ export const AuthProvider = ({ children }) => {
                 'Content-Type': 'application/json',
                 Authorization: `Token ${token}`,
             },
-        }).then(response => {
-            console.log(response.data);
-            if (!response.data) {
-                // Call the setToken function to store the JWT
-                setIsAuthenticated(false);
-                setUser([]);
-                setToken('');
-                localStorage.removeItem('token');
-                window.location.href = import.meta.env.VITE_APP_BASE_URL + 'login';
-            } else {
-                setErrorMessage(response.data);
-                console.error(response.data);
-            }
-        });
+        })
+            .then(response => response.json())
+            .then(response => {
+                console.log(response.data);
+                if (!response.data) {
+                    // Call the setToken function to store the JWT
+                    setIsAuthenticated(false);
+                    setUser([]);
+                    setToken('');
+                    localStorage.removeItem('token');
+                    window.location.href = import.meta.env.VITE_APP_BASE_URL + 'login';
+                } else {
+                    setErrorMessage(response.data);
+                    console.error(response.data);
+                }
+            });
     }, [ token ]);
 
     return (
         <AuthContext.Provider
             value={{
+                // @ts-ignore
                 isAuthenticated,
                 token,
                 setToken,
@@ -127,6 +131,7 @@ export const AuthProvider = ({ children }) => {
     );
 };
 
+/** @returns {any} */
 export const useAuth = () => {
     return useContext(AuthContext);
 };
