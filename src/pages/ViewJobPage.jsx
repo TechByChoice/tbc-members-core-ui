@@ -19,6 +19,7 @@ const formatDate = dateString => {
 
 function ViewJobPage({ userDetail, isLoading }) {
     const { id } = useParams();
+    /** @type {any} jobData */
     const [ jobData, setJobData ] = useState();
     const [ jobStatusCard, setJobStatusCard ] = useState(null);
     const { setStatusMessage, setIsAlertOpen, setStatusType } = useStatus();
@@ -315,7 +316,7 @@ function ViewJobPage({ userDetail, isLoading }) {
                         <Grid container display="flex" direction="row" alignItems="center" spacing={5}>
                             {/*Details*/}
                             <Grid item xs={12} sm={8}>
-                                <Grid containe spacing={2} display="flex" alignItems="center" direction="row" justifyContent="space-between">
+                                <Grid container spacing={2} display="flex" alignItems="center" direction="row" justifyContent="space-between">
                                     <Grid item sm={12} md={4}>
                                         <Typography variant="h4">{jobData?.job_title}</Typography>
                                     </Grid>
@@ -369,7 +370,7 @@ function ViewJobPage({ userDetail, isLoading }) {
                         <section>
                             <Typography variant="body1">{userDetail?.bio}</Typography>
                             <Typography variant="body1">{userDetail?.bio}</Typography>
-                            <Container variant="section">
+                            <Container>
                                 <div>
                                     <Typography variant="h5">Job Description:</Typography>
                                     <HtmlContentRenderer htmlContent={jobData?.external_description} />
@@ -394,7 +395,7 @@ function ViewJobPage({ userDetail, isLoading }) {
                                 </div>
                             </Container>
                             {jobData?.data?.current_company && (
-                                <Container variant="section">
+                                <Container>
                                     <Typography variant="h5">Current Company</Typography>
                                     <CompanyCard company={jobData?.data?.current_company} />
                                 </Container>

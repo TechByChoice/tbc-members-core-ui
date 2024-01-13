@@ -66,6 +66,7 @@ function ProfileSettingPage({ userDetail }) {
 
     const [ isEditing, setIsEditing ] = useState(false);
     const [ questions, setQuestions ] = useState({});
+    /** @type {any} fromData */
     const [ fromData, setFormData ] = useState();
 
     useEffect(() => {
@@ -95,7 +96,7 @@ function ProfileSettingPage({ userDetail }) {
 
     const handleChange = event => {
         const { name, value } = event.target;
-        setFormData(prevFormData => ({ ...prevFormData, [name]: value }));
+        setFormData({ ...fromData, [name]: value });
     };
 
     const handleEdit = () => {
@@ -133,19 +134,19 @@ function ProfileSettingPage({ userDetail }) {
                 <Tab label="Mentorship" {...a11yProps(4)} />
             </Tabs>
             <TabPanel value={value} index={0}>
-                <ProfileBasicInfo questions={questions} formErrors={formError} formData={{}} handleChange={handleChange} />
+                <ProfileBasicInfo questions={questions} formErrors={formError} handleChange={handleChange} />
             </TabPanel>
             <TabPanel value={value} index={1}>
-                <ProfileInterests questions={questions} formErrors={formError} formData={{}} handleChange={handleChange} />
+                <ProfileInterests questions={questions} handleChange={handleChange} />
             </TabPanel>
             <TabPanel value={value} index={2}>
-                <ProfileIdentity questions={questions} formErrors={formError} formData={{}} handleChange={handleChange} />
+                <ProfileIdentity questions={questions} />
             </TabPanel>
             <TabPanel value={value} index={3}>
-                <ProfileNotifications questions={questions} formErrors={formError} formData={{}} handleChange={handleChange} />
+                <ProfileNotifications />
             </TabPanel>
             <TabPanel value={value} index={4}>
-                <ProfileMentorship questions={questions} formErrors={formError} formData={{}} handleChange={handleChange} />
+                <ProfileMentorship questions={questions} />
             </TabPanel>
         </Root>
     );
