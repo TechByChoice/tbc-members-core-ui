@@ -35,7 +35,7 @@
         "@emotion/styled": "latest",
         "@mui/icons-material": "^5.15.3",
         "@mui/material": "latest",
-        "@typescript-eslint/parser": "^5.62.0",
+        "@typescript-eslint/parser": "^6.19.0",
         "@vitejs/plugin-react": "^4.2.1",
         "autoprefixer": "^10.4.16",
         "eslint": "^8.56.0",
