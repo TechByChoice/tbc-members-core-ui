@@ -10,7 +10,6 @@ export default function ProfileMentorDetails() {
 
     function handleSave() {
         const url = process.env.REACT_APP_API_BASE_URL + 'mentorship/update/profile/';
-        console.log(formData);
         fetch(url, {
             method: 'POST',
             headers: {
@@ -39,7 +38,7 @@ export default function ProfileMentorDetails() {
                 <FormMentorProfile defaultData={user[0]?.mentor_details?.mentor_profile} formData={formData} setFormData={setFormData} />
                 <Grid item xs={12} sm={8}>
                     <Button variant="contained" color="primary" onClick={handleSave}>
-                        Update
+                        Save
                     </Button>
                 </Grid>
             </>

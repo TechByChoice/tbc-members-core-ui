@@ -12,9 +12,7 @@ export default function ProfileIdentity({ questions }) {
     const { user } = useAuth();
     const userDetails = user[0];
     const [ formErrors, setFormErrors ] = useState({});
-    const {
-        statusType, setStatusMessage, setIsAlertOpen, setStatusType 
-    } = useStatus();
+    const { setStatusMessage, setIsAlertOpen, setStatusType } = useStatus();
 
     const [ identityFormData, setIdentityFormData ] = useState({
         identity_sexuality: [],

@@ -314,7 +314,7 @@ function ViewMemberProfile() {
                 Authorization: `Token ${token}`,
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ 'mentor-update-status': 'pause' }),
+            body: JSON.stringify({ 'mentor-update-status': 'paused' }),
         })
             .then(response => {
                 console.log(response, 'response');
