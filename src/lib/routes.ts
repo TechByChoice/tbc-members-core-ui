@@ -11,10 +11,11 @@ export const routes = {
                 profileData: () => apiJoin(routes.api.base, 'user/details/new-member'),
             },
         },
-        events: {list: () => apiJoin(routes.api.base, 'event'),},
+        events: { list: () => apiJoin(routes.api.base, 'event') },
         jobs: {
             list: () => apiJoin(routes.api.base, 'company/new/jobs/all-jobs'),
             pull: () => apiJoin(routes.api.base, 'company/pull/remote'),
         },
+        mentors: {list: () => apiJoin(routes.api.base, 'mentorship'),},
     },
 };
