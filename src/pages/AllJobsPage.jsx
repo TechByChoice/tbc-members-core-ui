@@ -4,6 +4,7 @@ import { Button, Grid, Typography } from '@mui/material';
 import JobCard from '../compoents/JobCard';
 import styled from '@emotion/styled';
 import { Link } from 'react-router-dom';
+import { routes } from '@/lib/routes';
 
 const CalloutCard = styled.section`
     border: 1px solid darkgray;
@@ -21,9 +22,7 @@ export default function AllJobsPage({}) {
     const [ userPostedJobs, setUserPostedJobs ] = useState([]);
 
     useEffect(() => {
-        const url = import.meta.env.VITE_APP_API_BASE_URL + 'company/new/jobs/all-jobs/';
-
-        fetch(url, {
+        fetch(routes.api.jobs.list(), {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' },
         })
@@ -43,8 +42,7 @@ export default function AllJobsPage({}) {
     }, []);
 
     function pullJobs() {
-        const url = import.meta.env.VITE_APP_API_BASE_URL + 'company/pull/remote/';
-        fetch(url, {
+        fetch(routes.api.jobs.pull(), {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
