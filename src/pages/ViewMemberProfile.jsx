@@ -330,6 +330,30 @@ function ViewMemberProfile() {
                 console.error('Fetch error:', error);
             });
     };
+    const handelReactivateMentorApplication = () => {
+        const url = process.env.REACT_APP_API_BASE_URL + `mentorship/mentor/${id}/update-status/`;
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                Authorization: `Token ${token}`,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ 'mentor-update-status': 'active' }),
+        })
+            .then(response => {
+                console.log(response, 'response');
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log(data, 'saved');
+            })
+            .catch(error => {
+                console.error('Fetch error:', error);
+            });
+    };
     const handelSendReminderMentor = () => {
         const url = process.env.REACT_APP_API_BASE_URL + `mentorship/mentor/${id}/update-status/`;
         fetch(url, {
@@ -508,7 +532,11 @@ function ViewMemberProfile() {
         }
 
         if (isOwnProfile && memberData?.data?.user?.is_mentor) {
-            if (memberData?.data?.user?.is_mentor_profile_approved && !memberData?.data?.user?.is_mentor_profile_active) {
+            if (
+                memberData?.data?.user?.is_mentor_profile_approved &&
+                !memberData?.data?.mentorship_program?.calendar_link &&
+                !memberData?.data?.user?.is_mentor_profile_active
+            ) {
                 return renderSetBookingLinkCard();
             }
             // data.mentorship_program.calendar_link
@@ -571,6 +599,19 @@ function ViewMemberProfile() {
                 </Typography>
                 <Button onClick={handelPauseMentorApplication} variant="contained" color="primary">
                     Pause Mentorship
+                </Button>
+            </CardContent>
+        </Card>
+    );
+    const renderReactivateMentoringCard = () => (
+        <Card>
+            <CardContent>
+                <Typography variant="h6">Your mentorship account is on pause.</Typography>
+                <Typography variant="body1">
+                    When you&apos;re ready to reactivate please feel free to click the button below when you&apos;re ready.
+                </Typography>
+                <Button onClick={handelReactivateMentorApplication} variant="contained" color="primary">
+                    Reactivate Mentor Application
                 </Button>
             </CardContent>
         </Card>

@@ -63,7 +63,7 @@ export default function ProfileCalLinkForm() {
     return (
         <>
             <Grid item xs={12}>
-                <Typography variant="h6">Calendar Link Integration</Typography>
+                <Typography variant="h6">Calendar Link</Typography>
                 <hr />
             </Grid>
             <Grid item xs={12} md={4} spacing={3} mt={3}>
@@ -85,7 +85,7 @@ export default function ProfileCalLinkForm() {
                     </Grid>
                     <Grid item xs={12} sm={8}>
                         <Button variant="contained" color="primary" onClick={handelSocialAccountSave}>
-                            Update
+                            Save
                         </Button>
                     </Grid>
                 </Grid>

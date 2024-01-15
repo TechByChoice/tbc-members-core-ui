@@ -78,13 +78,12 @@ export default function ProfileMentorship({ questions }) {
                             Save
                         </Button>
                         <ProfileMentorDetails />
-                        {!user[0]?.account_info?.is_mentor_profile_active &&
-                            user[0]?.account_info?.is_mentor_profile_approved &&
-                            user[0].mentor_details && (
-                            <>
-                                <ProfileCalLinkForm />
-                            </>
-                        )}
+                        {!user[0]?.account_info?.is_mentor_profile_active ||
+                            (user[0]?.account_info?.is_mentor_profile_approved && user[0].mentor_details && (
+                                <>
+                                    <ProfileCalLinkForm />
+                                </>
+                            ))}
                     </>
                 ) : (
                     <>
