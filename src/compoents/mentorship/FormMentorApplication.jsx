@@ -6,15 +6,16 @@ import { useAuth } from '../../providers/AuthProvider';
 const filter = createFilterOptions();
 
 export default function FormMentorApplication({
-    formData, setFormData, defaultValues, onFormDataChange 
+    formData, setFormData, defaultValues = false, onFormDataChange 
 }) {
-    const [ commitmentQuestions, setCommitmentQuestions ] = useState();
+    const [ commitmentQuestions, setCommitmentQuestions ] = useState([]);
+    const [ newData, setNewData ] = useState([]);
     const [ supportAreas, setSupportAreas ] = useState();
     const { accountDetails } = useAuth();
 
     useEffect(() => {
         // This should be replaced with the appropriate API call
-        const url = process.env.REACT_APP_API_BASE_URL + 'mentorship/details/?fields=commitment_level&fields=mentor_support_areas';
+        const url = process.env.REACT_APP_API_BASE_URL + 'mentorship/details/?fields=commitment_level&fields=support_areas';
         fetch(url)
             .then(response => {
                 if (!response.ok) {
@@ -24,7 +25,7 @@ export default function FormMentorApplication({
             })
             .then(data => {
                 setCommitmentQuestions(data.commitment_level);
-                setSupportAreas(data.mentor_support_areas);
+                setSupportAreas(data.support_areas);
             })
             .catch(error => {
                 console.error('Fetch error:', error);
@@ -32,29 +33,30 @@ export default function FormMentorApplication({
     }, []);
 
     const handleCommitmentLevelChange = (event, newValue) => {
-        console.log(formData, 'formData', newValue);
         // Call the function passed from the parent component to update the formData state
         setFormData(preValue => ({
             ...preValue,
-            commitment_level: newValue.map(item => item.id),
+            commitment_level_id: newValue.map(item => item.id),
+            commitment_level: newValue,
         }));
     };
 
     const handleSupportAreasChange = (event, newValue) => {
-        console.log(formData, 'formData');
+        console.log(event, newValue);
         // Call the function passed from the parent component to update the formData state
         setFormData(preValue => ({
             ...preValue,
-            mentor_support_areas: newValue.map(item => item.id),
+            mentor_support_areas_id: newValue.map(item => item.id),
+            mentor_support_areas: newValue,
         }));
     };
 
     const handleMenteeSupportAreasChange = (event, newValue) => {
-        console.log(formData, 'formData');
         // Call the function passed from the parent component to update the formData state
         setFormData(preValue => ({
             ...preValue,
-            mentee_support_areas: newValue.map(item => item.id),
+            mentee_support_areas_id: newValue.map(item => item.id),
+            mentee_support_areas: newValue,
         }));
     };
 
@@ -81,45 +83,18 @@ export default function FormMentorApplication({
                         <Grid container>
                             <Grid item xs={12}>
                                 <FormControl fullWidth>
-                                    <FormLabel id="commitment_level">What level of involvement fits your schedule sense to you?</FormLabel>
+                                    <FormLabel id="commitment_level">What level of involvement fits your schedule?</FormLabel>
                                     <Autocomplete
                                         multiple
-                                        selectOnFocus
-                                        includeInputInList
                                         handleHomeEndKeys
-                                        value={formData?.commitment_level}
-                                        id="company_list"
-                                        name="company_list"
-                                        aria-labelledby="commitment_level"
-                                        options={commitmentQuestions || []} // <-- directly provide a default value here
-                                        isOptionEqualToValue={(option, value) =>
-                                            (option.inputValue && value.inputValue && option.inputValue === value.inputValue) || option === value
-                                        }
-                                        getOptionLabel={option => {
-                                            // Check for the special case where the option has an inputValue property
-                                            if (option.inputValue) return option.inputValue;
-
-                                            // Existing logic
-                                            return option.name;
-                                        }}
-                                        filterOptions={(options, params) => {
-                                            const filtered = filter(options, params);
-
-                                            const { inputValue } = params;
-                                            // Suggest the creation of a new value
-                                            const isExisting = options.some(option => inputValue === option.name);
-                                            if (inputValue !== '' && !isExisting) {
-                                                filtered.push({
-                                                    inputValue,
-                                                    name: `Add "${inputValue}"`,
-                                                });
-                                            }
-
-                                            return filtered;
-                                        }}
-                                        renderOption={(props, option) => <li {...props}>{option.name}</li>}
                                         onChange={handleCommitmentLevelChange}
-                                        renderInput={params => <TextField name="commitment_level" {...params} />}
+                                        id="combo-box-demo"
+                                        options={commitmentQuestions}
+                                        value={formData?.commitment_level || []}
+                                        getOptionLabel={option => {
+                                            return option ? option.name : '';
+                                        }}
+                                        renderInput={params => <TextField {...params} label="Please select all that apply to you" variant="outlined" />}
                                     />
                                 </FormControl>
                             </Grid>
@@ -133,36 +108,13 @@ export default function FormMentorApplication({
                                         selectOnFocus
                                         includeInputInList
                                         handleHomeEndKeys
-                                        value={defaultValues?.formData?.mentor_support_areas}
+                                        value={formData?.mentor_support_areas || []}
                                         id="mentor_support_areas"
                                         aria-labelledby="mentor_support_areas-label"
                                         options={supportAreas || []} // <-- directly provide a default value here
-                                        isOptionEqualToValue={(option, value) =>
-                                            (option.inputValue && value.inputValue && option.inputValue === value.inputValue) || option === value
-                                        }
                                         getOptionLabel={option => {
-                                            // Check for the special case where the option has an inputValue property
-                                            if (option.inputValue) return option.inputValue;
-
-                                            // Existing logic
-                                            return option.name;
+                                            return option ? option.name : '';
                                         }}
-                                        filterOptions={(options, params) => {
-                                            const filtered = filter(options, params);
-
-                                            const { inputValue } = params;
-                                            // Suggest the creation of a new value
-                                            const isExisting = options.some(option => inputValue === option.name);
-                                            if (inputValue !== '' && !isExisting) {
-                                                filtered.push({
-                                                    inputValue,
-                                                    name: `Add "${inputValue}"`,
-                                                });
-                                            }
-
-                                            return filtered;
-                                        }}
-                                        renderOption={(props, option) => <li {...props}>{option.name}</li>}
                                         onChange={handleSupportAreasChange}
                                         renderInput={params => <TextField name="mentor_support_areas" {...params} />}
                                     />
@@ -178,34 +130,12 @@ export default function FormMentorApplication({
                                             selectOnFocus
                                             includeInputInList
                                             handleHomeEndKeys
-                                            value={formData?.mentee_support_areas}
+                                            value={formData?.mentee_support_areas || []}
                                             id="mentee_support_areas"
                                             aria-labelledby="mentee_support_areas-label"
-                                            options={supportAreas || []} // <-- directly provide a default value here
-                                            isOptionEqualToValue={(option, value) =>
-                                                (option.inputValue && value.inputValue && option.inputValue === value.inputValue) || option === value
-                                            }
+                                            options={supportAreas || []}
                                             getOptionLabel={option => {
-                                                // Check for the special case where the option has an inputValue property
-                                                if (option.inputValue) return option.inputValue;
-
-                                                // Existing logic
-                                                return option.name;
-                                            }}
-                                            filterOptions={(options, params) => {
-                                                const filtered = filter(options, params);
-
-                                                const { inputValue } = params;
-                                                // Suggest the creation of a new value
-                                                const isExisting = options.some(option => inputValue === option.name);
-                                                if (inputValue !== '' && !isExisting) {
-                                                    filtered.push({
-                                                        inputValue,
-                                                        name: `Add "${inputValue}"`,
-                                                    });
-                                                }
-
-                                                return filtered;
+                                                return option ? option.name : '';
                                             }}
                                             renderOption={(props, option) => <li {...props}>{option.name}</li>}
                                             onChange={handleMenteeSupportAreasChange}
