@@ -77,7 +77,7 @@ function LoginPage() {
             <Grid item xs={12} sm={6} id="left">
                 {/* Left side */}
                 <CenteredContent>
-                    <FormContainer variant="standard">
+                    <FormContainer>
                         {isAuthenticated ? (
                             <Typography variant="h3" align="center">
                                 You are already logged in

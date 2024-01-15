@@ -92,7 +92,7 @@ export default function JobReferralPage() {
             case 1:
                 return <JobForm formErrors={formErrors} answers={answers} setAnswers={setAnswers} />;
             case 2:
-                return <JobReferralNotes formErrors={formErrors} answers={answers} setAnswers={setAnswers} />;
+                return <JobReferralNotes answers={answers} setAnswers={setAnswers} />;
             default:
                 throw new Error('Unknown step');
         }

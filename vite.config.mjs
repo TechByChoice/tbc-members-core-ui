@@ -4,7 +4,7 @@ import { defineConfig } from 'vite';
 
 export default defineConfig({
     plugins: [
-        react({ include: [ '**/*.jsx' ] }),
+        react({ include: [ '**/*.jsx', '**/*.tsx' ] }),
     ],
     resolve: { alias: { '@': resolve('.', '/src') } },
     server: {
@@ -24,6 +24,8 @@ export default defineConfig({
         include: [
             './src/**/*.jsx',
             './src/**/*.js',
+            './src/**/*.tsx',
+            './src/**/*.ts',
             './src/index.css',
             './index.html'
         ],

@@ -1,5 +1,5 @@
-import MemberDashboard from "./MemberDashboardPage";
-import VolunteerDashboard from "./VolunteerDashboardPage";
+import VolunteerDashboard from './VolunteerDashboardPage';
+import React from 'react';
 
 export default function TeamDashboard() {
     return (

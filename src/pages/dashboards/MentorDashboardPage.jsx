@@ -1,4 +1,5 @@
-import MemberDashboard from "./MemberDashboardPage";
+import MemberDashboard from './MemberDashboardPage';
+import React from 'react';
 
 export default function MentorDashboardPage() {
     return (
