@@ -9,15 +9,15 @@ export default function ProfileCalLinkForm() {
 
     const { setStatusMessage, setIsAlertOpen, setStatusType } = useStatus();
 
-    const [ socialMediaFormData, setSocialMediaFormData ] = useState({ calendar_link: '' });
+    const [ FormData, setFormData ] = useState({ calendar_link: '' });
 
     useEffect(() => {
         if (userDetails) {
-            setSocialMediaFormData({ calendar_link: userDetails?.mentor_details?.calendar_link?.replace(/https:\/\//g, '') || '' });
+            setFormData({ calendar_link: userDetails?.mentor_details?.calendar_link?.replace(/https:\/\//g, '') || '' });
         }
     }, [ userDetails ]);
 
-    const handelSocialAccountSave = e => {
+    const handelCalLinkSave = e => {
         e.preventDefault();
         const url = process.env.REACT_APP_API_BASE_URL + `mentorship/update/calendar-link/`;
         fetch(url, {
@@ -28,7 +28,7 @@ export default function ProfileCalLinkForm() {
             },
             body: JSON.stringify({
                 'mentor-update-status': 'active',
-                calendar_link: socialMediaFormData.calendar_link,
+                calendar_link: FormData.calendar_link,
             }),
         })
             .then(response => {
@@ -50,15 +50,12 @@ export default function ProfileCalLinkForm() {
         const { name, value } = e.target;
 
         let updatedValue = value;
-        // if (!value.startsWith('https://')) {
-        //     updatedValue = `https://${value}`;
-        // }
 
-        setSocialMediaFormData({
-            ...socialMediaFormData,
+        setFormData({
+            ...FormData,
             [name]: updatedValue,
         });
-        console.log(socialMediaFormData);
+        console.log(FormData);
     };
     return (
         <>
@@ -77,14 +74,14 @@ export default function ProfileCalLinkForm() {
                             <OutlinedInput
                                 onChange={handleChange}
                                 name="calendar_link"
-                                value={socialMediaFormData.calendar_link}
+                                value={FormData.calendar_link}
                                 startAdornment={<InputAdornment position="start">https://</InputAdornment>}
                                 type="url"
                             />
                         </FormControl>
                     </Grid>
                     <Grid item xs={12} sm={8}>
-                        <Button variant="contained" color="primary" onClick={handelSocialAccountSave}>
+                        <Button variant="contained" color="primary" onClick={handelCalLinkSave}>
                             Save
                         </Button>
                     </Grid>
