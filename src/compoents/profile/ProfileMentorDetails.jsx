@@ -9,7 +9,7 @@ export default function ProfileMentorDetails() {
     const { user, token } = useAuth();
 
     function handleSave() {
-        const url = process.env.REACT_APP_API_BASE_URL + 'mentorship/update/profile/';
+        const url = process.env.VITE_APP_API_BASE_URL + 'mentorship/update/profile/';
         fetch(url, {
             method: 'POST',
             headers: {

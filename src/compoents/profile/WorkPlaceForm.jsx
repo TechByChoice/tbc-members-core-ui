@@ -82,7 +82,7 @@ export default function WorkPlaceForm({ questions }) {
             setStatusType('error');
             setStatusMessage('Please update all required fields.');
         } else {
-            const url = process.env.REACT_APP_API_BASE_URL + 'user/profile/update/work-place';
+            const url = import.meta.env.VITE_APP_API_BASE_URL + 'user/profile/update/work-place';
             fetch(url, {
                 method: 'POST',
                 credentials: 'include',

@@ -1,4 +1,4 @@
-import MemberDashboard from "./MemberDashboardPage";
+import React from 'react';
 
 export default function CompanyAccountDashboard() {
     return (

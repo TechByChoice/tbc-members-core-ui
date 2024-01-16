@@ -32,7 +32,7 @@ export default function ProfileIdentity({ questions }) {
     function handleSave(e) {
         e.preventDefault();
         setIsAlertOpen(false);
-        const url = process.env.REACT_APP_API_BASE_URL + 'user/profile/update/idenity';
+        const url = import.meta.env.VITE_APP_API_BASE_URL + 'user/profile/update/idenity';
         fetch(url, {
             method: 'POST',
             credentials: 'include',

@@ -15,6 +15,7 @@ import PickCompany from '../compoents/PickCompany';
 import { useStatus } from '../providers/MsgStatusProvider';
 import JobForm from '../compoents/JobDetails';
 import JobReferralNotes from '../compoents/JobReferralNotes';
+import { useStatusMessage } from '../hooks/useStatusMessage';
 
 const steps = [
     'Company Details',
@@ -24,7 +25,8 @@ const steps = [
 
 export default function JobReferralPage() {
     const [ activeStep, setActiveStep ] = React.useState(0);
-    const { setStatusType, setStatusMessage, setIsAlertOpen } = useStatus();
+    const statusMessage = useStatusMessage();
+
     const [ answers, setAnswers ] = React.useState({
         department: null,
         department_size: null,
@@ -52,7 +54,7 @@ export default function JobReferralPage() {
 
     useEffect(() => {
         if (activeStep === steps.length) {
-            const url = `${process.env.REACT_APP_API_BASE_URL}company/new/jobs/create-referral/`;
+            const url = `${import.meta.env.VITE_APP_API_BASE_URL}company/new/jobs/create-referral/`;
 
             fetch(url, {
                 method: 'POST',
@@ -67,18 +69,14 @@ export default function JobReferralPage() {
                     if (!response.ok) {
                         // If not OK, throw an error to be caught in the catch block
                         return response.json().then(errorData => {
-                            setStatusMessage("We can't validate your request. Please try again");
-                            setIsAlertOpen(true);
-                            setStatusType('error');
+                            statusMessage.error("We can't validate your request. Please try again");
                             handleBack();
                         });
                     }
                     return response.json();
                 })
                 .then(data => {
-                    setStatusMessage('Your job post is in!');
-                    setIsAlertOpen(true);
-                    setStatusType('success');
+                    statusMessage.success('Your job post is in!');
                     history(`/job/${data.id}`);
                 })
                 .catch(error => {
@@ -94,7 +92,7 @@ export default function JobReferralPage() {
             case 1:
                 return <JobForm formErrors={formErrors} answers={answers} setAnswers={setAnswers} />;
             case 2:
-                return <JobReferralNotes formErrors={formErrors} answers={answers} setAnswers={setAnswers} />;
+                return <JobReferralNotes answers={answers} setAnswers={setAnswers} />;
             default:
                 throw new Error('Unknown step');
         }
@@ -166,13 +164,9 @@ export default function JobReferralPage() {
         }
         if (validationResult.isValid) {
             setActiveStep(activeStep + 1);
-            setStatusType('');
-            setStatusMessage('');
-            setIsAlertOpen(false);
+            statusMessage.hide();
         } else {
-            setStatusType('error');
-            setStatusMessage('Please update all required fields.');
-            setIsAlertOpen(true);
+            statusMessage.error('Please update all required fields.');
         }
     };
 

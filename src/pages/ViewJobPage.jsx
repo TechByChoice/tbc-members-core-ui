@@ -6,6 +6,7 @@ import Container from '@mui/material/Container';
 import CompanyCard from '../compoents/CompanyCard';
 import { Link } from 'react-router-dom';
 import { useStatus } from '../providers/MsgStatusProvider';
+import { useStatusMessage } from '../hooks/useStatusMessage';
 
 const HtmlContentRenderer = ({ htmlContent }) => {
     return <div dangerouslySetInnerHTML={{ __html: htmlContent }} />;
@@ -18,9 +19,12 @@ const formatDate = dateString => {
 
 function ViewJobPage({ userDetail, isLoading }) {
     const { id } = useParams();
+    /** @type {any} jobData */
     const [ jobData, setJobData ] = useState();
     const [ jobStatusCard, setJobStatusCard ] = useState(null);
     const { setStatusMessage, setIsAlertOpen, setStatusType } = useStatus();
+    const statusMessage = useStatusMessage();
+
     const isOwnProfile = userDetail?.user_info.id === jobData?.created_by_id;
     const isStaffOrEditor = userDetail?.account_info?.is_staff || jobData?.created_by_id === userDetail?.user_info?.id;
 
@@ -52,7 +56,7 @@ function ViewJobPage({ userDetail, isLoading }) {
 
     const handelPublishJob = () => {
         // if () {
-        const url = `${process.env.REACT_APP_API_BASE_URL}company/new/jobs/${id}/referral/publish/`;
+        const url = `${import.meta.env.VITE_APP_API_BASE_URL}company/new/jobs/${id}/referral/publish/`;
         fetch(url, {
             method: 'GET',
             credentials: 'include',
@@ -65,17 +69,13 @@ function ViewJobPage({ userDetail, isLoading }) {
                 if (!response.ok) {
                     // If not OK, throw an error to be caught in the catch block
                     return response.json().then(errorData => {
-                        setStatusMessage("Sorry it looks like we can't publish your job");
-                        setIsAlertOpen(true);
-                        setStatusType('error');
+                        statusMessage.error("Sorry it looks like we can't publish your job");
                     });
                 }
                 return response.json();
             })
             .then(data => {
-                setStatusMessage("We're reviewing your job now");
-                setIsAlertOpen(true);
-                setStatusType('success');
+                statusMessage.success("We're reviewing your job now");
             })
             .catch(error => {
                 console.error('There was an error publish the job', error);
@@ -86,7 +86,7 @@ function ViewJobPage({ userDetail, isLoading }) {
     };
     const handelPauseJob = () => {
         // if (isOwnProfile) {
-        const url = `${process.env.REACT_APP_API_BASE_URL}company/new/jobs/${id}/referral/pause/`;
+        const url = `${import.meta.env.VITE_APP_API_BASE_URL}company/new/jobs/${id}/referral/pause/`;
         fetch(url, {
             method: 'GET',
             credentials: 'include',
@@ -99,17 +99,13 @@ function ViewJobPage({ userDetail, isLoading }) {
                 if (!response.ok) {
                     // If not OK, throw an error to be caught in the catch block
                     return response.json().then(errorData => {
-                        setStatusMessage("Sorry it looks like we can't pause your job");
-                        setIsAlertOpen(true);
-                        setStatusType('error');
+                        statusMessage.error("Sorry it looks like we can't pause your job");
                     });
                 }
                 return response.json();
             })
             .then(data => {
-                setStatusMessage("We've paused your job");
-                setIsAlertOpen(true);
-                setStatusType('success');
+                statusMessage.success("We've paused your job");
             })
             .catch(error => {
                 console.error('There was an error publish the job', error);
@@ -120,7 +116,7 @@ function ViewJobPage({ userDetail, isLoading }) {
     };
     const handelCloseJob = () => {
         // if (isOwnProfile) {
-        const url = `${process.env.REACT_APP_API_BASE_URL}company/new/jobs/${id}/referral/closed/`;
+        const url = `${import.meta.env.VITE_APP_API_BASE_URL}company/new/jobs/${id}/referral/closed/`;
         fetch(url, {
             method: 'GET',
             credentials: 'include',
@@ -134,17 +130,13 @@ function ViewJobPage({ userDetail, isLoading }) {
                     // If not OK, throw an error to be caught in the catch block
                     return response.json().then(errorData => {
                         console.log(errorData);
-                        setStatusMessage("Sorry it looks like we can't close your job");
-                        setIsAlertOpen(true);
-                        setStatusType('error');
+                        statusMessage.error("Sorry it looks like we can't close your job");
                     });
                 }
                 return response.json();
             })
             .then(data => {
-                setStatusMessage("We've closed your job now");
-                setIsAlertOpen(true);
-                setStatusType('success');
+                statusMessage.success("We've closed your job now");
             })
             .catch(error => {
                 console.error('There was an error publish the job', error);
@@ -153,7 +145,7 @@ function ViewJobPage({ userDetail, isLoading }) {
     };
     const handelActiveJob = () => {
         if (userDetail?.account_info?.is_staff) {
-            const url = `${process.env.REACT_APP_API_BASE_URL}company/new/jobs/${id}/referral/active/`;
+            const url = `${import.meta.env.VITE_APP_API_BASE_URL}company/new/jobs/${id}/referral/active/`;
             fetch(url, {
                 method: 'GET',
                 credentials: 'include',
@@ -167,17 +159,13 @@ function ViewJobPage({ userDetail, isLoading }) {
                         // If not OK, throw an error to be caught in the catch block
                         return response.json().then(errorData => {
                             console.log(errorData);
-                            setStatusMessage("Sorry it looks like we can't publish your job");
-                            setIsAlertOpen(true);
-                            setStatusType('error');
+                            statusMessage.error("Sorry it looks like we can't publish your job");
                         });
                     }
                     return response.json();
                 })
                 .then(data => {
-                    setStatusMessage('Job is now active');
-                    setIsAlertOpen(true);
-                    setStatusType('success');
+                    statusMessage.success('Job is now active');
                 })
                 .catch(error => {
                     console.error('There was an error publish the job', error);
@@ -328,7 +316,7 @@ function ViewJobPage({ userDetail, isLoading }) {
                         <Grid container display="flex" direction="row" alignItems="center" spacing={5}>
                             {/*Details*/}
                             <Grid item xs={12} sm={8}>
-                                <Grid containe spacing={2} display="flex" alignItems="center" direction="row" justifyContent="space-between">
+                                <Grid container spacing={2} display="flex" alignItems="center" direction="row" justifyContent="space-between">
                                     <Grid item sm={12} md={4}>
                                         <Typography variant="h4">{jobData?.job_title}</Typography>
                                     </Grid>
@@ -382,7 +370,7 @@ function ViewJobPage({ userDetail, isLoading }) {
                         <section>
                             <Typography variant="body1">{userDetail?.bio}</Typography>
                             <Typography variant="body1">{userDetail?.bio}</Typography>
-                            <Container variant="section">
+                            <Container>
                                 <div>
                                     <Typography variant="h5">Job Description:</Typography>
                                     <HtmlContentRenderer htmlContent={jobData?.external_description} />
@@ -407,7 +395,7 @@ function ViewJobPage({ userDetail, isLoading }) {
                                 </div>
                             </Container>
                             {jobData?.data?.current_company && (
-                                <Container variant="section">
+                                <Container>
                                     <Typography variant="h5">Current Company</Typography>
                                     <CompanyCard company={jobData?.data?.current_company} />
                                 </Container>

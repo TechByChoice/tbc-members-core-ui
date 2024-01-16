@@ -1,21 +1,18 @@
-import {
-    Button, Checkbox,
-    FormControl, FormControlLabel,
-    Grid,
-    Typography
-} from "@mui/material";
-import React, {useEffect, useState} from "react";
-import {createFilterOptions} from "@mui/material/Autocomplete";
-import {useAuth} from "../../providers/AuthProvider";
-import {useStatus} from "../../providers/MsgStatusProvider";
+import { Button, Checkbox, FormControl, FormControlLabel, Grid, Typography } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { createFilterOptions } from '@mui/material/Autocomplete';
+import { useAuth } from '../../providers/AuthProvider';
+import { useStatus } from '../../providers/MsgStatusProvider';
 
 const filter = createFilterOptions();
 
 export default function ProfileNotifications() {
-    const {user} = useAuth();
-    const {statusType, setStatusMessage, setIsAlertOpen, setStatusType} = useStatus();
+    const { user } = useAuth();
+    const {
+        statusType, setStatusMessage, setIsAlertOpen, setStatusType 
+    } = useStatus();
     const userDetails = user[0];
-    const [notificationsFormData, setNotificationsFormData] = useState({
+    const [ notificationsFormData, setNotificationsFormData ] = useState({
         marketing_jobs: false,
         marketing_events: false,
         marketing_org_updates: false,
@@ -36,18 +33,18 @@ export default function ProfileNotifications() {
             marketing_monthly_newsletter: false,
         };
 
-    defaults.marketing_jobs = userDetails.user_info.userprofile.marketing_jobs || false;
-    defaults.marketing_events = userDetails.user_info.userprofile.marketing_events || false;
-    defaults.marketing_org_updates = userDetails.user_info.userprofile.marketing_org_updates || false;
-    defaults.marketing_identity_based_programing = userDetails.user_info.userprofile.marketing_identity_based_programing || false;
-    defaults.marketing_monthly_newsletter = userDetails.user_info.userprofile.marketing_monthly_newsletter || false;
+        defaults.marketing_jobs = userDetails.user_info.userprofile.marketing_jobs || false;
+        defaults.marketing_events = userDetails.user_info.userprofile.marketing_events || false;
+        defaults.marketing_org_updates = userDetails.user_info.userprofile.marketing_org_updates || false;
+        defaults.marketing_identity_based_programing = userDetails.user_info.userprofile.marketing_identity_based_programing || false;
+        defaults.marketing_monthly_newsletter = userDetails.user_info.userprofile.marketing_monthly_newsletter || false;
 
         return defaults;
     };
 
     useEffect(() => {
         if (userDetails) {
-            const defaultValues = extractDefaultValues()
+            const defaultValues = extractDefaultValues();
             setNotificationsFormData({
                 marketing_jobs: defaultValues.marketing_jobs || false,
                 marketing_events: defaultValues.marketing_events || false,
@@ -56,25 +53,25 @@ export default function ProfileNotifications() {
                 marketing_monthly_newsletter: defaultValues.marketing_monthly_newsletter || false,
             });
         }
-    }, [userDetails]);
+    }, [ userDetails ]);
 
-    const handleChange = (event) => {
-        const {name, checked} = event.target;
-        setNotificationsFormData((prevFormData) => ({...prevFormData, [name]: checked}));
+    const handleChange = event => {
+        const { name, checked } = event.target;
+        setNotificationsFormData(prevFormData => ({ ...prevFormData, [name]: checked }));
     };
 
     function handleSave(e) {
-        e.preventDefault()
-        const url = process.env.REACT_APP_API_BASE_URL + 'user/profile/update/notifications';
+        e.preventDefault();
+        const url = import.meta.env.VITE_APP_API_BASE_URL + 'user/profile/update/notifications';
         fetch(url, {
             method: 'POST',
             credentials: 'include',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Token ${localStorage.getItem('token')}`
+                Authorization: `Token ${localStorage.getItem('token')}`,
                 // 'credentials': 'include',
             },
-            body: JSON.stringify(notificationsFormData)
+            body: JSON.stringify(notificationsFormData),
         })
             .then(response => response.json())
             .then(data => {
@@ -84,18 +81,17 @@ export default function ProfileNotifications() {
                     setStatusMessage('Updates have been saved');
                 }
             })
-            .catch((error) => {
+            .catch(error => {
                 console.error('Error:', error);
             });
     }
-
 
     return (
         <>
             <Grid container>
                 <Grid item xs={12}>
                     <Typography variant="h6">Notifications</Typography>
-                    <hr/>
+                    <hr />
                 </Grid>
                 <Grid item xs={12} md={4} spacing={3} mt={3}>
                     <Typography variant="body">Update how and when we reach out to you</Typography>
@@ -106,10 +102,13 @@ export default function ProfileNotifications() {
                         <Grid item xs={12}>
                             <FormControl>
                                 <FormControlLabel
-                                    control={<Checkbox onChange={handleChange}
-                                                       checked={notificationsFormData.marketing_monthly_newsletter}
-
-                                                       name="marketing_monthly_newsletter"/>}
+                                    control={
+                                        <Checkbox
+                                            onChange={handleChange}
+                                            checked={notificationsFormData.marketing_monthly_newsletter}
+                                            name="marketing_monthly_newsletter"
+                                        />
+                                    }
                                     label="Our Monthly Newsletter"
                                 />
                             </FormControl>
@@ -119,9 +118,7 @@ export default function ProfileNotifications() {
                         <Grid item xs={12}>
                             <FormControl>
                                 <FormControlLabel
-                                    control={<Checkbox onChange={handleChange}
-                                                       checked={notificationsFormData.marketing_events}
-                                                       name="marketing_events"/>}
+                                    control={<Checkbox onChange={handleChange} checked={notificationsFormData.marketing_events} name="marketing_events" />}
                                     label="Community Events"
                                 />
                             </FormControl>
@@ -131,10 +128,13 @@ export default function ProfileNotifications() {
                         <Grid item xs={12}>
                             <FormControl>
                                 <FormControlLabel
-                                    control={<Checkbox onChange={handleChange}
-                                                       checked={notificationsFormData.marketing_identity_based_programing}
-
-                                                       name="marketing_identity_based_programing"/>}
+                                    control={
+                                        <Checkbox
+                                            onChange={handleChange}
+                                            checked={notificationsFormData.marketing_identity_based_programing}
+                                            name="marketing_identity_based_programing"
+                                        />
+                                    }
                                     label="Interest Based Programing"
                                 />
                             </FormControl>
@@ -144,9 +144,7 @@ export default function ProfileNotifications() {
                         <Grid item xs={12}>
                             <FormControl>
                                 <FormControlLabel
-                                    control={<Checkbox onChange={handleChange}
-                                                       checked={notificationsFormData.marketing_jobs}
-                                                       name="marketing_jobs"/>}
+                                    control={<Checkbox onChange={handleChange} checked={notificationsFormData.marketing_jobs} name="marketing_jobs" />}
                                     label="Open Jobs & Job Hunting Tips"
                                 />
                             </FormControl>
@@ -156,9 +154,13 @@ export default function ProfileNotifications() {
                         <Grid item xs={12}>
                             <FormControl>
                                 <FormControlLabel
-                                    control={<Checkbox onChange={handleChange}
-                                                       checked={notificationsFormData.marketing_org_updates}
-                                                       name="marketing_org_updates"/>}
+                                    control={
+                                        <Checkbox
+                                            onChange={handleChange}
+                                            checked={notificationsFormData.marketing_org_updates}
+                                            name="marketing_org_updates"
+                                        />
+                                    }
                                     label="Community Updates"
                                 />
                             </FormControl>
@@ -172,5 +174,5 @@ export default function ProfileNotifications() {
                 </Grid>
             </Grid>
         </>
-    )
+    );
 }

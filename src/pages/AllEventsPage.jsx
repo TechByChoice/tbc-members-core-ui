@@ -1,33 +1,33 @@
-import React, {Component, useEffect,useState} from 'react';
+import React, { Component, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import EventCard from "../compoents/EventCard";
-import {Grid} from "@mui/material";
+import EventCard from '../compoents/EventCard';
+import { Grid } from '@mui/material';
 
 export default function AllEventsPage({}) {
-    const [events, setEvents] = useState([]);
+    const [ events, setEvents ] = useState([]);
 
     useEffect(() => {
-        const url = process.env.REACT_APP_API_BASE_URL + 'event/';
+        const url = import.meta.env.VITE_APP_API_BASE_URL + 'event/';
 
         fetch(url, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Token ${localStorage.getItem('token')}`
+                Authorization: `Token ${localStorage.getItem('token')}`,
             },
         })
-        .then((response) => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then((data) => {
-            setEvents(data.events); // Assuming the data object has an 'events' property
-        })
-        .catch((error) => {
-            console.error('Error fetching events:', error);
-        });
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                setEvents(data.events); // Assuming the data object has an 'events' property
+            })
+            .catch(error => {
+                console.error('Error fetching events:', error);
+            });
     }, []);
 
     return (

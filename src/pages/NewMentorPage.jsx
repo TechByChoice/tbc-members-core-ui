@@ -1,21 +1,20 @@
-import * as React from 'react';
-import { useNavigate } from 'react-router-dom';
-import CssBaseline from '@mui/material/CssBaseline';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
+import CssBaseline from '@mui/material/CssBaseline';
 import Paper from '@mui/material/Paper';
-import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
-import Button from '@mui/material/Button';
+import Stepper from '@mui/material/Stepper';
 import Typography from '@mui/material/Typography';
-import { useStatus } from '../providers/MsgStatusProvider';
+import * as React from 'react';
 import FormMentorApplication from '../compoents/mentorship/FormMentorApplication';
 import FormMentorCareer from '../compoents/mentorship/FormMentorCareer';
-import FormMentorshipValues from '../compoents/mentorship/FormMentorshipValues';
 import FormMentorProfile from '../compoents/mentorship/FormMentorProfile';
-import { useEffect } from 'react';
+import FormMentorshipValues from '../compoents/mentorship/FormMentorshipValues';
+import { useStatus } from '../providers/MsgStatusProvider';
+import { useStatusMessage } from '../hooks/useStatusMessage';
 
 const steps = [
     'Commitment Level',
@@ -24,9 +23,62 @@ const steps = [
     'Profile'
 ];
 
+const STEP_COMMITMENT_LEVEL = 0;
+const STEP_CAREER_QUESTIONS = 1;
+const STEP_VALUES = 2;
+const STEP_PROFILE = 3;
+
+/**
+ * Validate the given step index, optionally throwing an error if the step is invalid,
+ * otherwise just logging an error. "Validate" in this context means that the step index
+ * is within the bounds of the steps array.
+ *
+ * @param {number} index The step index to validate
+ * @param {boolean} shouldThrow Whether or not to throw an error if the step is invalid
+ * @returns {boolean} Whether or not the step is valid
+ */
+const validateStepIndex = (index, shouldThrow = true) => {
+    if (index >= 0 && index < steps.length) {
+        return true;
+    }
+
+    if (shouldThrow) {
+        throw new Error('Unknown step');
+    }
+
+    console.error('Unknown step');
+    return false;
+};
+
+const CompletedStepsContent = () => (
+    <>
+        <Typography variant="h5" gutterBottom>
+            Thanks for giving use these details!
+        </Typography>
+        <Typography variant="subtitle1">
+            You&apos;ll be redirected to the next phase to submit your report. If you&apos;re not redirect please use this link to get to the next part.
+        </Typography>
+    </>
+);
+
+const NextBackButtons = ({ activeStep, handleBack, handleNext }) => (
+    <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+        {activeStep !== 0 && (
+            <Button onClick={handleBack} sx={{ mt: 3, ml: 1 }}>
+                Back
+            </Button>
+        )}
+
+        <Button variant="contained" onClick={handleNext} sx={{ mt: 3, ml: 1 }}>
+            {activeStep === steps.length - 1 ? 'Submit Details' : 'Next'}
+        </Button>
+    </Box>
+);
+
 export default function NewMentorPage() {
+    const [ hasCompleted, setHasCompleted ] = React.useState(false);
     const [ activeStep, setActiveStep ] = React.useState(0);
-    const { setStatusType, setStatusMessage, setIsAlertOpen } = useStatus();
+    const statusMessage = useStatusMessage();
 
     const [ formData, setFormData ] = React.useState({
         commitmentLevel: null,
@@ -35,201 +87,105 @@ export default function NewMentorPage() {
         profile: null,
     });
 
+    // Update the formData state with new data for the current step
     const onFormDataChange = (stepIndex, newFormData) => {
-        // Update the formData state with new data for the current step
+        validateStepIndex(stepIndex);
+
         const newFormDataState = { ...formData };
-        switch (stepIndex) {
-            case 0:
-                newFormDataState.commitmentLevel = newFormData;
-                break;
-            case 1:
-                newFormDataState.careerQuestions = newFormData;
-                break;
-            case 2:
-                newFormDataState.values = newFormData;
-                break;
-            case 3:
-                newFormDataState.profile = newFormData;
-                break;
-            default:
-                break;
-        }
+        const keyMap = {
+            [STEP_COMMITMENT_LEVEL]: 'commitmentLevel',
+            [STEP_CAREER_QUESTIONS]: 'careerQuestions',
+            [STEP_VALUES]: 'values',
+            [STEP_PROFILE]: 'profile',
+        };
+
+        newFormDataState[keyMap[stepIndex]] = newFormData;
+
         setFormData(newFormDataState);
     };
-    const getStepContent = step => {
-        switch (step) {
-            case 0:
-                return <FormMentorApplication setFormData={setFormData} formData={formData} onFormDataChange={newData => onFormDataChange(0, newData)} />;
-            case 1:
-                return <FormMentorCareer onFormDataChange={newData => onFormDataChange(1, newData)} />;
-            case 2:
-                return <FormMentorshipValues onFormDataChange={newData => onFormDataChange(2, newData)} />;
-            case 3:
-                return <FormMentorProfile setFormData={setFormData} formData={formData} onFormDataChange={newData => onFormDataChange(3, newData)} />;
-            default:
-                throw new Error('Unknown step');
-        }
-    };
-    const saveCommitmentLevel = async data => {
-        try {
-            const url = process.env.REACT_APP_API_BASE_URL + 'mentorship/update/support/';
-            const response = await fetch(url, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Token ${localStorage.getItem('token')}`,
-                    // 'credentials': 'include',
-                },
-                body: JSON.stringify(formData),
-            });
-            if (!response.status) {
-                throw new Error('Network response was not ok');
-            }
 
-            return await response.json();
-        } catch (error) {
-            console.error('There was a problem with the fetch operation:', error);
-            throw error;
-        }
-    };
+    // return the correct component for the given step
+    const getStepContent = stepIndex => {
+        validateStepIndex(stepIndex);
 
-    const saveCareerQuestions = async data => {
-        try {
-            const url = process.env.REACT_APP_API_BASE_URL + 'mentorship/update/career/';
-            const response = await fetch(url, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Token ${localStorage.getItem('token')}`,
-                    // 'credentials': 'include',
-                },
-                body: JSON.stringify(formData.careerQuestions),
-            });
-            if (!response.status) {
-                throw new Error('Network response was not ok');
-            }
+        const contentMap = {
+            [STEP_COMMITMENT_LEVEL]: () => (
+                <FormMentorApplication
+                    setFormData={setFormData}
+                    formData={formData}
+                    defaultValues={null}
+                    onFormDataChange={newData => onFormDataChange(STEP_COMMITMENT_LEVEL, newData)}
+                />
+            ),
+            [STEP_CAREER_QUESTIONS]: () => <FormMentorCareer onFormDataChange={newData => onFormDataChange(STEP_CAREER_QUESTIONS, newData)} />,
+            [STEP_VALUES]: () => <FormMentorshipValues onFormDataChange={newData => onFormDataChange(STEP_VALUES, newData)} />,
+            [STEP_PROFILE]: () => (
+                <FormMentorProfile questions={null} defaultData={null} setFormData={setFormData} formData={formData} formErrors={null} />
+            ),
+        };
 
-            return await response.json();
-        } catch (error) {
-            console.error('There was a problem with the fetch operation:', error);
-            throw error;
-        }
-    };
-
-    const saveValues = async data => {
-        try {
-            const url = process.env.REACT_APP_API_BASE_URL + 'mentorship/update/value/';
-            const response = await fetch(url, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Token ${localStorage.getItem('token')}`,
-                    // 'credentials': 'include',
-                },
-                body: JSON.stringify(formData.values),
-            });
-            if (!response.status) {
-                throw new Error('Network response was not ok');
-            }
-
-            return await response.json();
-        } catch (error) {
-            console.error('There was a problem with the fetch operation:', error);
-            throw error;
-        }
-    };
-
-    const saveProfile = async data => {
-        try {
-            const url = process.env.REACT_APP_API_BASE_URL + 'mentorship/update/profile/';
-            const response = await fetch(url, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Token ${localStorage.getItem('token')}`,
-                    // 'credentials': 'include',
-                },
-                body: JSON.stringify(formData),
-            });
-            if (!response.status) {
-                throw new Error('Network response was not ok');
-            }
-
-            return await response.json();
-        } catch (error) {
-            console.error('There was a problem with the fetch operation:', error);
-            throw error;
-        }
+        return contentMap[stepIndex]();
     };
 
     const handleNext = async () => {
-        let saveResponse;
-
-        switch (activeStep) {
-            case 0:
-                saveResponse = await saveCommitmentLevel(formData.commitmentLevel);
-                if (saveResponse.status) {
-                    // If save is successful, move to the next step
-                    setActiveStep(1);
-                } else {
-                    setStatusType('error');
-                    setStatusMessage(saveResponse.message);
-                    setIsAlertOpen(true);
-                }
-                break;
-            case 1:
-                saveResponse = await saveCareerQuestions(formData.careerQuestions);
-                if (saveResponse.status) {
-                    // If save is successful, move to the next step
-                    setActiveStep(2);
-                } else {
-                    setStatusType('error');
-                    setStatusMessage(saveResponse.message);
-                    setIsAlertOpen(true);
-                }
-                break;
-            case 2:
-                saveResponse = await saveValues(formData.values);
-                if (saveResponse.status) {
-                    // If save is successful, move to the next step
-                    setActiveStep(3);
-                } else {
-                    setStatusType('error');
-                    setStatusMessage(saveResponse.message);
-                    setIsAlertOpen(true);
-                }
-                break;
-            case 3:
-                saveResponse = await saveProfile(formData.profile);
-                if (saveResponse.status) {
-                    // If save is successful, move to the next step
-                    setActiveStep(4);
-                } else {
-                    setStatusType('error');
-                    setStatusMessage(saveResponse.message);
-                    setIsAlertOpen(true);
-                }
-                break;
-            default:
-                // Handle unexpected step
-                console.error('Unknown step');
-                return;
+        if (!validateStepIndex(activeStep, false)) {
+            return;
         }
 
-        if (saveResponse) {
-            // If save is successful, move to the next step
-            // setActiveStep((prevActiveStep) => prevActiveStep + 1);
-        } else {
-            // Handle error, stay on current step
-            // Show error message to user
-            console.error('Save failed', saveResponse);
-            // Here, show an error message to the user
+        const saveStepToEndpoint = async (endpoint, data) => {
+            try {
+                const url = import.meta.env.VITE_APP_API_BASE_URL + endpoint;
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Token ${localStorage.getItem('token')}`,
+                        // 'credentials': 'include',
+                    },
+                    body: JSON.stringify(data),
+                });
+
+                if (!response.status) {
+                    throw new Error('Network response was not ok');
+                }
+
+                return await response.json();
+            } catch (error) {
+                console.error('There was a problem with the fetch operation:', error);
+                throw error;
+            }
+        };
+
+        const saveStepHandlerMap = {
+            [STEP_COMMITMENT_LEVEL]: async () => await saveStepToEndpoint('mentorship/update/support/', formData.commitmentLevel),
+            [STEP_CAREER_QUESTIONS]: async () => await saveStepToEndpoint('mentorship/update/career/', formData.careerQuestions),
+            [STEP_VALUES]: async () => await saveStepToEndpoint('mentorship/update/value/', formData.values),
+            [STEP_PROFILE]: async () => await saveStepToEndpoint('mentorship/update/profile/', formData.profile),
+        };
+
+        const saveStep = saveStepHandlerMap[activeStep];
+
+        try {
+            const saveResponse = await saveStep();
+
+            if (saveResponse.status) {
+                // If save is successful, move to the next step
+                setActiveStep(activeStep + 1);
+            }
+        } catch (error) {
+            statusMessage.error(error.message);
+            console.error('Save failed');
         }
     };
 
     const handleBack = () => {
         setActiveStep(activeStep - 1);
     };
+
+    
+React.useEffect(() => {
+        setHasCompleted(activeStep >= steps.length);
+    }, [ activeStep ]);
 
     return (
         <React.Fragment>
@@ -251,30 +207,12 @@ export default function NewMentorPage() {
                             </Step>
                         ))}
                     </Stepper>
-                    {activeStep === steps.length ? (
-                        <React.Fragment>
-                            <Typography variant="h5" gutterBottom>
-                                Thanks for giving use these details!
-                            </Typography>
-                            <Typography variant="subtitle1">
-                                You&apos;ll be redirected to the next phase to submit your report. If you&apos;re not redirect please use this link to get
-                                to the next part.
-                            </Typography>
-                        </React.Fragment>
-                    ) : (
-                        <React.Fragment>
-                            {getStepContent(activeStep, onFormDataChange)}
-                            <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                                {activeStep !== 0 && (
-                                    <Button onClick={handleBack} sx={{ mt: 3, ml: 1 }}>
-                                        Back
-                                    </Button>
-                                )}
 
-                                <Button variant="contained" onClick={handleNext} sx={{ mt: 3, ml: 1 }}>
-                                    {activeStep === steps.length - 1 ? 'Submit Details' : 'Next'}
-                                </Button>
-                            </Box>
+                    {hasCompleted && <CompletedStepsContent />}
+                    {!hasCompleted && (
+                        <React.Fragment>
+                            {getStepContent(activeStep)}
+                            <NextBackButtons activeStep={activeStep} handleBack={handleBack} handleNext={handleNext} />
                         </React.Fragment>
                     )}
                 </Paper>

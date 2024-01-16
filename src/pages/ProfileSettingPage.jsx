@@ -61,15 +61,16 @@ function a11yProps(index) {
 function ProfileSettingPage({ userDetail }) {
     const [ value, setValue ] = useState(0);
     const auth = useAuth();
-    const profile_url = process.env.REACT_APP_STRIPE_PPROFILE_URL;
+    const profile_url = import.meta.env.VITE_APP_STRIPE_PPROFILE_URL;
     const formError = {};
 
     const [ isEditing, setIsEditing ] = useState(false);
     const [ questions, setQuestions ] = useState({});
+    /** @type {any} fromData */
     const [ fromData, setFormData ] = useState();
 
     useEffect(() => {
-        const url = process.env.REACT_APP_API_BASE_URL + 'user/details/new-member';
+        const url = import.meta.env.VITE_APP_API_BASE_URL + 'user/details/new-member';
         fetch(url, {
             method: 'GET',
             credentials: 'include',
@@ -95,7 +96,7 @@ function ProfileSettingPage({ userDetail }) {
 
     const handleChange = event => {
         const { name, value } = event.target;
-        setFormData(prevFormData => ({ ...prevFormData, [name]: value }));
+        setFormData({ ...fromData, [name]: value });
     };
 
     const handleEdit = () => {
@@ -133,19 +134,19 @@ function ProfileSettingPage({ userDetail }) {
                 <Tab label="Mentorship" {...a11yProps(4)} />
             </Tabs>
             <TabPanel value={value} index={0}>
-                <ProfileBasicInfo questions={questions} formErrors={formError} formData={{}} handleChange={handleChange} />
+                <ProfileBasicInfo questions={questions} formErrors={formError} handleChange={handleChange} />
             </TabPanel>
             <TabPanel value={value} index={1}>
-                <ProfileInterests questions={questions} formErrors={formError} formData={{}} handleChange={handleChange} />
+                <ProfileInterests questions={questions} handleChange={handleChange} />
             </TabPanel>
             <TabPanel value={value} index={2}>
-                <ProfileIdentity questions={questions} formErrors={formError} formData={{}} handleChange={handleChange} />
+                <ProfileIdentity questions={questions} />
             </TabPanel>
             <TabPanel value={value} index={3}>
-                <ProfileNotifications questions={questions} formErrors={formError} formData={{}} handleChange={handleChange} />
+                <ProfileNotifications />
             </TabPanel>
             <TabPanel value={value} index={4}>
-                <ProfileMentorship questions={questions} formErrors={formError} formData={{}} handleChange={handleChange} />
+                <ProfileMentorship questions={questions} />
             </TabPanel>
         </Root>
     );

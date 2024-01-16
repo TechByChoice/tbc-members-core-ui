@@ -1,37 +1,23 @@
-import React, { useEffect, useState } from 'react';
-import {Box,
-    Button,
-    Card,
-    CardContent,
-    CardMedia,
-    Chip,
-    CircularProgress,
-    Divider,
-    FormControl,
-    FormControlLabel,
-    FormLabel,
-    Grid,
-    Hidden,
-    IconButton,
-    Modal,
-    Typography,} from '@mui/material';
-import { GitHub, Instagram, Language, LinkedIn, Twitter, YouTube } from '@mui/icons-material';
-import { useParams } from 'react-router';
-import { getBasicSystemInfo, getMemberData } from '../api-calls';
-import Container from '@mui/material/Container';
-import CompanyCard from '../compoents/CompanyCard';
-import HtmlContentRenderer from '../compoents/utils/HtmlContentRenderer';
-import { useAuth } from '../providers/AuthProvider';
-import { Link } from 'react-router-dom';
-import ReviewCard from '../compoents/ReviewCard';
-import AddMemberNoteCard from '../compoents/AddMemberNoteCard';
-import RadioGroup from '@mui/material/RadioGroup/RadioGroup';
-import Radio from '@mui/material/Radio/Radio';
+
 import BookMentorForm from '../compoents/BookMentorForm';
+import { getBasicSystemInfo, getMemberData } from '@/api-calls';
+import AddMemberNoteCard from '@/compoents/AddMemberNoteCard';
+import CompanyCard from '@/compoents/CompanyCard';
+import ReviewCard from '@/compoents/ReviewCard';
+import HtmlContentRenderer from '@/compoents/utils/HtmlContentRenderer';
+import { useAuth } from '@/providers/AuthProvider';
+import { GitHub, Instagram, Language, LinkedIn, Twitter, YouTube } from '@mui/icons-material';
+import { Box, Button, Card, CardContent, CardMedia, Chip, CircularProgress, Divider, Grid, Hidden, IconButton, Modal, Typography } from '@mui/material';
+import Container from '@mui/material/Container';
+import Link from '@mui/material/Link';
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router';
 
 function ViewMemberProfile() {
     const { id } = useParams();
+    /** @type {any} memberData */
     const [ memberData, setMemberData ] = useState();
+    /** @type {any} basicData */
     const [ basicData, setBasicData ] = useState();
     const [ open, setOpen ] = useState(false);
     const [ openBookMentorModal, setOpenBookMentorModal ] = useState(false);
@@ -70,7 +56,7 @@ function ViewMemberProfile() {
     }, [ memberData ]);
 
     function handelConnectWithMentor() {
-        const url = process.env.REACT_APP_API_BASE_URL + `mentorship/mentor/${id}/connect/roster/add`;
+        const url = import.meta.env.VITE_APP_API_BASE_URL + `mentorship/mentor/${id}/connect/roster/add`;
         fetch(url, {
             method: 'post',
             headers: {
@@ -564,11 +550,11 @@ function ViewMemberProfile() {
 
     const renderMentorProfileSection = () => (
         <>
-            <Container variant="section">
+            <Container>
                 <Typography variant="h5">Mentorship Goals:</Typography>
                 <HtmlContentRenderer htmlContent={memberData?.data?.mentorship_program?.mentor_profile?.mentorship_goals} />
             </Container>
-            <Container variant="section">
+            <Container>
                 <Typography variant="h5">How They Plan to Help:</Typography>
                 <HtmlContentRenderer htmlContent={memberData?.data?.mentorship_program?.mentor_profile?.mentor_how_to_help} />
             </Container>
@@ -695,7 +681,7 @@ function ViewMemberProfile() {
                             </Typography>
                             {/*{memberData?.data?.user?.is_mentor_profile_active && (*/}
                             {memberData?.data?.user?.is_mentor && renderMentorProfileSection()}
-                            <Container variant="section">
+                            <Container>
                                 <Typography variant="h5">Skills:</Typography>
                                 {memberData?.data?.talent_profile?.skills && (
                                     <>
@@ -710,7 +696,7 @@ function ViewMemberProfile() {
                                 )}
                             </Container>
                             {memberData?.data?.current_company && (
-                                <Container variant="section">
+                                <Container>
                                     <Typography variant="h5">Current Company</Typography>
                                     <CompanyCard company={memberData?.data?.current_company} />
                                 </Container>
@@ -718,7 +704,7 @@ function ViewMemberProfile() {
                             {isUserConnectedWithMentor && (
                                 <>
                                     <hr />
-                                    <AddMemberNoteCard />
+                                    <AddMemberNoteCard talentDetails={memberData?.data} />
                                 </>
                             )}
                         </section>
@@ -740,6 +726,8 @@ function ViewMemberProfile() {
                 style={{ padding: '20px' }}
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description">
+                {/*
+                // @ts-ignore */}
                 <Box
                     style={{
                         position: 'absolute',
