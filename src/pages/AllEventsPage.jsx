@@ -2,7 +2,7 @@ import React, { Component, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import EventCard from '../compoents/EventCard';
 import { Grid } from '@mui/material';
-import { routes } from '../lib/routes';
+import { routes } from '@/lib/routes';
 
 export default function AllEventsPage({}) {
     const [ events, setEvents ] = useState([]);

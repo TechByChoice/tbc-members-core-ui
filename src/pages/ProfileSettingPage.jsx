@@ -9,6 +9,7 @@ import ProfileInterests from '../compoents/profile/ProfileInterests';
 import ProfileMentorship from '../compoents/profile/ProfileMentorship';
 import ProfileNotifications from '../compoents/profile/ProfileNotifications';
 import ProfileIdentity from '../compoents/profile/ProfileIdentity';
+import { routes } from '@/lib/routes';
 
 const Root = styled(Box)`
     height: 100%;
@@ -70,8 +71,7 @@ function ProfileSettingPage({ userDetail }) {
     const [ fromData, setFormData ] = useState();
 
     useEffect(() => {
-        const url = import.meta.env.VITE_APP_API_BASE_URL + 'user/details/new-member';
-        fetch(url, {
+        fetch(routes.api.users.getProfile(), {
             method: 'GET',
             credentials: 'include',
             headers: {

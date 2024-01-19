@@ -19,6 +19,7 @@ import SkillsQuestionStep from '../compoents/onboarding/SkillsQuestionStep';
 import { useStatusMessage } from '../hooks/useStatusMessage';
 import { AnswerValidator } from '../lib/AnswerValidator';
 import { useAuth } from '../providers/AuthProvider';
+import { routes } from '@/lib/routes';
 
 /** @typedef {{index: number, name: string}} IStepDefinition */
 
@@ -229,14 +230,14 @@ export default function NewMemberPage() {
 
     const handleFormSubmit = e => {
         e.preventDefault();
-        const url = `${import.meta.env.VITE_APP_API_BASE_URL}user/new-member/profile/create`;
+
         const formData = new FormData();
 
         for (const name in answers) {
             formData.append(name, answers[name]);
         }
 
-        fetch(url, {
+        fetch(routes.api.users.updateProfile(), {
             method: 'PATCH',
             credentials: 'include',
             body: formData,

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import EventCard from '../compoents/EventCard';
 import { Grid } from '@mui/material';
 import MentorCard from '../compoents/MentorCard';
-import { routes } from '../lib/routes';
+import { routes } from '@/lib/routes';
 
 export default function AllMentorsPage({}) {
     const [ mentors, setMentors ] = useState([]);

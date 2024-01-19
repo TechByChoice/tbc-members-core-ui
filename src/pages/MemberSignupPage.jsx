@@ -10,6 +10,7 @@ import Link from '@mui/material/Link';
 import styled from '@emotion/styled';
 import Alert from '@mui/material/Alert';
 import { useStatusMessage } from '../hooks/useStatusMessage';
+import { routes } from '@/lib/routes';
 
 const CenteredContent = styled.div`
     display: flex;
@@ -49,9 +50,8 @@ function LoginPage() {
 
     const handleSubmit = async event => {
         event.preventDefault();
-        const url = import.meta.env.VITE_APP_API_BASE_URL + 'user/new/';
 
-        fetch(url, {
+        fetch(routes.api.users.signUp(), {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
