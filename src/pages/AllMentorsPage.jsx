@@ -3,14 +3,13 @@ import PropTypes from 'prop-types';
 import EventCard from '../compoents/EventCard';
 import { Grid } from '@mui/material';
 import MentorCard from '../compoents/MentorCard';
+import { routes } from '@/lib/routes';
 
 export default function AllMentorsPage({}) {
     const [ mentors, setMentors ] = useState([]);
 
     useEffect(() => {
-        const url = import.meta.env.VITE_APP_API_BASE_URL + 'mentorship/';
-
-        fetch(url, {
+        fetch(routes.api.mentors.list(), {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',

@@ -4,6 +4,7 @@ import { useAuth } from '../../providers/AuthProvider';
 import { createFilterOptions } from '@mui/material/Autocomplete';
 import { useStatus } from '../../providers/MsgStatusProvider';
 import CompanyDropdown from '../CompanyDropDown';
+import { routes } from '../../lib/routes';
 
 const filter = createFilterOptions();
 export default function WorkPlaceForm({ questions }) {
@@ -82,8 +83,7 @@ export default function WorkPlaceForm({ questions }) {
             setStatusType('error');
             setStatusMessage('Please update all required fields.');
         } else {
-            const url = import.meta.env.VITE_APP_API_BASE_URL + 'user/profile/update/work-place';
-            fetch(url, {
+            fetch(routes.api.users.workplace(), {
                 method: 'POST',
                 credentials: 'include',
                 headers: {

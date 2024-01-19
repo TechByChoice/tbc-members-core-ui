@@ -7,6 +7,7 @@ import CompanyCard from '../compoents/CompanyCard';
 import { Link } from 'react-router-dom';
 import { useStatus } from '../providers/MsgStatusProvider';
 import { useStatusMessage } from '../hooks/useStatusMessage';
+import { routes } from '@/lib/routes';
 
 const HtmlContentRenderer = ({ htmlContent }) => {
     return <div dangerouslySetInnerHTML={{ __html: htmlContent }} />;
@@ -55,9 +56,7 @@ function ViewJobPage({ userDetail, isLoading }) {
     }
 
     const handelPublishJob = () => {
-        // if () {
-        const url = `${import.meta.env.VITE_APP_API_BASE_URL}company/new/jobs/${id}/referral/publish/`;
-        fetch(url, {
+        fetch(routes.api.jobs.publish(id), {
             method: 'GET',
             credentials: 'include',
             headers: {
@@ -85,9 +84,7 @@ function ViewJobPage({ userDetail, isLoading }) {
         // }
     };
     const handelPauseJob = () => {
-        // if (isOwnProfile) {
-        const url = `${import.meta.env.VITE_APP_API_BASE_URL}company/new/jobs/${id}/referral/pause/`;
-        fetch(url, {
+        fetch(routes.api.jobs.pause(id), {
             method: 'GET',
             credentials: 'include',
             headers: {
@@ -115,9 +112,7 @@ function ViewJobPage({ userDetail, isLoading }) {
         // }
     };
     const handelCloseJob = () => {
-        // if (isOwnProfile) {
-        const url = `${import.meta.env.VITE_APP_API_BASE_URL}company/new/jobs/${id}/referral/closed/`;
-        fetch(url, {
+        fetch(routes.api.jobs.close(id), {
             method: 'GET',
             credentials: 'include',
             headers: {
@@ -145,8 +140,7 @@ function ViewJobPage({ userDetail, isLoading }) {
     };
     const handelActiveJob = () => {
         if (userDetail?.account_info?.is_staff) {
-            const url = `${import.meta.env.VITE_APP_API_BASE_URL}company/new/jobs/${id}/referral/active/`;
-            fetch(url, {
+            fetch(routes.api.jobs.activate(id), {
                 method: 'GET',
                 credentials: 'include',
                 headers: {

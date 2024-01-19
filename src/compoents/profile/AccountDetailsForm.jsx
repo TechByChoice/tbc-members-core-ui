@@ -2,6 +2,7 @@ import { Button, FormControl, FormHelperText, FormLabel, Grid, OutlinedInput, Ty
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '../../providers/AuthProvider';
 import { useStatus } from '../../providers/MsgStatusProvider';
+import { routes } from '../../lib/routes';
 
 export default function AccountDetailsForm() {
     const { user } = useAuth();
@@ -33,8 +34,7 @@ export default function AccountDetailsForm() {
 
     const handelAccountDetails = e => {
         e.preventDefault();
-        const url = import.meta.env.VITE_APP_API_BASE_URL + 'user/profile/update/account-details';
-        fetch(url, {
+        fetch(routes.api.users.updateAccountDetails(), {
             method: 'POST',
             credentials: 'include',
             headers: {

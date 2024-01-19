@@ -3,15 +3,15 @@ import { createFilterOptions } from '@mui/material/Autocomplete';
 import FormMentorProfile from '../mentorship/FormMentorProfile';
 import { Button, Grid } from '@mui/material';
 import { useAuth } from '../../providers/AuthProvider';
+import { routes } from '../../lib/routes';
 
 export default function ProfileMentorDetails() {
     const [ formData, setFormData ] = useState({});
     const { user, token } = useAuth();
 
     function handleSave() {
-        const url = import.meta.env.VITE_APP_API_BASE_URL + 'mentorship/update/profile/';
         console.log(formData);
-        fetch(url, {
+        fetch(routes.api.mentors.updateDetails(), {
             method: 'POST',
             headers: {
                 Authorization: `Token ${token}`,

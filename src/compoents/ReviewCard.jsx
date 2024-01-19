@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { useStatusMessage } from '../hooks/useStatusMessage';
 import { useAuth } from '../providers/AuthProvider';
 import TipTapEditor from './TipTapEditor';
+import { routes } from '../lib/routes';
 
 function ReviewCard({ talentDetails, setOpen }) {
     const [ formData, setFormData ] = useState({});
@@ -15,8 +16,7 @@ function ReviewCard({ talentDetails, setOpen }) {
     };
 
     const handleSubmit = () => {
-        const url = import.meta.env.VITE_APP_API_BASE_URL + `mentorship/reviews/${talentDetails?.mentorship_program?.id}/`;
-        fetch(url, {
+        fetch(routes.api.mentors.review(talentDetails?.mentorship_program?.id), {
             method: 'POST',
             headers: {
                 Authorization: `Token ${token}`,
