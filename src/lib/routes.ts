@@ -1,5 +1,3 @@
-import { getMemberData } from '@/api-calls';
-
 function apiJoin(...endpoints) {
     return endpoints.join('/');
 }
@@ -45,6 +43,6 @@ export const routes = {
             getMemberData: id => apiJoin(routes.api.base, `member/member-details/${id}`),
             basicSystemInfo: () => apiJoin(routes.api.base, 'user/details/new-member'),
         },
-        announcements: {list: () => apiJoin(routes.api.base, 'user/details/announcement'),},
+        announcements: { list: () => apiJoin(routes.api.base, 'user/details/announcement') },
     },
 };
