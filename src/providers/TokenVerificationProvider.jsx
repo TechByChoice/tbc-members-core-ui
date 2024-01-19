@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext, createContext } from 'react';
 import { useStatus } from './MsgStatusProvider';
 import { isValidToken as checkTokenValidity } from '../helpers';
+import { routes } from '@/lib/routes';
 
 const TokenContext = createContext(null);
 
@@ -59,8 +60,8 @@ export const TokenVerificationProvider = ({ children }) => {
             //  check if the token is still valid
             console.info('found token need to check if active');
             console.info('local token: ', localToken);
-            const fetchUrl = `${import.meta.env.VITE_APP_API_BASE_URL}reviews/check/${localToken}/`;
-            fetch(fetchUrl, {
+
+            fetch(routes.api.auth.checkToken(localToken), {
                 method: 'GET',
                 credentials: 'include',
                 headers: { 'Content-Type': 'application/json' },
@@ -91,8 +92,7 @@ export const TokenVerificationProvider = ({ children }) => {
         } else {
             console.info('NO localstorge tokenfound');
             if (isValidToken) {
-                const fetchUrl = `${import.meta.env.VITE_APP_API_BASE_URL}reviews/verify-token/${urlToken}/`;
-                verifyTokenCall(fetchUrl);
+                verifyTokenCall(routes.api.auth.verifyToken(urlToken));
             } else {
                 setLoading(false);
             }
