@@ -5,6 +5,7 @@ import { useAuth } from '../../providers/AuthProvider';
 import { useStatus } from '../../providers/MsgStatusProvider';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
+import { routes } from '../../lib/routes';
 
 const filter = createFilterOptions();
 
@@ -34,8 +35,7 @@ export default function ProfileIdentity({ questions }) {
     function handleSave(e) {
         e.preventDefault();
         setIsAlertOpen(false);
-        const url = import.meta.env.VITE_APP_API_BASE_URL + 'user/profile/update/idenity';
-        fetch(url, {
+        fetch(routes.api.users.updateProfileIdentity(), {
             method: 'POST',
             credentials: 'include',
             headers: {

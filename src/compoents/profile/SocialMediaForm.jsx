@@ -2,6 +2,7 @@ import { Button, FormControl, FormLabel, Grid, InputAdornment, OutlinedInput, Ty
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '../../providers/AuthProvider';
 import { useStatus } from '../../providers/MsgStatusProvider';
+import { routes } from '../../lib/routes';
 
 export default function SocialMediaForm() {
     const { user } = useAuth();
@@ -35,8 +36,7 @@ export default function SocialMediaForm() {
 
     const handelSocialAccountSave = e => {
         e.preventDefault();
-        const url = import.meta.env.VITE_APP_API_BASE_URL + 'user/profile/update/social-accounts';
-        fetch(url, {
+        fetch(routes.api.users.socialAccounts(), {
             method: 'POST',
             credentials: 'include',
             headers: {
