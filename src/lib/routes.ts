@@ -25,6 +25,7 @@ export const routes = {
             close: id => apiJoin(routes.api.base, `company/new/jobs/${id}/referral/closed`),
             activate: id => apiJoin(routes.api.base, `company/new/jobs/${id}/referral/active`),
             details: id => apiJoin(routes.api.base, `company/new/jobs/${id}/get-job`),
+            match: () => apiJoin(routes.api.base, 'company/new/jobs/job-match'),
         },
         mentors: {
             list: () => apiJoin(routes.api.base, 'mentorship'),
@@ -34,6 +35,7 @@ export const routes = {
                 values: () => apiJoin(routes.api.base, 'mentorship/update/value'),
                 profile: () => apiJoin(routes.api.base, 'mentorship/update/profile'),
             },
+            match: () => apiJoin(routes.api.base, 'mentorship/mentor-match'),
         },
         users: {
             signUp: () => apiJoin(routes.api.base, 'user/new'),
@@ -43,5 +45,6 @@ export const routes = {
             getMemberData: id => apiJoin(routes.api.base, `member/member-details/${id}`),
             basicSystemInfo: () => apiJoin(routes.api.base, 'user/details/new-member'),
         },
+        announcements: {list: () => apiJoin(routes.api.base, 'user/details/announcement'),},
     },
 };

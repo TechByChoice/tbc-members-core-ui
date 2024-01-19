@@ -7,6 +7,7 @@ import JobCard from '../../compoents/JobCard';
 import MentorCard from '../../compoents/MentorCard';
 import SlackMessage from '../../compoents/SlackMessage';
 import { useAuth } from '../../providers/AuthProvider';
+import { routes } from '../../lib/routes';
 
 export default function MemberDashboard() {
     const [ event, setEvent ] = useState();
@@ -19,9 +20,7 @@ export default function MemberDashboard() {
     });
 
     useEffect(() => {
-        const url = import.meta.env.VITE_APP_API_BASE_URL + 'event/';
-
-        fetch(url, {
+        fetch(routes.api.events.list(), {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -41,10 +40,7 @@ export default function MemberDashboard() {
                 console.error('Error fetching events:', error);
             });
 
-        // const job_match_url = import.meta.env.VITE_APP_API_BASE_URL + 'company/job/matches';
-        const job_match_url = import.meta.env.VITE_APP_API_BASE_URL + 'company/new/jobs/job-match/';
-
-        fetch(job_match_url, {
+        fetch(routes.api.jobs.match(), {
             method: 'get',
             headers: {
                 'Content-Type': 'application/json',
@@ -64,9 +60,7 @@ export default function MemberDashboard() {
                 console.error('Error fetching events:', error);
             });
 
-        const mentor_match_url = import.meta.env.VITE_APP_API_BASE_URL + 'mentorship/mentor-match/';
-
-        fetch(mentor_match_url, {
+        fetch(routes.api.mentors.match(), {
             method: 'get',
             headers: {
                 'Content-Type': 'application/json',
@@ -86,9 +80,7 @@ export default function MemberDashboard() {
                 console.error('Error fetching events:', error);
             });
 
-        const announcement_url = import.meta.env.VITE_APP_API_BASE_URL + 'user/details/announcement';
-
-        fetch(announcement_url, {
+        fetch(routes.api.announcements.list(), {
             method: 'get',
             headers: {
                 'Content-Type': 'application/json',
