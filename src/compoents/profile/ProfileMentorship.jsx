@@ -7,6 +7,7 @@ import { useAuth } from '../../providers/AuthProvider';
 import ProfileCalLinkForm from './ProfileCalLinkForm';
 import Button from '@mui/material/Button';
 import { useStatus } from '../../providers/MsgStatusProvider';
+import { routes } from '@/lib/routes';
 
 const filter = createFilterOptions();
 
@@ -40,8 +41,7 @@ export default function ProfileMentorship({ questions }) {
     const handelFormSubmit = e => {
         e.preventDefault();
 
-        const url = process.env.REACT_APP_API_BASE_URL + 'mentorship/update/support/';
-        fetch(url, {
+        fetch(routes.mentors.signup.commitmentLevel(), {
             method: 'POST',
             credentials: 'include',
             headers: {

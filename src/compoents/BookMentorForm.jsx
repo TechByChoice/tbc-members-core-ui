@@ -1,24 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import {Card,
-    CardMedia,
-    CardContent,
-    Typography,
-    Button,
-    Chip,
-    Box,
-    Rating,
-    Grid,
-    FormControl,
-    FormLabel,
-    FormHelperText,
-    Autocomplete,
-    TextField,
-    TextareaAutosize,} from '@mui/material';
-
-import TipTapEditor from './TipTapEditor';
+import { Autocomplete, Box, Button, Card, CardContent, FormControl, FormHelperText, FormLabel, TextField } from '@mui/material';
 import { useAuth } from '../providers/AuthProvider';
 import { useStatus } from '../providers/MsgStatusProvider';
 import { createFilterOptions } from '@mui/material/Autocomplete';
+import { routes } from '@/lib/routes';
 
 const filter = createFilterOptions();
 
@@ -29,9 +14,7 @@ function BookMentorForm({ talentDetails, setOpen }) {
     const { setStatusMessage, setIsAlertOpen, setStatusType } = useStatus();
 
     useEffect(() => {
-        // This should be replaced with the appropriate API call
-        const url = process.env.REACT_APP_API_BASE_URL + 'mentorship/details/?fields=mentor_support_areas';
-        fetch(url)
+        fetch(routes.api.mentors.getDetails('mentor_support_areas'))
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Network response was not ok');

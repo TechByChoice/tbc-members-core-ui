@@ -36,6 +36,7 @@ export const routes = {
             match: () => apiJoin(routes.api.base, 'mentorship/mentor-match'),
             review: programId => apiJoin(routes.api.base, `mentorship/reviews/${programId}`),
             updateDetails: () => apiJoin(routes.api.base, 'mentorship/update/profile'),
+            getDetails: details => apiJoin(routes.api.base, `mentorship/details/?fields=${details}`),
         },
         users: {
             signUp: () => apiJoin(routes.api.base, 'user/new'),

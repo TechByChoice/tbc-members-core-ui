@@ -2,6 +2,7 @@ import { Autocomplete, FormControl, FormHelperText, FormLabel, Grid, TextField, 
 import React, { useEffect, useState } from 'react';
 import { createFilterOptions } from '@mui/material/Autocomplete';
 import { useAuth } from '../../providers/AuthProvider';
+import { routes } from '@/lib/routes';
 
 const filter = createFilterOptions();
 
@@ -14,10 +15,7 @@ export default function FormMentorApplication({
     const { accountDetails } = useAuth();
 
     useEffect(() => {
-        // This should be replaced with the appropriate API call
-
-        const url = process.env.VITE_APP_API_BASE_URL + 'mentorship/details/?fields=commitment_level&fields=support_areas';
-        fetch(url)
+        fetch(routes.mentors.getDetails('commitment_level&fields=support_areas'))
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
