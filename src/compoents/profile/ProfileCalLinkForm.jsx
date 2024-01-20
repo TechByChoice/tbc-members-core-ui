@@ -1,13 +1,14 @@
 import { Button, FormControl, FormLabel, Grid, InputAdornment, OutlinedInput, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '../../providers/AuthProvider';
-import { useStatus } from '../../providers/MsgStatusProvider';
+import { useStatusMessage } from '@/hooks/useStatusMessage';
+import { routes } from '@/lib/routes';
 
 export default function ProfileCalLinkForm() {
     const { user, token } = useAuth();
     const userDetails = user[0];
 
-    const { setStatusMessage, setIsAlertOpen, setStatusType } = useStatus();
+    const statusMessage = useStatusMessage();
 
     const [ FormData, setFormData ] = useState({ calendar_link: '' });
 
@@ -19,8 +20,7 @@ export default function ProfileCalLinkForm() {
 
     const handelCalLinkSave = e => {
         e.preventDefault();
-        const url = process.env.REACT_APP_API_BASE_URL + `mentorship/update/calendar-link/`;
-        fetch(url, {
+        fetch(routes.api.mentors.updateCalLink(), {
             method: 'POST',
             headers: {
                 Authorization: `Token ${token}`,
@@ -40,9 +40,11 @@ export default function ProfileCalLinkForm() {
             })
             .then(data => {
                 console.log(data, 'saved');
+                statusMessage.success('Updates have been saved');
             })
             .catch(error => {
                 console.error('Fetch error:', error);
+                statusMessage.error('Sorry, it looks like we ran into an issue. Please try again.');
             });
     };
 
@@ -64,7 +66,7 @@ export default function ProfileCalLinkForm() {
                 <hr />
             </Grid>
             <Grid item xs={12} md={4} spacing={3} mt={3}>
-                <Typography variant="body">Update your Calendly link below to make sure people can book mentoring sessions with you!</Typography>
+                <Typography variant="body1">Update your Calendly link below to make sure people can book mentoring sessions with you!</Typography>
             </Grid>
             <Grid item xs={8}>
                 <Grid container>

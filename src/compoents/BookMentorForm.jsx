@@ -4,6 +4,7 @@ import { useAuth } from '../providers/AuthProvider';
 import { useStatus } from '../providers/MsgStatusProvider';
 import { createFilterOptions } from '@mui/material/Autocomplete';
 import { routes } from '@/lib/routes';
+import { useStatusMessage } from '@/hooks/useStatusMessage';
 
 const filter = createFilterOptions();
 
@@ -11,7 +12,7 @@ function BookMentorForm({ talentDetails, setOpen }) {
     const [ formData, setFormData ] = useState({});
     const [ supportAreas, setSupportAreas ] = useState();
     const { token } = useAuth();
-    const { setStatusMessage, setIsAlertOpen, setStatusType } = useStatus();
+    const statusMessage = useStatusMessage();
 
     useEffect(() => {
         fetch(routes.api.mentors.getDetails('mentor_support_areas'))
@@ -38,9 +39,7 @@ function BookMentorForm({ talentDetails, setOpen }) {
         }));
     };
     const handleSubmit = () => {
-        console.log(talentDetails);
-        const url = process.env.REACT_APP_API_BASE_URL + `mentorship/mentor/${talentDetails.user.id}/connect/roster/add`;
-        fetch(url, {
+        fetch(routes.api.mentors.connect.add(talentDetails.user.id), {
             method: 'POST',
             headers: {
                 Authorization: `Token ${token}`,
@@ -50,24 +49,18 @@ function BookMentorForm({ talentDetails, setOpen }) {
         })
             .then(response => {
                 if (!response.ok) {
-                    setStatusMessage('Sorry, we ran into an issue, please try again');
-                    setIsAlertOpen(true);
-                    setStatusType('error');
+                    statusMessage.error('Sorry, we ran into an issue, please try again');
                     throw new Error('Network response was not ok');
                 }
                 return response.json();
             })
             .then(data => {
                 setOpen(false);
-                setStatusMessage('Saved your review');
-                setIsAlertOpen(true);
-                setStatusType('success');
+                statusMessage.success('Saved your review');
             })
             .catch(error => {
                 console.error('Fetch error:', error);
-                setStatusMessage('Sorry, we ran into an issue, please try again');
-                setIsAlertOpen(true);
-                setStatusType('error');
+                statusMessage.error('Sorry, we ran into an issue, please try again');
             });
     };
 

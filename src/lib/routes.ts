@@ -33,9 +33,14 @@ export const routes = {
                 values: () => apiJoin(routes.api.base, 'mentorship/update/value'),
                 profile: () => apiJoin(routes.api.base, 'mentorship/update/profile'),
             },
+            connect: {
+                // We can add other paths here like booking sessions once cal.com integration is done
+                add: id => apiJoin(routes.api.base, `mentorship/mentor/${id}/connect/roster/add`),
+            },
             match: () => apiJoin(routes.api.base, 'mentorship/mentor-match'),
             review: programId => apiJoin(routes.api.base, `mentorship/reviews/${programId}`),
             updateDetails: () => apiJoin(routes.api.base, 'mentorship/update/profile'),
+            updateCalLink: () => apiJoin(routes.api.base, 'mentorship/update/calendar-link'),
             getDetails: details => apiJoin(routes.api.base, `mentorship/details/?fields=${details}`),
         },
         users: {
