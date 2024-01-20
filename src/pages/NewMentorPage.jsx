@@ -15,6 +15,7 @@ import FormMentorProfile from '../compoents/mentorship/FormMentorProfile';
 import FormMentorshipValues from '../compoents/mentorship/FormMentorshipValues';
 import { useStatus } from '../providers/MsgStatusProvider';
 import { useStatusMessage } from '../hooks/useStatusMessage';
+import { routes } from '@/lib/routes';
 
 const steps = [
     'Commitment Level',
@@ -132,9 +133,8 @@ export default function NewMentorPage() {
             return;
         }
 
-        const saveStepToEndpoint = async (endpoint, data) => {
+        const saveStepToEndpoint = async (url, data) => {
             try {
-                const url = import.meta.env.VITE_APP_API_BASE_URL + endpoint;
                 const response = await fetch(url, {
                     method: 'POST',
                     headers: {
@@ -157,10 +157,10 @@ export default function NewMentorPage() {
         };
 
         const saveStepHandlerMap = {
-            [STEP_COMMITMENT_LEVEL]: async () => await saveStepToEndpoint('mentorship/update/support/', formData.commitmentLevel),
-            [STEP_CAREER_QUESTIONS]: async () => await saveStepToEndpoint('mentorship/update/career/', formData.careerQuestions),
-            [STEP_VALUES]: async () => await saveStepToEndpoint('mentorship/update/value/', formData.values),
-            [STEP_PROFILE]: async () => await saveStepToEndpoint('mentorship/update/profile/', formData.profile),
+            [STEP_COMMITMENT_LEVEL]: async () => await saveStepToEndpoint(routes.api.mentors.signup.commitmentLevel(), formData.commitmentLevel),
+            [STEP_CAREER_QUESTIONS]: async () => await saveStepToEndpoint(routes.api.mentors.signup.career(), formData.careerQuestions),
+            [STEP_VALUES]: async () => await saveStepToEndpoint(routes.api.mentors.signup.values(), formData.values),
+            [STEP_PROFILE]: async () => await saveStepToEndpoint(routes.api.mentors.signup.profile(), formData.profile),
         };
 
         const saveStep = saveStepHandlerMap[activeStep];

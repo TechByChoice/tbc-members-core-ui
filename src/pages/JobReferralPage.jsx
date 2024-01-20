@@ -16,6 +16,7 @@ import { useStatus } from '../providers/MsgStatusProvider';
 import JobForm from '../compoents/JobDetails';
 import JobReferralNotes from '../compoents/JobReferralNotes';
 import { useStatusMessage } from '../hooks/useStatusMessage';
+import { routes } from '@/lib/routes';
 
 const steps = [
     'Company Details',
@@ -54,9 +55,7 @@ export default function JobReferralPage() {
 
     useEffect(() => {
         if (activeStep === steps.length) {
-            const url = `${import.meta.env.VITE_APP_API_BASE_URL}company/new/jobs/create-referral/`;
-
-            fetch(url, {
+            fetch(routes.api.jobs.createReferral(), {
                 method: 'POST',
                 credentials: 'include',
                 headers: {

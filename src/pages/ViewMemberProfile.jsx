@@ -12,6 +12,7 @@ import Container from '@mui/material/Container';
 import Link from '@mui/material/Link';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
+import { routes } from '@/lib/routes';
 
 function ViewMemberProfile() {
     const { id } = useParams();
@@ -56,8 +57,7 @@ function ViewMemberProfile() {
     }, [ memberData ]);
 
     function handelConnectWithMentor() {
-        const url = import.meta.env.VITE_APP_API_BASE_URL + `mentorship/mentor/${id}/connect/roster/add`;
-        fetch(url, {
+        fetch(routes.api.users.connectWithMentor(id), {
             method: 'post',
             headers: {
                 Authorization: `Token ${token}`,
