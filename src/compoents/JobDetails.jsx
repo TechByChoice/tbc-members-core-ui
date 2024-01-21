@@ -148,6 +148,7 @@ export default function JobForm({ formErrors, answers, setAnswers }) {
         <Container maxWidth="md">
             <TextField
                 fullWidth
+                required
                 label="Job Title"
                 error={!!formErrors.job_title}
                 name="job_title"
@@ -231,7 +232,7 @@ export default function JobForm({ formErrors, answers, setAnswers }) {
 
             <FormControl fullWidth>
                 <FormLabel id="job-interview-process">Interview Process</FormLabel>
-                <MyEditor id="external_interview_process" onFormDataChange={handleEditorUpdate} />
+                <MyEditor id="external_interview_process" onFormDataChange={handleEditorUpdate} error={formErrors} />
             </FormControl>
             <FormControl fullWidth>
                 <SkillsDropdown isRequired={true} error={formErrors} setAnswers={setAnswers} onSkillSelect={handleChange} />
