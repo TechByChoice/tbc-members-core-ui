@@ -49,7 +49,7 @@ export const AuthProvider = ({ children }) => {
     }, []);
 
     const login = useCallback((username, email, password, timezone) => {
-        const url = import.meta.env.VITE_APP_API_BASE_URL + 'user/login/';
+        const url = import.meta.env.VITE_APP_API_BASE_URL + '/user/login/';
         fetch(url, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -86,7 +86,7 @@ export const AuthProvider = ({ children }) => {
     }, []);
 
     const logout = useCallback(() => {
-        const url = import.meta.env.VITE_APP_API_BASE_URL + 'logout/';
+        const url = import.meta.env.VITE_APP_API_BASE_URL + '/user/logout/';
 
         fetch(url, {
             method: 'POST',
@@ -97,7 +97,6 @@ export const AuthProvider = ({ children }) => {
         })
             .then(response => response.json())
             .then(response => {
-                console.log(response.data);
                 if (!response.data) {
                     // Call the setToken function to store the JWT
                     setIsAuthenticated(false);
