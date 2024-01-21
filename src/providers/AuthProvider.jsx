@@ -103,7 +103,7 @@ export const AuthProvider = ({ children }) => {
                     setUser([]);
                     setToken('');
                     localStorage.removeItem('token');
-                    window.location.href = import.meta.env.VITE_APP_BASE_URL + 'login';
+                    window.location.href = import.meta.env.VITE_APP_BASE_URL + '/login';
                 } else {
                     setErrorMessage(response.data);
                     console.error(response.data);
