@@ -55,6 +55,7 @@ export default function JobReferralPage() {
 
     useEffect(() => {
         if (activeStep === steps.length) {
+            console.log(routes.api.jobs.createReferral(), 'hey');
             fetch(routes.api.jobs.createReferral(), {
                 method: 'POST',
                 credentials: 'include',
@@ -127,7 +128,6 @@ export default function JobReferralPage() {
 
     function validateCompanyDetails() {
         let errors = {};
-
         if (!answers['select_company']) {
             // If select_company is not set, validate companyName and company_url
             if (!answers['company_name']) {

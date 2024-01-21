@@ -3,9 +3,12 @@ import React, { useEffect, useState } from 'react';
 import { useAuth } from '../../providers/AuthProvider';
 import { useStatus } from '../../providers/MsgStatusProvider';
 import { routes } from '../../lib/routes';
+import { useStatusMessage } from '@/hooks/useStatusMessage';
 
 export default function AccountDetailsForm() {
     const { user } = useAuth();
+    const statusMessage = useStatusMessage();
+
     const userDetails = user[0];
     const [ formErrors, setFormErrors ] = useState({
         first_name: '',
@@ -46,9 +49,7 @@ export default function AccountDetailsForm() {
             .then(response => response.json())
             .then(data => {
                 if (data.status) {
-                    setIsAlertOpen(true);
-                    setStatusType('success');
-                    setStatusMessage('Updates have been saved');
+                    statusMessage.success('Updates have been saved');
                 } else {
                     console.error('Error:', data.message);
                     const newErrors = {
@@ -57,17 +58,12 @@ export default function AccountDetailsForm() {
                         email: data.message.email ? data.message.email[0] : '',
                         postal_code: data.message.postal_code ? data.message.postal_code[0] : '',
                     };
-                    setFormErrors(newErrors);
-                    setIsAlertOpen(true);
-                    setStatusType('error');
-                    setStatusMessage('We ran into an issue saving. Please try again.');
+                    statusMessage.error('We ran into an issue saving. Please try again.');
                 }
             })
             .catch(error => {
                 console.error('Error:', error);
-                setIsAlertOpen(true);
-                setStatusType('error');
-                setStatusMessage('We ran into an issue saving. Please try again.');
+                statusMessage.error('We ran into an issue saving. Please try again.');
             });
     };
 

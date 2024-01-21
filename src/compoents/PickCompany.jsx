@@ -1,16 +1,14 @@
 import * as React from 'react';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
-import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import CompanyDropdownUpdate from './CompanyDropDownUpdate';
-import { useEffect } from 'react';
+import AddCompanyForm from './utils/AddCompanyForm';
 
 export default function PickCompany({ formErrors, answers, setAnswers }) {
     const [ displayCompanyForm, setDisplayCompanyForm ] = React.useState(false);
 
-    useEffect(() => {}, [ setAnswers, answers ]);
     const handleSelection = e => {
         setAnswers(prevState => ({
             ...prevState,
@@ -18,7 +16,15 @@ export default function PickCompany({ formErrors, answers, setAnswers }) {
         }));
     };
 
-    const toggleDisplayCompanyForm = () => setDisplayCompanyForm(prevState => !prevState);
+    const toggleDisplayCompanyForm = () => {
+        setDisplayCompanyForm(prevState => !prevState);
+        if (!displayCompanyForm) {
+            setAnswers(prevState => ({
+                ...prevState,
+                select_company: null,
+            }));
+        }
+    };
 
     function SelectCompany() {
         return (
@@ -33,7 +39,7 @@ export default function PickCompany({ formErrors, answers, setAnswers }) {
                     <Grid item xs={12}>
                         <FormControlLabel
                             control={
-                                <Checkbox label="Add a new company" onChange={toggleDisplayCompanyForm} inputProps={{ 'aria-label': 'controlled' }} />
+                                <Checkbox aria-label="Add a new company" onChange={toggleDisplayCompanyForm} inputProps={{ 'aria-label': 'controlled' }} />
                             }
                             label="Add a new company"
                         />
@@ -43,39 +49,13 @@ export default function PickCompany({ formErrors, answers, setAnswers }) {
         );
     }
 
-    function AddCompanyForm() {
-        return (
-            <div>
-                <Typography variant="h6" gutterBottom>
-                    Add a Company
-                </Typography>
-                <Grid container spacing={3}>
-                    <Grid item xs={12}>
-                        <TextField
-                            required
-                            id="companyName"
-                            name="companyName"
-                            label="Company name"
-                            fullWidth
-                            autoComplete="given-name"
-                            variant="outlined"
-                        />
-                    </Grid>
-                    <Grid item xs={12}>
-                        <TextField required id="company_url" name="company_url" label="Company URL" fullWidth autoComplete="url" variant="outlined" />
-                    </Grid>
-                    <Grid item xs={12}>
-                        <FormControlLabel
-                            control={
-                                <Checkbox label="Add a new company" onChange={toggleDisplayCompanyForm} inputProps={{ 'aria-label': 'controlled' }} />
-                            }
-                            label="Select company from dropdown"
-                        />
-                    </Grid>
-                </Grid>
-            </div>
-        );
-    }
-
-    return <React.Fragment>{!displayCompanyForm ? <SelectCompany /> : <AddCompanyForm />}</React.Fragment>;
+    return (
+        <React.Fragment>
+            {!displayCompanyForm ? (
+                <SelectCompany />
+            ) : (
+                <AddCompanyForm setAnswers={setAnswers} answers={answers} toggleDisplayCompanyForm={toggleDisplayCompanyForm} />
+            )}
+        </React.Fragment>
+    );
 }

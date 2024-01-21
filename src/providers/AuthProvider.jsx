@@ -1,5 +1,6 @@
 import { createContext, useCallback, useContext, useEffect, useState } from 'react';
 import * as React from 'react';
+import { routes } from '@/lib/routes';
 
 const AuthContext = createContext([]);
 
@@ -14,9 +15,9 @@ export const AuthProvider = ({ children }) => {
     // get user details
     useEffect(() => {
         const url = import.meta.env.VITE_APP_API_BASE_URL + 'user/details/';
-        console.log('Before fetch call', url);
+
         if (localStorage.getItem('token')) {
-            fetch(url, {
+            fetch(routes.api.users.getUsersDetails(), {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
