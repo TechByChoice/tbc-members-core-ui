@@ -97,7 +97,6 @@ export const AuthProvider = ({ children }) => {
         })
             .then(response => response.json())
             .then(response => {
-                console.log(response, 'response');
                 if (!response.data) {
                     // Call the setToken function to store the JWT
                     setIsAuthenticated(false);
