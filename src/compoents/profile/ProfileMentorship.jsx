@@ -8,11 +8,14 @@ import ProfileCalLinkForm from './ProfileCalLinkForm';
 import Button from '@mui/material/Button';
 import { useStatus } from '../../providers/MsgStatusProvider';
 import { routes } from '@/lib/routes';
+import { useStatusMessage } from '@/hooks/useStatusMessage';
 
 const filter = createFilterOptions();
 
 export default function ProfileMentorship({ questions }) {
     const { user } = useAuth();
+    const statusMessage = useStatusMessage();
+
     let userData = user[0];
     const [ formData, setFormData ] = useState({
         commitment_level: [],
@@ -53,10 +56,7 @@ export default function ProfileMentorship({ questions }) {
             .then(response => response.json())
             .then(data => {
                 if (data.status) {
-                    console.log('hey');
-                    setIsAlertOpen(true);
-                    setStatusType('success');
-                    setStatusMessage('Updates have been saved');
+                    statusMessage.success('Updates have been saved');
                 }
             })
             .catch(error => {
