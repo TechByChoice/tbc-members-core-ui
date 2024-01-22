@@ -11,7 +11,11 @@ export const getMemberData = async memberId => {
     return response.json();
 };
 export const getBasicSystemInfo = async memberId => {
-    const response = await fetch(routes.api.users.basicSystemInfo());
+    const response = await fetch(routes.api.users.basicSystemInfoUpdate());
+    return response.json();
+};
+export const getPronouns = async () => {
+    const response = await fetch(routes.api.users.basicSystemInfoUpdate('pronouns'));
     return response.json();
 };
 export const getJobDetails = async jobId => {

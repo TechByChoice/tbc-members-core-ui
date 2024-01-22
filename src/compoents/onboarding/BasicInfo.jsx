@@ -14,6 +14,7 @@ import React from 'react';
 import { createFilterOptions } from '@mui/material/Autocomplete';
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
+import PronounsDropdown from '@/compoents/PronounsDropdown';
 
 const filter = createFilterOptions();
 
@@ -31,49 +32,7 @@ function BasicInfoStep({
             </Grid>
             {/* Pronouns Dropdown */}
             <Grid item xs={12}>
-                <FormControl fullWidth>
-                    <FormLabel id="pronouns-label">What are your pronouns</FormLabel>
-                    <Autocomplete
-                        multiple
-                        selectOnFocus
-                        includeInputInList
-                        handleHomeEndKeys
-                        id="pronouns_identities"
-                        aria-labelledby="pronouns-label"
-                        options={questions.pronouns_identities || []} // <-- directly provide a default value here
-                        isOptionEqualToValue={(option, value) =>
-                            (option.inputValue && value.inputValue && option.inputValue === value.inputValue) || option === value
-                        }
-                        getOptionLabel={option => {
-                            if (typeof option === 'string') {
-                                return option;
-                            }
-                            // Check for the special case where the option has an inputValue property
-                            if (option.inputValue) return option.inputValue;
-
-                            // Existing logic
-                            return option.pronouns;
-                        }}
-                        filterOptions={(options, params) => {
-                            const filtered = filter(options, params);
-
-                            const { inputValue } = params;
-                            // Suggest the creation of a new value
-                            const isExisting = options.some(option => inputValue === option.pronouns);
-                            if (inputValue !== '' && !isExisting) {
-                                filtered.push({
-                                    inputValue,
-                                    name: `Add "${inputValue}"`,
-                                });
-                            }
-
-                            return filtered;
-                        }}
-                        renderOption={(props, option) => <li {...props}>{option.pronouns || option.name}</li>}
-                        onChange={(event, value) => handleAutocompleteChange('pronouns_identities', value)}
-                        renderInput={params => <TextField name="pronouns_identities" {...params} />}
-                    />
-                </FormControl>
+                <PronounsDropdown formErrors={true} isRequired={false} answers={questions} setAnswers={handleAutocompleteChange} />
                 <FormControlLabel
                     control={<Checkbox onChange={handleInputChange} name="is_pronouns_displayed" color="primary" size="small" />}
                     label="Would you like your pronouns saved on your profile?"
