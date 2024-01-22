@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Autocomplete, FormControl, FormLabel, TextField } from '@mui/material';
-import { getPronouns } from '../api-calls';
+import { getDropDrownItems } from '../api-calls';
 import { createFilterOptions } from '@mui/material/Autocomplete';
 
 const filter = createFilterOptions();
@@ -11,7 +11,7 @@ export default function PronounsDropdown({ isRequired, setAnswers, formErrors })
         // Fetch the list of companies when the component mounts
         async function fetchData() {
             try {
-                const response = await getPronouns();
+                const response = await getDropDrownItems('pronouns');
                 setPronouns(response.pronouns);
             } catch (error) {
                 console.error('Error fetching pronouns:', error);
@@ -30,7 +30,6 @@ export default function PronounsDropdown({ isRequired, setAnswers, formErrors })
             <Autocomplete
                 id="pronouns_identities"
                 multiple
-                required={isRequired}
                 selectOnFocus
                 includeInputInList
                 handleHomeEndKeys
@@ -59,7 +58,7 @@ export default function PronounsDropdown({ isRequired, setAnswers, formErrors })
                     return filtered;
                 }}
                 onChange={(event, value) => setAnswers('pronouns_identities', value)}
-                renderInput={params => <TextField error={!!formErrors.pronouns_identities} name="pronouns_identities" {...params} />}
+                renderInput={params => <TextField required={isRequired} error={!!formErrors.pronouns_identities} name="pronouns_identities" {...params} />}
             />
         </FormControl>
     );

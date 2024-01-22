@@ -14,8 +14,8 @@ export const getBasicSystemInfo = async memberId => {
     const response = await fetch(routes.api.users.basicSystemInfoUpdate());
     return response.json();
 };
-export const getPronouns = async () => {
-    const response = await fetch(routes.api.users.basicSystemInfoUpdate('pronouns'));
+export const getDropDrownItems = async details => {
+    const response = await fetch(routes.api.users.basicSystemInfoUpdate(details));
     return response.json();
 };
 export const getJobDetails = async jobId => {

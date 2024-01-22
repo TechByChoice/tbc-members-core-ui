@@ -15,6 +15,7 @@ import { createFilterOptions } from '@mui/material/Autocomplete';
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import PronounsDropdown from '@/compoents/PronounsDropdown';
+import JobRoleDropdown from '@/compoents/JobRoleDropdown';
 
 const filter = createFilterOptions();
 
@@ -63,47 +64,7 @@ function BasicInfoStep({
             <Grid item xs={12}>
                 <FormControl fullWidth error={!!formErrors.job_roles}>
                     <FormLabel id="job-title-label">* What is the job title that best fits your desired or current position?</FormLabel>
-                    <Autocomplete
-                        multiple
-                        required
-                        selectOnFocus
-                        includeInputInList
-                        handleHomeEndKeys
-                        id="job_roles"
-                        aria-labelledby="job-title-label"
-                        options={questions.job_roles || []} // <-- directly provide a default value here
-                        isOptionEqualToValue={(option, value) =>
-                            (option.inputValue && value.inputValue && option.inputValue === value.inputValue) || option === value
-                        }
-                        getOptionLabel={option => {
-                            if (typeof option === 'string') {
-                                return option;
-                            }
-                            // Check for the special case where the option has an inputValue property
-                            if (option.inputValue) return option.inputValue;
-
-                            // Existing logic
-                            return option.name;
-                        }}
-                        filterOptions={(options, params) => {
-                            const filtered = filter(options, params);
-
-                            const { inputValue } = params;
-                            // Suggest the creation of a new value
-                            const isExisting = options.some(option => inputValue === option.name);
-                            if (inputValue !== '' && !isExisting) {
-                                filtered.push({
-                                    inputValue,
-                                    name: `Add "${inputValue}"`,
-                                });
-                            }
-
-                            return filtered;
-                        }}
-                        renderOption={(props, option) => <li {...props}>{option.pronouns || option.name}</li>}
-                        onChange={(event, value) => handleAutocompleteChange('job_roles', value)}
-                        renderInput={params => <TextField name="job-title-label" {...params} />}
-                    />
+                    <JobRoleDropdown formErrors={true} isRequired={true} answers={questions} setAnswers={handleAutocompleteChange} />
                     {!!formErrors.job_roles && <FormHelperText>{formErrors.job_roles}</FormHelperText>}
                 </FormControl>
             </Grid>
