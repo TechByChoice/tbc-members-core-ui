@@ -264,12 +264,12 @@ export default function NewMemberPage() {
         setIsComplete(activeStep === steps.length);
     }, [ activeStep ]);
 
-    useEffect(() => {
-        validationFunctionMap[activeStep]?.(answers, setFormErrors);
-    }, [ answers ]);
+    // useEffect(() => {
+    // validationFunctionMap[activeStep]?.(answers, setFormErrors);
+    // }, [ answers ]);
 
     useEffect(() => {
-        const url = import.meta.env.VITE_APP_API_BASE_URL + 'user/details/new-member';
+        const url = import.meta.env.VITE_APP_API_BASE_URL + '/user/details/new-member';
         fetch(url, {
             method: 'GET',
             credentials: 'include',
@@ -281,6 +281,7 @@ export default function NewMemberPage() {
         })
             .then(response => response.json())
             .then(data => {
+                console.log('hey');
                 if (data.status) {
                     setQuestions(data);
                     if (data.detail === 'Invalid token.') {
