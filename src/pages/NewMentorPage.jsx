@@ -13,7 +13,6 @@ import FormMentorApplication from '../compoents/mentorship/FormMentorApplication
 import FormMentorCareer from '../compoents/mentorship/FormMentorCareer';
 import FormMentorProfile from '../compoents/mentorship/FormMentorProfile';
 import FormMentorshipValues from '../compoents/mentorship/FormMentorshipValues';
-import { useStatus } from '../providers/MsgStatusProvider';
 import { useStatusMessage } from '../hooks/useStatusMessage';
 import { routes } from '@/lib/routes';
 
@@ -182,8 +181,7 @@ export default function NewMentorPage() {
         setActiveStep(activeStep - 1);
     };
 
-    
-React.useEffect(() => {
+    React.useEffect(() => {
         setHasCompleted(activeStep >= steps.length);
     }, [ activeStep ]);
 

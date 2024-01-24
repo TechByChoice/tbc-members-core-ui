@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useAuth } from '../../providers/AuthProvider';
 import { createFilterOptions } from '@mui/material/Autocomplete';
 import { useStatus } from '../../providers/MsgStatusProvider';
-import CompanyDropdown from '../CompanyDropDown';
+import CompanyDropdown from '../DropDownCompany';
 import { routes } from '../../lib/routes';
 
 const filter = createFilterOptions();

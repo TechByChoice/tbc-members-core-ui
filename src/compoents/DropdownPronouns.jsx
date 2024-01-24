@@ -4,7 +4,7 @@ import { getDropDrownItems } from '../api-calls';
 import { createFilterOptions } from '@mui/material/Autocomplete';
 
 const filter = createFilterOptions();
-export default function PronounsDropdown({ isRequired, setAnswers, formErrors }) {
+export default function DropdownPronouns({ isRequired, setAnswers, formErrors }) {
     const [ pronouns, setPronouns ] = useState([]);
 
     useEffect(() => {

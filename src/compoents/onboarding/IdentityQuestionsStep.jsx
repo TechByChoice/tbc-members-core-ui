@@ -3,6 +3,9 @@ import React from 'react';
 import { createFilterOptions } from '@mui/material/Autocomplete';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
+import GenderDropdown from '@/compoents/DropdownGender';
+import EthicDropdown from '@/compoents/DropdownEthic';
+import SexualityDropdown from '@/compoents/DropdownSexuality';
 
 const filter = createFilterOptions();
 
@@ -29,41 +32,7 @@ function IdentityQuestionsStep({
             <Grid item xs={12}>
                 <FormControl variant="outlined" fullWidth>
                     <FormLabel htmlFor="identity_sexuality">Please select the sexual identities that best describe you today.</FormLabel>
-                    <Autocomplete
-                        multiple
-                        selectOnFocus
-                        includeInputInList
-                        handleHomeEndKeys
-                        id="autocomplete-identity_sexuality"
-                        options={questions.sexual_identities || []}
-                        isOptionEqualToValue={(option, value) =>
-                            (option.inputValue && value.inputValue && option.inputValue === value.inputValue) || option === value
-                        }
-                        getOptionLabel={option => {
-                            if (typeof option === 'string') {
-                                return option;
-                            }
-                            if (option.inputValue) return option.inputValue;
-                            return option.name || option.identity;
-                        }}
-                        filterOptions={(options, params) => {
-                            const filtered = filterOptions(options, params);
-
-                            const { inputValue } = params;
-                            const isExisting = options.some(option => inputValue === option.name || option.identity);
-                            if (inputValue !== '' && !isExisting) {
-                                filtered.push({
-                                    inputValue,
-                                    name: `Add "${inputValue}"`,
-                                });
-                            }
-
-                            return filtered;
-                        }}
-                        renderOption={(props, option) => <li {...props}>{option.name || option.identity}</li>}
-                        onChange={(event, value) => handleAutocompleteChange('identity_sexuality', value)}
-                        renderInput={params => <TextField name="identity_sexuality" {...params} />}
-                    />
+                    <SexualityDropdown isRequired={false} handleChange={handleAutocompleteChange} />
                     <FormLabel>
                         If you see any terms you&apos;re not sure about we encourage you to check out this site to learn more about people&apos;s
                         experiences
@@ -79,42 +48,7 @@ function IdentityQuestionsStep({
             <Grid item xs={12}>
                 <FormControl variant="outlined" fullWidth>
                     <FormLabel htmlFor="gender_identities">Please select the gender identities that best describe you today.</FormLabel>
-                    <Autocomplete
-                        multiple
-                        selectOnFocus
-                        includeInputInList
-                        handleHomeEndKeys
-                        id="autocomplete-gender_identities"
-                        options={questions.gender_identities || []}
-                        isOptionEqualToValue={(option, value) =>
-                            (option.inputValue && value.inputValue && option.inputValue === value.inputValue) || option === value
-                        }
-                        name="gender_identities"
-                        getOptionLabel={option => {
-                            if (typeof option === 'string') {
-                                return option;
-                            }
-                            if (option.inputValue) return option.inputValue;
-                            return option.name || option.gender;
-                        }}
-                        filterOptions={(options, params) => {
-                            const filtered = filterOptions(options, params);
-
-                            const { inputValue } = params;
-                            const isExisting = options.some(option => inputValue === option.name || option.gender);
-                            if (inputValue !== '' && !isExisting) {
-                                filtered.push({
-                                    inputValue,
-                                    name: `Add "${inputValue}"`,
-                                });
-                            }
-
-                            return filtered;
-                        }}
-                        renderOption={(props, option) => <li {...props}>{option.name || option.gender}</li>}
-                        onChange={(event, value) => handleAutocompleteChange('gender_identities', value)}
-                        renderInput={params => <TextField name="gender_identities" {...params} />}
-                    />
+                    <GenderDropdown isRequired={false} handleChange={handleAutocompleteChange} />
                     <FormControlLabel
                         control={<Checkbox onChange={handleInputChange} name="is_identity_gender_displayed" color="primary" size="small" />}
                         label="Would you like to display your gender your profile?"
@@ -126,41 +60,7 @@ function IdentityQuestionsStep({
             <Grid item xs={12}>
                 <FormControl variant="outlined" fullWidth>
                     <FormLabel htmlFor="identity_ethic">Please select all the identities that best describe your ethic background</FormLabel>
-                    <Autocomplete
-                        multiple
-                        selectOnFocus
-                        includeInputInList
-                        handleHomeEndKeys
-                        id="autocomplete-ethic_identities"
-                        options={questions.ethic_identities || []}
-                        isOptionEqualToValue={(option, value) =>
-                            (option.inputValue && value.inputValue && option.inputValue === value.inputValue) || option === value
-                        }
-                        getOptionLabel={option => {
-                            if (typeof option === 'string') {
-                                return option;
-                            }
-                            if (option.inputValue) return option.inputValue;
-                            return option.name || option.ethnicity;
-                        }}
-                        filterOptions={(options, params) => {
-                            const filtered = filterOptions(options, params);
-
-                            const { inputValue } = params;
-                            const isExisting = options.some(option => inputValue === option.name || option.ethnicity);
-                            if (inputValue !== '' && !isExisting) {
-                                filtered.push({
-                                    inputValue,
-                                    name: `Add "${inputValue}"`,
-                                });
-                            }
-
-                            return filtered;
-                        }}
-                        renderOption={(props, option) => <li {...props}>{option.name || option.ethnicity}</li>}
-                        onChange={(event, value) => handleAutocompleteChange('identity_ethic', value)}
-                        renderInput={params => <TextField name="ethic_identities" {...params} />}
-                    />
+                    <EthicDropdown isRequired={false} handleChange={handleAutocompleteChange} />
                     <FormControlLabel
                         control={<Checkbox onChange={handleInputChange} name="is_identity_ethic_displayed" color="primary" size="small" />}
                         label="Would you like to display your ethnicity your profile?"

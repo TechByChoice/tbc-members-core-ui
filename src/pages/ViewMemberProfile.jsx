@@ -1,13 +1,29 @@
-
 import BookMentorForm from '../compoents/BookMentorForm';
-import { getBasicSystemInfo, getMemberData } from '@/api-calls';
+import { getDropDrownItems, getMemberData } from '@/api-calls';
 import AddMemberNoteCard from '@/compoents/AddMemberNoteCard';
 import CompanyCard from '@/compoents/CompanyCard';
 import ReviewCard from '@/compoents/ReviewCard';
 import HtmlContentRenderer from '@/compoents/utils/HtmlContentRenderer';
 import { useAuth } from '@/providers/AuthProvider';
 import { GitHub, Instagram, Language, LinkedIn, Twitter, YouTube } from '@mui/icons-material';
-import { Box, Button, Card, CardContent, CardMedia, Chip, CircularProgress, Divider, Grid, Hidden, IconButton, Modal, Typography } from '@mui/material';
+import {Box,
+    Button,
+    Card,
+    CardContent,
+    CardMedia,
+    Chip,
+    CircularProgress,
+    Divider,
+    FormControl,
+    FormLabel,
+    Grid,
+    Hidden,
+    IconButton,
+    Modal,
+    Typography,
+    FormControlLabel,
+    RadioGroup,
+    Radio,} from '@mui/material';
 import Container from '@mui/material/Container';
 import Link from '@mui/material/Link';
 import React, { useEffect, useState } from 'react';
@@ -34,7 +50,7 @@ function ViewMemberProfile() {
         async function fetchData() {
             try {
                 // eslint-disable-next-line no-undef
-                const [ memberResponse, basicResponse ] = await Promise.all([ getMemberData(id), getBasicSystemInfo() ]);
+                const [ memberResponse, basicResponse ] = await Promise.all([ getMemberData(id), getDropDrownItems('pronouns&fields=gender&fields=sexuality'), ]);
 
                 setMemberData(memberResponse);
                 setBasicData(basicResponse);

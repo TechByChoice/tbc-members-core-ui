@@ -1,25 +1,26 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { FormControl, FormLabel, TextField, Autocomplete } from '@mui/material';
-import { getBasicSystemInfo } from '../api-calls';
+import { getDropDrownItems } from '../api-calls';
 import { createFilterOptions } from '@mui/material/Autocomplete';
 
 const filter = createFilterOptions();
 
 export default function CompanyDropdownUpdate({
-    error, answers, setAnswers, onCompanySelect 
+    error, answers, setAnswers, onCompanySelect, isRequired 
 }) {
     const [ companies, setCompanies ] = useState([]);
-    const [ selectedCompany, setSelectedCompany ] = useState(answers.select_company || null);
+    const [ selectedCompany, setSelectedCompany ] = useState(null);
 
     useEffect(() => {
-        setSelectedCompany(answers.select_company || null);
-    }, [ answers.select_company ]);
+        const firstCompany = Array.isArray(answers?.company) ? answers?.company[0] : null;
+        setSelectedCompany(answers.select_company || firstCompany || null);
+    }, [ answers?.select_company || answers?.company ]);
 
     useEffect(() => {
         // Fetch the list of companies when the component mounts
         async function fetchCompanies() {
             try {
-                const response = await getBasicSystemInfo();
+                const response = await getDropDrownItems('companies');
                 setCompanies(response.company_list);
             } catch (error) {
                 console.error('Error fetching companies:', error);
@@ -31,7 +32,7 @@ export default function CompanyDropdownUpdate({
 
     return (
         <FormControl fullWidth variant="outlined">
-            <FormLabel id="company-label">* Company</FormLabel>
+            <FormLabel id="company-label">{isRequired && <>*</>} Company</FormLabel>
             <Autocomplete
                 required
                 selectOnFocus
@@ -42,6 +43,7 @@ export default function CompanyDropdownUpdate({
                 getOptionLabel={option => {
                     return typeof option === 'object' ? option.company_name : '';
                 }}
+                isOptionEqualToValue={(option, value) => option?.id === value?.id}
                 renderOption={(props, option) => (
                     <li {...props} key={option.id}>
                         {option.company_name}

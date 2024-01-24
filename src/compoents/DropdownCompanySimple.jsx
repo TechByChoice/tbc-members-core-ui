@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { FormControl, FormLabel, TextField, Autocomplete } from '@mui/material';
-import { getBasicSystemInfo } from '../api-calls';
+import { getDropDrownItems } from '../api-calls';
 import { createFilterOptions } from '@mui/material/Autocomplete';
 
 const filter = createFilterOptions();
 
-export default function CompanyDropdownUpdate({
-    error, answers, setAnswers, onCompanySelect, isRequired 
+export default function DropdownCompanySimple({
+    error, answers, setAnswers, isRequired 
 }) {
     const [ companies, setCompanies ] = useState([]);
     const [ selectedCompany, setSelectedCompany ] = useState(null);
@@ -20,8 +20,8 @@ export default function CompanyDropdownUpdate({
         // Fetch the list of companies when the component mounts
         async function fetchCompanies() {
             try {
-                const response = await getBasicSystemInfo();
-                setCompanies(response.company_list);
+                const response = await getDropDrownItems('companies');
+                setCompanies(response.companies);
             } catch (error) {
                 console.error('Error fetching companies:', error);
             }
@@ -34,7 +34,6 @@ export default function CompanyDropdownUpdate({
         <FormControl fullWidth variant="outlined">
             <FormLabel id="company-label">{isRequired && <>*</>} Company</FormLabel>
             <Autocomplete
-                required
                 selectOnFocus
                 includeInputInList
                 handleHomeEndKeys
@@ -56,14 +55,13 @@ export default function CompanyDropdownUpdate({
                 }}
                 onChange={(event, newValue) => {
                     setSelectedCompany(newValue);
-                    setAnswers(prevState => ({
-                        ...prevState,
-                        select_company: newValue,
-                        company: newValue,
-                        company_id: newValue?.id,
-                    }));
+                    setAnswers('select_company', newValue);
+                    setAnswers('company', newValue);
+                    setAnswers('company_id', newValue?.id);
                 }}
-                renderInput={params => <TextField {...params} name="company_name" error={!!error.company_name} inputProps={{ ...params.inputProps }} />}
+                renderInput={params => (
+                    <TextField {...params} required={isRequired} name="company_name" error={!!error.company_name} inputProps={{ ...params.inputProps }} />
+                )}
             />
         </FormControl>
     );

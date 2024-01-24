@@ -60,7 +60,7 @@ function validateBasicInfo(answers, setFormErrors) {
     const isValid = AnswerValidator.validateMany(answers, errors, {
         photo: 'Please upload your profile photo.',
         postal_code: 'Please enter your postal code.',
-        tech_journey: "Please specify how long you've been on your tech journey.",
+        years_of_experience: "Please specify how long you've been on your tech journey.",
         job_roles: 'Please specify titles that best fit you.',
     });
 
