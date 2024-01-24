@@ -15,7 +15,7 @@ export default function FormMentorApplication({
     const { accountDetails } = useAuth();
 
     useEffect(() => {
-        fetch(routes.api.mentors.getDetails('commitment_level&fields=support_areas'))
+        fetch(routes.api.mentors.getDetails('commitment_level&fields=mentor_support_areas'))
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
@@ -24,7 +24,7 @@ export default function FormMentorApplication({
             })
             .then(data => {
                 setCommitmentQuestions(data.commitment_level);
-                setSupportAreas(data.support_areas);
+                setSupportAreas(data.mentor_support_areas);
             })
             .catch(error => {
                 console.error('Fetch error:', error);

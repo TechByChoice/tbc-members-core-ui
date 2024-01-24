@@ -44,7 +44,7 @@ export default function ProfileMentorship({ questions }) {
     const handelFormSubmit = e => {
         e.preventDefault();
 
-        fetch(routes.mentors.signup.commitmentLevel(), {
+        fetch(routes.api.mentors.signup.commitmentLevel(), {
             method: 'POST',
             credentials: 'include',
             headers: {

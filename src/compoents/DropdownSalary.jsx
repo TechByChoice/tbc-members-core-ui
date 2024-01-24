@@ -12,7 +12,7 @@ export default function DropdownSalary({ setAnswers, labelName }) {
         // Fetch the list of companies when the component mounts
         async function fetchSkills() {
             try {
-                const response = await getDropDrownItems();
+                const response = await getDropDrownItems('job_salary_range');
                 setSalaries(response.job_salary_range);
             } catch (error) {
                 console.error('Error fetching salaries:', error);

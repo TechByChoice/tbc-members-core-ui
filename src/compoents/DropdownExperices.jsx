@@ -41,7 +41,7 @@ export default function ExperiencesDropdown({ isRequired, setAnswers, error }) {
                 }
                 renderOption={(props, option) => (
                     <li {...props} key={option.id}>
-                        {option.name}
+                        {option.label}
                     </li>
                 )}
                 getOptionLabel={option => {
@@ -52,14 +52,14 @@ export default function ExperiencesDropdown({ isRequired, setAnswers, error }) {
                     if (option.inputValue) return option.inputValue;
 
                     // Existing logic
-                    return option.name;
+                    return option.label;
                 }}
                 filterOptions={(options, params) => {
                     const filtered = filter(options, params);
 
                     const { inputValue } = params;
                     // Suggest the creation of a new value
-                    const isExisting = options.some(option => inputValue === option.name);
+                    const isExisting = options.some(option => inputValue === option.label);
                     if (inputValue !== '' && !isExisting) {
                         filtered.push({
                             inputValue,

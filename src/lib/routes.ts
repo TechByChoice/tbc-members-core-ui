@@ -17,20 +17,20 @@ export const routes = {
         jobs: {
             list: () => apiJoin(routes.api.base, 'company/new/jobs/all-jobs/'),
             createReferral: () => apiJoin(routes.api.base, 'company/new/jobs/create-referral/'),
-            publish: id => apiJoin(routes.api.base, `company/new/jobs/${id}/referral/publish`),
-            pause: id => apiJoin(routes.api.base, `company/new/jobs/${id}/referral/pause`),
-            close: id => apiJoin(routes.api.base, `company/new/jobs/${id}/referral/closed`),
-            activate: id => apiJoin(routes.api.base, `company/new/jobs/${id}/referral/active`),
+            publish: id => apiJoin(routes.api.base, `company/new/jobs/${id}/referral/publish/`),
+            pause: id => apiJoin(routes.api.base, `company/new/jobs/${id}/referral/pause/`),
+            close: id => apiJoin(routes.api.base, `company/new/jobs/${id}/referral/closed/`),
+            activate: id => apiJoin(routes.api.base, `company/new/jobs/${id}/referral/active/`),
             details: id => apiJoin(routes.api.base, `company/new/jobs/${id}/get-job/`),
             match: () => apiJoin(routes.api.base, 'company/new/jobs/job-match/'),
         },
         mentors: {
             list: () => apiJoin(routes.api.base, 'mentorship/'),
             signup: {
-                commitmentLevel: () => apiJoin(routes.api.base, 'mentorship/update/support'),
-                career: () => apiJoin(routes.api.base, 'mentorship/update/career'),
-                values: () => apiJoin(routes.api.base, 'mentorship/update/value'),
-                profile: () => apiJoin(routes.api.base, 'mentorship/update/profile'),
+                commitmentLevel: () => apiJoin(routes.api.base, 'mentorship/update/support/'),
+                career: () => apiJoin(routes.api.base, 'mentorship/update/career/'),
+                values: () => apiJoin(routes.api.base, 'mentorship/update/value/'),
+                profile: () => apiJoin(routes.api.base, 'mentorship/update/profile/'),
             },
             connect: {
                 // We can add other paths here like booking sessions once cal.com integration is done
@@ -48,7 +48,7 @@ export const routes = {
             getProfile: () => apiJoin(routes.api.base, 'user/details/new-member'),
             getUsersDetails: () => apiJoin(routes.api.base, 'user/details/'),
             connectWithMentor: id => apiJoin(routes.api.base, `mentorship/mentor/${id}/connect/roster/add`),
-            getMemberData: id => apiJoin(routes.api.base, `member/member-details/${id}`),
+            getMemberData: id => apiJoin(routes.api.base, `member/member-details/${id}/`),
             basicSystemInfo: () => apiJoin(routes.api.base, 'user/details/new-member'),
             basicSystemInfoUpdate: details => apiJoin(routes.api.base, `app/details/?fields=${details}`),
             updateAccountDetails: () => apiJoin(routes.api.base, 'user/profile/update/account-details'),
