@@ -20,7 +20,7 @@ export default function DropdownCompanyUpdate({
         async function fetchCompanies() {
             try {
                 const response = await getDropDrownItems('companies');
-                setCompanies(response.company_list);
+                setCompanies(response.companies);
             } catch (error) {
                 console.error('Error fetching companies:', error);
             }
