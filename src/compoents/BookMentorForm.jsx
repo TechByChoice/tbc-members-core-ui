@@ -57,7 +57,6 @@ function BookMentorForm({ talentDetails, setOpen }) {
     }, []);
 
     const handleSupportAreasChange = (event, newValue) => {
-        console.log(formData, 'formData');
         // Call the function passed from the parent component to update the formData state
         setFormData(preValue => ({
             ...preValue,

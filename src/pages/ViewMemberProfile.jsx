@@ -44,7 +44,6 @@ function ViewMemberProfile() {
     const { user, isLoading, token } = useAuth();
     const loggedInUser = user[0];
     const mentor_roster = loggedInUser?.mentor_roster_data;
-    console.log(loggedInUser?.user_info?.id, mentor_roster, loggedInUser);
 
     useEffect(() => {
         async function fetchData() {
@@ -87,7 +86,7 @@ function ViewMemberProfile() {
                 return response.json();
             })
             .then(data => {
-                console.log(data, 'saved');
+                console.log('saved');
             })
             .catch(error => {
                 console.error('Fetch error:', error);
@@ -269,14 +268,13 @@ function ViewMemberProfile() {
             body: JSON.stringify({ 'mentor-update-status': 'send-invite' }),
         })
             .then(response => {
-                console.log(response, 'response');
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
                 return response.json();
             })
             .then(data => {
-                console.log(data, 'saved');
+                console.log('saved');
             })
             .catch(error => {
                 console.error('Fetch error:', error);
@@ -294,14 +292,13 @@ function ViewMemberProfile() {
             body: JSON.stringify({ 'mentor-update-status': 'approve-mentor' }),
         })
             .then(response => {
-                console.log(response, 'response');
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
                 return response.json();
             })
             .then(data => {
-                console.log(data, 'saved');
+                console.log('saved');
             })
             .catch(error => {
                 console.error('Fetch error:', error);
@@ -319,14 +316,14 @@ function ViewMemberProfile() {
             body: JSON.stringify({ 'mentor-update-status': 'paused' }),
         })
             .then(response => {
-                console.log(response, 'response');
+                console.log('response');
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
                 return response.json();
             })
             .then(data => {
-                console.log(data, 'saved');
+                console.log('saved');
             })
             .catch(error => {
                 console.error('Fetch error:', error);
@@ -343,14 +340,13 @@ function ViewMemberProfile() {
             body: JSON.stringify({ 'mentor-update-status': 'active' }),
         })
             .then(response => {
-                console.log(response, 'response');
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
                 return response.json();
             })
             .then(data => {
-                console.log(data, 'saved');
+                console.log('saved');
             })
             .catch(error => {
                 console.error('Fetch error:', error);
@@ -367,14 +363,14 @@ function ViewMemberProfile() {
             body: JSON.stringify({ 'mentor-update-status': 'interview-reminder' }),
         })
             .then(response => {
-                console.log(response, 'response');
+                console.log('response');
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
                 return response.json();
             })
             .then(data => {
-                console.log(data, 'saved');
+                console.log('saved');
             })
             .catch(error => {
                 console.error('Fetch error:', error);
@@ -398,7 +394,7 @@ function ViewMemberProfile() {
                 return response.json();
             })
             .then(data => {
-                console.log(data, 'saved');
+                console.log('saved');
             })
             .catch(error => {
                 console.error('Fetch error:', error);

@@ -68,8 +68,6 @@ export const TokenVerificationProvider = ({ children }) => {
             })
                 .then(response => response.json())
                 .then(data => {
-                    console.log(data.status === 'success');
-
                     if (data.status === 'success') {
                         //  check if token is valid
                         setTokenStatus(true);

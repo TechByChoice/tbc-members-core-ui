@@ -55,7 +55,6 @@ export default function JobReferralPage() {
 
     useEffect(() => {
         if (activeStep === steps.length) {
-            console.log(routes.api.jobs.createReferral(), 'hey');
             fetch(routes.api.jobs.createReferral(), {
                 method: 'POST',
                 credentials: 'include',

@@ -281,7 +281,6 @@ export default function NewMemberPage() {
         })
             .then(response => response.json())
             .then(data => {
-                console.log('hey');
                 if (data.status) {
                     setQuestions(data);
                     if (data.detail === 'Invalid token.') {

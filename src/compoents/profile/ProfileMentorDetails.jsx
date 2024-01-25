@@ -25,7 +25,7 @@ export default function ProfileMentorDetails() {
                 return response.json();
             })
             .then(data => {
-                console.log(data, 'saved');
+                console.log('saved');
             })
             .catch(error => {
                 console.error('Fetch error:', error);

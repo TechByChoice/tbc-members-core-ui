@@ -41,7 +41,6 @@ export default function FormMentorApplication({
     };
 
     const handleSupportAreasChange = (event, newValue) => {
-        console.log(event, newValue);
         // Call the function passed from the parent component to update the formData state
         setFormData(preValue => ({
             ...preValue,
