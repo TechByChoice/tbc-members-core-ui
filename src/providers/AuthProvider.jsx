@@ -27,7 +27,7 @@ export const AuthProvider = ({ children }) => {
                 .then(response => response.json())
                 .then(data => {
                     if (data) {
-                        console.log(data, 'data');
+                        console.log('data');
                         setUser([ data ]);
                         setAccountDetails([ data.account_info ]);
                         if (data.detail === 'Invalid token.') {

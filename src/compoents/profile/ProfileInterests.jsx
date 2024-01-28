@@ -45,7 +45,6 @@ export default function ProfileInterests({ handleChange, questions }) {
                 department: defaultDepartment,
             });
         }
-        console.log(skillsRolesFormData);
     }, [ userDetails, questions ]);
 
     function handleSave(e) {

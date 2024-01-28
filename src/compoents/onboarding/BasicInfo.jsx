@@ -14,6 +14,10 @@ import React from 'react';
 import { createFilterOptions } from '@mui/material/Autocomplete';
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
+import DropdownPronouns from '@/compoents/DropdownPronouns';
+import DropdownJobRole from '@/compoents/DropdownJobRole';
+import DropdownCompanySimple from '@/compoents/DropdownCompanySimple';
+import YearsOfExperienceDropdown from '@/compoents/DropdownYearsOfExperience';
 
 const filter = createFilterOptions();
 
@@ -31,49 +35,7 @@ function BasicInfoStep({
             </Grid>
             {/* Pronouns Dropdown */}
             <Grid item xs={12}>
-                <FormControl fullWidth>
-                    <FormLabel id="pronouns-label">What are your pronouns</FormLabel>
-                    <Autocomplete
-                        multiple
-                        selectOnFocus
-                        includeInputInList
-                        handleHomeEndKeys
-                        id="pronouns_identities"
-                        aria-labelledby="pronouns-label"
-                        options={questions.pronouns_identities || []} // <-- directly provide a default value here
-                        isOptionEqualToValue={(option, value) =>
-                            (option.inputValue && value.inputValue && option.inputValue === value.inputValue) || option === value
-                        }
-                        getOptionLabel={option => {
-                            if (typeof option === 'string') {
-                                return option;
-                            }
-                            // Check for the special case where the option has an inputValue property
-                            if (option.inputValue) return option.inputValue;
-
-                            // Existing logic
-                            return option.pronouns;
-                        }}
-                        filterOptions={(options, params) => {
-                            const filtered = filter(options, params);
-
-                            const { inputValue } = params;
-                            // Suggest the creation of a new value
-                            const isExisting = options.some(option => inputValue === option.pronouns);
-                            if (inputValue !== '' && !isExisting) {
-                                filtered.push({
-                                    inputValue,
-                                    name: `Add "${inputValue}"`,
-                                });
-                            }
-
-                            return filtered;
-                        }}
-                        renderOption={(props, option) => <li {...props}>{option.pronouns || option.name}</li>}
-                        onChange={(event, value) => handleAutocompleteChange('pronouns_identities', value)}
-                        renderInput={params => <TextField name="pronouns_identities" {...params} />}
-                    />
-                </FormControl>
+                <DropdownPronouns formErrors={true} isRequired={false} answers={questions} setAnswers={handleAutocompleteChange} />
                 <FormControlLabel
                     control={<Checkbox onChange={handleInputChange} name="is_pronouns_displayed" color="primary" size="small" />}
                     label="Would you like your pronouns saved on your profile?"
@@ -104,47 +66,7 @@ function BasicInfoStep({
             <Grid item xs={12}>
                 <FormControl fullWidth error={!!formErrors.job_roles}>
                     <FormLabel id="job-title-label">* What is the job title that best fits your desired or current position?</FormLabel>
-                    <Autocomplete
-                        multiple
-                        required
-                        selectOnFocus
-                        includeInputInList
-                        handleHomeEndKeys
-                        id="job_roles"
-                        aria-labelledby="job-title-label"
-                        options={questions.job_roles || []} // <-- directly provide a default value here
-                        isOptionEqualToValue={(option, value) =>
-                            (option.inputValue && value.inputValue && option.inputValue === value.inputValue) || option === value
-                        }
-                        getOptionLabel={option => {
-                            if (typeof option === 'string') {
-                                return option;
-                            }
-                            // Check for the special case where the option has an inputValue property
-                            if (option.inputValue) return option.inputValue;
-
-                            // Existing logic
-                            return option.name;
-                        }}
-                        filterOptions={(options, params) => {
-                            const filtered = filter(options, params);
-
-                            const { inputValue } = params;
-                            // Suggest the creation of a new value
-                            const isExisting = options.some(option => inputValue === option.name);
-                            if (inputValue !== '' && !isExisting) {
-                                filtered.push({
-                                    inputValue,
-                                    name: `Add "${inputValue}"`,
-                                });
-                            }
-
-                            return filtered;
-                        }}
-                        renderOption={(props, option) => <li {...props}>{option.pronouns || option.name}</li>}
-                        onChange={(event, value) => handleAutocompleteChange('job_roles', value)}
-                        renderInput={params => <TextField name="job-title-label" {...params} />}
-                    />
+                    <DropdownJobRole formErrors={true} isRequired={true} answers={questions} setAnswers={handleAutocompleteChange} />
                     {!!formErrors.job_roles && <FormHelperText>{formErrors.job_roles}</FormHelperText>}
                 </FormControl>
             </Grid>
@@ -178,46 +100,47 @@ function BasicInfoStep({
                 <Grid item xs={12}>
                     <FormControl fullWidth>
                         <FormLabel id="company-label">Please select the company you work with.</FormLabel>
-                        <Autocomplete
-                            multiple
-                            selectOnFocus
-                            includeInputInList
-                            handleHomeEndKeys
-                            id="company_list"
-                            aria-labelledby="company-label"
-                            options={questions.company_list || []} // <-- directly provide a default value here
-                            isOptionEqualToValue={(option, value) =>
-                                (option.inputValue && value.inputValue && option.inputValue === value.inputValue) || option === value
-                            }
-                            getOptionLabel={option => {
-                                if (typeof option === 'string') {
-                                    return option;
-                                }
-                                // Check for the special case where the option has an inputValue property
-                                if (option.inputValue) return option.inputValue;
+                        <DropdownCompanySimple error={formErrors} isRequired={false} setAnswers={handleAutocompleteChange} answers={questions} />
+                        {/*<Autocomplete*/}
+                        {/*    multiple*/}
+                        {/*    selectOnFocus*/}
+                        {/*    includeInputInList*/}
+                        {/*    handleHomeEndKeys*/}
+                        {/*    id="company_list"*/}
+                        {/*    aria-labelledby="company-label"*/}
+                        {/*    options={questions.company_list || []} // <-- directly provide a default value here*/}
+                        {/*    isOptionEqualToValue={(option, value) =>*/}
+                        {/*        (option.inputValue && value.inputValue && option.inputValue === value.inputValue) || option === value*/}
+                        {/*    }*/}
+                        {/*    getOptionLabel={option => {*/}
+                        {/*        if (typeof option === 'string') {*/}
+                        {/*            return option;*/}
+                        {/*        }*/}
+                        {/*        // Check for the special case where the option has an inputValue property*/}
+                        {/*        if (option.inputValue) return option.inputValue;*/}
 
-                                // Existing logic
-                                return option.company_name;
-                            }}
-                            filterOptions={(options, params) => {
-                                const filtered = filter(options, params);
+                        {/*        // Existing logic*/}
+                        {/*        return option.company_name;*/}
+                        {/*    }}*/}
+                        {/*    filterOptions={(options, params) => {*/}
+                        {/*        const filtered = filter(options, params);*/}
 
-                                const { inputValue } = params;
-                                // Suggest the creation of a new value
-                                const isExisting = options.some(option => inputValue === option.company_name);
-                                if (inputValue !== '' && !isExisting) {
-                                    filtered.push({
-                                        inputValue,
-                                        name: `Add "${inputValue}"`,
-                                    });
-                                }
+                        {/*        const { inputValue } = params;*/}
+                        {/*        // Suggest the creation of a new value*/}
+                        {/*        const isExisting = options.some(option => inputValue === option.company_name);*/}
+                        {/*        if (inputValue !== '' && !isExisting) {*/}
+                        {/*            filtered.push({*/}
+                        {/*                inputValue,*/}
+                        {/*                name: `Add "${inputValue}"`,*/}
+                        {/*            });*/}
+                        {/*        }*/}
 
-                                return filtered;
-                            }}
-                            renderOption={(props, option) => <li {...props}>{option.company_name}</li>}
-                            onChange={(event, value) => handleAutocompleteChange('company_name', value)}
-                            renderInput={params => <TextField name="company_name" {...params} />}
-                        />
+                        {/*        return filtered;*/}
+                        {/*    }}*/}
+                        {/*    renderOption={(props, option) => <li {...props}>{option.company_name}</li>}*/}
+                        {/*    onChange={(event, value) => handleAutocompleteChange('company_name', value)}*/}
+                        {/*    renderInput={params => <TextField name="company_name" {...params} />}*/}
+                        {/*/>*/}
                     </FormControl>
                 </Grid>
             )}
@@ -232,40 +155,11 @@ function BasicInfoStep({
             <Grid item xs={12}>
                 <FormControl fullWidth error={!!formErrors.tech_journey}>
                     <FormLabel id="tech-journey-label">* How long have you been on your tech journey?</FormLabel>
-                    <Autocomplete
-                        multiple
-                        required
-                        selectOnFocus
-                        includeInputInList
-                        handleHomeEndKeys
-                        id="career_journey_choices"
-                        aria-labelledby="tech-journey-label"
-                        options={questions.career_journey_choices || []} // <-- directly provide a default value here
-                        isOptionEqualToValue={(option, value) =>
-                            (option.inputValue && value.inputValue && option.inputValue === value.inputValue) || option === value
-                        }
-                        getOptionLabel={option => {
-                            if (typeof option === 'string') {
-                                return option;
-                            }
-                            // Check for the special case where the option has an inputValue property
-                            if (option.inputValue) return option.inputValue;
-
-                            // Existing logic
-                            return option.name;
-                        }}
-                        filterOptions={(options, params) => {
-                            const filtered = filter(options, params);
-
-                            return filtered;
-                        }}
-                        renderOption={(props, option) => <li {...props}>{option.pronouns || option.name}</li>}
-                        onChange={(event, value) => {
-                            // Update the value to be the index + 1
-                            value = value.map((item, index) => index + 1);
-                            handleAutocompleteChange('tech_journey', value);
-                        }}
-                        renderInput={params => <TextField name="tech_journey" {...params} />}
+                    <YearsOfExperienceDropdown
+                        label="How long have you been on your tech journey?"
+                        setAnswers={handleAutocompleteChange}
+                        formErrors={formErrors}
+                        isRequired={true}
                     />
                     {!!formErrors.tech_journey && <FormHelperText>{formErrors.tech_journey}</FormHelperText>}
                 </FormControl>

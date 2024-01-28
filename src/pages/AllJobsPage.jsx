@@ -50,7 +50,7 @@ export default function AllJobsPage({}) {
             },
         })
             .then(data => {
-                console.log(data);
+                console.log('done');
             })
             .catch(error => {
                 console.error('Error fetching events:', error);

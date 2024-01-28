@@ -10,8 +10,9 @@ export const getMemberData = async memberId => {
     const response = await fetch(routes.api.users.getMemberData(memberId));
     return response.json();
 };
-export const getBasicSystemInfo = async memberId => {
-    const response = await fetch(routes.api.users.basicSystemInfo());
+
+export const getDropDrownItems = async details => {
+    const response = await fetch(routes.api.users.basicSystemInfoUpdate(details));
     return response.json();
 };
 export const getJobDetails = async jobId => {

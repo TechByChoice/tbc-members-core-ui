@@ -1,13 +1,29 @@
-
 import BookMentorForm from '../compoents/BookMentorForm';
-import { getBasicSystemInfo, getMemberData } from '@/api-calls';
+import { getDropDrownItems, getMemberData } from '@/api-calls';
 import AddMemberNoteCard from '@/compoents/AddMemberNoteCard';
 import CompanyCard from '@/compoents/CompanyCard';
 import ReviewCard from '@/compoents/ReviewCard';
 import HtmlContentRenderer from '@/compoents/utils/HtmlContentRenderer';
 import { useAuth } from '@/providers/AuthProvider';
 import { GitHub, Instagram, Language, LinkedIn, Twitter, YouTube } from '@mui/icons-material';
-import { Box, Button, Card, CardContent, CardMedia, Chip, CircularProgress, Divider, Grid, Hidden, IconButton, Modal, Typography } from '@mui/material';
+import {Box,
+    Button,
+    Card,
+    CardContent,
+    CardMedia,
+    Chip,
+    CircularProgress,
+    Divider,
+    FormControl,
+    FormLabel,
+    Grid,
+    Hidden,
+    IconButton,
+    Modal,
+    Typography,
+    FormControlLabel,
+    RadioGroup,
+    Radio,} from '@mui/material';
 import Container from '@mui/material/Container';
 import Link from '@mui/material/Link';
 import React, { useEffect, useState } from 'react';
@@ -28,13 +44,12 @@ function ViewMemberProfile() {
     const { user, isLoading, token } = useAuth();
     const loggedInUser = user[0];
     const mentor_roster = loggedInUser?.mentor_roster_data;
-    console.log(loggedInUser?.user_info?.id, mentor_roster, loggedInUser);
 
     useEffect(() => {
         async function fetchData() {
             try {
                 // eslint-disable-next-line no-undef
-                const [ memberResponse, basicResponse ] = await Promise.all([ getMemberData(id), getBasicSystemInfo() ]);
+                const [ memberResponse, basicResponse ] = await Promise.all([ getMemberData(id), getDropDrownItems('pronouns&fields=gender&fields=sexuality'), ]);
 
                 setMemberData(memberResponse);
                 setBasicData(basicResponse);
@@ -71,7 +86,7 @@ function ViewMemberProfile() {
                 return response.json();
             })
             .then(data => {
-                console.log(data, 'saved');
+                console.log('saved');
             })
             .catch(error => {
                 console.error('Fetch error:', error);
@@ -253,14 +268,13 @@ function ViewMemberProfile() {
             body: JSON.stringify({ 'mentor-update-status': 'send-invite' }),
         })
             .then(response => {
-                console.log(response, 'response');
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
                 return response.json();
             })
             .then(data => {
-                console.log(data, 'saved');
+                console.log('saved');
             })
             .catch(error => {
                 console.error('Fetch error:', error);
@@ -278,14 +292,13 @@ function ViewMemberProfile() {
             body: JSON.stringify({ 'mentor-update-status': 'approve-mentor' }),
         })
             .then(response => {
-                console.log(response, 'response');
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
                 return response.json();
             })
             .then(data => {
-                console.log(data, 'saved');
+                console.log('saved');
             })
             .catch(error => {
                 console.error('Fetch error:', error);
@@ -303,14 +316,14 @@ function ViewMemberProfile() {
             body: JSON.stringify({ 'mentor-update-status': 'paused' }),
         })
             .then(response => {
-                console.log(response, 'response');
+                console.log('response');
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
                 return response.json();
             })
             .then(data => {
-                console.log(data, 'saved');
+                console.log('saved');
             })
             .catch(error => {
                 console.error('Fetch error:', error);
@@ -327,14 +340,13 @@ function ViewMemberProfile() {
             body: JSON.stringify({ 'mentor-update-status': 'active' }),
         })
             .then(response => {
-                console.log(response, 'response');
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
                 return response.json();
             })
             .then(data => {
-                console.log(data, 'saved');
+                console.log('saved');
             })
             .catch(error => {
                 console.error('Fetch error:', error);
@@ -351,14 +363,14 @@ function ViewMemberProfile() {
             body: JSON.stringify({ 'mentor-update-status': 'interview-reminder' }),
         })
             .then(response => {
-                console.log(response, 'response');
+                console.log('response');
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
                 return response.json();
             })
             .then(data => {
-                console.log(data, 'saved');
+                console.log('saved');
             })
             .catch(error => {
                 console.error('Fetch error:', error);
@@ -382,7 +394,7 @@ function ViewMemberProfile() {
                 return response.json();
             })
             .then(data => {
-                console.log(data, 'saved');
+                console.log('saved');
             })
             .catch(error => {
                 console.error('Fetch error:', error);

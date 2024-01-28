@@ -1,21 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { Autocomplete, FormControl, FormLabel, TextField } from '@mui/material';
-import { getBasicSystemInfo } from '../api-calls';
+import { getDropDrownItems } from '../api-calls';
 import { createFilterOptions } from '@mui/material/Autocomplete';
 
 const filter = createFilterOptions();
-export default function SkillsDropdown({ isRequired, error, setAnswers }) {
-    const [ skills, setSkills ] = useState([]);
-    const [ selectedSkill, setSelectedSkill ] = useState('');
+export default function DropdownSalary({ setAnswers, labelName }) {
+    const [ salaries, setSalaries ] = useState([]);
+    const [ selectedSalary, setSelectedSalary ] = useState('');
 
     useEffect(() => {
         // Fetch the list of companies when the component mounts
         async function fetchSkills() {
             try {
-                const response = await getBasicSystemInfo();
-                setSkills(response.job_skills);
+                const response = await getDropDrownItems('job_salary_range');
+                setSalaries(response.job_salary_range);
             } catch (error) {
-                console.error('Error fetching skills:', error);
+                console.error('Error fetching salaries:', error);
             }
         }
 
@@ -24,10 +24,7 @@ export default function SkillsDropdown({ isRequired, error, setAnswers }) {
 
     return (
         <FormControl fullWidth variant="outlined">
-            <FormLabel id="skills-label">
-                {isRequired && <>*</>}
-                Skills
-            </FormLabel>
+            <FormLabel id="skills-label">{labelName}</FormLabel>
             <Autocomplete
                 id="skills-label"
                 multiple
@@ -35,15 +32,10 @@ export default function SkillsDropdown({ isRequired, error, setAnswers }) {
                 selectOnFocus
                 includeInputInList
                 handleHomeEndKeys
-                options={skills || []}
+                options={salaries || []}
                 isOptionEqualToValue={(option, value) =>
                     (option.inputValue && value.inputValue && option.inputValue === value.inputValue) || option === value
                 }
-                renderOption={(props, option) => (
-                    <li {...props} key={option.id}>
-                        {option.name}
-                    </li>
-                )}
                 getOptionLabel={option => {
                     if (typeof option === 'string') {
                         return option;
@@ -52,14 +44,14 @@ export default function SkillsDropdown({ isRequired, error, setAnswers }) {
                     if (option.inputValue) return option.inputValue;
 
                     // Existing logic
-                    return option.name;
+                    return option.range;
                 }}
                 filterOptions={(options, params) => {
                     const filtered = filter(options, params);
 
                     const { inputValue } = params;
                     // Suggest the creation of a new value
-                    const isExisting = options.some(option => inputValue === option.name);
+                    const isExisting = options.some(option => inputValue === option.range);
                     if (inputValue !== '' && !isExisting) {
                         filtered.push({
                             inputValue,
@@ -71,13 +63,21 @@ export default function SkillsDropdown({ isRequired, error, setAnswers }) {
                 }}
                 // value={selectedSkill}
                 onChange={(e, newValue) => {
-                    setSelectedSkill(newValue);
-                    setAnswers(prevState => ({
-                        ...prevState,
-                        skills: newValue,
-                    }));
+                    setSelectedSalary(e.target.value);
+                    if (labelName === 'Min Salary') {
+                        setAnswers(prevState => ({
+                            ...prevState,
+                            min_compensation: newValue,
+                        }));
+                    } else {
+                        setAnswers(prevState => ({
+                            ...prevState,
+                            max_compensation: newValue,
+                        }));
+                    }
                 }}
-                renderInput={params => <TextField error={!!error.skills} name="job_skills" {...params} />}
+                renderOption={(props, option) => <li {...props}>{option.range}</li>}
+                renderInput={params => <TextField name={labelName === 'Min Compensation' ? 'min_compensation' : 'max_compensation'} {...params} />}
             />
         </FormControl>
     );

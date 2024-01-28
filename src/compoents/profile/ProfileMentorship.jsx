@@ -38,13 +38,12 @@ export default function ProfileMentorship({ questions }) {
                 mentor_support_areas_id: userData.mentor_details.mentor_support_areas.map(item => item.id) || [],
             });
         }
-        console.log('formData?.commitment_level', formData?.commitment_level);
     }, [ userData ]);
 
     const handelFormSubmit = e => {
         e.preventDefault();
 
-        fetch(routes.mentors.signup.commitmentLevel(), {
+        fetch(routes.api.mentors.signup.commitmentLevel(), {
             method: 'POST',
             credentials: 'include',
             headers: {

@@ -3,7 +3,7 @@ import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
-import CompanyDropdownUpdate from './CompanyDropDownUpdate';
+import DropdownCompanyUpdate from './DropdownCompanyUpdate';
 import AddCompanyForm from './utils/AddCompanyForm';
 
 export default function PickCompany({ formErrors, answers, setAnswers }) {
@@ -34,7 +34,7 @@ export default function PickCompany({ formErrors, answers, setAnswers }) {
                 </Typography>
                 <Grid container spacing={3}>
                     <Grid item xs={12}>
-                        <CompanyDropdownUpdate error={formErrors} answers={answers} setAnswers={setAnswers} onCompanySelect={handleSelection} />
+                        <DropdownCompanyUpdate error={formErrors} answers={answers} setAnswers={setAnswers} onCompanySelect={handleSelection} />
                     </Grid>
                     <Grid item xs={12}>
                         <FormControlLabel

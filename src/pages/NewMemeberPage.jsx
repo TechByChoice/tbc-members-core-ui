@@ -60,7 +60,7 @@ function validateBasicInfo(answers, setFormErrors) {
     const isValid = AnswerValidator.validateMany(answers, errors, {
         photo: 'Please upload your profile photo.',
         postal_code: 'Please enter your postal code.',
-        tech_journey: "Please specify how long you've been on your tech journey.",
+        years_of_experience: "Please specify how long you've been on your tech journey.",
         job_roles: 'Please specify titles that best fit you.',
     });
 
@@ -264,12 +264,12 @@ export default function NewMemberPage() {
         setIsComplete(activeStep === steps.length);
     }, [ activeStep ]);
 
-    useEffect(() => {
-        validationFunctionMap[activeStep]?.(answers, setFormErrors);
-    }, [ answers ]);
+    // useEffect(() => {
+    // validationFunctionMap[activeStep]?.(answers, setFormErrors);
+    // }, [ answers ]);
 
     useEffect(() => {
-        const url = import.meta.env.VITE_APP_API_BASE_URL + 'user/details/new-member';
+        const url = import.meta.env.VITE_APP_API_BASE_URL + '/user/details/new-member';
         fetch(url, {
             method: 'GET',
             credentials: 'include',

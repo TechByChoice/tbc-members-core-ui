@@ -1,49 +1,44 @@
 import React, { useState, useEffect } from 'react';
 import { Autocomplete, FormControl, FormLabel, TextField } from '@mui/material';
-import { getBasicSystemInfo } from '../api-calls';
+import { getDropDrownItems } from '../api-calls';
 import { createFilterOptions } from '@mui/material/Autocomplete';
 
 const filter = createFilterOptions();
-export default function ExperiencesDropdown({ isRequired, setAnswers, error }) {
-    const [ experiences, setExperiences ] = useState([]);
-    const [ experiencesSkill, setExperiencesSkill ] = useState('');
+export default function DropdownRoles({ isRequired, error, setAnswers }) {
+    const [ roles, setRoles ] = useState([]);
+    const [ selectedRoles, setSelectedRoles ] = useState('');
 
     useEffect(() => {
         // Fetch the list of companies when the component mounts
-        async function fetchExperiences() {
+        async function fetchRoles() {
             try {
-                const response = await getBasicSystemInfo();
-                setExperiences(response.career_journey_choices);
+                const response = await getDropDrownItems('job_roles');
+                setRoles(response.job_roles);
             } catch (error) {
-                console.error('Error fetching skills:', error);
+                console.error('Error fetching roles:', error);
             }
         }
 
-        fetchExperiences();
+        fetchRoles();
     }, []);
 
     return (
         <FormControl fullWidth variant="outlined">
-            <FormLabel id="skills-label">
+            <FormLabel id="roles-label">
                 {isRequired && <>*</>}
-                What level of experiences are you looking for?
+                Roles
             </FormLabel>
             <Autocomplete
-                id="experiences-label"
                 multiple
                 required
                 selectOnFocus
                 includeInputInList
                 handleHomeEndKeys
-                options={experiences || []}
+                options={roles || []}
+                name="job_roles"
                 isOptionEqualToValue={(option, value) =>
                     (option.inputValue && value.inputValue && option.inputValue === value.inputValue) || option === value
                 }
-                renderOption={(props, option) => (
-                    <li {...props} key={option.id}>
-                        {option.name}
-                    </li>
-                )}
                 getOptionLabel={option => {
                     if (typeof option === 'string') {
                         return option;
@@ -58,6 +53,7 @@ export default function ExperiencesDropdown({ isRequired, setAnswers, error }) {
                     const filtered = filter(options, params);
 
                     const { inputValue } = params;
+
                     // Suggest the creation of a new value
                     const isExisting = options.some(option => inputValue === option.name);
                     if (inputValue !== '' && !isExisting) {
@@ -71,13 +67,14 @@ export default function ExperiencesDropdown({ isRequired, setAnswers, error }) {
                 }}
                 // value={selectedSkill}
                 onChange={(e, newValue) => {
-                    setExperiencesSkill(newValue);
+                    setSelectedRoles(newValue);
                     setAnswers(prevState => ({
                         ...prevState,
-                        years_of_experience: newValue,
+                        role: newValue,
                     }));
                 }}
-                renderInput={params => <TextField error={!!error.years_of_experience} name="years_of_experience" {...params} />}
+                renderOption={(props, option) => <li {...props}>{option.name}</li>}
+                renderInput={params => <TextField error={!!error.roles} name="job_roles" {...params} />}
             />
         </FormControl>
     );

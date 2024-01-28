@@ -1,42 +1,47 @@
-import React, {useState, useEffect} from 'react';
-import {Autocomplete, FormControl, FormLabel, TextField} from '@mui/material';
-import {getBasicSystemInfo} from "../api-calls";
-import {createFilterOptions} from "@mui/material/Autocomplete";
+import React, { useState, useEffect } from 'react';
+import { Autocomplete, FormControl, FormLabel, TextField } from '@mui/material';
+import { getDropDrownItems } from '../api-calls';
+import { createFilterOptions } from '@mui/material/Autocomplete';
 
 const filter = createFilterOptions();
-export default function SalaryDropdown({setAnswers, labelName}) {
-    const [salaries, setSalaries] = useState([]);
-    const [selectedSalary, setSelectedSalary] = useState('');
+export default function DropdownDepartments({
+    isRequired, error, setAnswers = false, handleAutocompleteChange 
+}) {
+    const [ departments, setDepartments ] = useState([]);
+    const [ selectedDepartment, setSelectedDepartment ] = useState('');
 
     useEffect(() => {
         // Fetch the list of companies when the component mounts
-        async function fetchSkills() {
+        async function fetchDepartments() {
             try {
-                const response = await getBasicSystemInfo();
-                setSalaries(response.job_salary_range);
+                const response = await getDropDrownItems('job_departments');
+                setDepartments(response.job_departments);
             } catch (error) {
-                console.error("Error fetching salaries:", error);
+                console.error('Error fetching departments:', error);
             }
         }
 
-        fetchSkills();
+        fetchDepartments();
     }, []);
 
     return (
         <FormControl fullWidth variant="outlined">
-            <FormLabel id="skills-label">{labelName}</FormLabel>
+            <FormLabel id="departments-label">
+                {isRequired && <>*</>}
+                Departments
+            </FormLabel>
             <Autocomplete
-                id="skills-label"
+                id="departments-label"
                 multiple
                 required
                 selectOnFocus
                 includeInputInList
                 handleHomeEndKeys
-                options={salaries || []}
+                options={departments || []}
                 isOptionEqualToValue={(option, value) =>
                     (option.inputValue && value.inputValue && option.inputValue === value.inputValue) || option === value
                 }
-                getOptionLabel={(option) => {
+                getOptionLabel={option => {
                     if (typeof option === 'string') {
                         return option;
                     }
@@ -44,14 +49,14 @@ export default function SalaryDropdown({setAnswers, labelName}) {
                     if (option.inputValue) return option.inputValue;
 
                     // Existing logic
-                    return option.range;
+                    return option.name;
                 }}
                 filterOptions={(options, params) => {
                     const filtered = filter(options, params);
 
-                    const {inputValue} = params;
+                    const { inputValue } = params;
                     // Suggest the creation of a new value
-                    const isExisting = options.some((option) => inputValue === option.range);
+                    const isExisting = options.some(option => inputValue === option.name);
                     if (inputValue !== '' && !isExisting) {
                         filtered.push({
                             inputValue,
@@ -63,23 +68,18 @@ export default function SalaryDropdown({setAnswers, labelName}) {
                 }}
                 // value={selectedSkill}
                 onChange={(e, newValue) => {
-                    setSelectedSalary(e.target.value);
-                    if(labelName === 'Min Salary') {
-                        setAnswers(prevState => ({
-                            ...prevState,
-                            min_compensation: newValue,
-                        }));
+                    setSelectedDepartment(newValue);
+                    if (handleAutocompleteChange) {
+                        handleAutocompleteChange('job_department', newValue);
                     } else {
                         setAnswers(prevState => ({
                             ...prevState,
-                            max_compensation: newValue,
+                            department: newValue,
                         }));
                     }
-
-
                 }}
-                renderOption={(props, option) => <li {...props}>{option.range }</li>}
-                renderInput={(params) => <TextField name={labelName == 'Min Compensation'? 'min_compensation' : 'max_compensation'} {...params} />}
+                renderOption={(props, option) => <li {...props}>{option.name}</li>}
+                renderInput={params => <TextField error={!!error.department} name="job_departments" {...params} />}
             />
         </FormControl>
     );

@@ -1,44 +1,51 @@
 import React, { useState, useEffect } from 'react';
 import { Autocomplete, FormControl, FormLabel, TextField } from '@mui/material';
-import { getBasicSystemInfo } from '../api-calls';
+import { getDropDrownItems } from '../api-calls';
 import { createFilterOptions } from '@mui/material/Autocomplete';
 
 const filter = createFilterOptions();
-export default function RolesDropdown({ isRequired, error, setAnswers }) {
-    const [ roles, setRoles ] = useState([]);
-    const [ selectedRoles, setSelectedRoles ] = useState('');
+export default function DropdownSkills({
+    isRequired, error, setAnswers, handleInputChange 
+}) {
+    const [ skills, setSkills ] = useState([]);
+    const [ selectedSkill, setSelectedSkill ] = useState('');
 
     useEffect(() => {
         // Fetch the list of companies when the component mounts
-        async function fetchRoles() {
+        async function fetchSkills() {
             try {
-                const response = await getBasicSystemInfo();
-                setRoles(response.job_roles);
+                const response = await getDropDrownItems('job_skills');
+                setSkills(response.job_skills);
             } catch (error) {
-                console.error('Error fetching roles:', error);
+                console.error('Error fetching skills:', error);
             }
         }
 
-        fetchRoles();
+        fetchSkills();
     }, []);
 
     return (
         <FormControl fullWidth variant="outlined">
-            <FormLabel id="roles-label">
+            <FormLabel id="skills-label">
                 {isRequired && <>*</>}
-                Roles
+                Skills
             </FormLabel>
             <Autocomplete
+                id="skills-label"
                 multiple
                 required
                 selectOnFocus
                 includeInputInList
                 handleHomeEndKeys
-                options={roles || []}
-                name="job_roles"
+                options={skills || []}
                 isOptionEqualToValue={(option, value) =>
                     (option.inputValue && value.inputValue && option.inputValue === value.inputValue) || option === value
                 }
+                renderOption={(props, option) => (
+                    <li {...props} key={option.id}>
+                        {option.name}
+                    </li>
+                )}
                 getOptionLabel={option => {
                     if (typeof option === 'string') {
                         return option;
@@ -53,7 +60,6 @@ export default function RolesDropdown({ isRequired, error, setAnswers }) {
                     const filtered = filter(options, params);
 
                     const { inputValue } = params;
-
                     // Suggest the creation of a new value
                     const isExisting = options.some(option => inputValue === option.name);
                     if (inputValue !== '' && !isExisting) {
@@ -67,14 +73,21 @@ export default function RolesDropdown({ isRequired, error, setAnswers }) {
                 }}
                 // value={selectedSkill}
                 onChange={(e, newValue) => {
-                    setSelectedRoles(newValue);
-                    setAnswers(prevState => ({
-                        ...prevState,
-                        role: newValue,
-                    }));
+                    setSelectedSkill(newValue);
+                    if (handleInputChange) {
+                        const valueArray = [];
+                        newValue.map((item, index) => {
+                            valueArray.push(item.name);
+                        });
+                        handleInputChange('job_skills', newValue);
+                    } else {
+                        setAnswers(prevState => ({
+                            ...prevState,
+                            skills: newValue,
+                        }));
+                    }
                 }}
-                renderOption={(props, option) => <li {...props}>{option.name}</li>}
-                renderInput={params => <TextField error={!!error.roles} name="job_roles" {...params} />}
+                renderInput={params => <TextField error={!!error.skills} name="job_skills" {...params} />}
             />
         </FormControl>
     );

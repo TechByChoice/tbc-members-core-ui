@@ -57,7 +57,6 @@ export default function ProfileIdentity({ questions }) {
 
     function handleSelectChange(e) {
         const { name, value } = e.target;
-        console.log(name, value, 'SelectChange');
 
         setIdentityFormData({
             ...identityFormData,
@@ -113,7 +112,6 @@ export default function ProfileIdentity({ questions }) {
                 const identityItem = questions.sexual_identities.find(item => item.id === roleId);
 
                 if (identityItem) {
-                    console.log(identityItem, 'item');
                     // If a match is found, add it to the defaults.identity_sexuality array
                     defaults.identity_sexuality.push(identityItem);
                 }
@@ -129,7 +127,6 @@ export default function ProfileIdentity({ questions }) {
                 const identityItem = questions.gender_identities.find(item => item.id === roleId);
 
                 if (identityItem) {
-                    console.log(identityItem, 'item');
                     // If a match is found, add it to the defaults.identity_sexuality array
                     defaults.gender_identities.push(identityItem);
                 }
@@ -144,7 +141,6 @@ export default function ProfileIdentity({ questions }) {
                 const identityItem = questions.ethic_identities.find(item => item.id === roleId);
 
                 if (identityItem) {
-                    console.log(identityItem, 'item');
                     // If a match is found, add it to the defaults.identity_sexuality array
                     defaults.ethic_identities.push(identityItem);
                 }

@@ -10,11 +10,11 @@ import {Container,
     InputAdornment,
     OutlinedInput,
     ButtonGroup,} from '@mui/material';
-import SkillsDropdown from './SkillsDropdown';
-import SalaryDropdown from './SalaryDropdown';
-import RolesDropdown from './RolesDropdown';
-import DepartmentsDropdown from './DepartmentsDropdown';
-import ExperiencesDropdown from './ExpericesDropdown';
+import DropdownSkills from './DropdownSkills';
+import DropdownSalary from './DropdownSalary';
+import DropdownRoles from './DropdownRoles';
+import DropdownDepartments from './DropdownDepartments';
+import ExperiencesDropdown from './DropdownExperices';
 import { EditorContent, useEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Heading from '@tiptap/extension-heading';
@@ -211,10 +211,10 @@ export default function JobForm({ formErrors, answers, setAnswers }) {
                 <ExperiencesDropdown isRequired={true} error={formErrors} setAnswers={setAnswers} onRoleSelect={handleChange} />
             </FormControl>
             <FormControl fullWidth margin="normal">
-                <RolesDropdown isRequired={true} error={formErrors} setAnswers={setAnswers} onRoleSelect={handleChange} />
+                <DropdownRoles isRequired={true} error={formErrors} setAnswers={setAnswers} onRoleSelect={handleChange} />
             </FormControl>
             <FormControl fullWidth margin="normal">
-                <DepartmentsDropdown isRequired={true} error={formErrors} setAnswers={setAnswers} onDepartmentSelect={handleChange} />
+                <DropdownDepartments isRequired={true} error={formErrors} setAnswers={setAnswers} onDepartmentSelect={handleChange} />
             </FormControl>
             <TextField
                 fullWidth
@@ -235,7 +235,7 @@ export default function JobForm({ formErrors, answers, setAnswers }) {
                 <MyEditor id="external_interview_process" onFormDataChange={handleEditorUpdate} error={formErrors} />
             </FormControl>
             <FormControl fullWidth>
-                <SkillsDropdown isRequired={true} error={formErrors} setAnswers={setAnswers} onSkillSelect={handleChange} />
+                <DropdownSkills isRequired={true} error={formErrors} setAnswers={setAnswers} onSkillSelect={handleChange} />
             </FormControl>
             <FormControl fullWidth>
                 <FormLabel htmlFor="company_url">* Link to Job Application</FormLabel>
@@ -250,8 +250,8 @@ export default function JobForm({ formErrors, answers, setAnswers }) {
                     onChange={handleChange}
                 />
             </FormControl>
-            <SalaryDropdown error={formErrors} setAnswers={setAnswers} onSalarySelect={handleChange} labelName="Min Salary" />
-            <SalaryDropdown error={formErrors} setAnswers={setAnswers} onSalarySelect={handleChange} labelName="Max Salary" />
+            <DropdownSalary error={formErrors} setAnswers={setAnswers} onSalarySelect={handleChange} labelName="Min Salary" />
+            <DropdownSalary error={formErrors} setAnswers={setAnswers} onSalarySelect={handleChange} labelName="Max Salary" />
 
             <TextField
                 fullWidth

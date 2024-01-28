@@ -1,6 +1,10 @@
 import { Typography, FormControl, FormLabel, TextField, Button, Input, Grid, Autocomplete, Select, MenuItem, FormHelperText } from '@mui/material';
 import React from 'react';
 import { createFilterOptions } from '@mui/material/Autocomplete';
+import DropdownSkillsSimple from '@/compoents/DropdownSkillsSimple';
+import DropdownDepartmentsSimple from '@/compoents/DropdownDepartmentsSimple';
+import DropdownCompanyTypes from '../DropdownCompanyTypes';
+import DropdownIndustries from '@/compoents/DropdownIndustries';
 
 const filter = createFilterOptions();
 
@@ -41,52 +45,7 @@ function SkillsQuestionStep({
             <Grid item xs={12}>
                 <FormControl fullWidth error={!!formErrors.job_skills}>
                     <FormLabel>* What skills best represent you?</FormLabel>
-                    <Autocomplete
-                        multiple
-                        required
-                        selectOnFocus
-                        includeInputInList
-                        handleHomeEndKeys
-                        id="autocomplete-job_skills"
-                        options={questions.job_skills || []} // <-- directly provide a default value here
-                        isOptionEqualToValue={(option, value) =>
-                            (option.inputValue && value.inputValue && option.inputValue === value.inputValue) || option === value
-                        }
-                        getOptionLabel={option => {
-                            if (typeof option === 'string') {
-                                return option;
-                            }
-                            // Check for the special case where the option has an inputValue property
-                            if (option.inputValue) return option.inputValue;
-
-                            // Existing logic
-                            return option.name;
-                        }}
-                        filterOptions={(options, params) => {
-                            const filtered = filter(options, params);
-
-                            const { inputValue } = params;
-                            // Suggest the creation of a new value
-                            const isExisting = options.some(option => inputValue === option.name);
-                            if (inputValue !== '' && !isExisting) {
-                                filtered.push({
-                                    inputValue,
-                                    name: `Add "${inputValue}"`,
-                                });
-                            }
-
-                            return filtered;
-                        }}
-                        renderOption={(props, option) => <li {...props}>{option.name || option.name}</li>}
-                        onChange={(event, value) => {
-                            const valueArray = [];
-                            value.map((item, index) => {
-                                valueArray.push(item.name);
-                            });
-                            handleAutocompleteChange('job_skills', valueArray);
-                        }}
-                        renderInput={params => <TextField name="job_skills" {...params} />}
-                    />
+                    <DropdownSkillsSimple handleInputChange={handleAutocompleteChange} error={formErrors} isRequired={true} />
                     {!!formErrors.job_skills && <FormHelperText>{formErrors.job_skills}</FormHelperText>}
                     <Typography variant="body2">Please select your top 5 skills</Typography>
                 </FormControl>
@@ -95,46 +54,7 @@ function SkillsQuestionStep({
             <Grid item xs={12}>
                 <FormControl fullWidth error={!!formErrors.job_department}>
                     <FormLabel>* What department best describes your interest?</FormLabel>
-                    <Autocomplete
-                        multiple
-                        selectOnFocus
-                        required
-                        includeInputInList
-                        handleHomeEndKeys
-                        id="autocomplete-job_skills"
-                        options={questions.job_department || []} // <-- directly provide a default value here
-                        isOptionEqualToValue={(option, value) =>
-                            (option.inputValue && value.inputValue && option.inputValue === value.inputValue) || option === value
-                        }
-                        getOptionLabel={option => {
-                            if (typeof option === 'string') {
-                                return option;
-                            }
-                            // Check for the special case where the option has an inputValue property
-                            if (option.inputValue) return option.inputValue;
-
-                            // Existing logic
-                            return option.name;
-                        }}
-                        filterOptions={(options, params) => {
-                            const filtered = filter(options, params);
-
-                            const { inputValue } = params;
-                            // Suggest the creation of a new value
-                            const isExisting = options.some(option => inputValue === option.name);
-                            if (inputValue !== '' && !isExisting) {
-                                filtered.push({
-                                    inputValue,
-                                    name: `Add "${inputValue}"`,
-                                });
-                            }
-
-                            return filtered;
-                        }}
-                        renderOption={(props, option) => <li {...props}>{option.name || option.name}</li>}
-                        onChange={(event, value) => handleAutocompleteChange('job_department', value)}
-                        renderInput={params => <TextField name="job_department" {...params} />}
-                    />
+                    <DropdownDepartmentsSimple isRequired={true} error={formErrors} handleAutocompleteChange={handleAutocompleteChange} />
                     {!!formErrors.job_department && <FormHelperText>{formErrors.job_department}</FormHelperText>}
                 </FormControl>
             </Grid>
@@ -142,90 +62,14 @@ function SkillsQuestionStep({
             <Grid item xs={12}>
                 <FormControl fullWidth>
                     <FormLabel>What types of companies would you like to work with?</FormLabel>
-                    <Autocomplete
-                        multiple
-                        selectOnFocus
-                        includeInputInList
-                        handleHomeEndKeys
-                        id="autocomplete-company_types"
-                        options={questions.company_types || []} // <-- directly provide a default value here
-                        isOptionEqualToValue={(option, value) =>
-                            (option.inputValue && value.inputValue && option.inputValue === value.inputValue) || option === value
-                        }
-                        getOptionLabel={option => {
-                            if (typeof option === 'string') {
-                                return option;
-                            }
-                            // Check for the special case where the option has an inputValue property
-                            if (option.inputValue) return option.inputValue;
-
-                            // Existing logic
-                            return option.name;
-                        }}
-                        filterOptions={(options, params) => {
-                            const filtered = filter(options, params);
-
-                            const { inputValue } = params;
-                            // Suggest the creation of a new value
-                            const isExisting = options.some(option => inputValue === option.name);
-                            if (inputValue !== '' && !isExisting) {
-                                filtered.push({
-                                    inputValue,
-                                    name: `Add "${inputValue}"`,
-                                });
-                            }
-
-                            return filtered;
-                        }}
-                        renderOption={(props, option) => <li {...props}>{option.name || option.name}</li>}
-                        onChange={(event, value) => handleAutocompleteChange('company_types', value)}
-                        renderInput={params => <TextField name="company_types" {...params} />}
-                    />
+                    <DropdownCompanyTypes isRequired={false} setAnswers={handleAutocompleteChange} formErrors={formErrors} />
                 </FormControl>
             </Grid>
 
             <Grid item xs={12}>
                 <FormControl fullWidth>
                     <FormLabel>What industries are you interested in?</FormLabel>
-                    <Autocomplete
-                        multiple
-                        selectOnFocus
-                        includeInputInList
-                        handleHomeEndKeys
-                        id="autocomplete-job_department"
-                        options={questions.job_department || []} // <-- directly provide a default value here
-                        isOptionEqualToValue={(option, value) =>
-                            (option.inputValue && value.inputValue && option.inputValue === value.inputValue) || option === value
-                        }
-                        getOptionLabel={option => {
-                            if (typeof option === 'string') {
-                                return option;
-                            }
-                            // Check for the special case where the option has an inputValue property
-                            if (option.inputValue) return option.inputValue;
-
-                            // Existing logic
-                            return option.name;
-                        }}
-                        filterOptions={(options, params) => {
-                            const filtered = filter(options, params);
-
-                            const { inputValue } = params;
-                            // Suggest the creation of a new value
-                            const isExisting = options.some(option => inputValue === option.name);
-                            if (inputValue !== '' && !isExisting) {
-                                filtered.push({
-                                    inputValue,
-                                    name: `Add "${inputValue}"`,
-                                });
-                            }
-
-                            return filtered;
-                        }}
-                        renderOption={(props, option) => <li {...props}>{option.name || option.name}</li>}
-                        onChange={(event, value) => handleAutocompleteChange('job_department', value)}
-                        renderInput={params => <TextField name="job_department" {...params} />}
-                    />
+                    <DropdownIndustries isRequired={false} error={formErrors} handleAutocompleteChange={handleAutocompleteChange} />
                 </FormControl>
             </Grid>
 
