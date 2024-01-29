@@ -2,10 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { Autocomplete, FormControl, FormLabel, TextField } from '@mui/material';
 import { getDropDrownItems } from '../api-calls';
 import { createFilterOptions } from '@mui/material/Autocomplete';
+import { useAuth } from '@/providers/AuthProvider';
 
 const filter = createFilterOptions();
 export default function DropdownPronouns({ isRequired, setAnswers, formErrors }) {
     const [ pronouns, setPronouns ] = useState([]);
+
+    const { fetchUserDetails } = useAuth();
 
     useEffect(() => {
         // Fetch the list of companies when the component mounts
@@ -19,7 +22,7 @@ export default function DropdownPronouns({ isRequired, setAnswers, formErrors })
         }
 
         fetchData();
-    }, []);
+    }, [ fetchUserDetails ]);
 
     return (
         <FormControl fullWidth variant="outlined">

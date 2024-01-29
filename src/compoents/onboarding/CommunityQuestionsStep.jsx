@@ -1,20 +1,36 @@
-import React from 'react';
-import {
-    Grid,
-    Typography,
-    Checkbox,
-    FormControl,
-    FormControlLabel,
-    Select,
-    MenuItem,
-    TextField, Autocomplete
-} from '@mui/material';
-import FormLabel from "@mui/material/FormLabel";
-import {createFilterOptions} from "@mui/material/Autocomplete";
+import React, { useEffect, useState } from 'react';
+import { Grid, Typography, Checkbox, FormControl, FormControlLabel, Select, MenuItem, TextField, Autocomplete } from '@mui/material';
+import FormLabel from '@mui/material/FormLabel';
+import { createFilterOptions } from '@mui/material/Autocomplete';
+import { getDropDrownItems } from '@/api-calls';
 
 const filter = createFilterOptions();
 
-function CommunityQuestionsStep({questions, handleAutocompleteChange, handleInputChange}) {
+function CommunityQuestionsStep({ questions, handleAutocompleteChange, handleInputChange }) {
+    const [ communityNeeds, setSetCommunityNeeds ] = useState([]);
+    const [ connectionMade, setConnectionMade ] = useState([]);
+
+    useEffect(() => {
+        // Fetch the list of companies when the component mounts
+        async function fetchData() {
+            try {
+                const response = await getDropDrownItems('community_needs');
+                setSetCommunityNeeds(response.community_needs);
+            } catch (error) {
+                console.error('Error fetching community needs:', error);
+            }
+            try {
+                const response = await getDropDrownItems('how_connected');
+                const clean_data = response.how_connected.map(([ id, name ]) => ({ id, name }));
+                setConnectionMade(clean_data);
+            } catch (error) {
+                console.error('Error fetching how connection found list:', error);
+            }
+        }
+
+        fetchData();
+    }, []);
+
     return (
         <Grid container spacing={3}>
             <Grid item xs={12}>
@@ -28,33 +44,24 @@ function CommunityQuestionsStep({questions, handleAutocompleteChange, handleInpu
 
             <Grid item xs={12}>
                 <FormControl>
-                    <FormControlLabel
-                        control={<Checkbox onChange={handleInputChange} name="is_mentor"/>}
-                        label="Would you like to be a mentor?"
-                    />
+                    <FormControlLabel control={<Checkbox onChange={handleInputChange} name="is_mentor" />} label="Would you like to be a mentor?" />
                 </FormControl>
             </Grid>
 
             <Grid item xs={12}>
                 <FormControl>
-                    <FormControlLabel
-                        control={<Checkbox onChange={handleInputChange} name="is_mentee"/>}
-                        label="Would you like to have a mentor?"
-                    />
+                    <FormControlLabel control={<Checkbox onChange={handleInputChange} name="is_mentee" />} label="Would you like to have a mentor?" />
                 </FormControl>
             </Grid>
 
             <Grid item xs={12}>
                 <FormControl fullWidth>
                     <FormLabel id="how-connection-made-label">How did you find the Tech by Choice community?</FormLabel>
-                    <Select
-                        labelId="how-connection-made-label"
-                        id="how-connection-made"
-                        name="how_connection_made"
-                        onChange={handleInputChange}
-                    >
-                        {questions.connection_options.map(option => (
-                            <MenuItem value={option.name}>{option.name}</MenuItem>
+                    <Select labelId="how-connection-made-label" id="how-connection-made" name="how_connection_made" onChange={handleInputChange}>
+                        {connectionMade?.map(option => (
+                            <MenuItem key={option.id} value={option.name}>
+                                {option.name}
+                            </MenuItem>
                         ))}
                     </Select>
                 </FormControl>
@@ -62,20 +69,19 @@ function CommunityQuestionsStep({questions, handleAutocompleteChange, handleInpu
 
             <Grid item xs={12}>
                 <FormControl fullWidth>
-                    <FormLabel id="tbc-program-interest-label">What Tech by Choice Services interest you
-                        most?</FormLabel>
+                    <FormLabel id="tbc-program-interest-label">What Tech by Choice Services interest you most?</FormLabel>
                     <Autocomplete
                         multiple
                         selectOnFocus
                         includeInputInList
                         handleHomeEndKeys
-                        id='tbc_program_interest'
+                        id="tbc_program_interest"
                         aria-labelledby="pronouns-label"
-                        options={questions.community_needs || []} // <-- directly provide a default value here
+                        options={communityNeeds || []} // <-- directly provide a default value here
                         isOptionEqualToValue={(option, value) =>
                             (option.inputValue && value.inputValue && option.inputValue === value.inputValue) || option === value
                         }
-                        getOptionLabel={(option) => {
+                        getOptionLabel={option => {
                             if (typeof option === 'string') {
                                 return option;
                             }
@@ -88,9 +94,9 @@ function CommunityQuestionsStep({questions, handleAutocompleteChange, handleInpu
                         filterOptions={(options, params) => {
                             const filtered = filter(options, params);
 
-                            const {inputValue} = params;
+                            const { inputValue } = params;
                             // Suggest the creation of a new value
-                            const isExisting = options.some((option) => inputValue === option.name);
+                            const isExisting = options.some(option => inputValue === option.name);
                             if (inputValue !== '' && !isExisting) {
                                 filtered.push({
                                     inputValue,
@@ -101,8 +107,8 @@ function CommunityQuestionsStep({questions, handleAutocompleteChange, handleInpu
                             return filtered;
                         }}
                         renderOption={(props, option) => <li {...props}>{option.name}</li>}
-                        onChange={(event, value) => handleAutocompleteChange("tbc_program_interest", value)}
-                        renderInput={(params) => <TextField name="tbc_program_interest" {...params} />}
+                        onChange={(event, value) => handleAutocompleteChange('tbc_program_interest', value)}
+                        renderInput={params => <TextField name="tbc_program_interest" {...params} />}
                     />
                 </FormControl>
             </Grid>

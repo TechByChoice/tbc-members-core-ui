@@ -23,7 +23,7 @@ export default function ProfileCalLinkForm() {
         fetch(routes.api.mentors.updateCalLink(), {
             method: 'POST',
             headers: {
-                Authorization: `Token ${token}`,
+                Authorization: `Token ${localStorage.getItem('token')}`,
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({

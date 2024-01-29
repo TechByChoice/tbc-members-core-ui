@@ -67,7 +67,7 @@ function BookMentorForm({ talentDetails, setOpen }) {
         fetch(routes.api.mentors.connect.add(talentDetails.user.id), {
             method: 'POST',
             headers: {
-                Authorization: `Token ${token}`,
+                Authorization: `Token ${localStorage.getItem('token')}`,
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(formData),

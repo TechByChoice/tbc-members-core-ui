@@ -2,11 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { Autocomplete, FormControl, FormLabel, TextField } from '@mui/material';
 import { getDropDrownItems } from '../api-calls';
 import { createFilterOptions } from '@mui/material/Autocomplete';
+import { useAuth } from '@/providers/AuthProvider';
 
 const filter = createFilterOptions();
 export default function ExperiencesDropdown({ isRequired, setAnswers, error }) {
     const [ experiences, setExperiences ] = useState([]);
     const [ experiencesSkill, setExperiencesSkill ] = useState('');
+    const { token } = useAuth();
 
     useEffect(() => {
         // Fetch the list of companies when the component mounts
@@ -20,7 +22,7 @@ export default function ExperiencesDropdown({ isRequired, setAnswers, error }) {
         }
 
         fetchExperiences();
-    }, []);
+    }, [ token ]);
 
     return (
         <FormControl fullWidth variant="outlined">

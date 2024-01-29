@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { FormControl, FormLabel, TextField, Autocomplete } from '@mui/material';
 import { getDropDrownItems } from '../api-calls';
 import { createFilterOptions } from '@mui/material/Autocomplete';
+import { useAuth } from '@/providers/AuthProvider';
 
 const filter = createFilterOptions();
 
@@ -10,6 +11,7 @@ export default function DropdownCompanySimple({
 }) {
     const [ companies, setCompanies ] = useState([]);
     const [ selectedCompany, setSelectedCompany ] = useState(null);
+    const { fetchUserDetails } = useAuth();
 
     useEffect(() => {
         const firstCompany = Array.isArray(answers?.company) ? answers?.company[0] : null;
@@ -28,7 +30,7 @@ export default function DropdownCompanySimple({
         }
 
         fetchCompanies();
-    }, []);
+    }, [ fetchUserDetails ]);
 
     return (
         <FormControl fullWidth variant="outlined">

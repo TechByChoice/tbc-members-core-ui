@@ -2,10 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { Autocomplete, FormControl, FormLabel, TextField } from '@mui/material';
 import { getDropDrownItems } from '../api-calls';
 import { createFilterOptions } from '@mui/material/Autocomplete';
+import { useAuth } from '@/providers/AuthProvider';
 
 const filter = createFilterOptions();
 export default function DropdownCompanyTypes({ isRequired, setAnswers, formErrors }) {
     const [ companyTypes, setCompanyTypes ] = useState([]);
+    const { token } = useAuth();
 
     useEffect(() => {
         // Fetch the list of companies when the component mounts
@@ -19,7 +21,7 @@ export default function DropdownCompanyTypes({ isRequired, setAnswers, formError
         }
 
         fetchData();
-    }, []);
+    }, [ token ]);
 
     return (
         <Autocomplete

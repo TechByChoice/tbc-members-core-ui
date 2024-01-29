@@ -7,12 +7,27 @@ export const getCompanyList = async () => {
     return response.json();
 };
 export const getMemberData = async memberId => {
-    const response = await fetch(routes.api.users.getMemberData(memberId));
+    const defaultHeaders = {
+        'Content-Type': 'application/json',
+        Authorization: `Token ${localStorage.getItem('token')}`,
+    };
+    const response = await fetch(routes.api.users.getMemberData(memberId), {
+        method: 'GET',
+        headers: defaultHeaders,
+    });
     return response.json();
 };
 
 export const getDropDrownItems = async details => {
-    const response = await fetch(routes.api.users.basicSystemInfoUpdate(details));
+    const defaultHeaders = {
+        'Content-Type': 'application/json',
+        Authorization: `Token ${localStorage.getItem('token')}`,
+    };
+
+    const response = await fetch(routes.api.users.basicSystemInfoUpdate(details), {
+        method: 'GET',
+        headers: defaultHeaders,
+    });
     return response.json();
 };
 export const getJobDetails = async jobId => {
