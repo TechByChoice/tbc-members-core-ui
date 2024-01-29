@@ -1,11 +1,5 @@
 import { routes } from '@/lib/routes';
 
-const API_BASE_URL = 'http://127.0.0.1:8000/reviews/';
-
-export const getCompanyList = async () => {
-    const response = await fetch(API_BASE_URL + 'companies/');
-    return response.json();
-};
 export const getMemberData = async memberId => {
     const defaultHeaders = {
         'Content-Type': 'application/json',
@@ -31,6 +25,14 @@ export const getDropDrownItems = async details => {
     return response.json();
 };
 export const getJobDetails = async jobId => {
-    const response = await fetch(routes.api.jobs.details(jobId));
+    const defaultHeaders = {
+        'Content-Type': 'application/json',
+        Authorization: `Token ${localStorage.getItem('token')}`,
+    };
+
+    const response = await fetch(routes.api.jobs.details(jobId), {
+        method: 'GET',
+        headers: defaultHeaders,
+    });
     return response.json();
 };
