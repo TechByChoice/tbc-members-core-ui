@@ -26,7 +26,7 @@ export default function NavBar() {
     };
     const handelLogout = event => {
         event.preventDefault();
-        navigate('/', { replace: true });
+        navigate('/dashboard', { replace: true });
         auth.logout();
     };
     return (
@@ -35,7 +35,7 @@ export default function NavBar() {
             <Toolbar style={{ display: 'flex', justifyContent: 'center' }} justify="center" id="hey" display="flex">
                 <Grid alignItems="center">
                     <Grid item justify="center">
-                        <Link to="/">
+                        <Link to="/dashboardd">
                             <Typography variant="h6">
                                 <img
                                     alt="Tech by Choice Logo"
@@ -56,7 +56,7 @@ export default function NavBar() {
                         <Grid container spacing={2} alignItems="center" justify="center">
                             {auth.isAuthenticated && (
                                 <Grid item>
-                                    <Link to="/">
+                                    <Link to="/dashboard">
                                         <Typography variant="body1">Dashboard</Typography>
                                     </Link>
                                 </Grid>

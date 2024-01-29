@@ -53,7 +53,7 @@ export default function WorkPlaceForm({ questions }) {
             const companyId = parseInt(userDetails.user_info.current_company.id);
 
             // Find the item in the companies array where the id matches the companyId
-            const identityItem = questions.company_list.find(item => item.id === companyId);
+            const identityItem = questions.companies.find(item => item.id === companyId);
 
             if (identityItem) {
                 // If a match is found, add it to the defaults.identity_sexuality array

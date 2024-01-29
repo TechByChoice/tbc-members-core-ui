@@ -109,7 +109,7 @@ export default function ProfileIdentity({ questions }) {
                 const roleId = parseInt(role, 10);
 
                 // Find the item in the sexual_identities array where the id matches the roleId
-                const identityItem = questions.sexual_identities.find(item => item.id === roleId);
+                const identityItem = questions.sexuality.find(item => item.id === roleId);
 
                 if (identityItem) {
                     // If a match is found, add it to the defaults.identity_sexuality array
@@ -124,7 +124,7 @@ export default function ProfileIdentity({ questions }) {
                 const roleId = parseInt(role, 10);
 
                 // Find the item in the sexual_identities array where the id matches the roleId
-                const identityItem = questions.gender_identities.find(item => item.id === roleId);
+                const identityItem = questions.gender.find(item => item.id === roleId);
 
                 if (identityItem) {
                     // If a match is found, add it to the defaults.identity_sexuality array
@@ -138,7 +138,7 @@ export default function ProfileIdentity({ questions }) {
                 const roleId = parseInt(role, 10);
 
                 // Find the item in the sexual_identities array where the id matches the roleId
-                const identityItem = questions.ethic_identities.find(item => item.id === roleId);
+                const identityItem = questions.ethic.find(item => item.id === roleId);
 
                 if (identityItem) {
                     // If a match is found, add it to the defaults.identity_sexuality array
@@ -209,7 +209,7 @@ export default function ProfileIdentity({ questions }) {
                                     includeInputInList
                                     handleHomeEndKeys
                                     id="autocomplete-identity_sexuality"
-                                    options={questions.sexual_identities || []}
+                                    options={questions.sexuality || []}
                                     isOptionEqualToValue={(option, value) =>
                                         (option.inputValue && value.inputValue && option.inputValue === value.inputValue) || option === value
                                     }
@@ -268,7 +268,7 @@ export default function ProfileIdentity({ questions }) {
                                     includeInputInList
                                     handleHomeEndKeys
                                     id="autocomplete-gender_identities"
-                                    options={questions.gender_identities || []}
+                                    options={questions.gender || []}
                                     isOptionEqualToValue={(option, value) =>
                                         (option.inputValue && value.inputValue && option.inputValue === value.inputValue) || option === value
                                     }
@@ -323,7 +323,7 @@ export default function ProfileIdentity({ questions }) {
                                     includeInputInList
                                     handleHomeEndKeys
                                     id="autocomplete-ethic_identities"
-                                    options={questions.ethic_identities || []}
+                                    options={questions.ethic || []}
                                     isOptionEqualToValue={(option, value) =>
                                         (option.inputValue && value.inputValue && option.inputValue === value.inputValue) || option === value
                                     }
