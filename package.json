@@ -51,7 +51,7 @@
         "vite": "^5.0.12"
     },
     "dependencies": {
-        "@tiptap/extension-heading": "^2.1.16",
+        "@tiptap/extension-heading": "^2.2.0",
         "@tiptap/extension-paragraph": "^2.1.16",
         "@tiptap/extension-text": "^2.1.16",
         "@tiptap/pm": "^2.1.16",
