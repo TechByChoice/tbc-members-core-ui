@@ -2,11 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { Autocomplete, FormControl, FormLabel, TextField } from '@mui/material';
 import { getDropDrownItems } from '../api-calls';
 import { createFilterOptions } from '@mui/material/Autocomplete';
+import { useAuth } from '@/providers/AuthProvider';
 
 const filter = createFilterOptions();
 export default function DropdownSalary({ setAnswers, labelName }) {
     const [ salaries, setSalaries ] = useState([]);
     const [ selectedSalary, setSelectedSalary ] = useState('');
+
+    const { token } = useAuth();
 
     useEffect(() => {
         // Fetch the list of companies when the component mounts
@@ -20,7 +23,7 @@ export default function DropdownSalary({ setAnswers, labelName }) {
         }
 
         fetchSkills();
-    }, []);
+    }, [ token ]);
 
     return (
         <FormControl fullWidth variant="outlined">

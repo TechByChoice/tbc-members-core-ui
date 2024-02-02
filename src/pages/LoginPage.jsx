@@ -55,7 +55,7 @@ function LoginPage() {
 
     useEffect(() => {
         if (user?.length > 0) {
-            navigate('/', { replace: true });
+            navigate('/dashboard', { replace: true });
         }
     }, [ user ]);
 

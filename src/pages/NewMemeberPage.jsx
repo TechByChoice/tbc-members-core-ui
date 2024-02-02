@@ -96,7 +96,7 @@ export default function NewMemberPage() {
     const [ isComplete, setIsComplete ] = useState(false);
     const [ completedSteps, setCompletedSteps ] = useState([]);
 
-    const { token, logout } = useAuth();
+    const { user, fetchUserDetails } = useAuth();
     const history = useNavigate();
     const statusMessage = useStatusMessage();
 
@@ -120,7 +120,8 @@ export default function NewMemberPage() {
         // Check if the value is an array (since Autocomplete can be multiple)
         if (Array.isArray(value)) {
             value = value.map(
-                item => item.pronouns || item.name || item.range || item.gender || item.identity || item.ethnicity || item, // the 'item' fallback is in case you have other Autocomplete instances with string values
+                item =>
+                    item.pronouns || item.name || item.company_name || item.value || item.range || item.gender || item.identity || item.ethnicity || item, // the 'item' fallback is in case you have other Autocomplete instances with string values
             );
         }
         setAnswers(prev => ({ ...prev, [name]: value }));
@@ -241,7 +242,7 @@ export default function NewMemberPage() {
             method: 'PATCH',
             credentials: 'include',
             body: formData,
-            headers: { Authorization: `Token ${token}` },
+            headers: { Authorization: `Token ${localStorage.getItem('token')}` },
         })
             .then(response => {
                 if (!response.ok) {
@@ -252,45 +253,29 @@ export default function NewMemberPage() {
             .then(data => {
                 // Handle the successful JSON response here, e.g.:
                 statusMessage.success("You're in!");
-                history('/');
+                history('/dashboard');
             })
             .catch(error => {
                 console.error('Fetch error:', error);
                 statusMessage.error('We ran into an error saving your profile');
             });
+        fetchUserDetails();
     };
 
     useEffect(() => {
         setIsComplete(activeStep === steps.length);
     }, [ activeStep ]);
 
-    // useEffect(() => {
-    // validationFunctionMap[activeStep]?.(answers, setFormErrors);
-    // }, [ answers ]);
+    const navigate = useNavigate();
 
     useEffect(() => {
-        const url = import.meta.env.VITE_APP_API_BASE_URL + '/user/details/new-member';
-        fetch(url, {
-            method: 'GET',
-            credentials: 'include',
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Token ${localStorage.getItem('token')}`,
-                // 'credentials': 'include'
-            },
-        })
-            .then(response => response.json())
-            .then(data => {
-                if (data.status) {
-                    setQuestions(data);
-                    if (data.detail === 'Invalid token.') {
-                        logout();
-                    }
-                } else {
-                    console.error(data);
-                }
-            });
-    }, []);
+        // move user to dashboard if the user doesn't
+        if(user[0]?.account_info?.is_member_onboarding_complete){
+            statusMessage.info("You've completed onboarding and no longer have access to this screen.");
+            navigate('/dashboard', { replace: false })
+        }
+    }, [ user ]);
+
 
     return (
         <React.Fragment>

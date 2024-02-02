@@ -10,6 +10,7 @@ import ProfileMentorship from '../compoents/profile/ProfileMentorship';
 import ProfileNotifications from '../compoents/profile/ProfileNotifications';
 import ProfileIdentity from '../compoents/profile/ProfileIdentity';
 import { routes } from '@/lib/routes';
+import { getDropDrownItems } from '@/api-calls';
 
 const Root = styled(Box)`
     height: 100%;
@@ -32,7 +33,7 @@ const SubmitButton = styled(Button)`
 
 function TabPanel(props) {
     const {
-        children, value, index, ...other 
+        children, value, index, ...other
     } = props;
 
     return (
@@ -71,27 +72,22 @@ function ProfileSettingPage({ userDetail }) {
     const [ fromData, setFormData ] = useState();
 
     useEffect(() => {
-        fetch(routes.api.users.getProfile(), {
-            method: 'GET',
-            credentials: 'include',
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Token ${localStorage.getItem('token')}`,
-                // 'credentials': 'include',
-            },
-        })
-            .then(response => response.json())
-            .then(data => {
-                if (data.status) {
-                    setQuestions(data);
-                    // setAnswers(initialAnswers);
-                    if (data.detail === 'Invalid token.') {
-                        auth.logout();
-                    }
-                } else {
-                    console.error(data);
-                }
-            });
+        async function fetchData() {
+            try {
+                // eslint-disable-next-line no-undef
+                const [ basicResponse ] = await Promise.all([
+                    getDropDrownItems(
+                        'pronouns&fields=gender&fields=sexuality&fields=ethic&fields=job_roles&fields=companies&fields=job_skills&fields=job_departments',
+                    ),
+                ]);
+
+                setQuestions(basicResponse);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        }
+
+        fetchData();
     }, []);
 
     const handleChange = event => {

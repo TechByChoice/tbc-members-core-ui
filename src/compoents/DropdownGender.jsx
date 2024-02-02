@@ -2,12 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { Autocomplete, TextField } from '@mui/material';
 import { getDropDrownItems } from '../api-calls';
 import { createFilterOptions } from '@mui/material/Autocomplete';
+import { useAuth } from '@/providers/AuthProvider';
 
 const filter = createFilterOptions();
 export default function GenderDropdown({
-    isRequired, setAnswers, formErrors, handleChange 
+    isRequired, setAnswers, formErrors, handleChange
 }) {
     const [ gender, setGender ] = useState([]);
+    const { token } = useAuth();
 
     useEffect(() => {
         // Fetch the list of companies when the component mounts
@@ -21,7 +23,7 @@ export default function GenderDropdown({
         }
 
         fetchData();
-    }, []);
+    }, [ token ]);
 
     return (
         <Autocomplete
@@ -33,18 +35,18 @@ export default function GenderDropdown({
             options={gender || []}
             renderOption={(props, option) => (
                 <li {...props} key={option.id}>
-                    {option.gender}
+                    {option.name}
                 </li>
             )}
             getOptionLabel={option => {
-                return option.gender;
+                return option.name;
             }}
             filterOptions={(options, params) => {
                 const filtered = filter(options, params);
 
                 const { inputValue } = params;
                 // Suggest the creation of a new value
-                const isExisting = options.some(option => inputValue === option.gender);
+                const isExisting = options.some(option => inputValue === option.name);
                 if (inputValue !== '' && !isExisting) {
                     filtered.push({
                         inputValue,

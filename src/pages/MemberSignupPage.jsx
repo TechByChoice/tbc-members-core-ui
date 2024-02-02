@@ -46,7 +46,7 @@ function LoginPage() {
     });
     const navigate = useNavigate();
     const isAuthenticated = false;
-    const { setToken } = useAuth();
+    const { setToken, fetchUserDetails } = useAuth();
 
     const handleSubmit = async event => {
         event.preventDefault();
@@ -64,6 +64,7 @@ function LoginPage() {
                 if (data.status) {
                     setToken(data.token);
                     localStorage.setItem('token', data.token);
+                    fetchUserDetails();
                     statusMessage.success('Welcome to Tech by Choice');
                     navigate('/new/member/2');
                 } else {
@@ -75,6 +76,8 @@ function LoginPage() {
                 console.error('Error:', error);
                 statusMessage.error(error.message);
             });
+
+        fetchUserDetails();
     };
 
     const handleChange = event => {
@@ -85,6 +88,8 @@ function LoginPage() {
     useEffect(() => {
         if (auth?.user?.length > 0) {
             navigate('/', { replace: true });
+        } else {
+            fetchUserDetails();
         }
     }, [ auth.user ]);
 

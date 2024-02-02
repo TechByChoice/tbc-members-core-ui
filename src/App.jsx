@@ -53,7 +53,7 @@ const App = () => {
                             <Route path="/new/member/2" element={<NewMemberPage />} />
                             <Route path="/event/all" element={<AllEventsPage />} />
                             <Route
-                                path="/"
+                                path="/dashboard"
                                 element={
                                     <PrivateRoutes userDetail={user?.[0]}>
                                         <Dashboard />

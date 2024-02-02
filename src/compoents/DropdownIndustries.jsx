@@ -2,13 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { Autocomplete, FormControl, FormLabel, TextField } from '@mui/material';
 import { getDropDrownItems } from '../api-calls';
 import { createFilterOptions } from '@mui/material/Autocomplete';
+import { useAuth } from '@/providers/AuthProvider';
 
 const filter = createFilterOptions();
 export default function DropdownIndustries({
-    isRequired, error, setAnswers = false, handleAutocompleteChange 
+    isRequired, error, setAnswers = false, handleAutocompleteChange
 }) {
     const [ industries, setIndustries ] = useState([]);
     const [ selectedDepartment, setSelectedDepartment ] = useState('');
+    const { token } = useAuth();
 
     useEffect(() => {
         // Fetch the list of companies when the component mounts
@@ -22,11 +24,11 @@ export default function DropdownIndustries({
         }
 
         fetchDepartments();
-    }, []);
+    }, [ token ]);
 
     return (
         <Autocomplete
-            id="departments-label"
+            id="industries-label"
             multiple
             required
             selectOnFocus
@@ -63,16 +65,16 @@ export default function DropdownIndustries({
             onChange={(e, newValue) => {
                 setSelectedDepartment(newValue);
                 if (handleAutocompleteChange) {
-                    handleAutocompleteChange('job_department', newValue);
+                    handleAutocompleteChange('job_industries', newValue);
                 } else {
                     setAnswers(prevState => ({
                         ...prevState,
-                        department: newValue,
+                        job_industries: newValue,
                     }));
                 }
             }}
             renderOption={(props, option) => <li {...props}>{option.name}</li>}
-            renderInput={params => <TextField required={isRequired} error={!!error.department} name="job_departments" {...params} />}
+            renderInput={params => <TextField required={isRequired} error={!!error.department} name="job_industries" {...params} />}
         />
     );
 }

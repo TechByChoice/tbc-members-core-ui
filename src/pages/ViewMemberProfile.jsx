@@ -75,7 +75,7 @@ function ViewMemberProfile() {
         fetch(routes.api.users.connectWithMentor(id), {
             method: 'post',
             headers: {
-                Authorization: `Token ${token}`,
+                Authorization: `Token ${localStorage.getItem('token')}`,
                 'Content-Type': 'application/json',
             },
         })
@@ -262,7 +262,7 @@ function ViewMemberProfile() {
         fetch(url, {
             method: 'POST',
             headers: {
-                Authorization: `Token ${token}`,
+                Authorization: `Token ${localStorage.getItem('token')}`,
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({ 'mentor-update-status': 'send-invite' }),
@@ -286,7 +286,7 @@ function ViewMemberProfile() {
         fetch(url, {
             method: 'POST',
             headers: {
-                Authorization: `Token ${token}`,
+                Authorization: `Token ${localStorage.getItem('token')}`,
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({ 'mentor-update-status': 'approve-mentor' }),
@@ -310,7 +310,7 @@ function ViewMemberProfile() {
         fetch(url, {
             method: 'POST',
             headers: {
-                Authorization: `Token ${token}`,
+                Authorization: `Token ${localStorage.getItem('token')}`,
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({ 'mentor-update-status': 'paused' }),
@@ -334,7 +334,7 @@ function ViewMemberProfile() {
         fetch(url, {
             method: 'POST',
             headers: {
-                Authorization: `Token ${token}`,
+                Authorization: `Token ${localStorage.getItem('token')}`,
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({ 'mentor-update-status': 'active' }),
@@ -357,7 +357,7 @@ function ViewMemberProfile() {
         fetch(url, {
             method: 'POST',
             headers: {
-                Authorization: `Token ${token}`,
+                Authorization: `Token ${localStorage.getItem('token')}`,
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({ 'mentor-update-status': 'interview-reminder' }),
@@ -382,7 +382,7 @@ function ViewMemberProfile() {
         fetch(url, {
             method: 'POST',
             headers: {
-                Authorization: `Token ${token}`,
+                Authorization: `Token ${localStorage.getItem('token')}`,
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(rejectionForm),
@@ -489,7 +489,7 @@ function ViewMemberProfile() {
             {memberData?.data?.user_profile?.identity_gender && memberData?.data?.user_profile?.is_identity_gender_displayed && (
                 <>
                     {memberData?.data?.user_profile?.identity_gender.map(identity => {
-                        const identityItem = basicData.gender_identities.find(item => item.id === identity);
+                        const identityItem = basicData.gender.find(item => item.id === identity);
                         return (
                             <>
                                 <Chip size="small" variant="outlined" label={identityItem?.gender} />
@@ -501,7 +501,7 @@ function ViewMemberProfile() {
             {memberData?.data?.user_profile?.identity_sexuality && memberData?.data?.user_profile?.is_identity_sexuality_displayed && (
                 <>
                     {memberData?.data?.user_profile?.identity_sexuality.map(identity => {
-                        const identityItem = basicData.sexual_identities.find(item => item.id === identity);
+                        const identityItem = basicData.sexuality.find(item => item.id === identity);
                         return (
                             <>
                                 <Chip size="small" variant="outlined" label={identityItem?.identity} />
@@ -548,7 +548,7 @@ function ViewMemberProfile() {
                 return renderMentorEdgeCaseStateCard();
             }
         } else {
-            if (memberData?.data?.user?.is_mentor && !loggedInUser?.account_info?.is_staff) {
+            if (memberData?.data?.user?.is_mentor && memberData?.data?.user?.is_mentor_profile_active && !loggedInUser?.account_info?.is_staff) {
                 if (isUserConnectedWithMentor) {
                     return renderMatchedWithThisMentorCard();
                 } else {
@@ -663,7 +663,7 @@ function ViewMemberProfile() {
                                                 memberData?.data?.user_profile?.is_pronouns_displayed && (
                                                 <>
                                                     {memberData?.data?.user_profile?.identity_pronouns.map(pronoun => {
-                                                        const identityItem = basicData.pronouns_identities.find(item => item.id === pronoun);
+                                                        const identityItem = basicData.pronouns.find(item => item.id === pronoun);
                                                         return (
                                                             <>
                                                                 <Typography variant="body2">{identityItem?.pronouns}</Typography>
@@ -692,7 +692,7 @@ function ViewMemberProfile() {
                                 <HtmlContentRenderer htmlContent={memberData?.data?.user_profile?.bio} />
                             </Typography>
                             {/*{memberData?.data?.user?.is_mentor_profile_active && (*/}
-                            {memberData?.data?.user?.is_mentor && renderMentorProfileSection()}
+                            {memberData?.data?.user?.is_mentor && memberData?.data?.user?.is_mentor_profile_active && renderMentorProfileSection()}
                             <Container>
                                 <Typography variant="h5">Skills:</Typography>
                                 {memberData?.data?.talent_profile?.skills && (

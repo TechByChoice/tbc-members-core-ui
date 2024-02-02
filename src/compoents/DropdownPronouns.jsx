@@ -2,24 +2,27 @@ import React, { useState, useEffect } from 'react';
 import { Autocomplete, FormControl, FormLabel, TextField } from '@mui/material';
 import { getDropDrownItems } from '../api-calls';
 import { createFilterOptions } from '@mui/material/Autocomplete';
+import { useAuth } from '@/providers/AuthProvider';
 
 const filter = createFilterOptions();
 export default function DropdownPronouns({ isRequired, setAnswers, formErrors }) {
     const [ pronouns, setPronouns ] = useState([]);
+
+    const { fetchUserDetails } = useAuth();
 
     useEffect(() => {
         // Fetch the list of companies when the component mounts
         async function fetchData() {
             try {
                 const response = await getDropDrownItems('pronouns');
-                setPronouns(response.pronouns);
+                setPronouns(response.name);
             } catch (error) {
                 console.error('Error fetching pronouns:', error);
             }
         }
 
         fetchData();
-    }, []);
+    }, [ fetchUserDetails ]);
 
     return (
         <FormControl fullWidth variant="outlined">
@@ -36,18 +39,18 @@ export default function DropdownPronouns({ isRequired, setAnswers, formErrors })
                 options={pronouns || []}
                 renderOption={(props, option) => (
                     <li {...props} key={option.id}>
-                        {option.pronouns}
+                        {option.name}
                     </li>
                 )}
                 getOptionLabel={option => {
-                    return option.pronouns;
+                    return option.name;
                 }}
                 filterOptions={(options, params) => {
                     const filtered = filter(options, params);
 
                     const { inputValue } = params;
                     // Suggest the creation of a new value
-                    const isExisting = options.some(option => inputValue === option.pronouns);
+                    const isExisting = options.some(option => inputValue === option.name);
                     if (inputValue !== '' && !isExisting) {
                         filtered.push({
                             inputValue,

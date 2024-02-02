@@ -8,7 +8,7 @@ import { routes } from '../../lib/routes';
 const filter = createFilterOptions();
 
 export default function ProfileInterests({ handleChange, questions }) {
-    const { user } = useAuth();
+    const { user, fetchUserDetails } = useAuth();
     const userDetails = user[0];
     const [ formErrors, setFormErrors ] = useState({});
     const { setStatusMessage, setIsAlertOpen, setStatusType } = useStatus();
@@ -27,7 +27,7 @@ export default function ProfileInterests({ handleChange, questions }) {
     };
 
     useEffect(() => {
-        if (userDetails && questions.job_skills && questions.job_department) {
+        if (userDetails && questions) {
             const defaultSkills = userDetails.user_info.talentprofile.skills
                 .map(skillId => {
                     return questions.job_skills.find(skill => skill.id === parseInt(skillId.id));
@@ -36,7 +36,7 @@ export default function ProfileInterests({ handleChange, questions }) {
 
             const defaultDepartment = userDetails.user_info.talentprofile.department
                 .map(departmentId => {
-                    return questions.job_department.find(department => department.id === parseInt(departmentId.id));
+                    return questions.job_departments.find(department => department.id === parseInt(departmentId.id));
                 })
                 .filter(department => department != null);
 
@@ -80,14 +80,14 @@ export default function ProfileInterests({ handleChange, questions }) {
 
     return (
         <>
-            {questions.job_skills && questions.job_department && (
+            {questions.job_skills && questions.job_departments && (
                 <Grid container>
                     <Grid item xs={12}>
                         <Typography variant="h6">Skills & Department</Typography>
                         <hr />
                     </Grid>
                     <Grid item xs={12} md={4} spacing={3} mt={3}>
-                        <Typography variant="body">Update your account details here</Typography>
+                        <Typography variant="body1">Update your account details here</Typography>
                     </Grid>
                     <Grid item xs={8}>
                         <Grid container>
@@ -97,7 +97,6 @@ export default function ProfileInterests({ handleChange, questions }) {
                                     <Autocomplete
                                         value={skillsRolesFormData.skills}
                                         multiple
-                                        required
                                         selectOnFocus
                                         includeInputInList
                                         handleHomeEndKeys
@@ -133,7 +132,7 @@ export default function ProfileInterests({ handleChange, questions }) {
                                         }}
                                         renderOption={(props, option) => <li {...props}>{option.name || option.name}</li>}
                                         onChange={(event, value) => handleAutocompleteChange('skills', value)}
-                                        renderInput={params => <TextField name="job_skills" {...params} />}
+                                        renderInput={params => <TextField required name="job_skills" {...params} />}
                                     />
                                     {!!formErrors.job_skills && <FormHelperText>{formErrors.job_skills}</FormHelperText>}
                                     <Typography variant="body2">Please select your top 5 skills</Typography>
@@ -151,7 +150,7 @@ export default function ProfileInterests({ handleChange, questions }) {
                                         includeInputInList
                                         handleHomeEndKeys
                                         id="autocomplete-job_skills"
-                                        options={questions.job_department || []} // <-- directly provide a default value here
+                                        options={questions.job_departments || []} // <-- directly provide a default value here
                                         isOptionEqualToValue={(option, value) =>
                                             (option.inputValue && value.inputValue && option.inputValue === value.inputValue) || option === value
                                         }

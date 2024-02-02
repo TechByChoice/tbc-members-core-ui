@@ -13,9 +13,7 @@ export const AuthProvider = ({ children }) => {
     const [ isLoading, setIsLoading ] = useState(true);
 
     // get user details
-    useEffect(() => {
-        const url = import.meta.env.VITE_APP_API_BASE_URL + 'user/details/';
-
+    const fetchUserDetails = useCallback(() => {
         if (localStorage.getItem('token')) {
             fetch(routes.api.users.getUsersDetails(), {
                 method: 'GET',
@@ -27,12 +25,13 @@ export const AuthProvider = ({ children }) => {
                 .then(response => response.json())
                 .then(data => {
                     if (data) {
-                        console.log('data');
-                        setUser([ data ]);
-                        setAccountDetails([ data.account_info ]);
                         if (data.detail === 'Invalid token.') {
                             logout();
                         }
+                        setToken(data.token);
+                        setUser([ data ]);
+                        setAccountDetails([ data.account_info ]);
+                        setIsAuthenticated(true);
                     } else {
                         setErrorMessage(data[0]);
                         console.error(data);
@@ -48,42 +47,50 @@ export const AuthProvider = ({ children }) => {
         }
     }, []);
 
-    const login = useCallback((username, email, password, timezone) => {
-        const url = import.meta.env.VITE_APP_API_BASE_URL + '/user/login/';
-        fetch(url, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                username,
-                email,
-                password,
-                timezone,
-            }),
-        })
-            .then(response => response.json())
-            .then(data => {
-                if (data.token) {
-                    // Call the setToken function to store the JWT
-                    localStorage.setItem('token', data.token);
-                    setToken(data.token);
-                    setIsAuthenticated(true);
-                    setUser([ data.user_info ]);
-                    setAccountDetails([ data.account_info ]);
-                    // Redirect the user to the home page
-                } else {
-                    setErrorMessage(data);
-                    console.error(data);
-                    setUser([]);
-                    setAccountDetails([]);
-                }
-            })
-            .catch(error => {
-                // set the error message here
+    useEffect(() => {
+        fetchUserDetails();
+    }, [ fetchUserDetails ]);
 
-                setErrorMessage(error);
-                console.error('Error:', error);
-            });
-    }, []);
+    const login = useCallback(
+        (username, email, password, timezone) => {
+            const url = import.meta.env.VITE_APP_API_BASE_URL + '/user/login/';
+            fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    username,
+                    email,
+                    password,
+                    timezone,
+                }),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.token) {
+                        // Call the setToken function to store the JWT
+                        localStorage.setItem('token', data.token);
+                        setToken(data.token);
+                        setIsAuthenticated(true);
+                        setUser([ data.user_info ]);
+                        setAccountDetails([ data.account_info ]);
+                        // Redirect the user to the home page
+                    } else {
+                        setErrorMessage(data);
+                        console.error(data);
+                        setUser([]);
+                        setAccountDetails([]);
+                    }
+                })
+                .catch(error => {
+                    // set the error message here
+
+                    setErrorMessage(error);
+                    console.error('Error:', error);
+                });
+            fetchUserDetails();
+        },
+        [ fetchUserDetails ],
+    );
 
     const logout = useCallback(() => {
         const url = import.meta.env.VITE_APP_API_BASE_URL + '/user/logout/';
@@ -92,23 +99,21 @@ export const AuthProvider = ({ children }) => {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Token ${token}`,
+                Authorization: `Token ${localStorage.getItem('token')}`,
             },
-        })
-            .then(response => response.json())
-            .then(response => {
-                if (!response.data) {
-                    // Call the setToken function to store the JWT
-                    setIsAuthenticated(false);
-                    setUser([]);
-                    setToken('');
-                    localStorage.removeItem('token');
-                    window.location.href = import.meta.env.VITE_APP_BASE_URL + '/login';
-                } else {
-                    setErrorMessage(response.data);
-                    console.error(response.data);
-                }
-            });
+        }).then(response => {
+            if (!response.data) {
+                // Call the setToken function to store the JWT
+                setIsAuthenticated(false);
+                setUser([]);
+                setToken('');
+                localStorage.removeItem('token');
+                // window.location.href = import.meta.env.VITE_APP_BASE_URL + 'login';
+            } else {
+                setErrorMessage(response.data);
+                console.error(response.data);
+            }
+        });
     }, [ token ]);
 
     return (
@@ -118,6 +123,7 @@ export const AuthProvider = ({ children }) => {
                 isAuthenticated,
                 token,
                 setToken,
+                fetchUserDetails,
                 login,
                 logout,
                 user,

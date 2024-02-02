@@ -24,12 +24,12 @@ export default function SocialMediaForm() {
     useEffect(() => {
         if (userDetails) {
             setSocialMediaFormData({
-                linkedin: userDetails?.user_info?.userprofile.linkedin.replace(/https:\/\//g, '') || '',
-                instagram: userDetails?.user_info?.userprofile.instagram.replace(/https:\/\//g, '') || '',
-                github: userDetails?.user_info?.userprofile.github.replace(/https:\/\//g, '') || '',
-                twitter: userDetails?.user_info?.userprofile.twitter.replace(/https:\/\//g, '') || '',
-                youtube: userDetails?.user_info?.userprofile.youtube.replace(/https:\/\//g, '') || '',
-                personal: userDetails?.user_info?.userprofile.personal.replace(/https:\/\//g, '') || '',
+                linkedin: userDetails?.user_info?.userprofile?.linkedin?.replace(/https:\/\//g, '') || '',
+                instagram: userDetails?.user_info?.userprofile?.instagram?.replace(/https:\/\//g, '') || '',
+                github: userDetails?.user_info?.userprofile?.github?.replace(/https:\/\//g, '') || '',
+                twitter: userDetails?.user_info?.userprofile?.twitter?.replace(/https:\/\//g, '') || '',
+                youtube: userDetails?.user_info?.userprofile?.youtube?.replace(/https:\/\//g, '') || '',
+                personal: userDetails?.user_info?.userprofile?.personal?.replace(/https:\/\//g, '') || '',
             });
         }
     }, [ userDetails ]);

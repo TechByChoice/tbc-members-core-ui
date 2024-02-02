@@ -10,7 +10,7 @@ import SexualityDropdown from '@/compoents/DropdownSexuality';
 const filter = createFilterOptions();
 
 function IdentityQuestionsStep({
-    answers, questions, handleAutocompleteChange, handleInputChange 
+    answers, questions, handleAutocompleteChange, handleInputChange
 }) {
     const filterOptions = (options, { inputValue }) => {
         const matcher = new RegExp(inputValue, 'i');
@@ -32,7 +32,7 @@ function IdentityQuestionsStep({
             <Grid item xs={12}>
                 <FormControl variant="outlined" fullWidth>
                     <FormLabel htmlFor="identity_sexuality">Please select the sexual identities that best describe you today.</FormLabel>
-                    <SexualityDropdown isRequired={false} handleChange={handleAutocompleteChange} />
+                    <SexualityDropdown isRequired={false} handleChange={handleAutocompleteChange} setAnswers={handleAutocompleteChange} />
                     <FormLabel>
                         If you see any terms you&apos;re not sure about we encourage you to check out this site to learn more about people&apos;s
                         experiences
@@ -48,7 +48,7 @@ function IdentityQuestionsStep({
             <Grid item xs={12}>
                 <FormControl variant="outlined" fullWidth>
                     <FormLabel htmlFor="gender_identities">Please select the gender identities that best describe you today.</FormLabel>
-                    <GenderDropdown isRequired={false} handleChange={handleAutocompleteChange} />
+                    <GenderDropdown isRequired={false} setAnswers={handleAutocompleteChange} handleChange={handleAutocompleteChange} />
                     <FormControlLabel
                         control={<Checkbox onChange={handleInputChange} name="is_identity_gender_displayed" color="primary" size="small" />}
                         label="Would you like to display your gender your profile?"
@@ -60,7 +60,7 @@ function IdentityQuestionsStep({
             <Grid item xs={12}>
                 <FormControl variant="outlined" fullWidth>
                     <FormLabel htmlFor="identity_ethic">Please select all the identities that best describe your ethic background</FormLabel>
-                    <EthicDropdown isRequired={false} handleChange={handleAutocompleteChange} />
+                    <EthicDropdown isRequired={false} setAnswers={handleAutocompleteChange} handleChange={handleAutocompleteChange} />
                     <FormControlLabel
                         control={<Checkbox onChange={handleInputChange} name="is_identity_ethic_displayed" color="primary" size="small" />}
                         label="Would you like to display your ethnicity your profile?"
