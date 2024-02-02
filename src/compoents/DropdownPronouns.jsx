@@ -15,7 +15,7 @@ export default function DropdownPronouns({ isRequired, setAnswers, formErrors })
         async function fetchData() {
             try {
                 const response = await getDropDrownItems('pronouns');
-                setPronouns(response.name);
+                setPronouns(response.pronouns);
             } catch (error) {
                 console.error('Error fetching pronouns:', error);
             }
