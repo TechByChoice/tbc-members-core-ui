@@ -6,7 +6,7 @@ import { useAuth } from '@/providers/AuthProvider';
 
 const filter = createFilterOptions();
 export default function EthicDropdown({
-    isRequired, setAnswers, formErrors, handleChange 
+    isRequired, setAnswers, formErrors, handleChange
 }) {
     const [ ethic, setEthic ] = useState([]);
     const { token } = useAuth();
@@ -35,18 +35,18 @@ export default function EthicDropdown({
             options={ethic || []}
             renderOption={(props, option) => (
                 <li {...props} key={option.id}>
-                    {option.ethnicity}
+                    {option.name}
                 </li>
             )}
             getOptionLabel={option => {
-                return option.ethnicity;
+                return option.name;
             }}
             filterOptions={(options, params) => {
                 const filtered = filter(options, params);
 
                 const { inputValue } = params;
                 // Suggest the creation of a new value
-                const isExisting = options.some(option => inputValue === option.ethnicity);
+                const isExisting = options.some(option => inputValue === option.name);
                 if (inputValue !== '' && !isExisting) {
                     filtered.push({
                         inputValue,
