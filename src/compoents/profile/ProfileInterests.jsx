@@ -8,7 +8,7 @@ import { routes } from '../../lib/routes';
 const filter = createFilterOptions();
 
 export default function ProfileInterests({ handleChange, questions }) {
-    const { user } = useAuth();
+    const { user, fetchUserDetails } = useAuth();
     const userDetails = user[0];
     const [ formErrors, setFormErrors ] = useState({});
     const { setStatusMessage, setIsAlertOpen, setStatusType } = useStatus();
@@ -27,7 +27,7 @@ export default function ProfileInterests({ handleChange, questions }) {
     };
 
     useEffect(() => {
-        if (userDetails && questions.job_skills && questions.job_department) {
+        if (userDetails && questions) {
             const defaultSkills = userDetails.user_info.talentprofile.skills
                 .map(skillId => {
                     return questions.job_skills.find(skill => skill.id === parseInt(skillId.id));
@@ -97,7 +97,6 @@ export default function ProfileInterests({ handleChange, questions }) {
                                     <Autocomplete
                                         value={skillsRolesFormData.skills}
                                         multiple
-                                        required
                                         selectOnFocus
                                         includeInputInList
                                         handleHomeEndKeys
@@ -133,7 +132,7 @@ export default function ProfileInterests({ handleChange, questions }) {
                                         }}
                                         renderOption={(props, option) => <li {...props}>{option.name || option.name}</li>}
                                         onChange={(event, value) => handleAutocompleteChange('skills', value)}
-                                        renderInput={params => <TextField name="job_skills" {...params} />}
+                                        renderInput={params => <TextField required name="job_skills" {...params} />}
                                     />
                                     {!!formErrors.job_skills && <FormHelperText>{formErrors.job_skills}</FormHelperText>}
                                     <Typography variant="body2">Please select your top 5 skills</Typography>

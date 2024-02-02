@@ -96,7 +96,7 @@ export default function NewMemberPage() {
     const [ isComplete, setIsComplete ] = useState(false);
     const [ completedSteps, setCompletedSteps ] = useState([]);
 
-    const { token, logout, fetchUserDetails } = useAuth();
+    const { user, fetchUserDetails } = useAuth();
     const history = useNavigate();
     const statusMessage = useStatusMessage();
 
@@ -266,33 +266,16 @@ export default function NewMemberPage() {
         setIsComplete(activeStep === steps.length);
     }, [ activeStep ]);
 
-    // useEffect(() => {
-    // validationFunctionMap[activeStep]?.(answers, setFormErrors);
-    // }, [ answers ]);
+    const navigate = useNavigate();
 
-    // useEffect(() => {
-    //     const url = import.meta.env.VITE_APP_API_BASE_URL + '/user/details/new-member';
-    //     fetch(url, {
-    //         method: 'GET',
-    //         credentials: 'include',
-    //         headers: {
-    //             'Content-Type': 'application/json',
-    //             Authorization: `Token ${localStorage.getItem('token')}`,
-    //             // 'credentials': 'include'
-    //         },
-    //     })
-    //         .then(response => response.json())
-    //         .then(data => {
-    //             if (data.status) {
-    //                 setQuestions(data);
-    //                 if (data.detail === 'Invalid token.') {
-    //                     logout();
-    //                 }
-    //             } else {
-    //                 console.error(data);
-    //             }
-    //         });
-    // }, []);
+    useEffect(() => {
+        // move user to dashboard if the user doesn't
+        if(user[0]?.account_info?.is_member_onboarding_complete){
+            statusMessage.info("You've completed onboarding and no longer have access to this screen.");
+            navigate('/dashboard', { replace: false })
+        }
+    }, [ user ]);
+
 
     return (
         <React.Fragment>
