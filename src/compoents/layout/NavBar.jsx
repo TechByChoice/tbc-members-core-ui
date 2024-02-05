@@ -148,7 +148,7 @@ export default function NavBar() {
                                 </>
                             ) : (
                                 <>
-                                    <Link to="/login">Login</Link>
+                                    <Link to="/">Login</Link>
                                     <Link to="/new/member/1">Member Sign up</Link>
                                 </>
                             )}

@@ -175,7 +175,7 @@ function LoginPage() {
                                     <Button variant="contained" color="primary" fullWidth={true} type="submit">
                                         Create Account
                                     </Button>
-                                    <Link href="/login" variant="body2">
+                                    <Link href="/" variant="body2">
                                         Have an account? Login
                                     </Link>
                                 </form>

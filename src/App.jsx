@@ -40,7 +40,7 @@ const App = () => {
                     <NavBar />
                     <Container>
                         <Routes>
-                            <Route path="/login" element={<LoginPage />} />
+                            <Route path="/" element={<LoginPage />} />
                             <Route
                                 path="/profile"
                                 element={
