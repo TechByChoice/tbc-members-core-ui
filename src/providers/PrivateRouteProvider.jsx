@@ -50,7 +50,7 @@ export const PrivateRoutes = ({ children, userDetail }) => {
     // }
 
     if (!auth.isAuthenticated) {
-        return <Navigate to="/login" />;
+        return <Navigate to="/" />;
     }
     return children;
 };
