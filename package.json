@@ -53,7 +53,7 @@
     "dependencies": {
         "@tiptap/extension-heading": "^2.1.16",
         "@tiptap/extension-paragraph": "^2.2.0",
-        "@tiptap/extension-text": "^2.1.16",
+        "@tiptap/extension-text": "^2.2.1",
         "@tiptap/pm": "^2.2.0",
         "@tiptap/react": "^2.1.16",
         "@tiptap/starter-kit": "^2.2.0",
