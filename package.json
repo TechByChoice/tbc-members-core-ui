@@ -33,7 +33,7 @@
     "devDependencies": {
         "@emotion/react": "latest",
         "@emotion/styled": "latest",
-        "@mui/icons-material": "^5.15.6",
+        "@mui/icons-material": "^5.15.7",
         "@mui/material": "latest",
         "@typescript-eslint/parser": "^6.20.0",
         "@vitejs/plugin-react": "^4.2.1",
