@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import { useAuth } from '../providers/AuthProvider';
+import { useAuth } from '@/providers/AuthProvider';
 import { useNavigate } from 'react-router';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
-import { useStatus } from '../providers/MsgStatusProvider';
-import Link from '@mui/material/Link';
+import { useStatus } from '@/providers/MsgStatusProvider';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import styled from '@emotion/styled';
 import Alert from '@mui/material/Alert';
 import { useStatusMessage } from '../hooks/useStatusMessage';
+import { Link } from 'react-router-dom';
 
 const CenteredContent = styled.div`
     display: flex;
@@ -125,12 +125,8 @@ function LoginPage() {
                                     <Button variant="contained" color="primary" fullWidth={true} type="submit">
                                         Log in
                                     </Button>
-                                    <Link href="/forgot-password" variant="body2">
-                                        Forgot password?
-                                    </Link>
-                                    <Link href="/create-account" variant="body2">
-                                        {"Don't have an account? Sign Up"}
-                                    </Link>
+                                    <Link to="/forgot-password">Forgot password?</Link>
+                                    <Link to="/new/member/1">{"Don't have an account? Sign Up"}</Link>
                                 </form>
                             </>
                         )}

@@ -6,11 +6,11 @@ import { useNavigate } from 'react-router';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import { useStatus } from '../providers/MsgStatusProvider';
-import Link from '@mui/material/Link';
 import styled from '@emotion/styled';
 import Alert from '@mui/material/Alert';
 import { useStatusMessage } from '../hooks/useStatusMessage';
 import { routes } from '@/lib/routes';
+import { Link } from 'react-router-dom';
 
 const CenteredContent = styled.div`
     display: flex;
@@ -175,9 +175,7 @@ function LoginPage() {
                                     <Button variant="contained" color="primary" fullWidth={true} type="submit">
                                         Create Account
                                     </Button>
-                                    <Link href="/" variant="body2">
-                                        Have an account? Login
-                                    </Link>
+                                    <Link to="/">Have an account? Login</Link>
                                 </form>
                             </>
                         )}
