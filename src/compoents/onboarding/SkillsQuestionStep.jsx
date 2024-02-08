@@ -1,16 +1,31 @@
 import { Typography, FormControl, FormLabel, TextField, Button, Input, Grid, Autocomplete, Select, MenuItem, FormHelperText } from '@mui/material';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { createFilterOptions } from '@mui/material/Autocomplete';
 import DropdownSkillsSimple from '@/compoents/DropdownSkillsSimple';
 import DropdownDepartmentsSimple from '@/compoents/DropdownDepartmentsSimple';
 import DropdownCompanyTypes from '../DropdownCompanyTypes';
 import DropdownIndustries from '@/compoents/DropdownIndustries';
+import { getDropDrownItems } from '@/api-calls';
 
 const filter = createFilterOptions();
 
 function SkillsQuestionStep({
     answers, questions, handleInputChange, handleFileChange, handleAutocompleteChange, formErrors 
 }) {
+    const [ salaries, setSalaries ] = useState([]);
+    useEffect(() => {
+        // Fetch the list of companies when the component mounts
+        async function fetchSkills() {
+            try {
+                const response = await getDropDrownItems('job_salary_range');
+                setSalaries(response.job_salary_range);
+            } catch (error) {
+                console.error('Error fetching salaries:', error);
+            }
+        }
+
+        fetchSkills();
+    }, []);
     return (
         <Grid container spacing={3}>
             <Grid item xs={12}>
@@ -86,7 +101,7 @@ function SkillsQuestionStep({
                         includeInputInList
                         handleHomeEndKeys
                         id="autocomplete-job_salary_range"
-                        options={questions.job_salary_range || []} // <-- directly provide a default value here
+                        options={salaries || []} // <-- directly provide a default value here
                         isOptionEqualToValue={(option, value) =>
                             (option.inputValue && value.inputValue && option.inputValue === value.inputValue) || option === value
                         }
@@ -135,7 +150,7 @@ function SkillsQuestionStep({
                         includeInputInList
                         handleHomeEndKeys
                         id="autocomplete-job_salary_range"
-                        options={questions.job_salary_range || []} // <-- directly provide a default value here
+                        options={salaries || []} // <-- directly provide a default value here
                         isOptionEqualToValue={(option, value) =>
                             (option.inputValue && value.inputValue && option.inputValue === value.inputValue) || option === value
                         }
