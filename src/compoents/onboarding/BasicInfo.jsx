@@ -31,14 +31,14 @@ function BasicInfoStep({
             <Grid item xs={12}>
                 {/* Title */}
                 <Typography variant="h5">Let&apos;s get to know you!</Typography>
-                <Typography variant="subtitle1">The following questions will us help learn more about you.</Typography>
+                <Typography variant="subtitle1">The following questions will help us learn more about you.</Typography>
             </Grid>
             {/* Pronouns Dropdown */}
             <Grid item xs={12}>
                 <DropdownPronouns formErrors={true} isRequired={false} answers={questions} setAnswers={handleAutocompleteChange} />
                 <FormControlLabel
                     control={<Checkbox onChange={handleInputChange} name="is_pronouns_displayed" color="primary" size="small" />}
-                    label="Would you like your pronouns saved on your profile?"
+                    label="Check this box to display your pronouns on your talent profile"
                 />
             </Grid>
 
@@ -65,7 +65,7 @@ function BasicInfoStep({
             {/* Job Title Dropdown */}
             <Grid item xs={12}>
                 <FormControl fullWidth error={!!formErrors.job_roles}>
-                    <FormLabel id="job-title-label">* What is the job title that best fits your desired or current position?</FormLabel>
+                    <FormLabel id="job-title-label">* What&apos;s you current (or future) job title?</FormLabel>
                     <DropdownJobRole formErrors={true} isRequired={true} answers={questions} setAnswers={handleAutocompleteChange} />
                     {!!formErrors.job_roles && <FormHelperText>{formErrors.job_roles}</FormHelperText>}
                 </FormControl>
@@ -101,59 +101,13 @@ function BasicInfoStep({
                     <FormControl fullWidth>
                         <FormLabel id="company-label">Please select the company you work with.</FormLabel>
                         <DropdownCompanySimple error={formErrors} isRequired={false} setAnswers={handleAutocompleteChange} answers={questions} />
-                        {/*<Autocomplete*/}
-                        {/*    multiple*/}
-                        {/*    selectOnFocus*/}
-                        {/*    includeInputInList*/}
-                        {/*    handleHomeEndKeys*/}
-                        {/*    id="company_list"*/}
-                        {/*    aria-labelledby="company-label"*/}
-                        {/*    options={questions.company_list || []} // <-- directly provide a default value here*/}
-                        {/*    isOptionEqualToValue={(option, value) =>*/}
-                        {/*        (option.inputValue && value.inputValue && option.inputValue === value.inputValue) || option === value*/}
-                        {/*    }*/}
-                        {/*    getOptionLabel={option => {*/}
-                        {/*        if (typeof option === 'string') {*/}
-                        {/*            return option;*/}
-                        {/*        }*/}
-                        {/*        // Check for the special case where the option has an inputValue property*/}
-                        {/*        if (option.inputValue) return option.inputValue;*/}
-
-                        {/*        // Existing logic*/}
-                        {/*        return option.company_name;*/}
-                        {/*    }}*/}
-                        {/*    filterOptions={(options, params) => {*/}
-                        {/*        const filtered = filter(options, params);*/}
-
-                        {/*        const { inputValue } = params;*/}
-                        {/*        // Suggest the creation of a new value*/}
-                        {/*        const isExisting = options.some(option => inputValue === option.company_name);*/}
-                        {/*        if (inputValue !== '' && !isExisting) {*/}
-                        {/*            filtered.push({*/}
-                        {/*                inputValue,*/}
-                        {/*                name: `Add "${inputValue}"`,*/}
-                        {/*            });*/}
-                        {/*        }*/}
-
-                        {/*        return filtered;*/}
-                        {/*    }}*/}
-                        {/*    renderOption={(props, option) => <li {...props}>{option.company_name}</li>}*/}
-                        {/*    onChange={(event, value) => handleAutocompleteChange('company_name', value)}*/}
-                        {/*    renderInput={params => <TextField name="company_name" {...params} />}*/}
-                        {/*/>*/}
                     </FormControl>
                 </Grid>
             )}
-            {questions.total_companies > 0 && (
-                <Grid item xs={12}>
-                    <FormControl>
-                        <FormControlLabel onChange={(event, checked) => setViewNewCompany(checked)} control={<Checkbox />} label="Add a company" />
-                    </FormControl>
-                </Grid>
-            )}
+
             {/* Tech Journey Dropdown */}
             <Grid item xs={12}>
-                <FormControl fullWidth error={!!formErrors.tech_journey}>
+                <FormControl fullWidth error={!!formErrors.years_of_experience}>
                     <FormLabel id="tech-journey-label">* How long have you been on your tech journey?</FormLabel>
                     <YearsOfExperienceDropdown
                         label="How long have you been on your tech journey?"
@@ -161,7 +115,7 @@ function BasicInfoStep({
                         formErrors={formErrors}
                         isRequired={true}
                     />
-                    {!!formErrors.tech_journey && <FormHelperText>{formErrors.tech_journey}</FormHelperText>}
+                    {!!formErrors.years_of_experience && <FormHelperText>{formErrors.years_of_experience}</FormHelperText>}
                 </FormControl>
             </Grid>
             <Grid item xs={12}>

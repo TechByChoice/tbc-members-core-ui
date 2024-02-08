@@ -72,14 +72,21 @@ function validateBasicInfo(answers, setFormErrors) {
 function validateSkillsQuestionStep(answers, setFormErrors) {
     let errors = {};
 
-    const isValid = AnswerValidator.validateMany(answers, errors, {
-        talent_status: 'Job skills are required.',
+    let isValid = AnswerValidator.validateMany(answers, errors, {
+        talent_status: 'Talent profile status required.',
+        job_skills: 'Job skills are required.',
         job_department: 'Job department is required.',
     });
+    // Additional check for job_skills length
+    if (answers.job_skills && answers.job_skills.length > 5) {
+        errors.job_skills = 'You can only add up to 5 skills.';
+        // Mark the form as invalid if too many job_skills are added
+        isValid = false; // If you want the overall form validation to fail in this case
+    }
 
     setFormErrors(errors);
 
-    return isValid;
+    return isValid && Object.keys(errors).length === 0;
 }
 
 const validationFunctionMap = {
@@ -218,6 +225,7 @@ export default function NewMemberPage() {
         }
 
         setActiveStep(activeStep + 1);
+        console.log(activeStep, 'handleNext');
         statusMessage.hide();
     };
 
@@ -239,7 +247,7 @@ export default function NewMemberPage() {
         }
 
         fetch(routes.api.users.updateProfile(), {
-            method: 'PATCH',
+            method: 'POST',
             credentials: 'include',
             body: formData,
             headers: { Authorization: `Token ${localStorage.getItem('token')}` },
@@ -253,7 +261,7 @@ export default function NewMemberPage() {
             .then(data => {
                 // Handle the successful JSON response here, e.g.:
                 statusMessage.success("You're in!");
-                history('/dashboard');
+                // history('/dashboard');
             })
             .catch(error => {
                 console.error('Fetch error:', error);
@@ -270,12 +278,11 @@ export default function NewMemberPage() {
 
     useEffect(() => {
         // move user to dashboard if the user doesn't
-        if(user[0]?.account_info?.is_member_onboarding_complete){
+        if (user[0]?.account_info?.is_member_onboarding_complete) {
             statusMessage.info("You've completed onboarding and no longer have access to this screen.");
-            navigate('/dashboard', { replace: false })
+            // navigate('/dashboard', { replace: false })
         }
     }, [ user ]);
-
 
     return (
         <React.Fragment>

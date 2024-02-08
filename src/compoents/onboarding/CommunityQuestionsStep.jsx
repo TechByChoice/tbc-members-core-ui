@@ -76,7 +76,7 @@ function CommunityQuestionsStep({ questions, handleAutocompleteChange, handleInp
                         includeInputInList
                         handleHomeEndKeys
                         id="tbc_program_interest"
-                        aria-labelledby="pronouns-label"
+                        aria-labelledby="tbc_program_interest-label"
                         options={communityNeeds || []} // <-- directly provide a default value here
                         isOptionEqualToValue={(option, value) =>
                             (option.inputValue && value.inputValue && option.inputValue === value.inputValue) || option === value
