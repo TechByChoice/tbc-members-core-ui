@@ -29,17 +29,17 @@ function ViewJobPage({ userDetail, isLoading }) {
     const isOwnProfile = userDetail?.user_info.id === jobData?.created_by_id;
     const isStaffOrEditor = userDetail?.account_info?.is_staff || jobData?.created_by_id === userDetail?.user_info?.id;
 
-    useEffect(() => {
-        async function fetchData() {
-            try {
-                const jobResponse = await getJobDetails(id);
+    async function fetchData() {
+        try {
+            const jobResponse = await getJobDetails(id);
 
-                setJobData(jobResponse);
-            } catch (error) {
-                console.error('Error fetching data:', error);
-            }
+            setJobData(jobResponse);
+        } catch (error) {
+            console.error('Error fetching data:', error);
         }
+    }
 
+    useEffect(() => {
         fetchData();
     }, [ id ]);
 
@@ -75,6 +75,7 @@ function ViewJobPage({ userDetail, isLoading }) {
             })
             .then(data => {
                 statusMessage.success("We're reviewing your job now");
+                fetchData();
             })
             .catch(error => {
                 console.error('There was an error publish the job', error);
@@ -103,6 +104,7 @@ function ViewJobPage({ userDetail, isLoading }) {
             })
             .then(data => {
                 statusMessage.success("We've paused your job");
+                fetchData();
             })
             .catch(error => {
                 console.error('There was an error publish the job', error);
@@ -132,6 +134,7 @@ function ViewJobPage({ userDetail, isLoading }) {
             })
             .then(data => {
                 statusMessage.success("We've closed your job now");
+                fetchData();
             })
             .catch(error => {
                 console.error('There was an error publish the job', error);
@@ -160,6 +163,7 @@ function ViewJobPage({ userDetail, isLoading }) {
                 })
                 .then(data => {
                     statusMessage.success('Job is now active');
+                    fetchData();
                 })
                 .catch(error => {
                     console.error('There was an error publish the job', error);
