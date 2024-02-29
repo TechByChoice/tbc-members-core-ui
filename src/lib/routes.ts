@@ -60,5 +60,6 @@ export const routes = {
             workplace: () => apiJoin(routes.api.base, 'user/profile/update/work-place'),
         },
         announcements: { list: () => apiJoin(routes.api.base, 'user/details/announcement') },
+        companies: { get: id => apiJoin(routes.api.base, `company-profile/companies/${id}/`) },
     },
 };

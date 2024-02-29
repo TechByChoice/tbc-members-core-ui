@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { Suspense, useEffect, useState } from 'react';
 import { Button, Card, CardContent, Grid } from '@mui/material';
 import Typography from '@mui/material/Typography';
 import { Link } from 'react-router-dom';
@@ -6,8 +6,9 @@ import EventCard from '../../compoents/EventCard';
 import JobCard from '../../compoents/JobCard';
 import MentorCard from '../../compoents/MentorCard';
 import SlackMessage from '../../compoents/SlackMessage';
-import { useAuth } from '../../providers/AuthProvider';
-import { routes } from '../../lib/routes';
+import { routes } from '@/lib/routes';
+// import ButtonAddReview from "open_doors/ButtonAddReview";
+const ButtonAddReview = React.lazy(() => import('open_doors/ButtonAddReview'));
 
 export default function MemberDashboard() {
     const [ event, setEvent ] = useState();
@@ -132,6 +133,22 @@ export default function MemberDashboard() {
                                 <Link to="/job/new/referral">
                                     <Button variant="outlined">Add Job</Button>
                                 </Link>
+                            </Grid>
+                        </CardContent>
+                    </Card>
+                </Grid>
+
+                <Grid item xs={12} sm={6}>
+                    <Card>
+                        <CardContent>
+                            <Typography variant="h6" align="center">
+                                Review a Company
+                            </Typography>
+                            <Grid container display="flex" alignItems="center" justifyContent="center">
+                                {/*<Button type="button" variant="outlined">Add Review</Button>*/}
+                                <Suspense fallback={<div>Loading...</div>}>
+                                    <ButtonAddReview />
+                                </Suspense>
                             </Grid>
                         </CardContent>
                     </Card>

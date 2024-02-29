@@ -21,9 +21,12 @@ import * as React from 'react';
 import { createRoot } from 'react-dom/client';
 import { Route, Routes } from 'react-router';
 import { BrowserRouter } from 'react-router-dom';
+import { Suspense } from 'react';
+import ViewCompanyPage from '@/pages/ViewCompanyPage';
+// import Review from "open_doors/Review";
 
 // import TestPage from ;
-// const TestPage = React.lazy(() => import("open_doors/TestPage"  ));
+const Review = React.lazy(() => import('open_doors/Review'));
 
 const App = () => {
     const { user, isLoading } = useAuth();
@@ -41,6 +44,15 @@ const App = () => {
                     <Container>
                         <Routes>
                             <Route path="/" element={<LoginPage />} />
+
+                            <Route
+                                path="/reviews"
+                                element={
+                                    <Suspense fallback={<div>Loading...</div>}>
+                                        <Review />
+                                    </Suspense>
+                                }
+                            />
                             <Route
                                 path="/profile"
                                 element={
@@ -62,6 +74,7 @@ const App = () => {
                             />
                             <Route path="/job/new/referral" element={<JobReferralPage />} />
                             <Route path="/job/:id" element={<ViewJobPage isLoading={isLoading} userDetail={user?.[0]} />} />
+                            <Route path="/company/:id" element={<ViewCompanyPage isLoading={isLoading} userDetail={user?.[0]} />} />
                             <Route path="/job/all" element={<AllJobsPage />} />
                             <Route path="/member/:id" element={<ViewMemberProfile />} />
                             <Route path="/mentor/create" element={<NewMentorPage />} />
