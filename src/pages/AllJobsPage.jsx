@@ -20,11 +20,25 @@ const JobWrapper = styled.section`
 export default function AllJobsPage({}) {
     const [ jobs, setJobs ] = useState([]);
     const [ userPostedJobs, setUserPostedJobs ] = useState([]);
+    const [ currentPage, setCurrentPage ] = useState(1);
+    const [ totalItems, setTotalItems ] = useState(0);
+    const [ nextUrl, setNextUrl ] = useState();
+    const itemsPerPage = 100;
+    let totalPages = Math.ceil(totalItems / itemsPerPage);
 
     useEffect(() => {
-        fetch(routes.api.jobs.list(), {
+        let jobsUrl = null;
+        if (nextUrl) {
+            jobsUrl = nextUrl;
+        } else {
+            jobsUrl = `${routes.api.jobs.list()}?page=${currentPage}&limit=100`;
+        }
+        fetch(jobsUrl, {
             method: 'GET',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Token ${localStorage.getItem('token')}`,
+            },
         })
             .then(response => {
                 if (!response.ok) {
@@ -33,33 +47,31 @@ export default function AllJobsPage({}) {
                 return response.json();
             })
             .then(data => {
-                setJobs(data.all_jobs);
+                setJobs(data.all_jobs.results);
+                setTotalItems(data.all_jobs.count);
+                setNextUrl(data.all_jobs.next);
                 setUserPostedJobs(data.posted_job);
             })
             .catch(error => {
                 console.error('Error fetching events:', error);
             });
-    }, []);
+    }, [ currentPage, itemsPerPage ]);
 
-    function pullJobs() {
-        fetch(routes.api.jobs.pull(), {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Token ${localStorage.getItem('token')}`,
-            },
-        })
-            .then(data => {
-                console.log('done');
-            })
-            .catch(error => {
-                console.error('Error fetching events:', error);
-            });
-    }
+    const handleNext = () => {
+        if (currentPage < totalPages) {
+            setCurrentPage(currentPage + 1);
+        }
+    };
+
+    const handlePrevious = () => {
+        if (currentPage > 1) {
+            setCurrentPage(currentPage - 1);
+        }
+    };
 
     return (
         <JobWrapper>
-            {userPostedJobs.length > 0 ? (
+            {userPostedJobs?.length > 0 ? (
                 <CalloutCard>
                     <Typography variant="h5" mb={1}>
                         Jobs You Posted
@@ -70,6 +82,7 @@ export default function AllJobsPage({}) {
                                 <Grid item xs={12} sm={6} md={4} key={index}>
                                     <JobCard
                                         match={false}
+                                        companyId={job?.parent_company?.id}
                                         companyLogo={job?.parent_company?.logo}
                                         companyName={job?.parent_company?.name}
                                         jobType={job?.role?.name}
@@ -102,6 +115,7 @@ export default function AllJobsPage({}) {
                     jobs.map((job, index) => (
                         <Grid item xs={12} sm={6} md={4} key={index}>
                             <JobCard
+                                companyId={job?.parent_company?.id}
                                 companyLogo={job?.parent_company?.logo}
                                 companyName={job?.parent_company?.name}
                                 jobType={job?.role?.name}
@@ -115,9 +129,15 @@ export default function AllJobsPage({}) {
                         </Grid>
                     ))
                 ) : (
-                    <p>Loading events...</p> // Or any other loading indicator
+                    <p>Loading events...</p>
                 )}
             </Grid>
+            <Button onClick={handlePrevious} disabled={currentPage === 1}>
+                Previous
+            </Button>
+            <Button onClick={handleNext} disabled={currentPage === totalPages}>
+                Next
+            </Button>
         </JobWrapper>
     );
 }

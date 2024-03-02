@@ -302,12 +302,14 @@ function ViewJobPage({ userDetail, isLoading }) {
                         <Grid container display="flex" direction="row" alignItems="center" spacing={5}>
                             <Grid item xs={12} sm={4}>
                                 <Card>
-                                    <CardMedia
-                                        component="img"
-                                        height="140"
-                                        src={jobData?.parent_company?.logo}
-                                        alt={`${jobData?.parent_company?.company_name} Logo`}
-                                    />
+                                    <Link to={`/company/${jobData?.parent_company?.id}`}>
+                                        <CardMedia
+                                            component="img"
+                                            height="140"
+                                            src={jobData?.parent_company?.logo}
+                                            alt={`${jobData?.parent_company?.company_name} Logo`}
+                                        />
+                                    </Link>
                                 </Card>
                             </Grid>
                         </Grid>

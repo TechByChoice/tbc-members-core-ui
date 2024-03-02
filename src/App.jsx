@@ -23,7 +23,7 @@ import { Route, Routes } from 'react-router';
 import { BrowserRouter } from 'react-router-dom';
 import { Suspense } from 'react';
 import ViewCompanyPage from '@/pages/ViewCompanyPage';
-// import Review from "open_doors/Review";
+import AllMembersPage from '@/pages/AllMembersPage';
 
 // import TestPage from ;
 const Review = React.lazy(() => import('open_doors/Review'));
@@ -63,6 +63,7 @@ const App = () => {
                             />
                             <Route path="/new/member/1" element={<MemberSignupPage />} />
                             <Route path="/new/member/2" element={<NewMemberPage />} />
+                            <Route path="/member/all" element={<AllMembersPage />} />
                             <Route path="/event/all" element={<AllEventsPage />} />
                             <Route
                                 path="/dashboard"
