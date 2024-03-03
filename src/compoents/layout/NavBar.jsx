@@ -73,6 +73,11 @@ export default function NavBar() {
                                 </Link>
                             </Grid>
                             <Grid item>
+                                <Link to="/member/all">
+                                    <Typography variant="body1">Members</Typography>
+                                </Link>
+                            </Grid>
+                            <Grid item>
                                 <Typography variant="body1">Blog</Typography>
                             </Grid>
                             <Grid item>

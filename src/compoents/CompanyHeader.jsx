@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import { Box, Typography, Link, Avatar, Grid, Paper, IconButton } from '@mui/material';
 import { GitHub, Instagram, Language, LinkedIn, Twitter, YouTube } from '@mui/icons-material';
 import JobCard from '@/compoents/JobCard';
-import Alert from '@mui/material/Alert';
+const ButtonAddReview = React.lazy(() => import('open_doors/ButtonAddReview'));
 
 const CompanyHeader = ({ companyProfile, companyScore, companyJobs }) => {
     return (
@@ -12,11 +12,20 @@ const CompanyHeader = ({ companyProfile, companyScore, companyJobs }) => {
                     <Grid item>
                         <img alt={companyProfile?.company_name} src={companyProfile?.logo} style={{ minWidth: 100, minHeight: 100, padding: 20 }} />
                     </Grid>
-                    <Grid item>
-                        <Typography variant="h5" sx={{ fontWeight: 'bold', color: 'inherit' }}>
-                            TBC Approval Score: {companyScore?.average_rating} / 5
-                        </Typography>
-                    </Grid>
+                    {companyScore?.average_rating ? (
+                        <Grid item>
+                            <Typography variant="h5" sx={{ fontWeight: 'bold', color: 'inherit' }}>
+                                TBC Approval Score: {companyScore?.average_rating} / 5
+                            </Typography>
+                        </Grid>
+                    ) : (
+                        <Grid item sx={{ textAlign: 'right' }}>
+                            <Typography variant="body1">Be the first to review {companyProfile?.company_name}</Typography>
+                            <Suspense fallback={<div>Loading...</div>}>
+                                <ButtonAddReview />
+                            </Suspense>
+                        </Grid>
+                    )}
                 </Grid>
             </Paper>
             <Grid container justifyContent="flex-start">
@@ -79,14 +88,15 @@ const CompanyHeader = ({ companyProfile, companyScore, companyJobs }) => {
                     </Box>
                 </Grid>
             </Grid>
-            <Grid container justifyContent="flex-start">
-                <Typography variant="h3">Open Jobs</Typography>
+            {companyJobs?.length > 0 && (
                 <Grid container justifyContent="flex-start">
-                    {companyJobs?.length > 0 &&
-                        companyJobs.map((job, index) => (
+                    <Typography variant="h3">Open Jobs</Typography>
+                    <Grid container justifyContent="flex-start">
+                        {companyJobs.map((job, index) => (
                             <Grid item key={index}>
                                 <JobCard
                                     match={false}
+                                    companyId={companyProfile?.id}
                                     companyLogo={companyProfile?.logo}
                                     companyName={companyProfile?.company_name}
                                     jobType={job?.role?.name}
@@ -97,8 +107,9 @@ const CompanyHeader = ({ companyProfile, companyScore, companyJobs }) => {
                                     description={null}></JobCard>
                             </Grid>
                         ))}
+                    </Grid>
                 </Grid>
-            </Grid>
+            )}
         </>
     );
 };

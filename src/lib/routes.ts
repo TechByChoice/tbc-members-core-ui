@@ -49,6 +49,7 @@ export const routes = {
             getProfile: () => apiJoin(routes.api.base, 'user/details/new-member'),
             getUsersDetails: () => apiJoin(routes.api.base, 'user/details/'),
             connectWithMentor: id => apiJoin(routes.api.base, `mentorship/mentor/${id}/connect/roster/add`),
+            getAllMembers: () => apiJoin(routes.api.base, `app/member/all/`),
             getMemberData: id => apiJoin(routes.api.base, `member/member-details/${id}/`),
             basicSystemInfo: () => apiJoin(routes.api.base, 'user/details/new-member'),
             basicSystemInfoUpdate: details => apiJoin(routes.api.base, `app/details/?fields=${details}`),

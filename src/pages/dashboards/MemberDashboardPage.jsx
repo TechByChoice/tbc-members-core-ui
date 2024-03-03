@@ -7,7 +7,7 @@ import JobCard from '../../compoents/JobCard';
 import MentorCard from '../../compoents/MentorCard';
 import SlackMessage from '../../compoents/SlackMessage';
 import { routes } from '@/lib/routes';
-// import ButtonAddReview from "open_doors/ButtonAddReview";
+
 const ButtonAddReview = React.lazy(() => import('open_doors/ButtonAddReview'));
 
 export default function MemberDashboard() {
@@ -191,6 +191,7 @@ export default function MemberDashboard() {
                             {job ? (
                                 <JobCard
                                     match={false}
+                                    companyId={job?.parent_company?.id}
                                     companyLogo={job?.parent_company?.logo}
                                     companyName={job?.parent_company?.name}
                                     jobType={job?.role?.name}

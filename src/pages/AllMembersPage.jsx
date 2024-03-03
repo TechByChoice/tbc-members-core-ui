@@ -1,5 +1,5 @@
 import React, { Component, useEffect, useState } from 'react';
-import { Button, Grid } from '@mui/material';
+import { Button, Grid, Pagination, PaginationItem } from '@mui/material';
 import { routes } from '@/lib/routes';
 import Typography from '@mui/material/Typography';
 import MentorCard from '@/compoents/MentorCard';
@@ -11,15 +11,23 @@ export default function AllMembersPage({}) {
     const [ nextUrl, setNextUrl ] = useState();
     const itemsPerPage = 5;
     let totalPages = Math.ceil(totalItems / itemsPerPage);
+    const ArrowBackIcon = () => {
+        return (
+            <Button onClick={handlePrevious} disabled={currentPage === 1}>
+                Previous
+            </Button>
+        );
+    };
+    const ArrowForwardIcon = () => {
+        return (
+            <Button onClick={handleNext} disabled={currentPage === totalPages}>
+                Next
+            </Button>
+        );
+    };
 
     useEffect(() => {
-        let membersUrl = null;
-        if (nextUrl) {
-            membersUrl = nextUrl;
-        } else {
-            membersUrl = `${routes.api.users.getAllMembers()}?page=${currentPage}&limit=${itemsPerPage}`;
-        }
-        fetch(membersUrl, {
+        fetch(`${routes.api.users.getAllMembers()}?page=${currentPage}&limit=${itemsPerPage}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -54,6 +62,11 @@ export default function AllMembersPage({}) {
             setCurrentPage(currentPage - 1);
         }
     };
+
+    const handlePageChange = (event, value) => {
+        alert(value);
+        setCurrentPage(value);
+    };
     return (
         <div>
             <Typography variant="h3" align="center">
@@ -70,12 +83,11 @@ export default function AllMembersPage({}) {
                     <p>Loading Members...</p>
                 )}
             </Grid>
-            <Button onClick={handlePrevious} disabled={currentPage === 1}>
-                Previous
-            </Button>
-            <Button onClick={handleNext} disabled={currentPage === totalPages}>
-                Next
-            </Button>
+            <Pagination
+                count={totalPages}
+                onChange={handlePageChange}
+                renderItem={item => <PaginationItem slots={{ previous: ArrowBackIcon, next: ArrowForwardIcon }} {...item} />}
+            />
         </div>
     );
 }
