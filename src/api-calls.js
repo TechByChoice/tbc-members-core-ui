@@ -36,3 +36,15 @@ export const getJobDetails = async jobId => {
     });
     return response.json();
 };
+export const getCompanyDetails = async companyId => {
+    const defaultHeaders = {
+        'Content-Type': 'application/json',
+        Authorization: `Token ${localStorage.getItem('token')}`,
+    };
+
+    const response = await fetch(routes.api.companies.get(companyId), {
+        method: 'GET',
+        headers: defaultHeaders,
+    });
+    return response.json();
+};

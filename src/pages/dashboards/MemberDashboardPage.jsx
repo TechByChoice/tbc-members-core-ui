@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { Suspense, useEffect, useState } from 'react';
 import { Button, Card, CardContent, Grid } from '@mui/material';
 import Typography from '@mui/material/Typography';
 import { Link } from 'react-router-dom';
@@ -6,8 +6,9 @@ import EventCard from '../../compoents/EventCard';
 import JobCard from '../../compoents/JobCard';
 import MentorCard from '../../compoents/MentorCard';
 import SlackMessage from '../../compoents/SlackMessage';
-import { useAuth } from '../../providers/AuthProvider';
-import { routes } from '../../lib/routes';
+import { routes } from '@/lib/routes';
+
+const ButtonAddReview = React.lazy(() => import('open_doors/ButtonAddReview'));
 
 export default function MemberDashboard() {
     const [ event, setEvent ] = useState();
@@ -137,6 +138,22 @@ export default function MemberDashboard() {
                     </Card>
                 </Grid>
 
+                <Grid item xs={12} sm={6}>
+                    <Card>
+                        <CardContent>
+                            <Typography variant="h6" align="center">
+                                Review a Company
+                            </Typography>
+                            <Grid container display="flex" alignItems="center" justifyContent="center">
+                                {/*<Button type="button" variant="outlined">Add Review</Button>*/}
+                                <Suspense fallback={<div>Loading...</div>}>
+                                    <ButtonAddReview />
+                                </Suspense>
+                            </Grid>
+                        </CardContent>
+                    </Card>
+                </Grid>
+
                 {/* Announcement */}
                 <Grid item xs={12}>
                     <Grid container display="flex" direction="row" justifyContent="space-around">
@@ -174,6 +191,7 @@ export default function MemberDashboard() {
                             {job ? (
                                 <JobCard
                                     match={false}
+                                    companyId={job?.parent_company?.id}
                                     companyLogo={job?.parent_company?.logo}
                                     companyName={job?.parent_company?.name}
                                     jobType={job?.role?.name}
