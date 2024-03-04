@@ -2,8 +2,7 @@ import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
-import { Card, CardContent } from '@mui/material';
-import Checkbox from '@mui/material/Checkbox';
+import { Card, CardContent, FormControlLabel, Checkbox } from '@mui/material';
 
 function ConfirmAccountPage() {
     const navigate = useNavigate();
@@ -21,7 +20,7 @@ function ConfirmAccountPage() {
                         Creating an account means you agree to our service agreement
                     </Typography>
                     <Typography variant="subtitle1" component="h2"></Typography>
-                    <Checkbox {...label} defaultChecked />
+                    <FormControlLabel required control={<Checkbox />} label="I agree to the service agreement" />
                 </CardContent>
             </Card>
         </Grid>
