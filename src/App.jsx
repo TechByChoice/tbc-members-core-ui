@@ -7,7 +7,6 @@ import AllMentorsPage from '@/pages/AllMentorsPage';
 import Dashboard from '@/pages/Dashboard';
 import JobReferralPage from '@/pages/JobReferralPage';
 import LoginPage from '@/pages/LoginPage';
-import MemberSignupPage from '@/pages/MemberSignupPage';
 import NewMemberPage from '@/pages/NewMemeberPage';
 import NewMentorPage from '@/pages/NewMentorPage';
 import ProfileSettingPage from '@/pages/ProfileSettingPage';
@@ -24,12 +23,18 @@ import { BrowserRouter } from 'react-router-dom';
 import { Suspense } from 'react';
 import ViewCompanyPage from '@/pages/ViewCompanyPage';
 import AllMembersPage from '@/pages/AllMembersPage';
-import CompanySignupPage from '@/pages/CompanySignupPage';
 import CreateAccountPage from '@/pages/CreateAccountPage';
+import * as PropTypes from 'prop-types';
+import CheckEmailPage from '@/pages/CheckEmailPage';
 
 // import TestPage from ;
 const Review = React.lazy(() => import('open_doors/Review'));
 
+function ConfirmEmail(props) {
+    return null;
+}
+
+ConfirmEmail.propTypes = { status: PropTypes.string };
 const App = () => {
     const { user, isLoading } = useAuth();
 
@@ -64,6 +69,7 @@ const App = () => {
                                 }
                             />
                             <Route path="/new" element={<CreateAccountPage />} />
+                            <Route path="/check-email" element={<CheckEmailPage />} />
                             <Route path="/new/member/2" element={<NewMemberPage />} />
                             <Route path="/member/all" element={<AllMembersPage />} />
                             <Route path="/event/all" element={<AllEventsPage />} />
