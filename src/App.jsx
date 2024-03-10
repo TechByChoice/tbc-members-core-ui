@@ -26,8 +26,9 @@ import AllMembersPage from '@/pages/AllMembersPage';
 import CreateAccountPage from '@/pages/CreateAccountPage';
 import * as PropTypes from 'prop-types';
 import CheckEmailPage from '@/pages/CheckEmailPage';
-import ConfirmAccountPage from '@/pages/ConfirmAccountPage';
+import ConfirmAccountPage from '@/pages/onboarding/company/ConfirmAccountPage';
 import NewCompanyPage from '@/pages/NewCompanyPage';
+import ConfirmAgreementPage from '@/pages/onboarding/company/ConfirmAgreementPage';
 
 // import TestPage from ;
 const Review = React.lazy(() => import('open_doors/Review'));
@@ -72,10 +73,25 @@ const App = () => {
                             />
                             <Route path="/new" element={<CreateAccountPage />} />
                             <Route path="/new/check-email" element={<CheckEmailPage />} />
-                            <Route path="/new/company/confirm-account" element={<ConfirmAccountPage />} />
+                            <Route path="/new/company/confirm-agreement/" element={<ConfirmAgreementPage />} />
+                            <Route path="/new/company/confirm-account/:id/:token" element={<ConfirmAccountPage />} />
                             <Route path="/new/company/create-profile" element={<NewCompanyPage />} />
-                            <Route path="/new/member/2" element={<NewMemberPage />} />
-                            <Route path="/member/all" element={<AllMembersPage />} />
+                            <Route
+                                path="/new/member/2"
+                                element={
+                                    <PrivateRoutes userDetail={user?.[0]}>
+                                        <NewMemberPage />
+                                    </PrivateRoutes>
+                                }
+                            />
+                            <Route
+                                path="/member/all"
+                                element={
+                                    <PrivateRoutes userDetail={user?.[0]}>
+                                        <AllMembersPage />
+                                    </PrivateRoutes>
+                                }
+                            />
                             <Route path="/event/all" element={<AllEventsPage />} />
                             <Route
                                 path="/dashboard"
@@ -85,13 +101,48 @@ const App = () => {
                                     </PrivateRoutes>
                                 }
                             />
-                            <Route path="/job/new/referral" element={<JobReferralPage />} />
+                            <Route
+                                path="/job/new/referral"
+                                element={
+                                    <PrivateRoutes userDetail={user?.[0]}>
+                                        <JobReferralPage />
+                                    </PrivateRoutes>
+                                }
+                            />
                             <Route path="/job/:id" element={<ViewJobPage isLoading={isLoading} userDetail={user?.[0]} />} />
                             <Route path="/company/:id" element={<ViewCompanyPage isLoading={isLoading} userDetail={user?.[0]} />} />
-                            <Route path="/job/all" element={<AllJobsPage />} />
-                            <Route path="/member/:id" element={<ViewMemberProfile />} />
-                            <Route path="/mentor/create" element={<NewMentorPage />} />
-                            <Route path="/mentor/all" element={<AllMentorsPage />} />
+                            <Route
+                                path="/job/all"
+                                element={
+                                    <PrivateRoutes userDetail={user?.[0]}>
+                                        <AllJobsPage />
+                                    </PrivateRoutes>
+                                }
+                            />
+                            <Route
+                                path="/member/:id"
+                                element={
+                                    <PrivateRoutes userDetail={user?.[0]}>
+                                        <ViewMemberProfile />
+                                    </PrivateRoutes>
+                                }
+                            />
+                            <Route
+                                path="/mentor/create"
+                                element={
+                                    <PrivateRoutes userDetail={user?.[0]}>
+                                        <NewMentorPage />
+                                    </PrivateRoutes>
+                                }
+                            />
+                            <Route
+                                path="/mentor/all"
+                                element={
+                                    <PrivateRoutes userDetail={user?.[0]}>
+                                        <AllMentorsPage />
+                                    </PrivateRoutes>
+                                }
+                            />
                         </Routes>
                     </Container>
                 </BrowserRouter>
