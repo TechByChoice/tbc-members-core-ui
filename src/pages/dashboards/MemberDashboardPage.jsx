@@ -7,6 +7,7 @@ import JobCard from '../../compoents/JobCard';
 import MentorCard from '../../compoents/MentorCard';
 import SlackMessage from '../../compoents/SlackMessage';
 import { routes } from '@/lib/routes';
+import ErrorBoundary from '@/compoents/ErrorBoundary';
 
 const ButtonAddReview = React.lazy(() => import('open_doors/ButtonAddReview'));
 
@@ -137,23 +138,22 @@ export default function MemberDashboard() {
                         </CardContent>
                     </Card>
                 </Grid>
-
-                <Grid item xs={12} sm={6}>
-                    <Card>
-                        <CardContent>
-                            <Typography variant="h6" align="center">
-                                Review a Company
-                            </Typography>
-                            <Grid container display="flex" alignItems="center" justifyContent="center">
-                                {/*<Button type="button" variant="outlined">Add Review</Button>*/}
-                                <Suspense fallback={<div>Loading...</div>}>
-                                    <ButtonAddReview />
-                                </Suspense>
-                            </Grid>
-                        </CardContent>
-                    </Card>
-                </Grid>
-
+                <ErrorBoundary>
+                    <Suspense fallback={<div>Loading...</div>}>
+                        <Grid item xs={12} sm={6}>
+                            <Card>
+                                <CardContent>
+                                    <Typography variant="h6" align="center">
+                                        Review a Company
+                                    </Typography>
+                                    <Grid container display="flex" alignItems="center" justifyContent="center">
+                                        <ButtonAddReview />
+                                    </Grid>
+                                </CardContent>
+                            </Card>
+                        </Grid>
+                    </Suspense>
+                </ErrorBoundary>
                 {/* Announcement */}
                 <Grid item xs={12}>
                     <Grid container display="flex" direction="row" justifyContent="space-around">
