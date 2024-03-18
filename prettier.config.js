@@ -25,7 +25,7 @@ module.exports = {
     insertPragma: false,
     jsxSingleQuote: false,
     ...overrides,
-    printWidth: 155,
+    printWidth: 170,
     proseWrap: 'preserve',
     quoteProps: 'as-needed',
     requirePragma: false,
