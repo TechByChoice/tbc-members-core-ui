@@ -52,7 +52,6 @@ export default function AllMembersPage({}) {
 
     const handleNext = () => {
         if (currentPage < totalPages) {
-            console.log('het');
             setCurrentPage(currentPage + 1);
         }
     };
@@ -64,7 +63,6 @@ export default function AllMembersPage({}) {
     };
 
     const handlePageChange = (event, value) => {
-        alert(value);
         setCurrentPage(value);
     };
     return (
