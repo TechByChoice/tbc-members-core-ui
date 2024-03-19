@@ -2,6 +2,8 @@ import React, { Suspense } from 'react';
 import { Box, Typography, Link, Avatar, Grid, Paper, IconButton } from '@mui/material';
 import { GitHub, Instagram, Language, LinkedIn, Twitter, YouTube } from '@mui/icons-material';
 import JobCard from '@/compoents/JobCard';
+import ErrorBoundary from '@/compoents/ErrorBoundary';
+
 const ButtonAddReview = React.lazy(() => import('open_doors/ButtonAddReview'));
 
 const CompanyHeader = ({ companyProfile, companyScore, companyJobs }) => {
@@ -19,12 +21,14 @@ const CompanyHeader = ({ companyProfile, companyScore, companyJobs }) => {
                             </Typography>
                         </Grid>
                     ) : (
-                        <Grid item sx={{ textAlign: 'right' }}>
-                            <Typography variant="body1">Be the first to review {companyProfile?.company_name}</Typography>
+                        <ErrorBoundary>
                             <Suspense fallback={<div>Loading...</div>}>
-                                <ButtonAddReview />
+                                <Grid item sx={{ textAlign: 'right' }}>
+                                    <Typography variant="body1">Be the first to review {companyProfile?.company_name}</Typography>
+                                    <ButtonAddReview />
+                                </Grid>
                             </Suspense>
-                        </Grid>
+                        </ErrorBoundary>
                     )}
                 </Grid>
             </Paper>

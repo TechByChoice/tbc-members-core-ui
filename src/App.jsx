@@ -21,14 +21,17 @@ import * as React from 'react';
 import { createRoot } from 'react-dom/client';
 import { Route, Routes } from 'react-router';
 import { BrowserRouter } from 'react-router-dom';
-import { Suspense } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import ViewCompanyPage from '@/pages/ViewCompanyPage';
 import AllMembersPage from '@/pages/AllMembersPage';
+import ErrorBoundary from '@/compoents/ErrorBoundary';
 
 // import TestPage from ;
 const Review = React.lazy(() => import('open_doors/Review'));
 
 const App = () => {
+    const [ moduleLoaded, setModuleLoaded ] = useState(false);
+
     const { user, isLoading } = useAuth();
 
     if (isLoading) {
@@ -44,15 +47,17 @@ const App = () => {
                     <Container>
                         <Routes>
                             <Route path="/" element={<LoginPage />} />
-
                             <Route
                                 path="/reviews"
                                 element={
-                                    <Suspense fallback={<div>Loading...</div>}>
-                                        <Review />
-                                    </Suspense>
+                                    <ErrorBoundary>
+                                        <Suspense fallback={<div>Loading...</div>}>
+                                            <Review />
+                                        </Suspense>
+                                    </ErrorBoundary>
                                 }
                             />
+
                             <Route
                                 path="/profile"
                                 element={
