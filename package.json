@@ -52,7 +52,7 @@
         "vite": "^5.1.6"
     },
     "dependencies": {
-        "@techbychoice/tbc-component-library": "^0.0.6",
+        "@techbychoice/tbc-component-library": "^0.0.7",
         "@tiptap/extension-heading": "^2.2.4",
         "@tiptap/extension-paragraph": "^2.2.3",
         "@tiptap/extension-text": "^2.2.1",
