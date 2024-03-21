@@ -17,6 +17,7 @@ import { AuthProvider, useAuth } from '@/providers/AuthProvider';
 import { StatusProvider } from '@/providers/MsgStatusProvider';
 import { PrivateRoutes } from '@/providers/PrivateRouteProvider';
 import { Container } from '@mui/material';
+import { TbcThemeProvider } from '@techbychoice/tbc-component-library';
 import * as React from 'react';
 import { createRoot } from 'react-dom/client';
 import { Route, Routes } from 'react-router';
@@ -39,57 +40,59 @@ const App = () => {
     }
 
     return (
-        <AuthProvider>
-            <StatusProvider>
-                <BrowserRouter>
-                    <StatusAlert />
-                    <NavBar />
-                    <Container>
-                        <Routes>
-                            <Route path="/" element={<LoginPage />} />
-                            <Route
-                                path="/reviews"
-                                element={
-                                    <ErrorBoundary>
-                                        <Suspense fallback={<div>Loading...</div>}>
-                                            <Review />
-                                        </Suspense>
-                                    </ErrorBoundary>
-                                }
-                            />
+        <TbcThemeProvider>
+            <AuthProvider>
+                <StatusProvider>
+                    <BrowserRouter>
+                        <StatusAlert />
+                        <NavBar />
+                        <Container>
+                            <Routes>
+                                <Route path="/" element={<LoginPage />} />
+                                <Route
+                                    path="/reviews"
+                                    element={
+                                        <ErrorBoundary>
+                                            <Suspense fallback={<div>Loading...</div>}>
+                                                <Review />
+                                            </Suspense>
+                                        </ErrorBoundary>
+                                    }
+                                />
 
-                            <Route
-                                path="/profile"
-                                element={
-                                    <PrivateRoutes userDetail={user || undefined}>
-                                        <ProfileSettingPage userDetail={user || undefined} />
-                                    </PrivateRoutes>
-                                }
-                            />
-                            <Route path="/new/member/1" element={<MemberSignupPage />} />
-                            <Route path="/new/member/2" element={<NewMemberPage />} />
-                            <Route path="/member/all" element={<AllMembersPage />} />
-                            <Route path="/event/all" element={<AllEventsPage />} />
-                            <Route
-                                path="/dashboard"
-                                element={
-                                    <PrivateRoutes userDetail={user?.[0]}>
-                                        <Dashboard />
-                                    </PrivateRoutes>
-                                }
-                            />
-                            <Route path="/job/new/referral" element={<JobReferralPage />} />
-                            <Route path="/job/:id" element={<ViewJobPage isLoading={isLoading} userDetail={user?.[0]} />} />
-                            <Route path="/company/:id" element={<ViewCompanyPage isLoading={isLoading} userDetail={user?.[0]} />} />
-                            <Route path="/job/all" element={<AllJobsPage />} />
-                            <Route path="/member/:id" element={<ViewMemberProfile />} />
-                            <Route path="/mentor/create" element={<NewMentorPage />} />
-                            <Route path="/mentor/all" element={<AllMentorsPage />} />
-                        </Routes>
-                    </Container>
-                </BrowserRouter>
-            </StatusProvider>
-        </AuthProvider>
+                                <Route
+                                    path="/profile"
+                                    element={
+                                        <PrivateRoutes userDetail={user || undefined}>
+                                            <ProfileSettingPage userDetail={user || undefined} />
+                                        </PrivateRoutes>
+                                    }
+                                />
+                                <Route path="/new/member/1" element={<MemberSignupPage />} />
+                                <Route path="/new/member/2" element={<NewMemberPage />} />
+                                <Route path="/member/all" element={<AllMembersPage />} />
+                                <Route path="/event/all" element={<AllEventsPage />} />
+                                <Route
+                                    path="/dashboard"
+                                    element={
+                                        <PrivateRoutes userDetail={user?.[0]}>
+                                            <Dashboard />
+                                        </PrivateRoutes>
+                                    }
+                                />
+                                <Route path="/job/new/referral" element={<JobReferralPage />} />
+                                <Route path="/job/:id" element={<ViewJobPage isLoading={isLoading} userDetail={user?.[0]} />} />
+                                <Route path="/company/:id" element={<ViewCompanyPage isLoading={isLoading} userDetail={user?.[0]} />} />
+                                <Route path="/job/all" element={<AllJobsPage />} />
+                                <Route path="/member/:id" element={<ViewMemberProfile />} />
+                                <Route path="/mentor/create" element={<NewMentorPage />} />
+                                <Route path="/mentor/all" element={<AllMentorsPage />} />
+                            </Routes>
+                        </Container>
+                    </BrowserRouter>
+                </StatusProvider>
+            </AuthProvider>
+        </TbcThemeProvider>
     );
 };
 
