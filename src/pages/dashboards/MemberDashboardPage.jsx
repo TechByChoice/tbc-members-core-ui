@@ -8,6 +8,7 @@ import MentorCard from '../../compoents/MentorCard';
 import SlackMessage from '../../compoents/SlackMessage';
 import { useAuth } from '../../providers/AuthProvider';
 import { routes } from '../../lib/routes';
+import BasicCardComonent from '../../compoents/BasicCardComonent/BasicCardComonent';
 
 export default function MemberDashboard() {
     const [ event, setEvent ] = useState();
@@ -212,6 +213,17 @@ export default function MemberDashboard() {
                         </Grid>
                         <CardContent>{mentor ? <MentorCard mentor={mentor} /> : <p>Loading mentor...</p>}</CardContent>
                     </Card>
+                </Grid>
+                <Grid>
+                    <div>
+                        <BasicCardComonent
+                            imageUrl="path_to_your_image.jpg"
+                            headerText="Header Text"
+                            // icon={<YourIconComponent />}
+                            hourlyRate={20} // Example hourly rate
+                            buttonText="Click Me"
+                        />
+                    </div>
                 </Grid>
             </Grid>
         </>
