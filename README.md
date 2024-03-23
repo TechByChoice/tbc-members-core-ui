@@ -4,79 +4,119 @@ Welcome to the TBC Members Core UI project! This open-source project is part of 
 
 ## About the Project
 
-- **Project Purpose:** 
-  Provide a brief overview of what the project does and its target audience. Explain the problems it solves and its potential impact.
+**Project Purpose:**
 
-- **Features:** 
-  Highlight key features of the project.
+The TBC Members Core UI aims to provide a user-friendly interface for managing membership data for organizations. This site helps [Tech by Choice](www.techbychoice.org), a non-profits tech community, streamline their member management processes and programing. The project addresses common challenges such as member registration, profile management, and member communication, ultimately enhancing the overall experience for both administrators and members.
 
-- **Screenshots/Demos:** 
-  Include screenshots or demo links to give a visual understanding of the project.
+**Features:**
+
+-   Member registration and login
+-   Profile management
+-   Mentorship program management
+-   Company Reviews
+-   Org wide updates (email, newsletters)
+-   Event management
+-   Community Reporting and analytics
+
+**Screenshots/Demos:**
+Coming soon
 
 ## Getting Started
 
 ### Prerequisites
 
-- Node.js
-- npm (comes with Node.js)
+-   Node.js
+-   npm (comes with Node.js)
 
 ### Installation
 
 1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/TechByChoice/tbc-members-core-ui.git
+
+    ```bash
+    git clone https://github.com/TechByChoice/tbc-members-core-ui.git
+
+    ```
 
 2. **Navigate to the project directory:**
-   ```bash
-   cd tbc-members-core-ui
+
+    ```bash
+    cd tbc-members-core-ui
+
+    ```
 
 3. **Install dependencies:**
-   ```bash
-   npm install
+    ```bash
+    npm install
+    ```
 
 ### Running the Project
 
-- Development server:
+-   Development server:
     ```bash
-   npm run dev
-- Build the project:
-   ```bash
-   npm run build
-- Preview the build:
-   ```bash
-   npm run preview
+    npm run dev
+    ```
+-   Build the project:
+    ```bash
+    npm run build
+    ```
+-   Preview the build:
+    ```bash
+    npm run preview
+    ```
 
 ### Environment Variables
-- Set up .env as per src/example.env.
+
+-   Set up .env as per src/example.env.
+
 ## Contributing
 
 We actively welcome your pull requests and contributions. Please read our CONTRIBUTING.md for guidelines on how to contribute.
 
 ## Reporting Issues
-- Use the GitHub Issues page to report issues.
-- Clearly describe the issue including steps to reproduce when it is a bug.
+
+-   Use the GitHub Issues page to report issues.
+-   Clearly describe the issue including steps to reproduce when it is a bug.
 
 ## Submitting Enhancements
-- Submit enhancement suggestions through GitHub Issues.
-- Be clear and detailed in your explanation of the proposed feature or improvement.
+
+-   Submit enhancement suggestions through GitHub Issues.
+-   Be clear and detailed in your explanation of the proposed feature or improvement.
 
 ## Community
-- Code of Conduct: Include a section or link to the Code of Conduct to foster an inclusive and respectful community.
-Getting Help: Provide information on where users can go for help (e.g., community forums, Discord/Slack channels).
+
+### Code of Conduct
+
+The Open TBC Program adheres to the Tech By Choice Code of Conduct, fostering a respectful and inclusive environment. Read our [Code of Conduct](https://github.com/TechByChoice/getting-started/blob/main/CODE_OF_CONDUCT.md).
 
 ## License
-This project is licensed under the MIT License - see the LICENSE file for details.
+
+This project is licensed under the MIT License - see the [LICENSE](https://github.com/TechByChoice/getting-started/blob/main/LICENSE.md) file for details.
 
 ## Acknowledgments
-- Mention any individuals or organizations that have contributed significantly to the project.
-- Acknowledge any third-party assets or libraries used in the project.
+
+-   Mention any individuals or organizations that have contributed significantly to the project.
+-   Acknowledge any third-party assets or libraries used in the project.
 
 ## Support the Project
-- Provide information on how users can support the project (e.g., donations, sponsorships).
-- Encourage users to star the repository on GitHub.
+
+We have multiple ways for you to support our work!
+
+### Donations
+
+As aa nonprofit community, every donation big or small helps us continue our work. Become a [Github sponsor](https://github.com/sponsors/TechByChoice) to help our community keep growing!
+
+### Contributions
+
+We're seeking contributions in the following areas:
+
+Mentorship: Share your expertise and guide our cohort members.
+Content Creation: Help us create tutorials, blogs, and documentation.
+Administrative Support: Assist in managing teams and projects efficiently. Interested in contributing? Reach out to us at opentbc@techbychoice.org or join our Slack channel.
 
 ## Roadmap
-- Share the future plans for the project, if available. This can include upcoming features, improvements, and areas where help is needed.
+
+-   Project roadmap coming soon
 
 ## Changelog
-Maintain a changelog or provide a link to it, detailing the changes made in each release.
+
+Project changelog coming soon
