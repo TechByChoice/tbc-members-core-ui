@@ -31,9 +31,10 @@ function ViewJobPage({ userDetail, isLoading }) {
     async function fetchData() {
         try {
             const jobResponse = await getCompanyDetails(id);
+            const latestReview = jobResponse.companyReview.length - 1;
 
             setCompanyData(jobResponse.company);
-            setCompanyScore(jobResponse.companyReview[0]);
+            setCompanyScore(jobResponse.companyReview[latestReview]);
             setCompanyJobs(jobResponse.companyJobs);
         } catch (error) {
             console.error('Error fetching data:', error);
