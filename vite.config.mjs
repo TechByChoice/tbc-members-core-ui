@@ -12,7 +12,7 @@ export default defineConfig({
             name: 'hostApp',
             filename: 'remoteEntry.js',
             remotes: {
-                open_doors: isProd ? 'http://opendoors.techbychoice.org/dist/assets/remoteEntry.js' : 'http://localhost:4000/dist/assets/remoteEntry.js'
+                open_doors: isProd ? 'https://opendoors.techbychoice.org/dist/assets/remoteEntry.js' : 'http://localhost:4000/dist/assets/remoteEntry.js'
             },
             shared: ['react', 'react-dom', 'react-router-dom'],
         }),
