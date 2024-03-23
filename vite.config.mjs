@@ -3,6 +3,8 @@ import {resolve} from 'node:path';
 import {defineConfig} from 'vite';
 import federation from "@originjs/vite-plugin-federation";
 
+// Check if the current mode is production
+const isProd = process.env.NODE_ENV === 'production';
 export default defineConfig({
     plugins: [
         react({include: ['**/*.jsx', '**/*.tsx']}),
@@ -10,7 +12,7 @@ export default defineConfig({
             name: 'hostApp',
             filename: 'remoteEntry.js',
             remotes: {
-                open_doors: 'http://localhost:4000/dist/assets/remoteEntry.js'
+                open_doors: isProd ? 'http://opendoors.techbychoice.org/dist/assets/remoteEntry.js' : 'http://localhost:4000/dist/assets/remoteEntry.js'
             },
             shared: ['react', 'react-dom', 'react-router-dom'],
         }),
