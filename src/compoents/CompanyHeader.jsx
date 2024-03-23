@@ -2,8 +2,8 @@ import React, { Suspense } from 'react';
 import { Box, Typography, Link, Avatar, Grid, Paper, IconButton } from '@mui/material';
 import { GitHub, Instagram, Language, LinkedIn, Twitter, YouTube } from '@mui/icons-material';
 import JobCard from '@/compoents/JobCard';
+import HtmlContentRenderer from './utils/HtmlContentRenderer';
 import ErrorBoundary from '@/compoents/ErrorBoundary';
-
 const ButtonAddReview = React.lazy(() => import('open_doors/ButtonAddReview'));
 
 const CompanyHeader = ({ companyProfile, companyScore, companyJobs }) => {
@@ -12,7 +12,7 @@ const CompanyHeader = ({ companyProfile, companyScore, companyJobs }) => {
             <Paper sx={{ padding: 2 }} elevation={4}>
                 <Grid container alignItems="end" justifyContent="space-between">
                     <Grid item>
-                        <img alt={companyProfile?.company_name} src={companyProfile?.logo} style={{ minWidth: 100, minHeight: 100, padding: 20 }} />
+                        <img alt={companyProfile?.company_name} src={companyProfile?.logo} style={{ maxWidth: 100, maxHeight: 100, padding: 20 }} />
                     </Grid>
                     {companyScore?.average_rating ? (
                         <Grid item>
@@ -38,6 +38,28 @@ const CompanyHeader = ({ companyProfile, companyScore, companyJobs }) => {
                         <Typography variant="h2" sx={{ fontWeight: 'bold', color: 'inherit' }}>
                             {companyProfile?.company_name}
                         </Typography>
+                    </Box>
+                    <Box>
+                        <Typography variant="h5" sx={{ fontWeight: 'bold', color: 'inherit' }}>
+                            Who&apos;s leaving reviews
+                        </Typography>
+                        {companyScore?.demographics_summary}
+                    </Box>
+                    <Box>
+                        <Typography variant="h6" sx={{ fontWeight: 'bold', color: 'inherit' }}>
+                            TL;DR
+                        </Typography>
+                        {/*<Typography variant="body2">*/}
+                        <HtmlContentRenderer htmlContent={companyScore?.short_summary_text} />
+                        {/*</Typography>*/}
+                    </Box>
+                    <Box>
+                        <Typography variant="h6" sx={{ fontWeight: 'bold', color: 'inherit' }}>
+                            Full Summary
+                        </Typography>
+                        {/*<Typography variant="body2">*/}
+                        <HtmlContentRenderer htmlContent={companyScore?.full_summary_text} />
+                        {/*</Typography>*/}
                     </Box>
                     <Box>
                         <Grid container justifyContent="flex-start" sx={{ gap: '2%' }}>
