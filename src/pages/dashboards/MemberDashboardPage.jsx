@@ -165,7 +165,7 @@ export default function MemberDashboard() {
                 {/* Bottom items */}
                 <Grid item xs={12} sm={4}>
                     <Grid container display="flex" direction="row" justifyContent="space-between">
-                        <Typography variant="h6">Top Job</Typography>
+                        <Typography variant="h6">Top Job Andre</Typography>
                         <Link to="/job/all">
                             <Button variant="text">View More</Button>
                         </Link>
@@ -195,7 +195,7 @@ export default function MemberDashboard() {
                     <Grid container display="flex" direction="row" justifyContent="space-between">
                         <Typography variant="h6">Next Event</Typography>
                         <Link to="/event/all">
-                            <Button variant="text">View More</Button>
+                            <Button variant="text">View More Andre</Button>
                         </Link>
                     </Grid>
                     <Card>
@@ -214,7 +214,7 @@ export default function MemberDashboard() {
                         <CardContent>{mentor ? <MentorCard mentor={mentor} /> : <p>Loading mentor...</p>}</CardContent>
                     </Card>
                 </Grid>
-                <Grid>
+                <Grid item xs={12} sm={4}>
                     <div>
                         <BasicCardComonent
                             imageUrl="path_to_your_image.jpg"
@@ -222,6 +222,7 @@ export default function MemberDashboard() {
                             // icon={<YourIconComponent />}
                             hourlyRate={20} // Example hourly rate
                             buttonText="Click Me"
+                            // companyName={job?.parent_company?.name}
                         />
                     </div>
                 </Grid>
