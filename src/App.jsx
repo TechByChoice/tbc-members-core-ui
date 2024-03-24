@@ -29,6 +29,7 @@ import ErrorBoundary from '@/compoents/ErrorBoundary';
 
 // import TestPage from ;
 const Review = React.lazy(() => import('open_doors/Review'));
+const SurveyQuestions = React.lazy(() => import('open_doors/SurveyQuestions'));
 
 const App = () => {
     const [ moduleLoaded, setModuleLoaded ] = useState(false);
@@ -57,6 +58,15 @@ const App = () => {
                                                 <Review />
                                             </Suspense>
                                         </ErrorBoundary>
+                                    }
+                                />
+
+                                <Route
+                                    path="/questions/:id"
+                                    element={
+                                        <Suspense fallback={<div>Loading...</div>}>
+                                            <SurveyQuestions />
+                                        </Suspense>
                                     }
                                 />
 
