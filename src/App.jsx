@@ -7,7 +7,6 @@ import AllMentorsPage from '@/pages/AllMentorsPage';
 import Dashboard from '@/pages/Dashboard';
 import JobReferralPage from '@/pages/JobReferralPage';
 import LoginPage from '@/pages/LoginPage';
-import MemberSignupPage from '@/pages/MemberSignupPage';
 import NewMemberPage from '@/pages/NewMemeberPage';
 import NewMentorPage from '@/pages/NewMentorPage';
 import ProfileSettingPage from '@/pages/ProfileSettingPage';
@@ -26,9 +25,9 @@ import { Suspense, useState } from 'react';
 import ViewCompanyPage from '@/pages/ViewCompanyPage';
 import AllMembersPage from '@/pages/AllMembersPage';
 import ErrorBoundary from '@/compoents/ErrorBoundary';
-import CompanySignupPage from '@/pages/CompanySignupPage';
 import CreateAccountPage from '@/pages/CreateAccountPage';
 import CheckEmailPage from '@/pages/CheckEmailPage';
+import ConfirmAccountPage from '@/pages/onboarding/ConfirmAccountPage';
 
 // import TestPage from ;
 const Review = React.lazy(() => import('open_doors/Review'));
@@ -83,6 +82,7 @@ const App = () => {
                                 />
                                 <Route path="/new" element={<CreateAccountPage />} />
                                 <Route path="/check-email" element={<CheckEmailPage />} />
+                                <Route path="/company/confirm-account" element={<ConfirmAccountPage />} />
                                 <Route path="/new/member/2" element={<NewMemberPage />} />
                                 <Route path="/member/all" element={<AllMembersPage />} />
                                 <Route path="/event/all" element={<AllEventsPage />} />
