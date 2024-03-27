@@ -22,12 +22,13 @@ import * as React from 'react';
 import { createRoot } from 'react-dom/client';
 import { Route, Routes } from 'react-router';
 import { BrowserRouter } from 'react-router-dom';
-import { Suspense, useEffect, useState } from 'react';
+import { Suspense, useState } from 'react';
 import ViewCompanyPage from '@/pages/ViewCompanyPage';
 import AllMembersPage from '@/pages/AllMembersPage';
 import ErrorBoundary from '@/compoents/ErrorBoundary';
 import CompanySignupPage from '@/pages/CompanySignupPage';
 import CreateAccountPage from '@/pages/CreateAccountPage';
+import CheckEmailPage from '@/pages/CheckEmailPage';
 
 // import TestPage from ;
 const Review = React.lazy(() => import('open_doors/Review'));
@@ -81,6 +82,7 @@ const App = () => {
                                     }
                                 />
                                 <Route path="/new" element={<CreateAccountPage />} />
+                                <Route path="/check-email" element={<CheckEmailPage />} />
                                 <Route path="/new/member/2" element={<NewMemberPage />} />
                                 <Route path="/member/all" element={<AllMembersPage />} />
                                 <Route path="/event/all" element={<AllEventsPage />} />
