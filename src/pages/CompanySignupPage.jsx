@@ -52,7 +52,7 @@ function CompanySignupPage() {
     const handleSubmit = async event => {
         event.preventDefault();
 
-        fetch(routes.api.users.signUp(), {
+        fetch(routes.api.users.companySignUp(), {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -63,11 +63,10 @@ function CompanySignupPage() {
             .then(response => response.json())
             .then(data => {
                 if (data.status) {
-                    setToken(data.token);
-                    localStorage.setItem('token', data.token);
-                    fetchUserDetails();
-                    statusMessage.success('Welcome to Tech by Choice');
-                    navigate('/new/member/2');
+                    // setToken(data.token);
+                    // localStorage.setItem('token', data.token);
+                    // fetchUserDetails();
+                    // navigate('/new/check-email');
                 } else {
                     console.error('Error:', data.message);
                     statusMessage.error(data.message);
@@ -85,25 +84,6 @@ function CompanySignupPage() {
         const { name, value } = event.target;
         setFormData(prevFormData => ({ ...prevFormData, [name]: value }));
     };
-
-    useEffect(() => {
-        if (auth?.user?.length > 0) {
-            navigate('/', { replace: true });
-        } else {
-            fetchUserDetails();
-        }
-    }, [ auth.user ]);
-
-    useEffect(() => {
-        if (!auth.errorMessage) {
-            statusMessage.hide();
-            return;
-        }
-
-        if (auth.errorMessage['non_field_errors']) {
-            statusMessage.error(auth.errorMessage['non_field_errors'][0]);
-        }
-    }, [ auth.errorMessage ]);
 
     return (
         <>

@@ -1,21 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import TextField from '@mui/material/TextField';
-import Button from '@mui/material/Button';
 import { useAuth } from '@/providers/AuthProvider';
 import { useNavigate } from 'react-router';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import { useStatus } from '@/providers/MsgStatusProvider';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import styled from '@emotion/styled';
-import Alert from '@mui/material/Alert';
-import { useStatusMessage } from '../hooks/useStatusMessage';
-import { Link } from 'react-router-dom';
 import { Box, Tab, Tabs } from '@mui/material';
-import NewMemberPage from '@/pages/NewMemeberPage';
 import CompanySignupPage from '@/pages/CompanySignupPage';
 import MemberSignupPage from '@/pages/MemberSignupPage';
+import { useStatusMessage } from '@/hooks/useStatusMessage';
 
 const CenteredContent = styled.div`
     display: flex;
@@ -87,7 +80,7 @@ function CreateAccountPage() {
         if (user?.length > 0) {
             navigate('/dashboard', { replace: true });
         }
-    }, [ user ]);
+    }, []);
 
     useEffect(() => {
         if (!errorMessage) {
@@ -128,6 +121,8 @@ function CreateAccountPage() {
                         )}
                     </FormContainer>
                 </CenteredContent>
+
+                {/*    */}
             </Grid>
             <Grid item xs={12} sm={6}>
                 <ImageBG

@@ -27,7 +27,9 @@ import AllMembersPage from '@/pages/AllMembersPage';
 import ErrorBoundary from '@/compoents/ErrorBoundary';
 import CreateAccountPage from '@/pages/CreateAccountPage';
 import CheckEmailPage from '@/pages/CheckEmailPage';
-import ConfirmAccountPage from '@/pages/onboarding/ConfirmAccountPage';
+import ConfirmAccountPage from '@/pages/onboarding/company/ConfirmAccountPage';
+import NewCompanyPage from '@/pages/NewCompanyPage';
+import ConfirmAgreementPage from '@/pages/onboarding/company/ConfirmAgreementPage';
 
 // import TestPage from ;
 const Review = React.lazy(() => import('open_doors/Review'));
@@ -81,9 +83,18 @@ const App = () => {
                                     }
                                 />
                                 <Route path="/new" element={<CreateAccountPage />} />
-                                <Route path="/check-email" element={<CheckEmailPage />} />
-                                <Route path="/company/confirm-account" element={<ConfirmAccountPage />} />
-                                <Route path="/new/member/2" element={<NewMemberPage />} />
+                                <Route path="/new/check-email" element={<CheckEmailPage />} />
+                                <Route path="/new/company/confirm-agreement/" element={<ConfirmAgreementPage />} />
+                                <Route path="/new/company/confirm-account" element={<ConfirmAccountPage />} />
+                                <Route path="/new/company/create-profile" element={<NewCompanyPage />} />
+                                <Route
+                                    path="/new/member/2"
+                                    element={
+                                        <PrivateRoutes userDetail={user?.[0]}>
+                                            <NewMemberPage />
+                                        </PrivateRoutes>
+                                    }
+                                />
                                 <Route path="/member/all" element={<AllMembersPage />} />
                                 <Route path="/event/all" element={<AllEventsPage />} />
                                 <Route
