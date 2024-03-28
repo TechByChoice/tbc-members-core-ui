@@ -23,19 +23,27 @@
     margin-right: 10px;
 }
 
-.card-content {
+.card-details {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     padding: 10px;
 }
 
+.hourly-rate {
+    display: flex;
+    /* justify-content: left; */
+    flex-direction: column;
+    margin: 0;
+    /* background-color: #0056b3; */
+}
+
 .card-button {
-    display: block;
-    width: 100%;
-    padding: 10px;
-    background-color: #007bff;
+    border-radius: 20px;
+    padding: 8px 16px;
+    background-color: #111418;
     color: #fff;
     border: none;
-    border-bottom-left-radius: 15px;
-    border-bottom-right-radius: 15px;
     cursor: pointer;
 }
 

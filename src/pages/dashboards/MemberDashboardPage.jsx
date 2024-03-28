@@ -218,7 +218,7 @@ export default function MemberDashboard() {
                     <div>
                         <BasicCardComonent
                             imageUrl="path_to_your_image.jpg"
-                            headerText="Header Text"
+                            headerText="Software Developer"
                             // icon={<YourIconComponent />}
                             hourlyRate={20} // Example hourly rate
                             buttonText="Click Me"
