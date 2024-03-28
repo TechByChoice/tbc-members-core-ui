@@ -111,7 +111,6 @@ export default function NewCompanyPage() {
     };
 
     const handleAutocompleteChange = (name, value) => {
-        console.log(name, value, 'test');
         // Check if the value is an array (since Autocomplete can be multiple)
         if (Array.isArray(value)) {
             value = value.map(

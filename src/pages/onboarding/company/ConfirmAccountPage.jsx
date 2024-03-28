@@ -29,7 +29,6 @@ function ConfirmAccountPage() {
                     localStorage.setItem('token', data.token);
                     // fetchUserDetails();
                     navigate('/new/company/confirm-agreement/');
-                    console.log(data);
                 } else {
                     console.error('Error:', data.message);
                     // statusMessage.error(data.message);
