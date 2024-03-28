@@ -31,37 +31,46 @@ const steps = Object.values(StepDefinitions);
 function validateProfileStep(answers, setFormErrors) {
     let errors = {};
 
-    // const isValid = AnswerValidator.validateMany(answers, errors, {
-    //     photo: 'Please upload your profile photo.',
-    //     postal_code: 'Please enter your postal code.',
-    //     years_of_experience: "Please specify how long you've been on your tech journey.",
-    //     job_roles: 'Please specify titles that best fit you.',
-    // });
+    const isValid = AnswerValidator.validateMany(answers, errors, {
+        logo: 'Please upload the company logo.',
+        location: 'Please enter your postal code.',
+        mission: 'Please add the companies mission.',
+        company_size: 'Please specify company size.',
+        industries: 'Please specify company industries.',
+        website: 'Please specify company website.',
+    });
 
-    // setFormErrors(errors);
-    //
-    // return isValid;
-    return true;
+    setFormErrors(errors);
+
+    return isValid;
+    // return true;
 }
 
 function validateRolesStep(answers, setFormErrors) {
     let errors = {};
-
+    console.log(errors, 'before');
     let isValid = AnswerValidator.validateMany(answers, errors, {
-        talent_status: 'Talent profile status required.',
-        job_skills: 'Job skills are required.',
-        job_department: 'Job department is required.',
+        job_roles: 'Open roles are required.',
+        on_site_remote: 'Job work environment required.',
     });
-    // Additional check for job_skills length
-    if (answers.job_skills && answers.job_skills.length > 5) {
-        errors.job_skills = 'You can only add up to 5 skills.';
-        // Mark the form as invalid if too many job_skills are added
-        isValid = false; // If you want the overall form validation to fail in this case
+
+    if (answers.on_site_remote === 'On-site' || answers.on_site_remote === 'Hybrid') {
+        if (!answers.open_role_location) {
+            errors.open_role_location = 'Open role location is required for on-site or hybrid roles.';
+            isValid = false;
+        }
+    }
+    if (answers.on_site_remote === 'Remote' || answers.on_site_remote === 'unknown') {
+        // If on_site_remote is 'remote', ensure open_role_location error is cleared if it exists
+        if (errors.open_role_location) {
+            delete errors.open_role_location;
+            isValid = Object.keys(errors).length === 0;
+        }
     }
 
     setFormErrors(errors);
 
-    return isValid && Object.keys(errors).length === 0;
+    return isValid;
 }
 
 const validationFunctionMap = {
@@ -102,6 +111,7 @@ export default function NewCompanyPage() {
     };
 
     const handleAutocompleteChange = (name, value) => {
+        console.log(name, value, 'test');
         // Check if the value is an array (since Autocomplete can be multiple)
         if (Array.isArray(value)) {
             value = value.map(
@@ -151,23 +161,43 @@ export default function NewCompanyPage() {
         answers
     ]);
 
-    const handleNext = () => {
-        const isValid = (validationFunctionMap[activeStep] ?? validationFunctionMap.default)(answers, setFormErrors);
+    const handleNext = async () => {
+        const validationFunctions = [ validateProfileStep, validateRolesStep ];
+        const currentValidationFunction = validationFunctions[activeStep] ?? validationFunctionMap.default;
+        const isValid = currentValidationFunction(answers, setFormErrors);
 
-        if (!isValid) {
-            statusMessage.error('Please update all required fields.');
-            setCompletedSteps(prev => prev.filter(step => step !== activeStep));
-
-            return;
+        if (isValid) {
+            if (activeStep + 1 < steps.length) {
+                // setActiveStep((prevActiveStep) => prevActiveStep + 1);
+                // Not the last step, proceed to the next step
+                try {
+                    const update = await handleProfileFormSubmit(); // Assume this function returns a truthy value if successful
+                    if (!update) {
+                        // Handle the case where AJAX call was not successful
+                        // Maybe set an error message or log
+                        statusMessage.error('We ran into an issue, please try again.');
+                        console.error('Failed to update profile.');
+                    }
+                } catch (error) {
+                    // Handle any errors that occurred during the AJAX call
+                    console.error('Error submitting form:', error);
+                }
+            } else {
+                // Last step, perform form submission
+                try {
+                    const update_roles = await handleOpenRolesFormSubmit();
+                    if (!update_roles) {
+                        statusMessage.error('We ran into an issue, please try again.');
+                        console.error('Failed to update profile.');
+                    }
+                } catch (error) {
+                    // Handle any errors that occurred during the AJAX call
+                    console.error('Error submitting form:', error);
+                }
+            }
+        } else {
+            statusMessage.error('Please correct the errors before proceeding.');
         }
-
-        if (!completedSteps.includes(activeStep)) {
-            setCompletedSteps(prev => [ ...prev, activeStep ]);
-        }
-
-        setActiveStep(activeStep + 1);
-        console.log(activeStep, 'handleNext');
-        statusMessage.hide();
     };
 
     const handleBack = () => {
@@ -178,37 +208,92 @@ export default function NewCompanyPage() {
         setActiveStep(activeStep - 1);
     };
 
-    const handleFormSubmit = e => {
-        e.preventDefault();
+    const handleOpenRolesFormSubmit = async () => {
+        // e.preventDefault();
 
-        const formData = new FormData();
+        // Reset form errors before validation
+        setFormErrors({});
 
-        for (const name in answers) {
-            formData.append(name, answers[name]);
+        // Validate each step. Adjust the parameters as necessary to match your actual state structure and validation needs.
+        const isProfileValid = validateProfileStep(answers, setFormErrors);
+        const isRolesValid = validateRolesStep(answers, setFormErrors);
+
+        if (isProfileValid && isRolesValid) {
+            const formData = new FormData();
+
+            for (const name in answers) {
+                formData.append(name, answers[name]);
+            }
+
+            fetch(routes.api.companies.createOnboardingOpenRoles(), {
+                method: 'POST',
+                // credentials: 'include',
+                body: formData,
+                headers: { Authorization: `Token ${localStorage.getItem('token')}` },
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`Server error: ${response.status} ${response.statusText}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // Handle the successful JSON response here, e.g.:
+                    statusMessage.success("You're in!");
+                    // history('/dashboard');
+                })
+                .catch(error => {
+                    console.error('Fetch error:', error);
+                    statusMessage.error('We ran into an error saving your profile');
+                });
+            fetchUserDetails();
         }
+    };
 
-        fetch(routes.api.users.updateProfile(), {
-            method: 'POST',
-            credentials: 'include',
-            body: formData,
-            headers: { Authorization: `Token ${localStorage.getItem('token')}` },
-        })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`Server error: ${response.status} ${response.statusText}`);
-                }
-                return response.json();
+    const handleProfileFormSubmit = async () => {
+        // e.preventDefault();
+
+        // Reset form errors before validation
+        setFormErrors({});
+
+        // Validate each step. Adjust the parameters as necessary to match your actual state structure and validation needs.
+        const isProfileValid = validateProfileStep(answers, setFormErrors);
+
+        if (isProfileValid) {
+            const formData = new FormData();
+
+            for (const name in answers) {
+                formData.append(name, answers[name]);
+            }
+
+            fetch(routes.api.companies.createOnboardingProfile(), {
+                method: 'POST',
+                credentials: 'include',
+                body: formData,
+                headers: { Authorization: `Token ${localStorage.getItem('token')}` },
             })
-            .then(data => {
-                // Handle the successful JSON response here, e.g.:
-                statusMessage.success("You're in!");
-                // history('/dashboard');
-            })
-            .catch(error => {
-                console.error('Fetch error:', error);
-                statusMessage.error('We ran into an error saving your profile');
-            });
-        fetchUserDetails();
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`Server error: ${response.status} ${response.statusText}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // Handle the successful JSON response here, e.g.:
+                    statusMessage.success('Your profile has been created!');
+                    setAnswers(prev => ({ ...prev, companyId: data.companyId }));
+                    setActiveStep(prevActiveStep => prevActiveStep + 1);
+                    // history('/dashboard');
+                })
+                .catch(error => {
+                    console.error('Fetch error:', error);
+                    statusMessage.error('We ran into an error saving your profile');
+                });
+            return true;
+            // fetchUserDetails();
+        } else {
+            return false;
+        }
     };
 
     useEffect(() => {
@@ -217,13 +302,13 @@ export default function NewCompanyPage() {
 
     const navigate = useNavigate();
 
-    useEffect(() => {
-        // move user to dashboard if the user doesn't
-        if (user[0]?.account_info?.is_member_onboarding_complete) {
-            statusMessage.info("You've completed onboarding and no longer have access to this screen.");
-            navigate('/dashboard', { replace: false });
-        }
-    }, [ user ]);
+    // useEffect(() => {
+    //     // move user to dashboard if the user doesn't
+    //     if (user[0]?.account_info?.is_member_onboarding_complete) {
+    //         statusMessage.info("You've completed onboarding and no longer have access to this screen.");
+    //         navigate('/dashboard', { replace: false });
+    //     }
+    // }, [ user ]);
 
     return (
         <React.Fragment>
@@ -250,7 +335,7 @@ export default function NewCompanyPage() {
                             </Step>
                         ))}
                     </Stepper>
-                    <form onSubmit={handleFormSubmit}>
+                    <form>
                         {isComplete && (
                             <React.Fragment>
                                 <Typography variant="h5" gutterBottom>
@@ -270,13 +355,16 @@ export default function NewCompanyPage() {
                                             Back
                                         </Button>
                                     )}
-                                    <Button
-                                        variant="contained"
-                                        onClick={activeStep === steps.length - 1 ? null : handleNext}
-                                        type={activeStep === steps.length - 1 ? 'submit' : 'button'}
-                                        sx={{ mt: 3, ml: 1 }}>
-                                        {activeStep === steps.length - 1 ? 'Submit Details' : 'Next'}
-                                    </Button>
+
+                                    {activeStep < steps.length - 1 ? (
+                                        <Button variant="contained" onClick={handleNext} type="button" sx={{ mt: 3, ml: 1 }}>
+                                            Next
+                                        </Button>
+                                    ) : (
+                                        <Button variant="contained" onClick={handleNext} type="button" sx={{ mt: 3, ml: 1 }}>
+                                            Submit Details
+                                        </Button>
+                                    )}
                                 </Box>
                             </React.Fragment>
                         )}

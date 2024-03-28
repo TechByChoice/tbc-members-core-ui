@@ -6,7 +6,7 @@ import { useAuth } from '@/providers/AuthProvider';
 
 const filter = createFilterOptions();
 export default function DropdownIndustries({
-    isRequired, error, setAnswers = false, handleAutocompleteChange
+    isRequired, error, setAnswers = false, handleAutocompleteChange, fieldName = 'job_industries' 
 }) {
     const [ industries, setIndustries ] = useState([]);
     const [ selectedDepartment, setSelectedDepartment ] = useState('');
@@ -28,7 +28,7 @@ export default function DropdownIndustries({
 
     return (
         <Autocomplete
-            id="industries-label"
+            id={`${fieldName}-label`}
             multiple
             required
             selectOnFocus
@@ -65,16 +65,16 @@ export default function DropdownIndustries({
             onChange={(e, newValue) => {
                 setSelectedDepartment(newValue);
                 if (handleAutocompleteChange) {
-                    handleAutocompleteChange('job_industries', newValue);
+                    handleAutocompleteChange(fieldName, newValue);
                 } else {
                     setAnswers(prevState => ({
                         ...prevState,
-                        job_industries: newValue,
+                        [fieldName]: newValue,
                     }));
                 }
             }}
             renderOption={(props, option) => <li {...props}>{option.name}</li>}
-            renderInput={params => <TextField required={isRequired} error={!!error.department} name="job_industries" {...params} />}
+            renderInput={params => <TextField required={isRequired} error={!!error[fieldName]} name={fieldName} {...params} />}
         />
     );
 }

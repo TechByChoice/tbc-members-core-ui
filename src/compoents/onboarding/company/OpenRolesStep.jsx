@@ -1,28 +1,13 @@
-import {Typography,
-    FormControl,
-    FormLabel,
-    TextField,
-    Button,
-    Input,
-    Grid,
-    Autocomplete,
-    InputAdornment,
-    OutlinedInput,
-    InputLabel,
-    FormHelperText,} from '@mui/material';
+import { Typography, FormControl, FormLabel, Grid, OutlinedInput, FormHelperText } from '@mui/material';
 import React from 'react';
 import { createFilterOptions } from '@mui/material/Autocomplete';
-import Checkbox from '@mui/material/Checkbox';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import DropdownPronouns from '@/compoents/DropdownPronouns';
 import DropdownJobRole from '@/compoents/DropdownJobRole';
-import DropdownCompanySimple from '@/compoents/DropdownCompanySimple';
-import YearsOfExperienceDropdown from '@/compoents/DropdownYearsOfExperience';
+import DropdownRemote from '@/compoents/DropdownRemote';
 
 const filter = createFilterOptions();
 
 function OpenRolesStep({
-    formErrors, handleInputChange, handleFileChange, handleAutocompleteChange, questions 
+    formErrors, handleInputChange, handleAutocompleteChange, questions 
 }) {
     const [ viewNewCompany, setViewNewCompany ] = React.useState(false);
 
@@ -35,13 +20,19 @@ function OpenRolesStep({
             </Grid>
 
             <Grid item xs={12}>
-                <FormLabel id="open-roles">*Select all of the roles you&apos;re looking to fill</FormLabel>
-                <DropdownJobRole formErrors={true} isRequired={false} answers={questions} setAnswers={handleAutocompleteChange} />
+                <FormControl fullWidth error={!!formErrors.job_roles}>
+                    <FormLabel id="open-roles">*Select all of the roles you&apos;re looking to fill</FormLabel>
+                    <DropdownJobRole formErrors={true} isRequired={false} answers={questions} setAnswers={handleAutocompleteChange} />
+                    {!!formErrors.job_roles && <FormHelperText>{formErrors.job_roles}</FormHelperText>}
+                </FormControl>
             </Grid>
 
             <Grid item xs={12}>
-                <FormLabel id="open-roles">*Work Environments</FormLabel>
-                <DropdownJobRole formErrors={true} isRequired={false} answers={questions} setAnswers={handleAutocompleteChange} />
+                <FormControl fullWidth error={!!formErrors.on_site_remote}>
+                    <FormLabel id="open-roles">*Work Environments</FormLabel>
+                    <DropdownRemote isRequired={false} answers={questions} error={formErrors} handleAutocompleteChange={handleAutocompleteChange} />
+                    {!!formErrors.on_site_remote && <FormHelperText>{formErrors.on_site_remote}</FormHelperText>}
+                </FormControl>
             </Grid>
 
             {/* Postal Code */}

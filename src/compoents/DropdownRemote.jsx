@@ -17,7 +17,8 @@ export default function DropdownRemote({
         async function fetchDepartments() {
             try {
                 const response = await getDropDrownItems('on_site_remote');
-                setCompanyEnvironment(response.on_site_remote);
+                const clean_data = response.on_site_remote.map(([ id, name ]) => ({ id, name }));
+                setCompanyEnvironment(clean_data);
             } catch (error) {
                 console.error('Error fetching on_site_remote:', error);
             }

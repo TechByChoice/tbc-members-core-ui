@@ -22,6 +22,7 @@ import { RichTextEditor } from '@/compoents/RichTextEditor';
 import Box from '@mui/material/Box';
 import DropdownIndustries from '@/compoents/DropdownIndustries';
 import DropdownCompanySize from '@/compoents/DropdownCompanySize';
+import InputLocation from '@/compoents/InputLocation';
 
 const filter = createFilterOptions();
 
@@ -52,14 +53,14 @@ function ProfileStep({
             <Grid item xs={12}>
                 <FormControl fullWidth error={!!formErrors.location}>
                     <FormLabel htmlFor="location">* Company Location</FormLabel>
-                    <OutlinedInput onChange={handleInputChange} name="location" />
+                    <InputLocation formErrors={formErrors} handleAutocompleteChange={handleAutocompleteChange} />
                     {!!formErrors.location && <FormHelperText>{formErrors.location}</FormHelperText>}
                 </FormControl>
             </Grid>
 
             <Grid item xs={12}>
                 <FormControl fullWidth error={!!formErrors.mission}>
-                    <FormLabel htmlFor="location">* Company Mission</FormLabel>
+                    <FormLabel htmlFor="mission">* Company Mission</FormLabel>
                     <RichTextEditor onFormDataChange={handleEditorUpdate} id="mission" />
                     {!!formErrors.mission && <FormHelperText>{formErrors.mission}</FormHelperText>}
                 </FormControl>
@@ -68,26 +69,45 @@ function ProfileStep({
             {/* Job Title Dropdown */}
             <Grid item xs={12}>
                 <FormControl fullWidth error={!!formErrors.company_size}>
-                    <FormLabel id="job-title-label">* How large is the company?</FormLabel>
-                    <DropdownCompanySize error={formErrors} isRequired={true} answers={questions} setAnswers={handleAutocompleteChange} />
+                    <FormLabel id="company_size-label">* How large is the company?</FormLabel>
+                    <DropdownCompanySize
+                        fieldName="company_size"
+                        error={formErrors}
+                        isRequired={true}
+                        answers={questions}
+                        handleAutocompleteChange={handleAutocompleteChange}
+                    />
                     {!!formErrors.company_size && <FormHelperText>{formErrors.company_size}</FormHelperText>}
                 </FormControl>
             </Grid>
 
             <Grid item xs={12}>
                 <FormControl fullWidth error={!!formErrors.industries}>
-                    <FormLabel id="tech-journey-label">* What industry do you work in?</FormLabel>
-                    <DropdownIndustries isRequired={false} error={formErrors} handleAutocompleteChange={handleAutocompleteChange} />
+                    <FormLabel id="industries-label">* What industry do you work in?</FormLabel>
+                    <DropdownIndustries fieldName="industries" isRequired={false} error={formErrors} handleAutocompleteChange={handleAutocompleteChange} />
                     {!!formErrors.industries && <FormHelperText>{formErrors.industries}</FormHelperText>}
                 </FormControl>
             </Grid>
-
             <Grid item xs={12}>
                 <Typography variant="h5" component="h5">
                     Company Online Presences
                 </Typography>
             </Grid>
             {/* Social Profiles */}
+            <Grid item xs={12}>
+                <FormControl fullWidth error={!!formErrors.website}>
+                    <InputLabel htmlFor="website">* Website</InputLabel>
+                    <OutlinedInput
+                        requried
+                        label="Company Website"
+                        onChange={handleInputChange}
+                        name="website"
+                        startAdornment={<InputAdornment position="start">https://</InputAdornment>}
+                        type="url"
+                    />
+                    {!!formErrors.industries && <FormHelperText>{formErrors.website}</FormHelperText>}
+                </FormControl>
+            </Grid>
             <Grid item xs={12}>
                 <FormControl fullWidth>
                     <InputLabel htmlFor="linkedin">Linkedin Profile</InputLabel>
@@ -115,19 +135,7 @@ function ProfileStep({
             </Grid>
             <Grid item xs={12}>
                 <FormControl fullWidth>
-                    <InputLabel htmlFor="website">Website</InputLabel>
-                    <OutlinedInput
-                        label="Your Personal Website"
-                        onChange={handleInputChange}
-                        name="website"
-                        startAdornment={<InputAdornment position="start">https://</InputAdornment>}
-                        type="url"
-                    />
-                </FormControl>
-            </Grid>
-            <Grid item xs={12}>
-                <FormControl fullWidth>
-                    <InputLabel htmlFor="github">Your Github Account</InputLabel>
+                    <InputLabel htmlFor="github">Github Account</InputLabel>
                     <OutlinedInput
                         label="Github Account"
                         onChange={handleInputChange}
@@ -139,7 +147,7 @@ function ProfileStep({
             </Grid>
             <Grid item xs={12}>
                 <FormControl fullWidth>
-                    <InputLabel htmlFor="twitter">Your Twitter Handle</InputLabel>
+                    <InputLabel htmlFor="twitter">Twitter Handle</InputLabel>
                     <OutlinedInput
                         label="Twitter Handle"
                         onChange={handleInputChange}
