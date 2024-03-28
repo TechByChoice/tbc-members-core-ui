@@ -48,7 +48,7 @@ function validateProfileStep(answers, setFormErrors) {
 
 function validateRolesStep(answers, setFormErrors) {
     let errors = {};
-    console.log(errors, 'before');
+
     let isValid = AnswerValidator.validateMany(answers, errors, {
         job_roles: 'Open roles are required.',
         on_site_remote: 'Job work environment required.',
