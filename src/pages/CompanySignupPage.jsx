@@ -33,7 +33,7 @@ const ImageBG = styled.div`
     background-repeat: no-repeat;
 `;
 
-function LoginPage() {
+function CompanySignupPage() {
     const auth = useAuth();
     const { statusType } = useStatus();
     const statusMessage = useStatusMessage();
@@ -41,6 +41,7 @@ function LoginPage() {
     const [ formData, setFormData ] = useState({
         first_name: '',
         last_name: '',
+        company_name: '',
         email: '',
         password: '',
     });
@@ -51,7 +52,7 @@ function LoginPage() {
     const handleSubmit = async event => {
         event.preventDefault();
 
-        fetch(routes.api.users.signUp(), {
+        fetch(routes.api.users.companySignUp(), {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -62,11 +63,10 @@ function LoginPage() {
             .then(response => response.json())
             .then(data => {
                 if (data.status) {
-                    setToken(data.token);
-                    localStorage.setItem('token', data.token);
-                    fetchUserDetails();
-                    statusMessage.success('Welcome to Tech by Choice');
-                    navigate('/new/member/2');
+                    // setToken(data.token);
+                    // localStorage.setItem('token', data.token);
+                    // fetchUserDetails();
+                    // navigate('/new/check-email');
                 } else {
                     console.error('Error:', data.message);
                     statusMessage.error(data.message);
@@ -85,29 +85,10 @@ function LoginPage() {
         setFormData(prevFormData => ({ ...prevFormData, [name]: value }));
     };
 
-    useEffect(() => {
-        if (auth?.user?.length > 0) {
-            navigate('/', { replace: true });
-        } else {
-            fetchUserDetails();
-        }
-    }, [ auth.user ]);
-
-    useEffect(() => {
-        if (!auth.errorMessage) {
-            statusMessage.hide();
-            return;
-        }
-
-        if (auth.errorMessage['non_field_errors']) {
-            statusMessage.error(auth.errorMessage['non_field_errors'][0]);
-        }
-    }, [ auth.errorMessage ]);
-
     return (
         <>
             <Typography variant="h4" component="h1" align="center">
-                Join the Community
+                Company Account
             </Typography>
             {auth.errorMessage?.length > 0 &&
                 auth.errorMessage.map((error, index) => (
@@ -117,34 +98,52 @@ function LoginPage() {
                 ))}
 
             <form onSubmit={handleSubmit}>
-                <TextField
-                    required
-                    variant="outlined"
-                    id="first_name"
-                    name="first_name"
-                    label="First Name"
-                    type="text"
-                    onChange={handleChange}
-                    margin="normal"
-                    fullWidth
-                />
-                <TextField
-                    required
-                    variant="outlined"
-                    id="last_name"
-                    name="last_name"
-                    label="Last Name"
-                    type="text"
-                    onChange={handleChange}
-                    margin="normal"
-                    fullWidth
-                />
+                <Grid container spacing={2} alignItems="center" justifyContent="center">
+                    <Grid item xs={6}>
+                        <TextField
+                            required
+                            variant="outlined"
+                            id="first_name"
+                            name="first_name"
+                            label="First Name"
+                            type="text"
+                            onChange={handleChange}
+                            margin="normal"
+                            fullWidth
+                        />
+                    </Grid>
+                    <Grid item xs={6}>
+                        <TextField
+                            required
+                            variant="outlined"
+                            id="last_name"
+                            name="last_name"
+                            label="Last Name"
+                            type="text"
+                            onChange={handleChange}
+                            margin="normal"
+                            fullWidth
+                        />
+                    </Grid>
+                </Grid>
+
                 <TextField
                     required
                     variant="outlined"
                     id="email"
                     name="email"
                     label="Email"
+                    type="text"
+                    onChange={handleChange}
+                    margin="normal"
+                    fullWidth
+                />
+                <TextField
+                    required
+                    variant="outlined"
+                    id="company_name"
+                    name="company_name"
+                    label="Company Name"
                     type="text"
                     onChange={handleChange}
                     margin="normal"
@@ -171,4 +170,4 @@ function LoginPage() {
     );
 }
 
-export default LoginPage;
+export default CompanySignupPage;

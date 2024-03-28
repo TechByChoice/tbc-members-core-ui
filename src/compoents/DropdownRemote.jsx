@@ -5,21 +5,22 @@ import { createFilterOptions } from '@mui/material/Autocomplete';
 import { useAuth } from '@/providers/AuthProvider';
 
 const filter = createFilterOptions();
-export default function DropdownIndustries({
-    isRequired, error, setAnswers = false, handleAutocompleteChange, fieldName = 'job_industries' 
+export default function DropdownRemote({
+    isRequired, error, setAnswers = false, handleAutocompleteChange 
 }) {
-    const [ industries, setIndustries ] = useState([]);
-    const [ selectedDepartment, setSelectedDepartment ] = useState('');
+    const [ companyEnvironment, setCompanyEnvironment ] = useState([]);
+    const [ selectedEnvironment, setSelectedEnvironment ] = useState('');
     const { token } = useAuth();
 
     useEffect(() => {
         // Fetch the list of companies when the component mounts
         async function fetchDepartments() {
             try {
-                const response = await getDropDrownItems('job_industries');
-                setIndustries(response.job_industries);
+                const response = await getDropDrownItems('on_site_remote');
+                const clean_data = response.on_site_remote.map(([ id, name ]) => ({ id, name }));
+                setCompanyEnvironment(clean_data);
             } catch (error) {
-                console.error('Error fetching industries:', error);
+                console.error('Error fetching on_site_remote:', error);
             }
         }
 
@@ -28,13 +29,12 @@ export default function DropdownIndustries({
 
     return (
         <Autocomplete
-            id={`${fieldName}-label`}
+            id="on_site_remote-label"
             multiple
-            required
             selectOnFocus
             includeInputInList
             handleHomeEndKeys
-            options={industries || []}
+            options={companyEnvironment || []}
             isOptionEqualToValue={(option, value) => (option.inputValue && value.inputValue && option.inputValue === value.inputValue) || option === value}
             getOptionLabel={option => {
                 if (typeof option === 'string') {
@@ -63,18 +63,18 @@ export default function DropdownIndustries({
             }}
             // value={selectedSkill}
             onChange={(e, newValue) => {
-                setSelectedDepartment(newValue);
+                setSelectedEnvironment(newValue);
                 if (handleAutocompleteChange) {
-                    handleAutocompleteChange(fieldName, newValue);
+                    handleAutocompleteChange('on_site_remote', newValue);
                 } else {
                     setAnswers(prevState => ({
                         ...prevState,
-                        [fieldName]: newValue,
+                        on_site_remote: newValue,
                     }));
                 }
             }}
             renderOption={(props, option) => <li {...props}>{option.name}</li>}
-            renderInput={params => <TextField required={isRequired} error={!!error[fieldName]} name={fieldName} {...params} />}
+            renderInput={params => <TextField required={isRequired} error={!!error.on_site_remote} name="on_site_remote" {...params} />}
         />
     );
 }

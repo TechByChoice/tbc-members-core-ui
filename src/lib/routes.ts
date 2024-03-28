@@ -5,6 +5,7 @@ function apiJoin(...endpoints) {
 export const routes = {
     api: {
         base: import.meta.env.VITE_APP_API_BASE_URL,
+        talent: import.meta.env.VITE_APP_API_TALENT_CHOICE_URL,
         auth: {
             checkToken: localToken => apiJoin(routes.api.base, `reviews/check/${localToken}`),
             verifyToken: token => apiJoin(routes.api.base, `reviews/verify-token/${token}`),
@@ -45,6 +46,7 @@ export const routes = {
         },
         users: {
             signUp: () => apiJoin(routes.api.base, 'user/new/'),
+            companySignUp: () => apiJoin(routes.api.base, 'user/new/company'),
             updateProfile: () => apiJoin(routes.api.base, 'user/new-member/profile/create'),
             getProfile: () => apiJoin(routes.api.base, 'user/details/new-member'),
             getUsersDetails: () => apiJoin(routes.api.base, 'user/details/'),
@@ -61,6 +63,12 @@ export const routes = {
             workplace: () => apiJoin(routes.api.base, 'user/profile/update/work-place'),
         },
         announcements: { list: () => apiJoin(routes.api.base, 'user/details/announcement') },
-        companies: { get: id => apiJoin(routes.api.base, `company-profile/companies/${id}/`) },
+        companies: {
+            get: id => apiJoin(routes.api.base, `company-profile/companies/${id}/`),
+            activateAccount: (id, token) => apiJoin(routes.api.base, `talent-choice/company/confirm-email/${id}/${token}/`),
+            confirmAgreement: () => apiJoin(routes.api.base, `talent-choice/company/confirm-agreement/`),
+            createOnboardingProfile: () => apiJoin(routes.api.base, `talent-choice/company/onboarding/create/profile/`),
+            createOnboardingOpenRoles: () => apiJoin(routes.api.talent, `company/new/onboarding/open-roles/`),
+        },
     },
 };

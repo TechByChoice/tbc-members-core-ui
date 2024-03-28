@@ -7,7 +7,6 @@ import AllMentorsPage from '@/pages/AllMentorsPage';
 import Dashboard from '@/pages/Dashboard';
 import JobReferralPage from '@/pages/JobReferralPage';
 import LoginPage from '@/pages/LoginPage';
-import MemberSignupPage from '@/pages/MemberSignupPage';
 import NewMemberPage from '@/pages/NewMemeberPage';
 import NewMentorPage from '@/pages/NewMentorPage';
 import ProfileSettingPage from '@/pages/ProfileSettingPage';
@@ -22,10 +21,15 @@ import * as React from 'react';
 import { createRoot } from 'react-dom/client';
 import { Route, Routes } from 'react-router';
 import { BrowserRouter } from 'react-router-dom';
-import { Suspense, useEffect, useState } from 'react';
+import { Suspense, useState } from 'react';
 import ViewCompanyPage from '@/pages/ViewCompanyPage';
 import AllMembersPage from '@/pages/AllMembersPage';
 import ErrorBoundary from '@/compoents/ErrorBoundary';
+import CreateAccountPage from '@/pages/CreateAccountPage';
+import CheckEmailPage from '@/pages/CheckEmailPage';
+import ConfirmAccountPage from '@/pages/onboarding/company/ConfirmAccountPage';
+import NewCompanyPage from '@/pages/NewCompanyPage';
+import ConfirmAgreementPage from '@/pages/onboarding/company/ConfirmAgreementPage';
 
 // import TestPage from ;
 const Review = React.lazy(() => import('open_doors/Review'));
@@ -78,8 +82,19 @@ const App = () => {
                                         </PrivateRoutes>
                                     }
                                 />
-                                <Route path="/new/member/1" element={<MemberSignupPage />} />
-                                <Route path="/new/member/2" element={<NewMemberPage />} />
+                                <Route path="/new" element={<CreateAccountPage />} />
+                                <Route path="/new/check-email" element={<CheckEmailPage />} />
+                                <Route path="/new/company/confirm-agreement/" element={<ConfirmAgreementPage />} />
+                                <Route path="/new/company/confirm-account" element={<ConfirmAccountPage />} />
+                                <Route path="/new/company/create-profile" element={<NewCompanyPage />} />
+                                <Route
+                                    path="/new/member/2"
+                                    element={
+                                        <PrivateRoutes userDetail={user?.[0]}>
+                                            <NewMemberPage />
+                                        </PrivateRoutes>
+                                    }
+                                />
                                 <Route path="/member/all" element={<AllMembersPage />} />
                                 <Route path="/event/all" element={<AllEventsPage />} />
                                 <Route

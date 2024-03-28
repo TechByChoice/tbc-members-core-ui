@@ -154,7 +154,7 @@ export default function NavBar() {
                             ) : (
                                 <>
                                     <Link to="/">Login</Link>
-                                    <Link to="/new/member/1">Member Sign up</Link>
+                                    <Link to="/new">Create Account</Link>
                                 </>
                             )}
                         </Grid>

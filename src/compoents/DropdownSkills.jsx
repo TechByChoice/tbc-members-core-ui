@@ -6,7 +6,7 @@ import { useAuth } from '@/providers/AuthProvider';
 
 const filter = createFilterOptions();
 export default function DropdownSkills({
-    isRequired, error, setAnswers, handleInputChange 
+    isRequired, error, setAnswers, handleInputChange, inputLabel = 'Skills', inputName = 'skills' 
 }) {
     const [ skills, setSkills ] = useState([]);
     const [ selectedSkill, setSelectedSkill ] = useState('');
@@ -29,12 +29,12 @@ export default function DropdownSkills({
 
     return (
         <FormControl fullWidth variant="outlined">
-            <FormLabel id="skills-label">
+            <FormLabel id={inputName}>
                 {isRequired && <>*</>}
-                Skills
+                {inputLabel}
             </FormLabel>
             <Autocomplete
-                id="skills-label"
+                id={inputName}
                 multiple
                 required
                 selectOnFocus
@@ -82,15 +82,16 @@ export default function DropdownSkills({
                         newValue.map((item, index) => {
                             valueArray.push(item.name);
                         });
-                        handleInputChange('job_skills', newValue);
+
+                        handleInputChange(inputName, newValue);
                     } else {
                         setAnswers(prevState => ({
                             ...prevState,
-                            skills: newValue,
+                            [inputName]: newValue,
                         }));
                     }
                 }}
-                renderInput={params => <TextField error={!!error.skills} name="job_skills" {...params} />}
+                renderInput={params => <TextField error={!!error.skills} name={inputName} {...params} />}
             />
         </FormControl>
     );
