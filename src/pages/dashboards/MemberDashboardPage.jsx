@@ -165,9 +165,9 @@ export default function MemberDashboard() {
                 {/* Bottom items */}
                 <Grid item xs={12} sm={4}>
                     <Grid container display="flex" direction="row" justifyContent="space-between">
-                        <Typography variant="h6">Top Job Andre</Typography>
+                        <Typography variant="h6">Top Job</Typography>
                         <Link to="/job/all">
-                            <Button variant="text">View More</Button>
+                            <Button variant="text">View More Andre</Button>
                         </Link>
                     </Grid>
                     <Card>
@@ -208,7 +208,7 @@ export default function MemberDashboard() {
                         <Grid container display="flex" direction="row" justifyContent="space-between">
                             <Typography variant="h6">Top Mentor</Typography>
                             <Link to="/mentor/all">
-                                <Button variant="text">View More</Button>
+                                <Button variant="text">View More Andre</Button>
                             </Link>
                         </Grid>
                         <CardContent>{mentor ? <MentorCard mentor={mentor} /> : <p>Loading mentor...</p>}</CardContent>
@@ -219,7 +219,8 @@ export default function MemberDashboard() {
                         <BasicCardComonent
                             imageUrl="path_to_your_image.jpg"
                             headerText="Software Developer"
-                            // icon={<YourIconComponent />}
+                            bodyText={job?.role?.name}
+                            icon={job?.role?.name}
                             hourlyRate={20} // Example hourly rate
                             buttonText="Click Me"
                             // companyName={job?.parent_company?.name}
@@ -230,3 +231,6 @@ export default function MemberDashboard() {
         </>
     );
 }
+
+// {<YourIconComponent />}
+// "front end role"
