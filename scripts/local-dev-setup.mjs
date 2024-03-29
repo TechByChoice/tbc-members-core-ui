@@ -1,6 +1,7 @@
 import fs from 'node:fs/promises';
 import { dirname } from 'node:path';
 import readline from 'node:readline';
+import path  from 'node:path';
 
 const EXAMPLE_ENV_FILE = 'example.env';
 const TARGET_ENV_FILE = '.env';
@@ -14,7 +15,7 @@ const rl = readline.createInterface({
 
 
 function basePath(...paths) {
-    return paths.join(dirname(dirname(new URL(import.meta.url).pathname)), ...paths);
+    return path.join(dirname(dirname(new URL(import.meta.url).pathname)), ...paths);
 }
 
 async function askQuestion(question) {
@@ -23,11 +24,16 @@ async function askQuestion(question) {
     });
 }
 
-function checkForExistingEnvFile(targetFn) {
-    return fs
-        .access(targetFn)
-        .then(() => true)
-        .catch(() => false);
+async function checkForExistingEnvFile(targetFn) {
+    let result = true;
+    try{
+        await fs.access(targetFn);
+        result = true;
+    } catch (error) {
+        result = false;
+    }
+
+    return result;
 }
 
 function ensureStringIsHttpsUrl(url) {
@@ -54,7 +60,7 @@ async function main() {
     const targetEnvironmentFile = basePath(TARGET_ENV_FILE);
     const exampleEnvironmentFile = basePath(EXAMPLE_ENV_FILE);
 
-    if (checkForExistingEnvFile(targetEnvironmentFile)) {
+    if (await checkForExistingEnvFile(targetEnvironmentFile)) {
         console.log(`The target environment file already exists: ${targetEnvironmentFile}`);
         process.exit(0);
     }
