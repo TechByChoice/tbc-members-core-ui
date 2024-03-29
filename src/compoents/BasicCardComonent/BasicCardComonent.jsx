@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import './BasicCardComonent.css'; // Stylesheet for the card
 
 const BasicCardComonent = ({
-    imageUrl, headerText, icon, hourlyRate, buttonText 
+    imageUrl, headerText, icon, hourlyRate, buttonText, bodyText 
 }) => {
     return (
         <div className="card">
@@ -11,6 +11,9 @@ const BasicCardComonent = ({
             <div className="card-header">
                 <div className="card-icon">{icon}</div>
                 <h2>{headerText}</h2>
+            </div>
+            <div>
+                <p className="body-text">${bodyText}</p>
             </div>
             <div className="card-details">
                 <p className="hourly-rate">
@@ -26,6 +29,7 @@ const BasicCardComonent = ({
 BasicCardComonent.propTypes = {
     imageUrl: PropTypes.string.isRequired,
     headerText: PropTypes.string.isRequired,
+    bodyText: PropTypes.string.isRequired,
     icon: PropTypes.element.isRequired,
     hourlyRate: PropTypes.number.isRequired,
     buttonText: PropTypes.string.isRequired,
