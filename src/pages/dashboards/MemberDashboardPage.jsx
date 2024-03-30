@@ -236,13 +236,13 @@ export default function MemberDashboard() {
                 </Grid>
 
                 <Grid item xs={12} sm={4}>
+                    <Grid container display="flex" direction="row" justifyContent="space-between">
+                        <Typography variant="h6">Top Mentor</Typography>
+                        <Link to="/mentor/all">
+                            <Button variant="text">View More</Button>
+                        </Link>
+                    </Grid>
                     <Card>
-                        <Grid container display="flex" direction="row" justifyContent="space-between">
-                            <Typography variant="h6">Top Mentor</Typography>
-                            <Link to="/mentor/all">
-                                <Button variant="text">View More</Button>
-                            </Link>
-                        </Grid>
                         <CardContent>{mentor ? <MentorCard mentor={mentor} /> : <p>Loading mentor...</p>}</CardContent>
                     </Card>
                 </Grid>
