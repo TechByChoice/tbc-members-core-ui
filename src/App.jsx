@@ -32,8 +32,6 @@ import NewCompanyPage from '@/pages/NewCompanyPage';
 import ConfirmAgreementPage from '@/pages/onboarding/company/ConfirmAgreementPage';
 import WrapperReview from '@/compoents/WrapperReview';
 
-// import TestPage from ;
-const Review = React.lazy(() => import('open_doors/Review'));
 const SurveyQuestions = React.lazy(() => import('open_doors/SurveyQuestions'));
 
 const App = () => {

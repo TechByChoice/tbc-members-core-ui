@@ -2,6 +2,7 @@ import React, { Suspense, useEffect, useState } from 'react';
 import { Button, Card, CardContent, Grid } from '@mui/material';
 import Typography from '@mui/material/Typography';
 import { Link } from 'react-router-dom';
+import MuiLink from '@mui/material/Link';
 import EventCard from '../../compoents/EventCard';
 import JobCard from '../../compoents/JobCard';
 import MentorCard from '../../compoents/MentorCard';
@@ -163,25 +164,32 @@ export default function MemberDashboard() {
 
                 {/* Announcement */}
                 <Grid item xs={12}>
-                    <Grid container display="flex" direction="row" justifyContent="space-around">
-                        <Grid item>
-                            <Typography variant="h5">
+                    {/*<Grid item xs={12} style={{ border: '2px solid #004085', borderRadius: '4px', padding: '10px', margin: '10px 0' }}>*/}
+                    <Grid container alignItems="center" justifyContent="space-between" style={{ padding: '10px 0' }}>
+                        <Grid item style={{ display: 'flex', alignItems: 'center' }}>
+                            <div
+                                style={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    borderRadius: '50%',
+                                }}>
+                                {/* Megaphone icon here, replace with actual image/icon */}
                                 <span role="img" aria-label="megaphone">
                                     📣
                                 </span>
-                            </Typography>
+                            </div>
                         </Grid>
-                        <Grid item>
-                            <Typography variant="h5">Latest&apos;s Announcement!</Typography>
-                            {/*
-                            // @ts-ignore */}
-                            {announcement && <SlackMessage style={{ width: '75%' }} elements={announcement.elements} />}
-                        </Grid>
-                        <Grid item>
-                            <Button target="_blank" href={`https://techbychoice.slack.com/archives/CELK4L5FW/p${announcement.ts}`} variant="outlined">
-                                View In Slack
-                            </Button>
-                        </Grid>
+                        {announcement && (
+                            <Grid item style={{ maxWidth: '75%', margin: '10px 0' }}>
+                                <Typography variant="h5">Latest&apos;s Announcement!</Typography>
+                                <SlackMessage elements={announcement.elements} />
+                                <MuiLink target="_blank" href={`https://techbychoice.slack.com/archives/CELK4L5FW/p${announcement.ts}`}>
+                                    View In Slack
+                                </MuiLink>
+                            </Grid>
+                        )}
+                        <Grid item></Grid>
                     </Grid>
                 </Grid>
 
