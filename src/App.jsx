@@ -30,6 +30,7 @@ import CheckEmailPage from '@/pages/CheckEmailPage';
 import ConfirmAccountPage from '@/pages/onboarding/company/ConfirmAccountPage';
 import NewCompanyPage from '@/pages/NewCompanyPage';
 import ConfirmAgreementPage from '@/pages/onboarding/company/ConfirmAgreementPage';
+import WrapperReview from '@/compoents/WrapperReview';
 
 // import TestPage from ;
 const Review = React.lazy(() => import('open_doors/Review'));
@@ -54,16 +55,7 @@ const App = () => {
                         <Container>
                             <Routes>
                                 <Route path="/" element={<LoginPage />} />
-                                <Route
-                                    path="/reviews"
-                                    element={
-                                        <ErrorBoundary>
-                                            <Suspense fallback={<div>Loading...</div>}>
-                                                <Review />
-                                            </Suspense>
-                                        </ErrorBoundary>
-                                    }
-                                />
+                                <Route path="/reviews" element={<WrapperReview />} />
 
                                 <Route
                                     path="/questions/:id"
