@@ -10,8 +10,6 @@ import { routes } from '@/lib/routes';
 import ErrorBoundary from '@/compoents/ErrorBoundary';
 import { useAuth } from '@/providers/AuthProvider';
 
-const ButtonAddReview = React.lazy(() => import('open_doors/ButtonAddReview'));
-
 export default function MemberDashboard() {
     const [ event, setEvent ] = useState();
     /** @type {any} job */
@@ -112,7 +110,7 @@ export default function MemberDashboard() {
         <>
             <Grid container spacing={3}>
                 {/* Top three items */}
-                <Grid item xs={12} sm={6}>
+                <Grid item xs={12} sm={reviewAccess ? 4 : 6}>
                     <Card>
                         <CardContent>
                             <Typography variant="h6" align="center">
@@ -127,7 +125,7 @@ export default function MemberDashboard() {
                     </Card>
                 </Grid>
 
-                <Grid item xs={12} sm={6}>
+                <Grid item xs={12} sm={reviewAccess ? 4 : 6}>
                     <Card>
                         <CardContent>
                             <Typography variant="h6" align="center">
@@ -145,14 +143,16 @@ export default function MemberDashboard() {
                 {reviewAccess && (
                     <ErrorBoundary>
                         <Suspense fallback={<div>Loading...</div>}>
-                            <Grid item xs={12} sm={6}>
+                            <Grid item xs={12} sm={4}>
                                 <Card>
                                     <CardContent>
                                         <Typography variant="h6" align="center">
                                             Review a Company
                                         </Typography>
                                         <Grid container display="flex" alignItems="center" justifyContent="center">
-                                            <ButtonAddReview />
+                                            <Link to="/reviews">
+                                                <Button variant="outlined">Add a Review</Button>
+                                            </Link>
                                         </Grid>
                                     </CardContent>
                                 </Card>
