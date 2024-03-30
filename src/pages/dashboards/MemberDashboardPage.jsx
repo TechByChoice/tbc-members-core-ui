@@ -8,6 +8,7 @@ import MentorCard from '../../compoents/MentorCard';
 import SlackMessage from '../../compoents/SlackMessage';
 import { routes } from '@/lib/routes';
 import ErrorBoundary from '@/compoents/ErrorBoundary';
+import { useAuth } from '@/providers/AuthProvider';
 
 const ButtonAddReview = React.lazy(() => import('open_doors/ButtonAddReview'));
 
@@ -20,6 +21,8 @@ export default function MemberDashboard() {
         elements: [],
         ts: '',
     });
+    const { user } = useAuth();
+    const reviewAccess = user[0]?.account_info?.is_company_review_access_active;
 
     useEffect(() => {
         fetch(routes.api.events.list(), {
@@ -138,22 +141,26 @@ export default function MemberDashboard() {
                         </CardContent>
                     </Card>
                 </Grid>
-                <ErrorBoundary>
-                    <Suspense fallback={<div>Loading...</div>}>
-                        <Grid item xs={12} sm={6}>
-                            <Card>
-                                <CardContent>
-                                    <Typography variant="h6" align="center">
-                                        Review a Company
-                                    </Typography>
-                                    <Grid container display="flex" alignItems="center" justifyContent="center">
-                                        <ButtonAddReview />
-                                    </Grid>
-                                </CardContent>
-                            </Card>
-                        </Grid>
-                    </Suspense>
-                </ErrorBoundary>
+
+                {reviewAccess && (
+                    <ErrorBoundary>
+                        <Suspense fallback={<div>Loading...</div>}>
+                            <Grid item xs={12} sm={6}>
+                                <Card>
+                                    <CardContent>
+                                        <Typography variant="h6" align="center">
+                                            Review a Company
+                                        </Typography>
+                                        <Grid container display="flex" alignItems="center" justifyContent="center">
+                                            <ButtonAddReview />
+                                        </Grid>
+                                    </CardContent>
+                                </Card>
+                            </Grid>
+                        </Suspense>
+                    </ErrorBoundary>
+                )}
+
                 {/* Announcement */}
                 <Grid item xs={12}>
                     <Grid container display="flex" direction="row" justifyContent="space-around">
