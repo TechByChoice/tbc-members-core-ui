@@ -10,6 +10,7 @@ import SlackMessage from '../../compoents/SlackMessage';
 import { routes } from '@/lib/routes';
 import ErrorBoundary from '@/compoents/ErrorBoundary';
 import { useAuth } from '@/providers/AuthProvider';
+import { FeatureCard } from '@/compoents/FeatuerCards';
 
 export default function MemberDashboard() {
     const [ event, setEvent ] = useState();
@@ -112,51 +113,36 @@ export default function MemberDashboard() {
             <Grid container spacing={3}>
                 {/* Top three items */}
                 <Grid item xs={12} sm={reviewAccess ? 4 : 6}>
-                    <Card>
-                        <CardContent>
-                            <Typography variant="h6" align="center">
-                                View Events
-                            </Typography>
-                            <Grid container display="flex" alignItems="center" justifyContent="center">
-                                <Link to="/event/all">
-                                    <Button variant="outlined">View Events</Button>
-                                </Link>
-                            </Grid>
-                        </CardContent>
-                    </Card>
+                    <FeatureCard
+                        image="https://uploads-ssl.webflow.com/5fc123904bcd576087dd38e2/6608a822eef4f37b6097e8e8_Event%20Icon%20(1).png"
+                        subTitle="Join an Event"
+                        linkEndpoint="/event/all"
+                        btnText="View Events"
+                        title="RSVP to Today"
+                    />
                 </Grid>
 
                 <Grid item xs={12} sm={reviewAccess ? 4 : 6}>
-                    <Card>
-                        <CardContent>
-                            <Typography variant="h6" align="center">
-                                Referral a Job
-                            </Typography>
-                            <Grid container display="flex" alignItems="center" justifyContent="center">
-                                <Link to="/job/new/referral">
-                                    <Button variant="outlined">Add Job</Button>
-                                </Link>
-                            </Grid>
-                        </CardContent>
-                    </Card>
+                    <FeatureCard
+                        image="https://uploads-ssl.webflow.com/5fc123904bcd576087dd38e2/6608bc162a64b123bebe0fdd_Job%20Board%20Icon.png"
+                        subTitle="Community Job Board"
+                        linkEndpoint="/job/new/referral"
+                        btnText="Add Job"
+                        title="Add Job Referral"
+                    />
                 </Grid>
 
                 {reviewAccess && (
                     <ErrorBoundary>
                         <Suspense fallback={<div>Loading...</div>}>
                             <Grid item xs={12} sm={4}>
-                                <Card>
-                                    <CardContent>
-                                        <Typography variant="h6" align="center">
-                                            Review a Company
-                                        </Typography>
-                                        <Grid container display="flex" alignItems="center" justifyContent="center">
-                                            <Link to="/reviews">
-                                                <Button variant="outlined">Add a Review</Button>
-                                            </Link>
-                                        </Grid>
-                                    </CardContent>
-                                </Card>
+                                <FeatureCard
+                                    image="https://uploads-ssl.webflow.com/5fc123904bcd576087dd38e2/6608a8228b913bba42d50c39_Reviews%20Icon.png"
+                                    subTitle="TBC: Open Doors"
+                                    linkEndpoint="/reviews"
+                                    btnText="Add a Review"
+                                    title="Company Reviews"
+                                />
                             </Grid>
                         </Suspense>
                     </ErrorBoundary>
