@@ -1,13 +1,13 @@
-import React, {useEffect, useState} from 'react';
-import Grid from "@mui/material/Grid";
-import {useAuth} from "../providers/AuthProvider";
-import PartnershipDashboard from "./dashboards/PartnershipDashboardPage";
-import CompanyAccountDashboard from "./dashboards/CompanyAccountDashboardPage";
-import CommunityRecruiterDashboard from "./dashboards/CommunityRecruiterDashboardPage";
-import TeamDashboard from "./dashboards/TeamDashboardPage";
-import MemberDashboard from "./dashboards/MemberDashboardPage";
-import VolunteerDashboard from "./dashboards/VolunteerDashboardPage";
-
+import React, { useEffect, useState } from 'react';
+import Grid from '@mui/material/Grid';
+import { useAuth } from '../providers/AuthProvider';
+import PartnershipDashboard from './dashboards/PartnershipDashboardPage';
+import CompanyAccountDashboard from './dashboards/CompanyAccountDashboardPage';
+import CommunityRecruiterDashboard from './dashboards/CommunityRecruiterDashboardPage';
+import TeamDashboard from './dashboards/TeamDashboardPage';
+import MemberDashboard from './dashboards/MemberDashboardPage';
+import VolunteerDashboard from './dashboards/VolunteerDashboardPage';
+import Typography from '@mui/material/Typography';
 
 function MentorDashboard() {
     return null;
@@ -15,6 +15,7 @@ function MentorDashboard() {
 
 function Dashboard() {
     const auth = useAuth();
+    const { user } = useAuth();
     const accountInfo = auth.accountDetails[0];
 
     // if (!auth?.isLoading) {
@@ -27,7 +28,9 @@ function Dashboard() {
 
     return (
         <Grid container>
-            Welcome
+            <Grid item xs={12} pt={5} pb={5}>
+                <Typography variant="h2">Welcome Back, {user[0]?.user_info?.first_name}</Typography>
+            </Grid>
             <Grid item xs={12}>
                 {accountInfo?.is_member && <MemberDashboard />}
                 {accountInfo?.is_mentor && <MentorDashboard />}
