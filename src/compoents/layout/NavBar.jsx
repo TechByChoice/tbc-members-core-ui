@@ -14,6 +14,7 @@ import { useTheme } from '@mui/material';
 const StyledLink = styled(Link)(({ theme: { breakpoints, spacing, palette } }) => ({
     fontFamily: 'Space Mono',
     color: palette.common.black,
+    textDecoration: 'none',
     transition: 'all .2s',
     margin: spacing(1),
     '&:hover': {
@@ -27,6 +28,7 @@ const StyledMuiLink = styled(MuiLink)(({ theme: { breakpoints, spacing, palette 
     color: palette.common.black,
     transition: 'all .2s',
     textDecorationColor: palette.common.black,
+    textDecoration: 'none',
     margin: spacing(1),
     '&:hover': {
         color: palette.primary.main,
@@ -44,14 +46,6 @@ const StyledButtonDropdown = styled(Button)(({ theme: { breakpoints, spacing, pa
     textTransform: 'capitalize',
     textDecoration: 'underline',
     fontSize: '1rem',
-    '&:after': {
-        content: '"\\2304"',
-        position: 'relative',
-        top: '-5px',
-        left: '4px',
-        fontSize: '1.2rem',
-        textDecoration: 'none',
-    },
     '&:hover': {
         color: palette.primary.main,
         textDecoration: 'underline',
@@ -111,9 +105,13 @@ export default function NavBar() {
         getInvolved: [
             { label: 'Become a Speaker', href: 'https://www.techbychoice.org/teach' },
             { label: 'Volunteer', href: 'https://www.techbychoice.org/volunteer' },
-            { label: 'Become a Mentor', href: '/mentor/create', isInternal: true },
+            {
+                label: 'Become a Mentor', href: '/mentor/create', isInternal: true, isAuth: true 
+            },
             { label: 'Events', href: '/event/all', isInternal: true },
-            { label: 'Members', href: '/member/all', isInternal: true },
+            {
+                label: 'Members', href: '/member/all', isInternal: true, isAuth: true 
+            },
         ],
         resources: [{ label: 'Tech Role Quiz', href: 'https://www.quiz.techbychoice.org' }],
     };
@@ -171,23 +169,23 @@ export default function NavBar() {
     const renderMenuButton = (label, items) => (
         <>
             <StyledButtonDropdown aria-haspopup="true" onClick={handleOpenMenu(label.toLowerCase())}>
-                {label}
+                {label} <ExpandMoreIcon style={{ transform: menuStates[label.toLowerCase()] ? 'rotate(180deg)' : 'rotate(0deg)' }} />
             </StyledButtonDropdown>
             <Menu anchorEl={menuStates[label.toLowerCase()]} open={Boolean(menuStates[label.toLowerCase()])} onClose={handleCloseMenu(label.toLowerCase())}>
                 {items.map((item, index) => (
-                    <StyledMenuItem key={index} onClick={handleCloseMenu(label.toLowerCase())}>
-                        {item.isInternal ? (
-                            <>
-                                <StyledLink to={item.href}>{item.label}</StyledLink>
-                            </>
-                        ) : (
-                            <>
-                                <StyledMuiLink href={item.href} target="_blank" rel="noopener noreferrer">
-                                    {item.label}
-                                </StyledMuiLink>
-                            </>
+                    <React.Fragment key={index}>
+                        {((item.isAuth && auth?.isAuthenticated) || item.isAuth === false || item.isAuth === undefined) && (
+                            <StyledMenuItem onClick={handleCloseMenu(label.toLowerCase())}>
+                                {item.isInternal ? (
+                                    <StyledLink to={item.href}>{item.label}</StyledLink>
+                                ) : (
+                                    <StyledMuiLink href={item.href} target="_blank" rel="noopener noreferrer">
+                                        {item.label}
+                                    </StyledMuiLink>
+                                )}
+                            </StyledMenuItem>
                         )}
-                    </StyledMenuItem>
+                    </React.Fragment>
                 ))}
             </Menu>
         </>
@@ -195,30 +193,39 @@ export default function NavBar() {
 
     const renderProfileDropdown = () => (
         <>
-            <Tooltip title="Account settings">
-                <IconButton onClick={handleClick} size="small" sx={{ ml: 2 }}>
-                    <Avatar sx={{ width: 32, height: 32 }}>{user?.[0]?.user_info?.first_name[0]}</Avatar>
-                </IconButton>
-            </Tooltip>
-            <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
-                <MenuItem
-                    onClick={() => {
-                        handleClose();
-                        history('/profile');
-                    }}>
-                    <ListItemIcon>
-                        <Settings fontSize="small" />
-                    </ListItemIcon>
-                    Profile
-                </MenuItem>
-                <Divider />
-                <MenuItem onClick={handelLogout}>
-                    <ListItemIcon>
-                        <Logout fontSize="small" />
-                    </ListItemIcon>
-                    Logout
-                </MenuItem>
-            </Menu>
+            {auth.isAuthenticated ? (
+                <>
+                    <Tooltip title="Account settings">
+                        <IconButton onClick={handleClick} size="small" sx={{ ml: 2 }}>
+                            <Avatar sx={{ width: 32, height: 32 }}>{user?.[0]?.user_info?.first_name[0]}</Avatar>
+                        </IconButton>
+                    </Tooltip>
+                    <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
+                        <MenuItem
+                            onClick={() => {
+                                handleClose();
+                                history('/profile');
+                            }}>
+                            <ListItemIcon>
+                                <Settings fontSize="small" />
+                            </ListItemIcon>
+                            Profile
+                        </MenuItem>
+                        <Divider />
+                        <MenuItem onClick={handelLogout}>
+                            <ListItemIcon>
+                                <Logout fontSize="small" />
+                            </ListItemIcon>
+                            Logout
+                        </MenuItem>
+                    </Menu>
+                </>
+            ) : (
+                <>
+                    <StyledLink to="/">Login</StyledLink>
+                    <StyledLink to="/new">Create Account</StyledLink>
+                </>
+            )}
         </>
     );
 
