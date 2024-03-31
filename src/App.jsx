@@ -1,6 +1,7 @@
 import StatusAlert from '@/compoents/Alerts';
 import NavBar from '@/compoents/layout/NavBar';
 import '@/index.css';
+import theme from './temp-theme';
 import AllEventsPage from '@/pages/AllEventsPage';
 import AllJobsPage from '@/pages/AllJobsPage';
 import AllMentorsPage from '@/pages/AllMentorsPage';
@@ -31,6 +32,7 @@ import ConfirmAccountPage from '@/pages/onboarding/company/ConfirmAccountPage';
 import NewCompanyPage from '@/pages/NewCompanyPage';
 import ConfirmAgreementPage from '@/pages/onboarding/company/ConfirmAgreementPage';
 import WrapperReview from '@/compoents/WrapperReview';
+import { ThemeProvider } from '@mui/material/styles';
 
 const SurveyQuestions = React.lazy(() => import('open_doors/SurveyQuestions'));
 
@@ -45,68 +47,70 @@ const App = () => {
 
     return (
         <TbcThemeProvider>
-            <AuthProvider>
-                <StatusProvider>
-                    <BrowserRouter>
-                        <StatusAlert />
-                        <NavBar />
-                        <Container>
-                            <Routes>
-                                <Route path="/" element={<LoginPage />} />
-                                <Route path="/reviews" element={<WrapperReview />} />
+            <ThemeProvider theme={theme}>
+                <AuthProvider>
+                    <StatusProvider>
+                        <BrowserRouter>
+                            <StatusAlert />
+                            <NavBar />
+                            <Container>
+                                <Routes>
+                                    <Route path="/" element={<LoginPage />} />
+                                    <Route path="/reviews" element={<WrapperReview />} />
 
-                                <Route
-                                    path="/questions/:id"
-                                    element={
-                                        <Suspense fallback={<div>Loading...</div>}>
-                                            <SurveyQuestions />
-                                        </Suspense>
-                                    }
-                                />
+                                    <Route
+                                        path="/questions/:id"
+                                        element={
+                                            <Suspense fallback={<div>Loading...</div>}>
+                                                <SurveyQuestions />
+                                            </Suspense>
+                                        }
+                                    />
 
-                                <Route
-                                    path="/profile"
-                                    element={
-                                        <PrivateRoutes userDetail={user || undefined}>
-                                            <ProfileSettingPage userDetail={user || undefined} />
-                                        </PrivateRoutes>
-                                    }
-                                />
-                                <Route path="/new" element={<CreateAccountPage />} />
-                                <Route path="/new/check-email" element={<CheckEmailPage />} />
-                                <Route path="/new/company/confirm-agreement/" element={<ConfirmAgreementPage />} />
-                                <Route path="/new/company/confirm-account" element={<ConfirmAccountPage />} />
-                                <Route path="/new/company/create-profile" element={<NewCompanyPage />} />
-                                <Route
-                                    path="/new/member/2"
-                                    element={
-                                        <PrivateRoutes userDetail={user?.[0]}>
-                                            <NewMemberPage />
-                                        </PrivateRoutes>
-                                    }
-                                />
-                                <Route path="/member/all" element={<AllMembersPage />} />
-                                <Route path="/event/all" element={<AllEventsPage />} />
-                                <Route
-                                    path="/dashboard"
-                                    element={
-                                        <PrivateRoutes userDetail={user?.[0]}>
-                                            <Dashboard />
-                                        </PrivateRoutes>
-                                    }
-                                />
-                                <Route path="/job/new/referral" element={<JobReferralPage />} />
-                                <Route path="/job/:id" element={<ViewJobPage isLoading={isLoading} userDetail={user?.[0]} />} />
-                                <Route path="/company/:id" element={<ViewCompanyPage isLoading={isLoading} userDetail={user?.[0]} />} />
-                                <Route path="/job/all" element={<AllJobsPage />} />
-                                <Route path="/member/:id" element={<ViewMemberProfile />} />
-                                <Route path="/mentor/create" element={<NewMentorPage />} />
-                                <Route path="/mentor/all" element={<AllMentorsPage />} />
-                            </Routes>
-                        </Container>
-                    </BrowserRouter>
-                </StatusProvider>
-            </AuthProvider>
+                                    <Route
+                                        path="/profile"
+                                        element={
+                                            <PrivateRoutes userDetail={user || undefined}>
+                                                <ProfileSettingPage userDetail={user || undefined} />
+                                            </PrivateRoutes>
+                                        }
+                                    />
+                                    <Route path="/new" element={<CreateAccountPage />} />
+                                    <Route path="/new/check-email" element={<CheckEmailPage />} />
+                                    <Route path="/new/company/confirm-agreement/" element={<ConfirmAgreementPage />} />
+                                    <Route path="/new/company/confirm-account" element={<ConfirmAccountPage />} />
+                                    <Route path="/new/company/create-profile" element={<NewCompanyPage />} />
+                                    <Route
+                                        path="/new/member/2"
+                                        element={
+                                            <PrivateRoutes userDetail={user?.[0]}>
+                                                <NewMemberPage />
+                                            </PrivateRoutes>
+                                        }
+                                    />
+                                    <Route path="/member/all" element={<AllMembersPage />} />
+                                    <Route path="/event/all" element={<AllEventsPage />} />
+                                    <Route
+                                        path="/dashboard"
+                                        element={
+                                            <PrivateRoutes userDetail={user?.[0]}>
+                                                <Dashboard />
+                                            </PrivateRoutes>
+                                        }
+                                    />
+                                    <Route path="/job/new/referral" element={<JobReferralPage />} />
+                                    <Route path="/job/:id" element={<ViewJobPage isLoading={isLoading} userDetail={user?.[0]} />} />
+                                    <Route path="/company/:id" element={<ViewCompanyPage isLoading={isLoading} userDetail={user?.[0]} />} />
+                                    <Route path="/job/all" element={<AllJobsPage />} />
+                                    <Route path="/member/:id" element={<ViewMemberProfile />} />
+                                    <Route path="/mentor/create" element={<NewMentorPage />} />
+                                    <Route path="/mentor/all" element={<AllMentorsPage />} />
+                                </Routes>
+                            </Container>
+                        </BrowserRouter>
+                    </StatusProvider>
+                </AuthProvider>
+            </ThemeProvider>
         </TbcThemeProvider>
     );
 };
