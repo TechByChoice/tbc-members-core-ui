@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { AppBar, Toolbar, ListItemIcon, IconButton, Menu, MenuItem, Grid, Button, Avatar, Divider, Tooltip } from '@mui/material';
 import { useAuth } from '@/providers/AuthProvider';
 import { useNavigate } from 'react-router-dom';
-import { Logout, PersonAdd, Settings } from '@mui/icons-material';
+import { Logout, Settings } from '@mui/icons-material';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Link } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
 import MuiLink from '@mui/material/Link';
@@ -79,6 +80,7 @@ export default function NavBar() {
     const auth = useAuth();
     const { user } = useAuth();
     const navigate = useNavigate();
+    const [ mobileSubmenuOpen, setMobileSubmenuOpen ] = useState(null);
     const [ anchorEl, setAnchorEl ] = React.useState(null);
     const open = Boolean(anchorEl);
     const history = useNavigate();
@@ -135,6 +137,12 @@ export default function NavBar() {
             children: menuItems.resources,
         },
     ];
+
+    // Function to toggle mobile submenu
+    const toggleMobileSubmenu = menu => {
+        setMobileSubmenuOpen(mobileSubmenuOpen === menu ? null : menu);
+    };
+
     const handleMenu = event => {
         setAnchorEl(event.currentTarget);
     };
@@ -221,12 +229,29 @@ export default function NavBar() {
         </Button>
     );
 
-    // Function to render desktop menu buttons with dropdowns
-    const renderDesktopMenuButtons = navigationItems.map(section => (
-        <Grid item key={section.label}>
-            {renderMenuButton(section.label, section.children)}
-        </Grid>
-    ));
+    const renderMobileSubmenu = (label, items) => {
+        const isOpen = mobileSubmenuOpen === label;
+        return (
+            <>
+                <MenuItem onClick={() => toggleMobileSubmenu(label)}>
+                    {label}
+                    <ExpandMoreIcon style={{ transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)' }} />
+                </MenuItem>
+                {isOpen &&
+                    items.map((item, index) => (
+                        <MenuItem key={index} onClick={handleClose}>
+                            {item.isInternal ? (
+                                <StyledLink to={item.href}>{item.label}</StyledLink>
+                            ) : (
+                                <StyledMuiLink href={item.href} target="_blank" rel="noopener noreferrer">
+                                    {item.label}
+                                </StyledMuiLink>
+                            )}
+                        </MenuItem>
+                    ))}
+            </>
+        );
+    };
 
     // Function to render desktop navigation
     const renderDesktopNavigation = () => (
@@ -248,12 +273,8 @@ export default function NavBar() {
                 <MenuIcon />
             </IconButton>
             <Menu id="menu-appbar" anchorEl={anchorEl} keepMounted open={Boolean(anchorEl)} onClose={handleClose}>
-                {navigationItems.map(section => (
-                    <MenuItem onClick={handleClose} key={section.label}>
-                        {section.label}
-                    </MenuItem>
-                ))}
-                <MenuItem onClick={handleClose}>Donate</MenuItem>
+                {navigationItems.map(section => renderMobileSubmenu(section.label, section.children))}
+                <MenuItem onClick={handleClose}>{renderDonateButton()}</MenuItem>
                 <MenuItem
                     onClick={() => {
                         handleClose();
