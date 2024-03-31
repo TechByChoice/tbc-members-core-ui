@@ -4,13 +4,35 @@ import Toolbar from '@mui/material/Toolbar';
 import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import { useAuth } from '../../providers/AuthProvider';
+import { useAuth } from '@/providers/AuthProvider';
 import { useNavigate } from 'react-router-dom';
 import IconButton from '@mui/material/IconButton';
 import { Avatar, Divider, ListItemIcon, Menu, MenuItem, Tooltip } from '@mui/material';
 import { Logout, PersonAdd, Settings } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
+import { styled } from '@mui/material/styles';
+import MuiLink from '@mui/material/Link';
 
+const StyledLink = styled(Link)(({ theme: { breakpoints, spacing, palette } }) => ({
+    fontFamily: 'Space Mono',
+    color: palette.common.black,
+    transition: 'all .2s',
+    '&:hover': {
+        color: palette.primary.main,
+        letterSpacing: '1px',
+    },
+}));
+
+const StyledMuiLink = styled(MuiLink)(({ theme: { breakpoints, spacing, palette } }) => ({
+    fontFamily: 'Space Mono',
+    color: palette.common.black,
+    transition: 'all .2s',
+    textDecorationColor: palette.common.black,
+    '&:hover': {
+        color: palette.primary.main,
+        letterSpacing: '1px',
+    },
+}));
 export default function NavBar() {
     const auth = useAuth();
     const navigate = useNavigate();
@@ -34,16 +56,14 @@ export default function NavBar() {
             {/* Top row with logo */}
             <Toolbar style={{ display: 'flex', justifyContent: 'center' }} justify="center" id="hey" display="flex">
                 <Grid alignItems="center">
-                    <Grid item justify="center">
-                        <Link to="/dashboardd">
-                            <Typography variant="h6">
-                                <img
-                                    alt="Tech by Choice Logo"
-                                    height="50px"
-                                    src="https://uploads-ssl.webflow.com/5fc123904bcd576087dd38e2/6071eb46472b5c02f7dbd662_tbc-logo.svg"
-                                />
-                            </Typography>
-                        </Link>
+                    <Grid item justifyContent="center">
+                        <StyledLink to="/dashboardd">
+                            <img
+                                alt="Tech by Choice Logo"
+                                height="50px"
+                                src="https://uploads-ssl.webflow.com/5fc123904bcd576087dd38e2/6071eb46472b5c02f7dbd662_tbc-logo.svg"
+                            />
+                        </StyledLink>
                     </Grid>
                 </Grid>
             </Toolbar>
@@ -56,32 +76,34 @@ export default function NavBar() {
                         <Grid container spacing={2} alignItems="center" justify="center">
                             {auth.isAuthenticated && (
                                 <Grid item>
-                                    <Link to="/dashboard">
-                                        <Typography variant="body1">Dashboard</Typography>
-                                    </Link>
+                                    <StyledLink to="/dashboard">Dashboard</StyledLink>
                                 </Grid>
                             )}
                             <Grid item>
-                                <Typography variant="body1">About Us</Typography>
+                                <StyledMuiLink target="_blank" href="">
+                                    About Us
+                                </StyledMuiLink>
                             </Grid>
                             <Grid item>
-                                <Typography variant="body1">Programs</Typography>
+                                <StyledMuiLink target="_blank" href="">
+                                    Programs
+                                </StyledMuiLink>
                             </Grid>
                             <Grid item>
-                                <Link to="/event/all">
-                                    <Typography variant="body1">Events</Typography>
-                                </Link>
+                                <StyledLink to="/event/all">Events</StyledLink>
                             </Grid>
                             <Grid item>
-                                <Link to="/member/all">
-                                    <Typography variant="body1">Members</Typography>
-                                </Link>
+                                <StyledLink to="/member/all">Members</StyledLink>
                             </Grid>
                             <Grid item>
-                                <Typography variant="body1">Blog</Typography>
+                                <StyledMuiLink target="_blank" href="https://www.techbychoice.org/blog">
+                                    Blog
+                                </StyledMuiLink>
                             </Grid>
                             <Grid item>
-                                <Typography variant="body1">Get Involved</Typography>
+                                <StyledMuiLink target="_blank" href="">
+                                    Get Involved
+                                </StyledMuiLink>
                             </Grid>
 
                             {/*<Grid  style={{ display: 'flex', justifyContent: 'center'}}>*/}
@@ -153,8 +175,8 @@ export default function NavBar() {
                                 </>
                             ) : (
                                 <>
-                                    <Link to="/">Login</Link>
-                                    <Link to="/new">Create Account</Link>
+                                    <StyledLink to="/">Login</StyledLink>
+                                    <StyledLink to="/new">Create Account</StyledLink>
                                 </>
                             )}
                         </Grid>
