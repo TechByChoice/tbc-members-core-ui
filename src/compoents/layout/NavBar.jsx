@@ -106,11 +106,16 @@ export default function NavBar() {
             { label: 'Become a Speaker', href: 'https://www.techbychoice.org/teach' },
             { label: 'Volunteer', href: 'https://www.techbychoice.org/volunteer' },
             {
-                label: 'Become a Mentor', href: '/mentor/create', isInternal: true, isAuth: true 
+                label: 'View Mentor',
+                href: '/mentor/all',
+                isInternal: true,
             },
             { label: 'Events', href: '/event/all', isInternal: true },
             {
-                label: 'Members', href: '/member/all', isInternal: true, isAuth: true 
+                label: 'View Members',
+                href: '/member/all',
+                isInternal: true,
+                isAuth: true,
             },
         ],
         resources: [{ label: 'Tech Role Quiz', href: 'https://www.quiz.techbychoice.org' }],
@@ -231,7 +236,7 @@ export default function NavBar() {
 
     // Function to render the Donate button
     const renderDonateButton = () => (
-        <Button variant="contained" color="primary" sx={{ margin: theme.spacing(1) }}>
+        <Button variant="contained" target="_blank" href="https://www.techbychoice.org/donate" color="primary" sx={{ margin: theme.spacing(1) }}>
             Donate
         </Button>
     );
