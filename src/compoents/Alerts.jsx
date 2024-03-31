@@ -6,8 +6,6 @@ import { useStatus } from '@/providers/MsgStatusProvider';
 import { styled } from '@mui/material/styles';
 import { Link } from 'react-router-dom';
 
-// const alertStyle = (theme) => css`
-// const AlertStyle = styled(Alert)`
 const AlertStyle = styled(Alert)(({ theme: { spacing, palette } }) => ({
     position: 'absolute',
     top: '10vh',
@@ -16,9 +14,6 @@ const AlertStyle = styled(Alert)(({ theme: { spacing, palette } }) => ({
     zIndex: 2000,
     width: '90%',
     maxWidth: '600px',
-    // // color: "#D32F2F",
-    // border: spacing(.2) + " solid " + palette.error.dark,
-    // background: palette.error.light
 }));
 
 const StatusAlert = () => {
