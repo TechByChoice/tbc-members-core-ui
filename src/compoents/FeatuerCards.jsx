@@ -40,7 +40,7 @@ const CardMediaMedia = styled(CardMedia)(({ theme: { breakpoints } }) => ({
     marginLeft: 'auto',
     marginRight: 'auto',
 
-    [breakpoints.up('sm')]: {marginRight: 'initial',},
+    [breakpoints.up('sm')]: { marginRight: 'initial' },
 }));
 
 const TypographyOverline = styled(Typography)(({}) => ({

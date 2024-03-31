@@ -1,5 +1,5 @@
 import React, { Suspense, useEffect, useState } from 'react';
-import { Button, Card, CardContent, Grid } from '@mui/material';
+import { Button, Card, CardContent, Grid, useMediaQuery, useTheme } from '@mui/material';
 import Typography from '@mui/material/Typography';
 import { Link } from 'react-router-dom';
 import MuiLink from '@mui/material/Link';
@@ -11,6 +11,8 @@ import { routes } from '@/lib/routes';
 import ErrorBoundary from '@/compoents/ErrorBoundary';
 import { useAuth } from '@/providers/AuthProvider';
 import { FeatureCard } from '@/compoents/FeatuerCards';
+import CardMedia from '@mui/material/CardMedia';
+import Box from '@mui/material/Box';
 
 export default function MemberDashboard() {
     const [ event, setEvent ] = useState();
@@ -21,6 +23,8 @@ export default function MemberDashboard() {
         elements: [],
         ts: '',
     });
+    const theme = useTheme();
+    const isTablet = useMediaQuery(theme.breakpoints.down('md'));
     const { user } = useAuth();
     const reviewAccess = user[0]?.account_info?.is_company_review_access_active;
 
@@ -149,34 +153,47 @@ export default function MemberDashboard() {
                 )}
 
                 {/* Announcement */}
-                <Grid item xs={12}>
-                    {/*<Grid item xs={12} style={{ border: '2px solid #004085', borderRadius: '4px', padding: '10px', margin: '10px 0' }}>*/}
-                    <Grid container alignItems="center" justifyContent="space-between" style={{ padding: '10px 0' }}>
-                        <Grid item style={{ display: 'flex', alignItems: 'center' }}>
-                            <div
-                                style={{
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    borderRadius: '50%',
-                                }}>
-                                {/* Megaphone icon here, replace with actual image/icon */}
-                                <span role="img" aria-label="megaphone">
-                                    📣
-                                </span>
-                            </div>
-                        </Grid>
-                        {announcement && (
-                            <Grid item style={{ maxWidth: '75%', margin: '10px 0' }}>
-                                <Typography variant="h5">Latest&apos;s Announcement!</Typography>
-                                <SlackMessage elements={announcement.elements} />
-                                <MuiLink target="_blank" href={`https://techbychoice.slack.com/archives/CELK4L5FW/p${announcement.ts}`}>
-                                    View In Slack
-                                </MuiLink>
-                            </Grid>
-                        )}
-                        <Grid item></Grid>
-                    </Grid>
+                <Grid item xs={12} mt={4} mb={4}>
+                    <Card
+                        sx={{
+                            display: 'flex',
+                            flexDirection: isTablet ? 'column' : 'row',
+                            pl: 5,
+                            pr: 5,
+                            pt: 2,
+                        }}>
+                        <CardMedia
+                            component="img"
+                            sx={{
+                                width: isTablet ? '18%' : '18%',
+                                margin: isTablet ? 'auto' : '35px 25px 0px 25px',
+                            }}
+                            image="https://uploads-ssl.webflow.com/5fc123904bcd576087dd38e2/6608c2d3d10b78c4b310fa34_Group%20234%20(1).png"
+                            alt="icon depicts a white megaphone centered within concentric red circles on a red
+                            square background, giving a target-like appearance"
+                        />
+                        <Box
+                            sx={{
+                                width: isTablet ? '100%' : 'auto',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                alignSelf: 'center',
+                            }}>
+                            <CardContent sx={{ flex: '1 auto' }}>
+                                <Typography component="h1" variant="h4">
+                                    Latest&apos;s Announcement!
+                                </Typography>
+                                <Typography variant="subtitle1" color="text.primary" component="div">
+                                    <SlackMessage elements={announcement.elements} />
+                                </Typography>
+                                <Box sx={{ pl: 0, pt: 1 }}>
+                                    <MuiLink target="_blank" variant="h6" underline="none" href={`https://techbychoice.slack.com/archives/CELK4L5FW/p${announcement.ts}`}>
+                                        View In Slack
+                                    </MuiLink>
+                                </Box>
+                            </CardContent>
+                        </Box>
+                    </Card>
                 </Grid>
 
                 {/* Bottom items */}
