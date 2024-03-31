@@ -11,6 +11,7 @@ Linear Issue [#TBC-](url)
 
 -   [ ] Bug fix (non-breaking change which fixes an issue)
 -   [ ] New feature (non-breaking change which adds functionality)
+-   [ ] Styling Updates (non-breaking change which updates the UX or Visuals)
 -   [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
 -   [ ] Documentation update
 
