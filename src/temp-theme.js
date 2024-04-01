@@ -1,5 +1,7 @@
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
+const SPACE_MONO = '"Space Mono", monospace';
+
 const theme = createTheme({
     palette: {
         primary: { main: '#4956CB' },
@@ -12,6 +14,19 @@ const theme = createTheme({
             default: '#F7F1E1',
             paper: '#FDF7E9',
         },
+    },
+    typography: {
+        fontFamily: '"Barlow", sans-serif',
+        h2: {fontWeight: 'bold',},
+        h4: {
+            fontFamily: SPACE_MONO,
+            fontWeight: 'bold',
+        },
+        h5: {
+            fontFamily: '"Barlow", sans-serif',
+            fontWeight: 'bold',
+        },
+        overline: { fontFamily: SPACE_MONO },
     },
     components: {
         // Name of the component
