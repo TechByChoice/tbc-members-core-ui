@@ -1,8 +1,61 @@
 import React, { Component, useEffect, useState } from 'react';
-import { Button, Grid, Pagination, PaginationItem } from '@mui/material';
+import {Container,
+    Grid,
+    Paper,
+    List,
+    ListItem,
+    Card,
+    Box,
+    Typography,
+    Button,
+    Pagination,
+    PaginationItem,
+    IconButton,
+    ListItemAvatar,
+    Avatar,
+    ListItemText,} from '@mui/material';
+import LaunchIcon from '@mui/icons-material/Launch';
+import ImageIcon from '@mui/icons-material/Image';
 import { routes } from '@/lib/routes';
-import Typography from '@mui/material/Typography';
 import MentorCard from '@/compoents/MentorCard';
+import { Link } from 'react-router-dom';
+
+const Sidebar = () => {
+    // Add your filters here
+};
+
+const SearchBar = () => {
+    // Search input and controls
+};
+
+const ContentArea = () => {
+    return <List>{/* Map over your data and return a ListItem for each candidate */}</List>;
+};
+
+const CandidateCard = ({ candidate }) => {
+    return <Card>{/* Layout the candidate's information here */}</Card>;
+};
+
+const MainLayout = () => {
+    return (
+        <Container maxWidth="xl">
+            <SearchBar />
+            <Grid container spacing={2}>
+                <Grid item xs={12} md={3}>
+                    <Sidebar />
+                </Grid>
+                <Grid item xs={12} md={9}>
+                    <ContentArea />
+                </Grid>
+            </Grid>
+            <Box sx={{ position: 'fixed', bottom: 16, right: 16 }}>
+                <Button variant="contained" color="primary">
+                    Add Candidate
+                </Button>
+            </Box>
+        </Container>
+    );
+};
 
 export default function AllMembersPage({}) {
     const [ members, setMembers ] = useState([]);
@@ -66,26 +119,55 @@ export default function AllMembersPage({}) {
         setCurrentPage(value);
     };
     return (
-        <div>
-            <Typography variant="h3" align="center">
-                View Members
-            </Typography>
-            <Grid container spacing={4}>
-                {members.length > 1 ? (
-                    members?.map((mentor, index) => (
-                        <Grid item xs={12} sm={6} md={4} key={index}>
-                            <MentorCard mentor={mentor}></MentorCard>
-                        </Grid>
-                    ))
-                ) : (
-                    <p>Loading Members...</p>
-                )}
-            </Grid>
-            <Pagination
-                count={totalPages}
-                onChange={handlePageChange}
-                renderItem={item => <PaginationItem slots={{ previous: ArrowBackIcon, next: ArrowForwardIcon }} {...item} />}
-            />
-        </div>
+        <>
+            <div>
+                <Typography variant="h3" align="center">
+                    View Members
+                </Typography>
+                <Grid container spacing={4}>
+                    {members.length > 1 ? (
+                        members?.map((member, index) => (
+                            <>
+                                <ListItem
+                                    key={index}
+                                    secondaryAction={
+                                        <Link to={`/member/${member.user.id}`}>
+                                            <IconButton edge="start" aria-label="open">
+                                                <LaunchIcon />
+                                            </IconButton>
+                                        </Link>
+                                    }>
+                                    <Link to={`/member/${member.user.id}`}>
+                                        <ListItemAvatar>
+                                            <Avatar
+                                                src={member.user_profile.photo}
+                                                sx={{ width: 100, height: 100 }}
+                                                alt={`Image of ${member.user.first_name} ${member.user.last_name[0]}`}
+                                                variant="rounded"
+                                            />
+                                        </ListItemAvatar>
+                                    </Link>
+                                    <ListItemText
+                                        sx={{ ml: 2 }}
+                                        primary={`${member.user.first_name} ${member.user.last_name[0]}`}
+                                        secondary={`Role: ${member.talent_profile.role}${
+                                            member?.company_details?.company_name ? ` Company: ${member.company_details.company_name}` : ''
+                                        }`}
+                                    />
+                                </ListItem>
+                            </>
+                        ))
+                    ) : (
+                        <p>Loading Members...</p>
+                    )}
+                </Grid>
+                <Pagination
+                    count={totalPages}
+                    onChange={handlePageChange}
+                    renderItem={item => <PaginationItem slots={{ previous: ArrowBackIcon, next: ArrowForwardIcon }} {...item} />}
+                />
+            </div>
+            <MainLayout />
+        </>
     );
 }
