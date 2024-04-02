@@ -97,7 +97,7 @@ function CreateAccountPage() {
 
     return (
         <Grid container id="top">
-            <Grid item xs={12} sm={6} id="left">
+            <Grid item xs={12} sm={8} id="left">
                 {/* Left side */}
                 <CenteredContent>
                     <FormContainer>
@@ -124,13 +124,10 @@ function CreateAccountPage() {
 
                 {/*    */}
             </Grid>
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={12} sm={4}>
                 <ImageBG
                     id="right"
-                    style={{
-                        backgroundImage:
-                            'https://uploads-ssl.webflow.com/5fc4802f4edc553647330622/5fd04d6d1ea5ad04a37db102_pexels-jopwell-2422290-p-1600.jpeg',
-                    }}
+                    style={{backgroundImage: 'https://uploads-ssl.webflow.com/5fc4802f4edc553647330622/5fd04d6d1ea5ad04a37db102_pexels-jopwell-2422290-p-1600.jpeg',}}
                 />
             </Grid>
         </Grid>
