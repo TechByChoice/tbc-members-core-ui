@@ -1,5 +1,5 @@
 import React, { Suspense, useEffect, useState } from 'react';
-import { Button, Card, CardContent, Grid, useMediaQuery, useTheme } from '@mui/material';
+import { Button, Card, CardContent, Grid, styled, useMediaQuery, useTheme } from '@mui/material';
 import Typography from '@mui/material/Typography';
 import { Link } from 'react-router-dom';
 import MuiLink from '@mui/material/Link';
@@ -13,6 +13,21 @@ import { useAuth } from '@/providers/AuthProvider';
 import { FeatureCard } from '@/compoents/FeatuerCards';
 import CardMedia from '@mui/material/CardMedia';
 import Box from '@mui/material/Box';
+
+const StyledContainer = styled(Grid)(({ theme: { breakpoints } }) => ({
+    display: 'flex',
+    flexDirection: 'row',
+    // justifyContent: 'space-around',
+    [breakpoints.down('md')]: {flexDirection: 'column',},
+}));
+const StyledCard = styled(Card)(({ theme: { breakpoints, spacing } }) => ({
+    minHeight: '450px',
+    margin: spacing(2),
+    [breakpoints.down('md')]: {
+        minHeight: 'inherit',
+        minWidth: '100%',
+    },
+}));
 
 export default function MemberDashboard() {
     const [ event, setEvent ] = useState();
@@ -197,57 +212,71 @@ export default function MemberDashboard() {
                 </Grid>
 
                 {/* Bottom items */}
-                <Grid item xs={12} sm={4}>
-                    <Grid container display="flex" direction="row" justifyContent="space-between">
-                        <Typography variant="h6">Top Job</Typography>
-                        <Link to="/job/all">
-                            <Button variant="text">View More</Button>
-                        </Link>
+                <Grid container spacing={2}>
+                    <Grid item xs={12} sm={12} md={4}>
+                        <Grid container display="flex" direction="row" justifyContent="space-between">
+                            <Typography variant="h6">Top Job</Typography>
+                            <Link to="/job/all">
+                                <Button variant="text">View More</Button>
+                            </Link>
+                        </Grid>
+                        <Grid container display="flex" direction="row" justifyContent="center">
+                            <StyledCard>
+                                <CardContent>
+                                    {job ? (
+                                        <JobCard
+                                            match={false}
+                                            companyId={job?.parent_company?.id}
+                                            companyLogo={job?.parent_company?.logo}
+                                            companyName={job?.parent_company?.name}
+                                            jobType={job?.role?.name}
+                                            jobTitle={job?.job_title}
+                                            jobId={job?.id}
+                                            location={job?.location}
+                                            salary={`${job?.max_compensation?.range} - ${job?.max_compensation?.range}`}
+                                            description={null}
+                                        />
+                                    ) : (
+                                        <Typography variant="body1">We currently don&apos;t have a match at this time. Please check back later.</Typography>
+                                    )}
+                                </CardContent>
+                            </StyledCard>
+                        </Grid>
                     </Grid>
-                    <Card>
-                        <CardContent>
-                            {job ? (
-                                <JobCard
-                                    match={false}
-                                    companyId={job?.parent_company?.id}
-                                    companyLogo={job?.parent_company?.logo}
-                                    companyName={job?.parent_company?.name}
-                                    jobType={job?.role?.name}
-                                    jobTitle={job?.job_title}
-                                    jobId={job?.id}
-                                    location={job?.location}
-                                    salary={`${job?.max_compensation?.range} - ${job?.max_compensation?.range}`}
-                                    description={null}
-                                />
-                            ) : (
-                                <p>Loading events...</p>
-                            )}
-                        </CardContent>
-                    </Card>
-                </Grid>
 
-                <Grid item xs={12} sm={4}>
-                    <Grid container display="flex" direction="row" justifyContent="space-between">
-                        <Typography variant="h6">Next Event</Typography>
-                        <Link to="/event/all">
-                            <Button variant="text">View More</Button>
-                        </Link>
+                    <Grid item xs={12} sm={12} md={4}>
+                        <Grid container display="flex" direction="row" justifyContent="space-between">
+                            <Typography variant="h6">Next Event</Typography>
+                            <Link to="/event/all">
+                                <Button variant="text">View More</Button>
+                            </Link>
+                        </Grid>
+                        <Grid container display="flex" direction="row" justifyContent="center">
+                            <StyledCard>
+                                <CardContent>{event ? <EventCard event={event} /> : <p>Loading events...</p>}</CardContent>
+                            </StyledCard>
+                        </Grid>
                     </Grid>
-                    <Card>
-                        <CardContent>{event ? <EventCard event={event} /> : <p>Loading events...</p>}</CardContent>
-                    </Card>
-                </Grid>
 
-                <Grid item xs={12} sm={4}>
-                    <Grid container display="flex" direction="row" justifyContent="space-between">
-                        <Typography variant="h6">Top Mentor</Typography>
-                        <Link to="/mentor/all">
-                            <Button variant="text">View More</Button>
-                        </Link>
+                    <Grid item xs={12} sm={12} md={4}>
+                        <Grid container display="flex" direction="row" justifyContent="space-between">
+                            <Typography variant="h6">Top Mentor</Typography>
+                            <Link to="/mentor/all">
+                                <Button variant="text">View More</Button>
+                            </Link>
+                        </Grid>
+                        <Grid container display="flex" direction="row" justifyContent="center">
+                            <StyledCard>
+                                <CardContent>
+                                    {mentor ? (
+                                        <MentorCard mentor={mentor} />
+                                    ) : (
+                                        <Typography variant="body1">We currently don&apos;t have a match at this time. Please check back later.</Typography>
+                                    )}
+                                </CardContent>
+                            </StyledCard>
+                        </Grid>
                     </Grid>
-                    <Card>
-                        <CardContent>{mentor ? <MentorCard mentor={mentor} /> : <p>Loading mentor...</p>}</CardContent>
-                    </Card>
                 </Grid>
             </Grid>
         </>
