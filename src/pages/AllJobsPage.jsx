@@ -50,7 +50,7 @@ export default function AllJobsPage({}) {
                 setJobs(data.all_jobs.results);
                 setTotalItems(data.all_jobs.count);
                 setNextUrl(data.all_jobs.next);
-                setUserPostedJobs(data.posted_job);
+                setUserPostedJobs(data.posted_jobs);
             })
             .catch(error => {
                 console.error('Error fetching events:', error);
@@ -71,14 +71,14 @@ export default function AllJobsPage({}) {
 
     return (
         <JobWrapper>
-            {userPostedJobs?.length > 0 ? (
+            {userPostedJobs?.count > 0 ? (
                 <CalloutCard>
                     <Typography variant="h5" mb={1}>
                         Jobs You Posted
                     </Typography>
                     <Grid container spacing={4}>
-                        {userPostedJobs ? (
-                            userPostedJobs.map((job, index) => (
+                        {userPostedJobs?.results ? (
+                            userPostedJobs?.results.map((job, index) => (
                                 <Grid item xs={12} sm={6} md={4} key={index}>
                                     <JobCard
                                         match={false}
