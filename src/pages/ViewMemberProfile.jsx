@@ -25,10 +25,10 @@ import {Box,
     RadioGroup,
     Radio,} from '@mui/material';
 import Container from '@mui/material/Container';
-import Link from '@mui/material/Link';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import { routes } from '@/lib/routes';
+import { Link } from 'react-router-dom';
 
 function ViewMemberProfile() {
     const { id } = useParams();
@@ -683,14 +683,14 @@ function ViewMemberProfile() {
                             </Typography>
                             {/*{memberData?.data?.user?.is_mentor_profile_active && (*/}
                             {memberData?.data?.user?.is_mentor && memberData?.data?.user?.is_mentor_profile_active && renderMentorProfileSection()}
-                            <Container>
+                            <Container sx={{ mb: 3 }}>
                                 <Typography variant="h5">Skills:</Typography>
                                 {memberData?.data?.talent_profile?.skills && (
                                     <>
                                         {memberData?.data?.talent_profile?.skills.map(skill => {
                                             return (
                                                 <>
-                                                    <Chip key={skill.id} label={skill?.name} />
+                                                    <Chip sx={{ mr: 2 }} key={skill} label={skill} />
                                                 </>
                                             );
                                         })}
@@ -699,8 +699,12 @@ function ViewMemberProfile() {
                             </Container>
                             {memberData?.data?.current_company && (
                                 <Container>
-                                    <Typography variant="h5">Current Company</Typography>
-                                    <CompanyCard company={memberData?.data?.current_company} />
+                                    <Typography gutterBottom variant="h5">
+                                        Current Company
+                                    </Typography>
+                                    <Link to={`/company/${memberData?.data?.current_company.id}`}>
+                                        <CompanyCard company={memberData?.data?.current_company} />
+                                    </Link>
                                 </Container>
                             )}
                             {isUserConnectedWithMentor && (
