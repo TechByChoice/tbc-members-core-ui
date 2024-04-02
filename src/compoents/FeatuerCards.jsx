@@ -46,8 +46,10 @@ const CardMediaMedia = styled(CardMedia)(({ theme: { breakpoints } }) => ({
 const TypographyOverline = styled(Typography)(({}) => ({
     lineHeight: 2,
     // color: "#ffffff",
+    fontFamily: '"Barlow", sans-serif',
+    textTransform: 'capitalize',
     fontWeight: 'bold',
-    fontSize: '0.625rem',
+    fontSize: '.89rem',
     opacity: 0.7,
 }));
 
@@ -66,7 +68,7 @@ export function FeatureCard({
             <CardMediaMedia image={image} />
             <CardContent>
                 <TypographyOverline variant={'overline'}>{subTitle}</TypographyOverline>
-                <TypographyHeading variant={'h6'} gutterBottom>
+                <TypographyHeading variant={'h5'} gutterBottom>
                     {title}
                 </TypographyHeading>
                 <Link to={linkEndpoint}>
