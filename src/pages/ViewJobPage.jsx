@@ -174,8 +174,11 @@ function ViewJobPage({ userDetail, isLoading }) {
     const renderPublishCard = () => {
         return (
             <CardContent>
-                <Typography variant="h6">Ready to publish this job?</Typography>
-                <Button variant="contained" onClick={handelPublishJob} color="primary">
+                <Typography variant="h5">Ready to publish this job?</Typography>
+                <Typography mb={2} variant="body1">
+                    One published a team member will review and once approved, the post will go live on our site.
+                </Typography>
+                <Button sx={{ marginRight: 3 }} variant="contained" onClick={handelPublishJob} color="primary">
                     Publish Now
                 </Button>
                 <Button variant="contained" onClick={handelCloseJob} color="primary">
@@ -186,14 +189,14 @@ function ViewJobPage({ userDetail, isLoading }) {
     };
     const renderCloseCard = () => (
         <CardContent>
-            <Typography variant="h6">Thanks for thinking of the community!</Typography>
+            <Typography variant="h5">Thanks for thinking of the community!</Typography>
             <Typography variant="body1">This job post has been closed but your support for the community is everlasting.</Typography>
         </CardContent>
     );
 
     const renderAdminPendingCard = () => (
         <CardContent>
-            <Typography variant="h6">Admin! Do your thing!</Typography>
+            <Typography variant="h5">Admin! Do your thing!</Typography>
             <Typography variant="body1">Once you review the job, we can update this.</Typography>
             <Button variant="contained" onClick={handelActiveJob} color="primary">
                 Mark as Active
@@ -203,21 +206,17 @@ function ViewJobPage({ userDetail, isLoading }) {
 
     const renderPendingCard = () => (
         <CardContent>
-            <Typography variant="h6">We&apos;re reviewing your job post</Typography>
+            <Typography variant="h5">We&apos;re reviewing your job post</Typography>
             <Typography variant="body1">You&apos;ll receive an email once the job is live.</Typography>
         </CardContent>
     );
 
     const renderActiveCard = () => (
         <CardContent>
-            <Typography variant="h6">Your job is now live!</Typography>
+            <Typography variant="h5">Your job is now live!</Typography>
             <Typography variant="body1">This post will be on our site for 3 months unless you close the opening first</Typography>
             <ButtonGroup orientation="horizontal" aria-label="horizontal outlined button group">
-                {jobData?.status === 'pause' ? (
-                    <Button onClick={handelPublishJob}>Publish Job</Button>
-                ) : (
-                    <Button onClick={handelPauseJob}>Pause Job</Button>
-                )}
+                {jobData?.status === 'pause' ? <Button onClick={handelPublishJob}>Publish Job</Button> : <Button onClick={handelPauseJob}>Pause Job</Button>}
 
                 <Button onClick={handelCloseJob}>Close Job</Button>
             </ButtonGroup>
@@ -267,14 +266,14 @@ function ViewJobPage({ userDetail, isLoading }) {
             <CardContent>
                 <Typography variant="h6">Want to apply?</Typography>
                 <Typography variant="body1">
-                    Learn how to apply by
-                    <Link to="/new/member/1">creating an account today</Link>.
+                    Learn how to apply by <Link to="/new/member/1">creating an account today</Link>.
                 </Typography>
             </CardContent>
         </Card>
     );
 
     const renderApplyCard = () => {
+        console.log(userDetail);
         if (userDetail) {
             return renderApplyNowCard();
         } else {
