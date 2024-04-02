@@ -11,6 +11,22 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import MenuIcon from '@mui/icons-material/Menu';
 import { useTheme } from '@mui/material';
 
+const SkipLink = styled(MuiLink)(({ theme }) => ({
+    position: 'absolute',
+    left: '-999px',
+    width: '1px',
+    height: '1px',
+    overflow: 'hidden',
+    top: '10px',
+    '&:focus': {
+        position: 'fixed',
+        left: '10px',
+        width: 'auto',
+        height: 'auto',
+        overflow: 'visible',
+    },
+}));
+
 const StyledLink = styled(Link)(({ theme: { breakpoints, spacing, palette } }) => ({
     fontFamily: 'Space Mono',
     color: palette.common.black,
@@ -45,12 +61,31 @@ const StyledButtonDropdown = styled(Button)(({ theme: { breakpoints, spacing, pa
     fontWeight: 'normal',
     textTransform: 'capitalize',
     textDecoration: 'underline',
-    fontSize: '1rem',
+    fontSize: '0.85rem',
     '&:hover': {
         color: palette.primary.main,
         textDecoration: 'underline',
         backgroundColor: 'rgba(73, 86, 203, 0)',
         letterSpacing: '1px',
+    },
+}));
+
+const StyledNavLink = styled(Link)(({ theme: { spacing, palette } }) => ({
+    fontFamily: 'Space Mono',
+    color: palette.common.black,
+    transition: 'all .2s',
+    textDecorationColor: palette.common.black,
+    margin: spacing(1),
+    fontWeight: 'normal',
+    textTransform: 'capitalize',
+    textDecoration: 'underline',
+    fontSize: '0.85rem',
+    '&:hover': {
+        color: palette.primary.main,
+        textDecoration: 'underline',
+        backgroundColor: 'rgba(73, 86, 203, 0)',
+        letterSpacing: '1px',
+        cursor: 'pointer',
     },
 }));
 
@@ -78,6 +113,7 @@ export default function NavBar() {
     const [ anchorEl, setAnchorEl ] = React.useState(null);
     const open = Boolean(anchorEl);
     const history = useNavigate();
+    const mainContentRef = React.useRef(null);
     const [ menuStates, setMenuStates ] = useState({
         about: null,
         programs: null,
@@ -173,7 +209,10 @@ export default function NavBar() {
 
     const renderMenuButton = (label, items) => (
         <>
-            <StyledButtonDropdown aria-haspopup="true" onClick={handleOpenMenu(label.toLowerCase())}>
+            <StyledButtonDropdown
+                aria-haspopup="true"
+                aria-label={menuStates[label.toLowerCase()] ? 'Collapse submenu' : 'Expand submenu'}
+                onClick={handleOpenMenu(label.toLowerCase())}>
                 {label} <ExpandMoreIcon style={{ transform: menuStates[label.toLowerCase()] ? 'rotate(180deg)' : 'rotate(0deg)' }} />
             </StyledButtonDropdown>
             <Menu anchorEl={menuStates[label.toLowerCase()]} open={Boolean(menuStates[label.toLowerCase()])} onClose={handleCloseMenu(label.toLowerCase())}>
@@ -201,8 +240,9 @@ export default function NavBar() {
             {auth.isAuthenticated ? (
                 <>
                     <Tooltip title="Account settings">
-                        <IconButton onClick={handleClick} size="small" sx={{ ml: 2 }}>
+                        <IconButton aria-label={anchorEl ? 'Collapse submenu' : 'Expand submenu'} onClick={handleClick} size="small" sx={{ ml: 2 }}>
                             <Avatar sx={{ width: 32, height: 32 }}>{user?.[0]?.user_info?.first_name[0]}</Avatar>
+                            <ExpandMoreIcon style={{ transform: anchorEl ? 'rotate(180deg)' : 'rotate(0deg)' }} />
                         </IconButton>
                     </Tooltip>
                     <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
@@ -245,7 +285,7 @@ export default function NavBar() {
         const isOpen = mobileSubmenuOpen === label;
         return (
             <>
-                <MenuItem onClick={() => toggleMobileSubmenu(label)}>
+                <MenuItem aria-label={isOpen ? 'Collapse submenu' : 'Expand submenu'} onClick={() => toggleMobileSubmenu(label)}>
                     {label}
                     <ExpandMoreIcon style={{ transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)' }} />
                 </MenuItem>
@@ -268,6 +308,11 @@ export default function NavBar() {
     // Function to render desktop navigation
     const renderDesktopNavigation = () => (
         <Grid container alignItems="center" justifyContent="center" spacing={2}>
+            {auth.isAuthenticated && (
+                <Grid item>
+                    <StyledNavLink to="/">Dashboard</StyledNavLink>
+                </Grid>
+            )}
             {navigationItems.map(section => (
                 <Grid item key={section.label}>
                     {renderMenuButton(section.label, section.children)}
@@ -281,34 +326,58 @@ export default function NavBar() {
     // Function to render mobile navigation
     const renderMobileNavigation = () => (
         <>
-            <IconButton edge="start" color="inherit" aria-label="menu" onClick={handleMenu}>
+            <IconButton edge="start" aria-label="Open navigation menu" color="inherit" onClick={handleMenu}>
                 <MenuIcon />
             </IconButton>
             <Menu id="menu-appbar" anchorEl={anchorEl} keepMounted open={Boolean(anchorEl)} onClose={handleClose}>
+                {auth.isAuthenticated && (
+                    <MenuItem component={Link} to="/">
+                        Dashboard
+                    </MenuItem>
+                )}
                 {navigationItems.map(section => renderMobileSubmenu(section.label, section.children))}
                 <MenuItem onClick={handleClose}>{renderDonateButton()}</MenuItem>
-                <MenuItem
-                    onClick={() => {
-                        handleClose();
-                        history('/profile');
-                    }}>
-                    Profile
-                </MenuItem>
-                <MenuItem onClick={handelLogout}>Logout</MenuItem>
+                {auth.isAuthenticated ? (
+                    <>
+                        <MenuItem
+                            onClick={() => {
+                                handleClose();
+                                history('/profile');
+                            }}>
+                            Profile
+                        </MenuItem>
+                        <MenuItem onClick={handelLogout}>Logout</MenuItem>
+                    </>
+                ) : (
+                    <>
+                        <MenuItem component={MuiLink} to="/">
+                            Login
+                        </MenuItem>
+                        <MenuItem component={MuiLink} to="/new">
+                            Create Account
+                        </MenuItem>
+                    </>
+                )}
             </Menu>
         </>
     );
 
     return (
         <AppBar elevation={0} position="static" color="transparent">
+            {/* Skip navigation link for keyboard and screen reader users */}
+            <SkipLink href="#mainContent" onFocus={() => mainContentRef.current?.focus()}>
+                Skip to content
+            </SkipLink>
+            {/* ... rest of your navigation */}
             {/* Top row with logo */}
-            <Toolbar style={{ display: 'flex', justifyContent: 'center' }} justify="center" id="hey" display="flex">
+            <Toolbar style={{ display: 'flex', justifyContent: 'center' }}>
                 <Grid alignItems="center">
                     <Grid item justifyContent="center">
                         <StyledLink to="/dashboard">
                             <img
                                 alt="Tech by Choice Logo"
                                 height="50px"
+                                aria-hidden="true"
                                 src="https://uploads-ssl.webflow.com/5fc123904bcd576087dd38e2/6071eb46472b5c02f7dbd662_tbc-logo.svg"
                             />
                         </StyledLink>
