@@ -53,7 +53,7 @@ const App = () => {
                         <BrowserRouter>
                             <StatusAlert />
                             <NavBar />
-                            <Container>
+                            <Container id="mainContent">
                                 <Routes>
                                     <Route path="/" element={<LoginPage />} />
                                     <Route path="/reviews" element={<WrapperReview />} />
