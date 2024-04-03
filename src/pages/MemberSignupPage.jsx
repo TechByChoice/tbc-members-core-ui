@@ -64,9 +64,9 @@ function LoginPage() {
                 if (data.status) {
                     setToken(data.token);
                     localStorage.setItem('token', data.token);
-                    fetchUserDetails();
                     statusMessage.success('Welcome to Tech by Choice');
                     navigate('/new/member/2');
+                    fetchUserDetails();
                 } else {
                     console.error('Error:', data.message);
                     statusMessage.error(data.message);
@@ -77,7 +77,7 @@ function LoginPage() {
                 statusMessage.error(error.message);
             });
 
-        fetchUserDetails();
+        // fetchUserDetails();
     };
 
     const handleChange = event => {
@@ -91,7 +91,7 @@ function LoginPage() {
         } else {
             fetchUserDetails();
         }
-    }, [ auth.user ]);
+    }, []);
 
     useEffect(() => {
         if (!auth.errorMessage) {
@@ -128,39 +128,9 @@ function LoginPage() {
                     margin="normal"
                     fullWidth
                 />
-                <TextField
-                    required
-                    variant="outlined"
-                    id="last_name"
-                    name="last_name"
-                    label="Last Name"
-                    type="text"
-                    onChange={handleChange}
-                    margin="normal"
-                    fullWidth
-                />
-                <TextField
-                    required
-                    variant="outlined"
-                    id="email"
-                    name="email"
-                    label="Email"
-                    type="text"
-                    onChange={handleChange}
-                    margin="normal"
-                    fullWidth
-                />
-                <TextField
-                    required
-                    variant="outlined"
-                    id="password"
-                    name="password"
-                    label="Password"
-                    type="password"
-                    onChange={handleChange}
-                    margin="normal"
-                    fullWidth
-                />
+                <TextField required variant="outlined" id="last_name" name="last_name" label="Last Name" type="text" onChange={handleChange} margin="normal" fullWidth />
+                <TextField required variant="outlined" id="email" name="email" label="Email" type="text" onChange={handleChange} margin="normal" fullWidth />
+                <TextField required variant="outlined" id="password" name="password" label="Password" type="password" onChange={handleChange} margin="normal" fullWidth />
 
                 <Button variant="contained" color="primary" fullWidth={true} type="submit">
                     Create Account

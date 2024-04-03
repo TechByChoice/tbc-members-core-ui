@@ -32,12 +32,10 @@ const ImageBG = styled.div`
 `;
 
 function CustomTabPanel(props) {
-    const {
-        children, value, index, ...other 
-    } = props;
+    const { children, value, index } = props;
 
     return (
-        <div role="tabpanel" hidden={value !== index} id={`simple-tabpanel-${index}`} aria-labelledby={`simple-tab-${index}`} {...other}>
+        <div role="tabpanel" hidden={value !== index} id={`simple-tabpanel-${index}`} aria-labelledby={`simple-tab-${index}`}>
             {value === index && (
                 <Box sx={{ p: 3 }}>
                     <Typography>{children}</Typography>
@@ -77,7 +75,7 @@ function CreateAccountPage() {
     };
 
     useEffect(() => {
-        if (user?.length > 0) {
+        if (isAuthenticated) {
             navigate('/dashboard', { replace: true });
         }
     }, []);
@@ -108,8 +106,8 @@ function CreateAccountPage() {
                         ) : (
                             <div style={{ width: '100%' }}>
                                 <Tabs value={value} variant="fullWidth" onChange={handleChange} aria-label="basic tabs example">
-                                    <Tab label="Member Account" {...a11yProps(0)} />
-                                    <Tab label="Company Account" {...a11yProps(1)} />
+                                    <Tab label="Member Account" />
+                                    <Tab label="Company Account" />
                                 </Tabs>
                                 <CustomTabPanel value={value} index={0}>
                                     <MemberSignupPage />
@@ -127,7 +125,7 @@ function CreateAccountPage() {
             <Grid item xs={12} sm={4}>
                 <ImageBG
                     id="right"
-                    style={{backgroundImage: 'https://uploads-ssl.webflow.com/5fc4802f4edc553647330622/5fd04d6d1ea5ad04a37db102_pexels-jopwell-2422290-p-1600.jpeg',}}
+                    style={{ backgroundImage: 'https://uploads-ssl.webflow.com/5fc4802f4edc553647330622/5fd04d6d1ea5ad04a37db102_pexels-jopwell-2422290-p-1600.jpeg' }}
                 />
             </Grid>
         </Grid>

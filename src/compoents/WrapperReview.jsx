@@ -19,7 +19,7 @@ export default function WrapperReview() {
                     </Suspense>
                 </>
             ) : (
-                <Box id="hey" justifyContent="center" display="flex">
+                <Box justifyContent="center" display="flex">
                     <Box display="flex" flexDirection="column" mt={4} gap={3} borderRadius={2} border="1px solid" borderColor="grey.300" maxWidth={500}>
                         <Box>
                             <Typography variant="h6" px={2} pt={2} textAlign="center">

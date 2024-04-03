@@ -154,7 +154,13 @@ export default function NavBar() {
                 isAuth: true,
             },
         ],
-        resources: [{ label: 'Tech Role Quiz', href: 'https://www.quiz.techbychoice.org' }],
+        resources: [
+            { label: 'Tech Role Quiz', href: 'https://www.quiz.techbychoice.org' },
+            {
+                label: 'Open Doors', isInternal: true, isAuth: true, href: '/reviews' 
+            },
+            { label: 'Job Board', isInternal: true, href: '/job/all' },
+        ],
     };
 
     // Define navigation items
@@ -217,7 +223,7 @@ export default function NavBar() {
             </StyledButtonDropdown>
             <Menu anchorEl={menuStates[label.toLowerCase()]} open={Boolean(menuStates[label.toLowerCase()])} onClose={handleCloseMenu(label.toLowerCase())}>
                 {items.map((item, index) => (
-                    <React.Fragment key={index}>
+                    <div key={index}>
                         {((item.isAuth && auth?.isAuthenticated) || item.isAuth === false || item.isAuth === undefined) && (
                             <StyledMenuItem onClick={handleCloseMenu(label.toLowerCase())}>
                                 {item.isInternal ? (
@@ -229,7 +235,7 @@ export default function NavBar() {
                                 )}
                             </StyledMenuItem>
                         )}
-                    </React.Fragment>
+                    </div>
                 ))}
             </Menu>
         </>
@@ -350,10 +356,16 @@ export default function NavBar() {
                     </>
                 ) : (
                     <>
-                        <MenuItem component={MuiLink} to="/">
+                        <MenuItem
+                            onClick={() => {
+                                history('/');
+                            }}>
                             Login
                         </MenuItem>
-                        <MenuItem component={MuiLink} to="/new">
+                        <MenuItem
+                            onClick={() => {
+                                history('/new');
+                            }}>
                             Create Account
                         </MenuItem>
                     </>
