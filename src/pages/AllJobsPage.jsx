@@ -5,6 +5,8 @@ import JobCard from '../compoents/JobCard';
 import styled from '@emotion/styled';
 import { Link } from 'react-router-dom';
 import { routes } from '@/lib/routes';
+import { useAuth } from '@/providers/AuthProvider';
+import Box from '@mui/material/Box';
 
 const CalloutCard = styled.section`
     border: 1px solid darkgray;
@@ -23,6 +25,7 @@ export default function AllJobsPage({}) {
     const [ currentPage, setCurrentPage ] = useState(1);
     const [ totalItems, setTotalItems ] = useState(0);
     const [ nextUrl, setNextUrl ] = useState();
+    const { isAuthenticated } = useAuth();
     const itemsPerPage = 100;
     let totalPages = Math.ceil(totalItems / itemsPerPage);
 
@@ -100,14 +103,18 @@ export default function AllJobsPage({}) {
                     </Grid>
                 </CalloutCard>
             ) : (
-                <CalloutCard>
-                    <Typography component="h5" variant="h5">
-                        Would you like to post a job?
-                    </Typography>
-                    <Link to="/job/new/referral">
-                        <Button variant="contained">Add Job</Button>
-                    </Link>
-                </CalloutCard>
+                <>
+                    {isAuthenticated && (
+                        <CalloutCard>
+                            <Typography component="h5" variant="h5">
+                                Would you like to post a job?
+                            </Typography>
+                            <Link to="/job/new/referral">
+                                <Button variant="contained">Add Job</Button>
+                            </Link>
+                        </CalloutCard>
+                    )}
+                </>
             )}
 
             <Grid container spacing={4}>
@@ -132,12 +139,28 @@ export default function AllJobsPage({}) {
                     <p>Loading events...</p>
                 )}
             </Grid>
-            <Button onClick={handlePrevious} disabled={currentPage === 1}>
-                Previous
-            </Button>
-            <Button onClick={handleNext} disabled={currentPage === totalPages}>
-                Next
-            </Button>
+            {jobs.length > 0 ? (
+                <>
+                    <Button onClick={handlePrevious} disabled={currentPage === 1}>
+                        Previous
+                    </Button>
+                    <Button onClick={handleNext} disabled={currentPage === totalPages}>
+                        Next
+                    </Button>
+                </>
+            ) : (
+                <>
+                    <Grid justifyContent="center" display="flex">
+                        <Box display="flex" flexDirection="column" mt={4} gap={3} borderRadius={2} border="1px solid" borderColor="grey.300" maxWidth={500}>
+                            <Box>
+                                <Typography variant="h6" px={2} pt={2} textAlign="center">
+                                    <b>Our job board is percolating. Please come back later.</b>
+                                </Typography>
+                            </Box>
+                        </Box>
+                    </Grid>
+                </>
+            )}
         </JobWrapper>
     );
 }

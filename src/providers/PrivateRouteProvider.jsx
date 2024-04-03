@@ -3,38 +3,25 @@ import { Navigate } from 'react-router-dom';
 import { useAuth } from './AuthProvider';
 import { useNavigate } from 'react-router';
 import { useStatus } from './MsgStatusProvider';
+import { useStatusMessage } from '@/hooks/useStatusMessage';
 
 export const PrivateRoutes = ({ children, userDetail }) => {
     const auth = useAuth();
+    const { user, isAuthenticated } = useAuth();
     const navigate = useNavigate();
     const [ isLoading, setIsLoading ] = useState(true);
-    const { setStatusMessage, setStatusType, setIsAlertOpen } = useStatus();
-    // Run the useEffect only once when the component mounts
-    useEffect(() => {
-        if (userDetail !== undefined) {
-            setIsLoading(false); // stop the loading status
-        }
-    }, [ userDetail ]);
+    const statusMessage = useStatusMessage();
 
     useEffect(() => {
-        if (!isLoading && auth.isAuthenticated && localStorage.getItem('token')) {
-            // if(userDetail.userprofile.subscription_status !== 'succeeded' && location.pathname === '/profile'){
-            //   setStatusMessage("We're missing the money");
-            //   setIsAlertOpen(true);
-            //   setStatusType('error'); // or 'error' or 'info'
-            // }
-            // if (userDetail.userprofile.subscription_status !== 'succeeded' && location.pathname !== '/profile') {
-            //   navigate('/profile', { state: { from: location } });
-            //   setStatusMessage("We're missing the money");
-            //   setIsAlertOpen(true);
-            //   setStatusType('error'); // or 'error' or 'info'
-            // }
-            // else if (auth.isAuthenticated && localStorage.getItem('token')) {
-            //     if (location.state && location.state.from) {
-            //       navigate(location.state.from.pathname);
-            //     }
-            //   console.log('we made it')
-            //   }
+        if (auth.isAuthenticated && localStorage.getItem('token')) {
+            // move user to dashboard if the user doesn't
+            if (user?.[0]?.account_info?.is_member) {
+                // onboarding complete
+                if (!user?.[0]?.account_info?.is_member_onboarding_complete) {
+                    navigate('/new/member/2', { replace: false });
+                    statusMessage.info('Please completed your onboarding to join the community.');
+                }
+            }
         }
     }, [
         auth.isAuthenticated,
