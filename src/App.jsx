@@ -21,8 +21,8 @@ import { TbcThemeProvider } from '@techbychoice/tbc-component-library';
 import * as React from 'react';
 import { createRoot } from 'react-dom/client';
 import { Route, Routes } from 'react-router';
-import { BrowserRouter } from 'react-router-dom';
-import { Suspense, useState } from 'react';
+import { BrowserRouter, useNavigate } from 'react-router-dom';
+import { Suspense, useEffect, useState } from 'react';
 import ViewCompanyPage from '@/pages/ViewCompanyPage';
 import AllMembersPage from '@/pages/AllMembersPage';
 import ErrorBoundary from '@/compoents/ErrorBoundary';
@@ -33,6 +33,7 @@ import NewCompanyPage from '@/pages/NewCompanyPage';
 import ConfirmAgreementPage from '@/pages/onboarding/company/ConfirmAgreementPage';
 import WrapperReview from '@/compoents/WrapperReview';
 import { ThemeProvider } from '@mui/material/styles';
+import { useStatusMessage } from '@/hooks/useStatusMessage';
 
 const SurveyQuestions = React.lazy(() => import('open_doors/SurveyQuestions'));
 
@@ -56,13 +57,22 @@ const App = () => {
                             <Container id="mainContent">
                                 <Routes>
                                     <Route path="/" element={<LoginPage />} />
-                                    <Route path="/reviews" element={<WrapperReview />} />
+                                    <Route
+                                        path="/reviews"
+                                        element={
+                                            <PrivateRoutes userDetail={user?.[0]}>
+                                                <WrapperReview />
+                                            </PrivateRoutes>
+                                        }
+                                    />
 
                                     <Route
                                         path="/questions/:id"
                                         element={
                                             <Suspense fallback={<div>Loading...</div>}>
-                                                <SurveyQuestions />
+                                                <PrivateRoutes userDetail={user?.[0]}>
+                                                    <SurveyQuestions />
+                                                </PrivateRoutes>
                                             </Suspense>
                                         }
                                     />
@@ -70,15 +80,15 @@ const App = () => {
                                     <Route
                                         path="/profile"
                                         element={
-                                            <PrivateRoutes userDetail={user || undefined}>
-                                                <ProfileSettingPage userDetail={user || undefined} />
+                                            <PrivateRoutes userDetail={user?.[0]}>
+                                                <ProfileSettingPage userDetail={user?.[0]} />
                                             </PrivateRoutes>
                                         }
                                     />
                                     <Route path="/new" element={<CreateAccountPage />} />
                                     <Route path="/new/check-email" element={<CheckEmailPage />} />
-                                    <Route path="/new/company/confirm-agreement/" element={<ConfirmAgreementPage />} />
-                                    <Route path="/new/company/confirm-account" element={<ConfirmAccountPage />} />
+                                    <Route path="/new/company/confirm-account/:id/:token" element={<ConfirmAccountPage />} />
+                                    <Route path="/new/company/confirm-agreement" element={<ConfirmAgreementPage />} />
                                     <Route path="/new/company/create-profile" element={<NewCompanyPage />} />
                                     <Route
                                         path="/new/member/2"
@@ -88,7 +98,14 @@ const App = () => {
                                             </PrivateRoutes>
                                         }
                                     />
-                                    <Route path="/member/all" element={<AllMembersPage />} />
+                                    <Route
+                                        path="/member/all"
+                                        element={
+                                            <PrivateRoutes userDetail={user?.[0]}>
+                                                <AllMembersPage />
+                                            </PrivateRoutes>
+                                        }
+                                    />
                                     <Route path="/event/all" element={<AllEventsPage />} />
                                     <Route
                                         path="/dashboard"
@@ -98,12 +115,33 @@ const App = () => {
                                             </PrivateRoutes>
                                         }
                                     />
-                                    <Route path="/job/new/referral" element={<JobReferralPage />} />
+                                    <Route
+                                        path="/job/new/referral"
+                                        element={
+                                            <PrivateRoutes userDetail={user?.[0]}>
+                                                <JobReferralPage />
+                                            </PrivateRoutes>
+                                        }
+                                    />
                                     <Route path="/job/:id" element={<ViewJobPage isLoading={isLoading} userDetail={user?.[0]} />} />
                                     <Route path="/company/:id" element={<ViewCompanyPage isLoading={isLoading} userDetail={user?.[0]} />} />
                                     <Route path="/job/all" element={<AllJobsPage />} />
-                                    <Route path="/member/:id" element={<ViewMemberProfile />} />
-                                    <Route path="/mentor/create" element={<NewMentorPage />} />
+                                    <Route
+                                        path="/member/:id"
+                                        element={
+                                            <PrivateRoutes userDetail={user?.[0]}>
+                                                <ViewMemberProfile />
+                                            </PrivateRoutes>
+                                        }
+                                    />
+                                    <Route
+                                        path="/mentor/create"
+                                        element={
+                                            <PrivateRoutes userDetail={user?.[0]}>
+                                                <NewMentorPage />
+                                            </PrivateRoutes>
+                                        }
+                                    />
                                     <Route path="/mentor/all" element={<AllMentorsPage />} />
                                 </Routes>
                             </Container>
