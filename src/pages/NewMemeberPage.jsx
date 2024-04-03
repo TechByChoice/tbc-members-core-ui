@@ -127,8 +127,7 @@ export default function NewMemberPage() {
         // Check if the value is an array (since Autocomplete can be multiple)
         if (Array.isArray(value)) {
             value = value.map(
-                item =>
-                    item.pronouns || item.name || item.company_name || item.value || item.range || item.gender || item.identity || item.ethnicity || item, // the 'item' fallback is in case you have other Autocomplete instances with string values
+                item => item.pronouns || item.name || item.company_name || item.value || item.range || item.gender || item.identity || item.ethnicity || item, // the 'item' fallback is in case you have other Autocomplete instances with string values
             );
         }
         setAnswers(prev => ({ ...prev, [name]: value }));
@@ -261,7 +260,7 @@ export default function NewMemberPage() {
             .then(data => {
                 // Handle the successful JSON response here, e.g.:
                 statusMessage.success("You're in!");
-                // history('/dashboard');
+                history('/dashboard');
             })
             .catch(error => {
                 console.error('Fetch error:', error);
