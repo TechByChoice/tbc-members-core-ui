@@ -5,11 +5,13 @@ import Grid from '@mui/material/Grid';
 import { Card, CardContent, FormControlLabel, Checkbox, Button } from '@mui/material';
 import { routes } from '@/lib/routes';
 import { useAuth } from '@/providers/AuthProvider';
+import { useStatusMessage } from '@/hooks/useStatusMessage';
 
 function ConfirmAccountPage() {
     const [ formData, setFormData ] = useState({ confirm_service_agreement: true });
     const { id, token } = useParams();
     const navigate = useNavigate();
+    const statusMessage = useStatusMessage();
     const label = { inputProps: { 'aria-label': 'I agree to the service agreement.' } };
     const { setToken } = useAuth();
 
@@ -25,13 +27,13 @@ function ConfirmAccountPage() {
             .then(response => response.json())
             .then(data => {
                 if (data.status) {
-                    setToken(data.token);
-                    localStorage.setItem('token', data.token);
+                    // setToken(data.token);
+                    // localStorage.setItem('token', data.token);
                     // fetchUserDetails();
+                    statusMessage.error(data.message);
                     navigate('/new/company/confirm-agreement/');
                 } else {
                     console.error('Error:', data.message);
-                    // statusMessage.error(data.message);
                 }
             })
             .catch(error => {
