@@ -91,6 +91,24 @@ export default function NewCompanyPage() {
     const history = useNavigate();
     const statusMessage = useStatusMessage();
 
+    useEffect(() => {
+        // move user to dashboard if the user doesn't
+        if (user[0]?.account_info?.is_company_onboarding_complete) {
+            statusMessage.info("You've completed onboarding and no longer have access to this screen.");
+            navigate('/dashboard', { replace: false });
+        }
+    }, [ user ]);
+    const fetchUserDetailsWrapper = () => {
+        return new Promise((resolve, reject) => {
+            try {
+                fetchUserDetails();
+                resolve();
+            } catch (error) {
+                reject(error);
+            }
+        });
+    };
+
     const handleInputChange = e => {
         const { name, value } = e.target;
         setAnswers(prev => ({ ...prev, [name]: value }));
@@ -114,8 +132,7 @@ export default function NewCompanyPage() {
         // Check if the value is an array (since Autocomplete can be multiple)
         if (Array.isArray(value)) {
             value = value.map(
-                item =>
-                    item.pronouns || item.name || item.company_name || item.value || item.range || item.gender || item.identity || item.ethnicity || item, // the 'item' fallback is in case you have other Autocomplete instances with string values
+                item => item.pronouns || item.name || item.company_name || item.value || item.range || item.gender || item.identity || item.ethnicity || item, // the 'item' fallback is in case you have other Autocomplete instances with string values
             );
         }
         setAnswers(prev => ({ ...prev, [name]: value }));
@@ -219,10 +236,19 @@ export default function NewCompanyPage() {
 
         if (isProfileValid && isRolesValid) {
             const formData = new FormData();
+            const companyId = user?.[0]?.company_account_data?.company_profile?.id;
 
-            for (const name in answers) {
+            const openRolesForm = [
+                'open_role_location',
+                'on_site_remote',
+                'companyId',
+                'job_roles'
+            ];
+            openRolesForm.map((name, index) => {
                 formData.append(name, answers[name]);
-            }
+            });
+
+            formData.append('companyId', companyId);
 
             fetch(routes.api.companies.createOnboardingOpenRoles(), {
                 method: 'POST',
@@ -239,13 +265,14 @@ export default function NewCompanyPage() {
                 .then(data => {
                     // Handle the successful JSON response here, e.g.:
                     statusMessage.success("You're in!");
-                    // history('/dashboard');
+                    fetchUserDetailsWrapper().then(() => {
+                        history('/dashboard');
+                    });
                 })
                 .catch(error => {
                     console.error('Fetch error:', error);
                     statusMessage.error('We ran into an error saving your profile');
                 });
-            fetchUserDetails();
         }
     };
 
@@ -282,6 +309,7 @@ export default function NewCompanyPage() {
                     statusMessage.success('Your profile has been created!');
                     setAnswers(prev => ({ ...prev, companyId: data.companyId }));
                     setActiveStep(prevActiveStep => prevActiveStep + 1);
+                    // fetchUserDetails();
                     // history('/dashboard');
                 })
                 .catch(error => {
@@ -289,7 +317,6 @@ export default function NewCompanyPage() {
                     statusMessage.error('We ran into an error saving your profile');
                 });
             return true;
-            // fetchUserDetails();
         } else {
             return false;
         }

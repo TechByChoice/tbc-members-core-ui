@@ -68,7 +68,7 @@ export const routes = {
             activateAccount: (id, token) => apiJoin(routes.api.base, `talent-choice/company/confirm-email/${id}/${token}/`),
             confirmAgreement: () => apiJoin(routes.api.base, `talent-choice/company/confirm-agreement/`),
             createOnboardingProfile: () => apiJoin(routes.api.base, `talent-choice/company/onboarding/create/profile/`),
-            createOnboardingOpenRoles: () => apiJoin(routes.api.talent, `company/new/onboarding/open-roles/`),
+            createOnboardingOpenRoles: () => apiJoin(routes.api.base, `talent-choice/company/complete-onboarding/`),
         },
     },
 };

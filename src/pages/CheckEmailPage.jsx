@@ -3,9 +3,21 @@ import { useNavigate } from 'react-router';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import { Card, CardContent } from '@mui/material';
+import { useAuth } from '@/providers/AuthProvider';
+import { useStatusMessage } from '@/hooks/useStatusMessage';
 
 function CheckEmailPage() {
     const navigate = useNavigate();
+    const { user } = useAuth();
+    const statusMessage = useStatusMessage();
+
+    useEffect(() => {
+        // move user to dashboard if the user doesn't
+        if (user[0]?.account_info?.is_company_onboarding_complete) {
+            statusMessage.info("You've completed onboarding and no longer have access to this screen.");
+            navigate('/dashboard', { replace: false });
+        }
+    }, [ user ]);
 
     return (
         <Grid container id="top">

@@ -63,10 +63,10 @@ function CompanySignupPage() {
             .then(response => response.json())
             .then(data => {
                 if (data.status) {
-                    // setToken(data.token);
-                    // localStorage.setItem('token', data.token);
-                    // fetchUserDetails();
-                    // navigate('/new/check-email');
+                    setToken(data.token);
+                    localStorage.setItem('token', data.token);
+                    fetchUserDetails();
+                    navigate('/new/check-email');
                 } else {
                     console.error('Error:', data.message);
                     statusMessage.error(data.message);
@@ -127,17 +127,7 @@ function CompanySignupPage() {
                     </Grid>
                 </Grid>
 
-                <TextField
-                    required
-                    variant="outlined"
-                    id="email"
-                    name="email"
-                    label="Email"
-                    type="text"
-                    onChange={handleChange}
-                    margin="normal"
-                    fullWidth
-                />
+                <TextField required variant="outlined" id="email" name="email" label="Email" type="text" onChange={handleChange} margin="normal" fullWidth />
                 <TextField
                     required
                     variant="outlined"
@@ -149,17 +139,7 @@ function CompanySignupPage() {
                     margin="normal"
                     fullWidth
                 />
-                <TextField
-                    required
-                    variant="outlined"
-                    id="password"
-                    name="password"
-                    label="Password"
-                    type="password"
-                    onChange={handleChange}
-                    margin="normal"
-                    fullWidth
-                />
+                <TextField required variant="outlined" id="password" name="password" label="Password" type="password" onChange={handleChange} margin="normal" fullWidth />
 
                 <Button variant="contained" color="primary" fullWidth={true} type="submit">
                     Create Account
