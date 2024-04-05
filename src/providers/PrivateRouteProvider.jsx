@@ -29,15 +29,6 @@ export const PrivateRoutes = ({ children, userDetail }) => {
             }
 
             if (userAccountInfo?.is_company_account && !userAccountInfo?.is_company_onboarding_complete) {
-                // <Route path="/new/check-email" element={<CheckEmailPage />} />
-                // <Route path="/new/company/confirm-account/:id/:token" element={<ConfirmAccountPage />} />
-                // <Route path="/new/company/confirm-agreement" element={<ConfirmAgreementPage />} />
-                // <Route path="/new/company/create-profile" element={<NewCompanyPage />} />
-                //         is_community_recruiter = models.BooleanField(default=False)
-                //         is_company_account = models.BooleanField(default=False)
-                //         is_email_confirmation_sent = models.BooleanField(default=False)
-                //         is_email_confirmed = models.BooleanField(default=False)
-                //         is_company_onboarding_complete = models.BooleanField(default=False)
                 if (!userAccountInfo?.is_company_onboarding_complete) {
                     const companyAccountData = user?.[0]?.company_account_data?.company_account;
                     if (!userAccountInfo?.is_email_confirmed) {
@@ -46,10 +37,6 @@ export const PrivateRoutes = ({ children, userDetail }) => {
                     if (!companyAccountData?.is_confirm_service_agreement && userAccountInfo?.is_email_confirmed) {
                         return navigate('/new/company/confirm-agreement', { replace: false });
                     }
-                    // if(!companyAccountData?.is_confirm_service_agreement
-                    //     && userAccountInfo?.is_email_confirmed){
-                    //     return navigate('/new/company/create-profile', { replace: false });
-                    // }
                     navigate('/new/company/create-profile', { replace: false });
                     statusMessage.info('Please completed your onboarding to activate your account.');
                 }
