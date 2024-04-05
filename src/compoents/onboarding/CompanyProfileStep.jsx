@@ -1,48 +1,32 @@
-import {
-    Typography,
-    FormControl,
-    FormLabel,
-    TextField,
-    Button,
-    Input, Grid, Autocomplete, Select, MenuItem, FormHelperText, OutlinedInput
-} from '@mui/material';
-import React from "react";
-import {createFilterOptions} from "@mui/material/Autocomplete";
+import { Typography, FormControl, FormLabel, TextField, Button, Input, Grid, Autocomplete, Select, MenuItem, FormHelperText, OutlinedInput } from '@mui/material';
+import React from 'react';
+import { createFilterOptions } from '@mui/material/Autocomplete';
 // import ReactQuill from "react-quill";
 
 const filter = createFilterOptions();
 
 function CompanyProfileStep({
-                                answers,
-                                questions,
-                                handleQuillInputChange,
-                                handleInputChange,
-                                handleFileChange,
-                                handleAutocompleteChange,
-                                formErrors
-                            }) {
-
+    questions, handleInputChange, handleFileChange, handleAutocompleteChange, formErrors 
+}) {
     return (
         <Grid container spacing={3}>
             <Grid item xs={12}>
                 <Typography variant="h5">Create Your Company Profile</Typography>
-                <Typography variant="subtitle1">
-                    Help the community learn more about your company.
-                </Typography>
+                <Typography variant="subtitle1">Help the community learn more about your company.</Typography>
             </Grid>
 
             <Grid item xs={12}>
                 <FormControl fullWidth error={!!formErrors.company_url}>
                     <FormLabel>Company Website</FormLabel>
-                    <OutlinedInput onChange={handleInputChange} name="company_url"/>
+                    <OutlinedInput onChange={handleInputChange} name="company_url" />
                     {!!formErrors.company_url && <FormHelperText>{formErrors.company_url}</FormHelperText>}
                 </FormControl>
             </Grid>
 
             <Grid item xs={12}>
                 <FormControl fullWidth error={!!formErrors.location}>
-                    <FormLabel>Company Location</FormLabel>
-                    <OutlinedInput onChange={handleInputChange} name="location"/>
+                    <FormLabel>Company Postal Code</FormLabel>
+                    <OutlinedInput onChange={handleInputChange} name="location" />
                     {!!formErrors.location && <FormHelperText>{formErrors.location}</FormHelperText>}
                 </FormControl>
             </Grid>
@@ -59,7 +43,7 @@ function CompanyProfileStep({
                     <Typography variant="body2">Company Logo</Typography>
                     <Button variant="contained" component="label">
                         Upload Image
-                        <input type="file" name="logo" onChange={handleFileChange} hidden/>
+                        <input type="file" name="logo" onChange={handleFileChange} hidden />
                     </Button>
                     {!!formErrors.logo && <FormHelperText>{formErrors.logo}</FormHelperText>}
                 </FormControl>
@@ -74,12 +58,10 @@ function CompanyProfileStep({
                         selectOnFocus
                         includeInputInList
                         handleHomeEndnames
-                        id='autocomplete-company_sizes'
+                        id="autocomplete-company_sizes"
                         options={questions.company_sizes || []} // <-- directly provide a default value here
-                        isOptionEqualToValue={(option, value) =>
-                            (option.inputValue && value.inputValue && option.inputValue === value.inputValue) || option === value
-                        }
-                        getOptionLabel={(option) => {
+                        isOptionEqualToValue={(option, value) => (option.inputValue && value.inputValue && option.inputValue === value.inputValue) || option === value}
+                        getOptionLabel={option => {
                             if (typeof option === 'string') {
                                 return option;
                             }
@@ -92,9 +74,9 @@ function CompanyProfileStep({
                         filterOptions={(options, params) => {
                             const filtered = filter(options, params);
 
-                            const {inputValue} = params;
+                            const { inputValue } = params;
                             // Suggest the creation of a new value
-                            const isExisting = options.some((option) => inputValue === option.name);
+                            const isExisting = options.some(option => inputValue === option.name);
                             if (inputValue !== '' && !isExisting) {
                                 filtered.push({
                                     inputValue,
@@ -106,14 +88,13 @@ function CompanyProfileStep({
                         }}
                         renderOption={(props, option) => <li {...props}>{option.name}</li>}
                         onChange={(event, value) => {
-                            handleAutocompleteChange("company_size", [value])
+                            handleAutocompleteChange('company_size', [ value ]);
                         }}
-                        renderInput={(params) => <TextField name="company_size" {...params} />}
+                        renderInput={params => <TextField name="company_size" {...params} />}
                     />
                     {!!formErrors.company_size && <FormHelperText>{formErrors.company_size}</FormHelperText>}
                 </FormControl>
             </Grid>
-
 
             <Grid item xs={12}>
                 <FormControl fullWidth>
@@ -122,12 +103,10 @@ function CompanyProfileStep({
                         selectOnFocus
                         includeInputInList
                         handleHomeEndnames
-                        id='autocomplete-company_types'
+                        id="autocomplete-company_types"
                         options={questions.company_types || []} // <-- directly provide a default value here
-                        isOptionEqualToValue={(option, value) =>
-                            (option.inputValue && value.inputValue && option.inputValue === value.inputValue) || option === value
-                        }
-                        getOptionLabel={(option) => {
+                        isOptionEqualToValue={(option, value) => (option.inputValue && value.inputValue && option.inputValue === value.inputValue) || option === value}
+                        getOptionLabel={option => {
                             if (typeof option === 'string') {
                                 return option;
                             }
@@ -140,9 +119,9 @@ function CompanyProfileStep({
                         filterOptions={(options, params) => {
                             const filtered = filter(options, params);
 
-                            const {inputValue} = params;
+                            const { inputValue } = params;
                             // Suggest the creation of a new value
-                            const isExisting = options.some((option) => inputValue === option.name);
+                            const isExisting = options.some(option => inputValue === option.name);
                             if (inputValue !== '' && !isExisting) {
                                 filtered.push({
                                     inputValue,
@@ -154,9 +133,9 @@ function CompanyProfileStep({
                         }}
                         renderOption={(props, option) => <li {...props}>{option.name || option.name}</li>}
                         onChange={(event, value) => {
-                            handleAutocompleteChange("company_types", [value])
+                            handleAutocompleteChange('company_types', [ value ]);
                         }}
-                        renderInput={(params) => <TextField name="company_types" {...params} />}
+                        renderInput={params => <TextField name="company_types" {...params} />}
                     />
                 </FormControl>
             </Grid>
@@ -169,12 +148,10 @@ function CompanyProfileStep({
                         selectOnFocus
                         includeInputInList
                         handleHomeEndnames
-                        id='autocomplete-company_industries'
+                        id="autocomplete-company_industries"
                         options={questions.company_industries || []} // <-- directly provide a default value here
-                        isOptionEqualToValue={(option, value) =>
-                            (option.inputValue && value.inputValue && option.inputValue === value.inputValue) || option === value
-                        }
-                        getOptionLabel={(option) => {
+                        isOptionEqualToValue={(option, value) => (option.inputValue && value.inputValue && option.inputValue === value.inputValue) || option === value}
+                        getOptionLabel={option => {
                             if (typeof option === 'string') {
                                 return option;
                             }
@@ -187,9 +164,9 @@ function CompanyProfileStep({
                         filterOptions={(options, params) => {
                             const filtered = filter(options, params);
 
-                            const {inputValue} = params;
+                            const { inputValue } = params;
                             // Suggest the creation of a new value
-                            const isExisting = options.some((option) => inputValue === option.name);
+                            const isExisting = options.some(option => inputValue === option.name);
                             if (inputValue !== '' && !isExisting) {
                                 filtered.push({
                                     inputValue,
@@ -200,16 +177,13 @@ function CompanyProfileStep({
                             return filtered;
                         }}
                         renderOption={(props, option) => <li {...props}>{option.name || option.name}</li>}
-                        onChange={(event, value) => handleAutocompleteChange("company_industries", value)}
-                        renderInput={(params) => <TextField name="company_industries" {...params} />}
+                        onChange={(event, value) => handleAutocompleteChange('company_industries', value)}
+                        renderInput={params => <TextField name="company_industries" {...params} />}
                     />
                 </FormControl>
             </Grid>
-
-
         </Grid>
     );
 }
-
 
 export default CompanyProfileStep;
