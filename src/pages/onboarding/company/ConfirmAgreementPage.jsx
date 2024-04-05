@@ -4,12 +4,23 @@ import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import { Card, CardContent, FormControlLabel, Checkbox, Button, CardActions } from '@mui/material';
 import { routes } from '@/lib/routes';
+import { useAuth } from '@/providers/AuthProvider';
+import { useStatusMessage } from '@/hooks/useStatusMessage';
 
 function ConfirmAccountPage() {
     const [ formData, setFormData ] = useState({ confirm_service_agreement: false });
     const { id, token } = useParams();
     const navigate = useNavigate();
+    const { user } = useAuth();
+    const statusMessage = useStatusMessage();
 
+    useEffect(() => {
+        // move user to dashboard if the user doesn't
+        if (user[0]?.account_info?.is_company_onboarding_complete) {
+            statusMessage.info("You've completed onboarding and no longer have access to this screen.");
+            navigate('/dashboard', { replace: false });
+        }
+    }, [ user ]);
     const handleCheckboxChange = event => {
         setFormData({ ...formData, confirm_service_agreement: event.target.checked });
     };

@@ -28,7 +28,7 @@ export const PrivateRoutes = ({ children, userDetail }) => {
                 }
             }
 
-            if (userAccountInfo?.is_company_account) {
+            if (userAccountInfo?.is_company_account && !userAccountInfo?.is_company_onboarding_complete) {
                 // <Route path="/new/check-email" element={<CheckEmailPage />} />
                 // <Route path="/new/company/confirm-account/:id/:token" element={<ConfirmAccountPage />} />
                 // <Route path="/new/company/confirm-agreement" element={<ConfirmAgreementPage />} />

@@ -14,6 +14,15 @@ function ConfirmAccountPage() {
     const statusMessage = useStatusMessage();
     const label = { inputProps: { 'aria-label': 'I agree to the service agreement.' } };
     const { setToken } = useAuth();
+    const { user } = useAuth();
+
+    useEffect(() => {
+        // move user to dashboard if the user doesn't
+        if (user[0]?.account_info?.is_company_onboarding_complete) {
+            statusMessage.info("You've completed onboarding and no longer have access to this screen.");
+            navigate('/dashboard', { replace: false });
+        }
+    }, [ user ]);
 
     useEffect(() => {
         console.log(id, token);

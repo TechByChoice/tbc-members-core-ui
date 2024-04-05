@@ -91,6 +91,13 @@ export default function NewCompanyPage() {
     const history = useNavigate();
     const statusMessage = useStatusMessage();
 
+    useEffect(() => {
+        // move user to dashboard if the user doesn't
+        if (user[0]?.account_info?.is_company_onboarding_complete) {
+            statusMessage.info("You've completed onboarding and no longer have access to this screen.");
+            navigate('/dashboard', { replace: false });
+        }
+    }, [ user ]);
     const fetchUserDetailsWrapper = () => {
         return new Promise((resolve, reject) => {
             try {
