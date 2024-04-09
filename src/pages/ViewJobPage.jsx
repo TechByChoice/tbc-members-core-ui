@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom';
 import { useStatus } from '../providers/MsgStatusProvider';
 import { useStatusMessage } from '../hooks/useStatusMessage';
 import { routes } from '@/lib/routes';
+import { useAuth } from '@/providers/AuthProvider';
 
 const HtmlContentRenderer = ({ htmlContent }) => {
     return <div dangerouslySetInnerHTML={{ __html: htmlContent }} />;
@@ -23,11 +24,12 @@ function ViewJobPage({ userDetail, isLoading }) {
     /** @type {any} jobData */
     const [ jobData, setJobData ] = useState();
     const [ jobStatusCard, setJobStatusCard ] = useState(null);
-    const { setStatusMessage, setIsAlertOpen, setStatusType } = useStatus();
     const statusMessage = useStatusMessage();
+    const { user } = useAuth();
+    console.log(user);
 
-    const isOwnProfile = userDetail?.user_info.id === jobData?.created_by_id;
-    const isStaffOrEditor = userDetail?.account_info?.is_staff || jobData?.created_by_id === userDetail?.user_info?.id;
+    const isOwnProfile = user?.[0]?.user_info.id === jobData?.created_by_id;
+    const isStaffOrEditor = user?.[0]?.account_info?.is_staff || jobData?.created_by_id === user?.[0]?.user_info?.id;
 
     async function fetchData() {
         try {
@@ -80,9 +82,6 @@ function ViewJobPage({ userDetail, isLoading }) {
             .catch(error => {
                 console.error('There was an error publish the job', error);
             });
-        // } else {
-        //     alert("don't have access")
-        // }
     };
     const handelPauseJob = () => {
         fetch(routes.api.jobs.pause(id), {
@@ -142,7 +141,7 @@ function ViewJobPage({ userDetail, isLoading }) {
         // }
     };
     const handelActiveJob = () => {
-        if (userDetail?.account_info?.is_staff) {
+        if (user?.[0]?.account_info?.is_staff) {
             fetch(routes.api.jobs.activate(id), {
                 method: 'GET',
                 credentials: 'include',
@@ -224,8 +223,8 @@ function ViewJobPage({ userDetail, isLoading }) {
     );
 
     const renderJobStatusSpecificCard = () => {
-        const isStaffOrEditor = userDetail?.account_info?.is_staff || jobData?.created_by_id === userDetail?.user_info?.id;
-        const isStaff = userDetail?.account_info?.is_staff;
+        const isStaffOrEditor = user?.[0]?.account_info?.is_staff || jobData?.created_by_id === user?.[0]?.user_info?.id;
+        const isStaff = user?.[0]?.account_info?.is_staff;
         const jobStatus = jobData?.status;
 
         switch (jobStatus) {
@@ -266,7 +265,7 @@ function ViewJobPage({ userDetail, isLoading }) {
             <CardContent>
                 <Typography variant="h6">Want to apply?</Typography>
                 <Typography variant="body1">
-                    Learn how to apply by <Link to="/new/member/1">creating an account today</Link>.
+                    Learn how to apply by <Link to="/new">creating an account today</Link>.
                 </Typography>
             </CardContent>
         </Card>
@@ -285,7 +284,7 @@ function ViewJobPage({ userDetail, isLoading }) {
         <Grid container spacing={3}>
             {/*{isOwnProfile && (*/}
             <Grid item xs={12}>
-                {renderJobPosterCard()}
+                {user.length > 0 && (user?.[0]?.account_info?.is_staff || jobData?.created_by_id === user?.[0]?.user_info?.id) && <>{renderJobPosterCard()}</>}
             </Grid>
             {/*)}*/}
             {/* 1/3 Contact Card */}
@@ -367,8 +366,8 @@ function ViewJobPage({ userDetail, isLoading }) {
                         <Divider sx={{ m: 2 }} variant="middle" />
                         {/* Body Section */}
                         <section>
-                            <Typography variant="body1">{userDetail?.bio}</Typography>
-                            <Typography variant="body1">{userDetail?.bio}</Typography>
+                            <Typography variant="body1">{user?.[0]?.bio}</Typography>
+                            <Typography variant="body1">{user?.[0]?.bio}</Typography>
                             <Container>
                                 <div>
                                     <Typography variant="h5">Job Description:</Typography>

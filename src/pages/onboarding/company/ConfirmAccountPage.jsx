@@ -36,30 +36,31 @@ function ConfirmAccountPage() {
             .then(response => response.json())
             .then(data => {
                 if (data.status) {
-                    // setToken(data.token);
-                    // localStorage.setItem('token', data.token);
-                    // fetchUserDetails();
                     statusMessage.error(data.message);
                     navigate('/new/company/confirm-agreement/');
                 } else {
+                    statusMessage.error(data.message);
                     console.error('Error:', data.message);
+                    navigate('/dashboard/');
                 }
             })
             .catch(error => {
                 console.error('Error:', error);
-                // statusMessage.error(error.message);
+                statusMessage.error(error.message);
             });
     }, []);
 
     return (
         <Grid container center id="top">
             <Card>
-                <CardContent>
-                    <Typography variant="h5" component="h1">
-                        Confirming your account ...
-                    </Typography>
-                    <Typography variant="subtitle1" component="h2"></Typography>
-                </CardContent>
+                <>
+                    <CardContent>
+                        <Typography variant="h5" component="h1">
+                            Confirming your account ...
+                        </Typography>
+                        <Typography variant="subtitle1" component="h2"></Typography>
+                    </CardContent>
+                </>
             </Card>
         </Grid>
     );
