@@ -18,7 +18,7 @@ const StyledContainer = styled(Grid)(({ theme: { breakpoints } }) => ({
     display: 'flex',
     flexDirection: 'row',
     // justifyContent: 'space-around',
-    [breakpoints.down('md')]: {flexDirection: 'column',},
+    [breakpoints.down('md')]: { flexDirection: 'column' },
 }));
 const StyledCard = styled(Card)(({ theme: { breakpoints, spacing } }) => ({
     minHeight: '450px',
@@ -196,7 +196,7 @@ export default function MemberDashboard() {
                             }}>
                             <CardContent sx={{ flex: '1 auto' }}>
                                 <Typography component="h1" variant="h4">
-                                    Latest&apos;s Announcement!
+                                    Latest Announcement!
                                 </Typography>
                                 <Typography variant="subtitle1" color="text.primary" component="div">
                                     <SlackMessage elements={announcement.elements} />
