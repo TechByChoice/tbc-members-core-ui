@@ -167,7 +167,7 @@ export default function MemberDashboard() {
                     <Grid container display="flex" direction="row" justifyContent="space-between">
                         <Typography variant="h6">Top Job</Typography>
                         <Link to="/job/all">
-                            <Button variant="text">View More Andre</Button>
+                            <Button variant="text">View More</Button>
                         </Link>
                     </Grid>
                     <Card>
@@ -195,12 +195,11 @@ export default function MemberDashboard() {
                     <Grid container display="flex" direction="row" justifyContent="space-between">
                         <Typography variant="h6">Next Event</Typography>
                         <Link to="/event/all">
-                            <Button variant="text">View More Andre image</Button>
+                            <Button variant="text">View More</Button>
                         </Link>
                     </Grid>
                     <Card>
-                        <CardContent>{event ? <EventCard event={event} /> : <p>Loading events...</p>}img</CardContent>
-                        img
+                        <CardContent>{event ? <EventCard event={event} /> : <p>Loading events...</p>}</CardContent>
                     </Card>
                 </Grid>
 
@@ -209,13 +208,13 @@ export default function MemberDashboard() {
                         <Grid container display="flex" direction="row" justifyContent="space-between">
                             <Typography variant="h6">Top Mentor</Typography>
                             <Link to="/mentor/all">
-                                <Button variant="text">View More Andre</Button>
+                                <Button variant="text">View More</Button>
                             </Link>
                         </Grid>
                         <CardContent>{mentor ? <MentorCard mentor={mentor} /> : <p>Loading mentor...</p>}</CardContent>
                     </Card>
                 </Grid>
-                <Grid item xs={12} sm={4}>
+                {/* <Grid item xs={12} sm={4}>
                     <div>
                         <BasicCardComonent
                             imageUrl={event}
@@ -227,7 +226,7 @@ export default function MemberDashboard() {
                             // companyName={job?.parent_company?.name}
                         />
                     </div>
-                </Grid>
+                </Grid> */}
             </Grid>
         </>
     );
