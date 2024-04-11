@@ -195,11 +195,12 @@ export default function MemberDashboard() {
                     <Grid container display="flex" direction="row" justifyContent="space-between">
                         <Typography variant="h6">Next Event</Typography>
                         <Link to="/event/all">
-                            <Button variant="text">View More Andre</Button>
+                            <Button variant="text">View More Andre image</Button>
                         </Link>
                     </Grid>
                     <Card>
-                        <CardContent>{event ? <EventCard event={event} /> : <p>Loading events...</p>}</CardContent>
+                        <CardContent>{event ? <EventCard event={event} /> : <p>Loading events...</p>}img</CardContent>
+                        img
                     </Card>
                 </Grid>
 
@@ -217,7 +218,7 @@ export default function MemberDashboard() {
                 <Grid item xs={12} sm={4}>
                     <div>
                         <BasicCardComonent
-                            imageUrl="path_to_your_image.jpg"
+                            imageUrl={event}
                             headerText="Software Developer"
                             bodyText={job?.role?.name}
                             icon={job?.role?.name}
