@@ -338,7 +338,6 @@ export default function NewCompanyPage() {
 
     return (
         <React.Fragment>
-            <CssBaseline />
             <AppBar
                 position="absolute"
                 color="default"
