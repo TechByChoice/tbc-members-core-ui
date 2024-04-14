@@ -64,11 +64,16 @@ export const routes = {
         },
         announcements: { list: () => apiJoin(routes.api.base, 'user/details/announcement') },
         companies: {
-            get: id => apiJoin(routes.api.base, `company-profile/companies/${id}/`),
+            get: id => apiJoin(routes.api.base, `company-profile/info/${id}/`),
+            getAll: () => apiJoin(routes.api.base, `company-profile/info/`),
             activateAccount: (id, token) => apiJoin(routes.api.base, `talent-choice/company/confirm-email/${id}/${token}/`),
             confirmAgreement: () => apiJoin(routes.api.base, `talent-choice/company/confirm-agreement/`),
             createOnboardingProfile: () => apiJoin(routes.api.base, `talent-choice/company/onboarding/create/profile/`),
             createOnboardingOpenRoles: () => apiJoin(routes.api.base, `talent-choice/company/complete-onboarding/`),
+        },
+        openDoors: {
+            createAccount: () => apiJoin(routes.api.base, 'open-doors/onboarding/'),
+            confirmAgreement: () => apiJoin(routes.api.base, `open-doors/onboarding/confirm-agreement/`),
         },
     },
 };

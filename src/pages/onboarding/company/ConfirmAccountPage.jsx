@@ -37,7 +37,7 @@ function ConfirmAccountPage() {
             .then(data => {
                 if (data.status) {
                     statusMessage.error(data.message);
-                    navigate('/new/company/confirm-agreement/');
+                    navigate('/new/confirm-agreement/');
                 } else {
                     statusMessage.error(data.message);
                     console.error('Error:', data.message);
