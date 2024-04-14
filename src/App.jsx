@@ -37,6 +37,7 @@ import { ThemeProvider } from '@mui/material/styles';
 import { useStatusMessage } from '@/hooks/useStatusMessage';
 import CreateReviewAccountPage from '@/pages/CreateReviewAccountPage';
 import TermsAndAgreementsWrapperPage from '@/pages/TermsAndAgreementsWrapperPage';
+import NavBarWrapper from '@/compoents/layout/NavBarWrapper';
 
 const SurveyQuestions = React.lazy(() => import('open_doors/SurveyQuestions'));
 
@@ -56,7 +57,7 @@ const App = () => {
                     <StatusProvider>
                         <BrowserRouter>
                             <StatusAlert />
-                            <NavBar />
+                            <NavBarWrapper />
                             <Container id="mainContent">
                                 <Routes>
                                     <Route path="/" element={<LoginPage />} />
