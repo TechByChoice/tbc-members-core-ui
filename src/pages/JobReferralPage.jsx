@@ -108,7 +108,7 @@ export default function JobReferralPage() {
             'external_description',
             'years_of_experience',
             'job_type',
-            'on_site_remote',
+            'on_site_remote'
         ];
 
         requiredFields.forEach(field => {
@@ -174,7 +174,6 @@ export default function JobReferralPage() {
 
     return (
         <React.Fragment>
-            <CssBaseline />
             <AppBar
                 position="absolute"
                 color="default"
@@ -198,8 +197,8 @@ export default function JobReferralPage() {
                                 Thanks for giving use these details!
                             </Typography>
                             <Typography variant="subtitle1">
-                                You&apos;ll be redirected to the next phase to submit your report. If you&apos;re not redirect please use this link to get
-                                to the next part.
+                                You&apos;ll be redirected to the next phase to submit your report. If you&apos;re not redirect please use this link to get to the next
+                                part.
                             </Typography>
                             <Button onClick={handleBack} sx={{ mt: 3, ml: 1 }}>
                                 Back

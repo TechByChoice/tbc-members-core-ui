@@ -105,7 +105,7 @@ const StyledMenuItem = styled(MenuItem)(({ theme }) => ({
     },
 }));
 
-export default function NavBar() {
+export default function NavBarReviews() {
     const auth = useAuth();
     const { user } = useAuth();
     const navigate = useNavigate();
@@ -170,18 +170,6 @@ export default function NavBar() {
         {
             label: 'About Us',
             children: menuItems.about,
-        },
-        {
-            label: 'Programs',
-            children: menuItems.programs,
-        },
-        {
-            label: 'Get Involved',
-            children: menuItems.getInvolved,
-        },
-        {
-            label: 'Resources',
-            children: menuItems.resources,
         },
     ];
 
@@ -317,15 +305,30 @@ export default function NavBar() {
     const renderDesktopNavigation = () => (
         <Grid container alignItems="center" justifyContent="center" spacing={2}>
             {auth.isAuthenticated && (
-                <Grid item>
-                    <StyledNavLink to="/">Dashboard</StyledNavLink>
-                </Grid>
+                <>
+                    <Grid item>
+                        <StyledNavLink to="/">Dashboard</StyledNavLink>
+                    </Grid>
+                </>
             )}
             {navigationItems.map(section => (
                 <Grid item key={section.label}>
                     {renderMenuButton(section.label, section.children)}
                 </Grid>
             ))}
+            {auth.isAuthenticated && (
+                <>
+                    <Grid item>
+                        <StyledNavLink to="/job/all">Job Board</StyledNavLink>
+                    </Grid>
+                    <Grid item>
+                        <StyledNavLink to="/company/all">View Companies</StyledNavLink>
+                    </Grid>
+                    <Grid item>
+                        <StyledNavLink to="/reviews">Open Doors</StyledNavLink>
+                    </Grid>
+                </>
+            )}
             <Grid item>{renderDonateButton()}</Grid>
             <Grid item>{renderProfileDropdown()}</Grid>
         </Grid>
@@ -344,6 +347,21 @@ export default function NavBar() {
                     </MenuItem>
                 )}
                 {navigationItems.map(section => renderMobileSubmenu(section.label, section.children))}
+                {auth.isAuthenticated && (
+                    <>
+                        <MenuItem component={Link} to="/job/all">
+                            Job Board
+                        </MenuItem>
+
+                        <MenuItem component={Link} to="/company/all">
+                            View Companies
+                        </MenuItem>
+
+                        <MenuItem component={Link} to="/reviews">
+                            Open Doors
+                        </MenuItem>
+                    </>
+                )}
                 <MenuItem onClick={handleClose}>{renderDonateButton()}</MenuItem>
                 {auth.isAuthenticated ? (
                     <>
@@ -382,7 +400,6 @@ export default function NavBar() {
             <SkipLink href="#mainContent" onFocus={() => mainContentRef.current?.focus()}>
                 Skip to content
             </SkipLink>
-            {/* ... rest of your navigation */}
             {/* Top row with logo */}
             <Toolbar style={{ display: 'flex', justifyContent: 'center' }}>
                 <Grid alignItems="center">

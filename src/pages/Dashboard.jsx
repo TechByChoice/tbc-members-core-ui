@@ -8,6 +8,7 @@ import TeamDashboard from './dashboards/TeamDashboardPage';
 import MemberDashboard from './dashboards/MemberDashboardPage';
 import VolunteerDashboard from './dashboards/VolunteerDashboardPage';
 import Typography from '@mui/material/Typography';
+import ReviewsDashboard from '@/pages/dashboards/ReviewsDashboardPage';
 
 function MentorDashboard() {
     return null;
@@ -29,10 +30,11 @@ function Dashboard() {
     return (
         <Grid container>
             <Grid item xs={12} pt={5} pb={5}>
-                <Typography variant="h2">Welcome Back, {user[0]?.user_info?.first_name}</Typography>
+                <Typography variant="h2">Welcome, {user[0]?.user_info?.first_name}</Typography>
             </Grid>
             <Grid item xs={12}>
                 {accountInfo?.is_member && <MemberDashboard />}
+                {accountInfo?.is_open_doors && <ReviewsDashboard />}
                 {accountInfo?.is_mentor && <MentorDashboard />}
                 {accountInfo?.is_volunteer && <VolunteerDashboard />}
                 {accountInfo?.is_team && <TeamDashboard />}

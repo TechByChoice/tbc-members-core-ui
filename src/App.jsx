@@ -25,6 +25,7 @@ import { BrowserRouter, useNavigate } from 'react-router-dom';
 import { Suspense, useEffect, useState } from 'react';
 import ViewCompanyPage from '@/pages/ViewCompanyPage';
 import AllMembersPage from '@/pages/AllMembersPage';
+import AllCompaniesPage from '@/pages/AllCompaniesPage';
 import ErrorBoundary from '@/compoents/ErrorBoundary';
 import CreateAccountPage from '@/pages/CreateAccountPage';
 import CheckEmailPage from '@/pages/CheckEmailPage';
@@ -34,6 +35,9 @@ import ConfirmAgreementPage from '@/pages/onboarding/company/ConfirmAgreementPag
 import WrapperReview from '@/compoents/WrapperReview';
 import { ThemeProvider } from '@mui/material/styles';
 import { useStatusMessage } from '@/hooks/useStatusMessage';
+import CreateReviewAccountPage from '@/pages/CreateReviewAccountPage';
+import TermsAndAgreementsWrapperPage from '@/pages/TermsAndAgreementsWrapperPage';
+import NavBarWrapper from '@/compoents/layout/NavBarWrapper';
 
 const SurveyQuestions = React.lazy(() => import('open_doors/SurveyQuestions'));
 
@@ -53,7 +57,7 @@ const App = () => {
                     <StatusProvider>
                         <BrowserRouter>
                             <StatusAlert />
-                            <NavBar />
+                            <NavBarWrapper />
                             <Container id="mainContent">
                                 <Routes>
                                     <Route path="/" element={<LoginPage />} />
@@ -69,11 +73,11 @@ const App = () => {
                                     <Route
                                         path="/questions/:id"
                                         element={
-                                            <Suspense fallback={<div>Loading...</div>}>
-                                                <PrivateRoutes userDetail={user?.[0]}>
+                                            <PrivateRoutes userDetail={user?.[0]}>
+                                                <Suspense fallback={<div>Loading...</div>}>
                                                     <SurveyQuestions />
-                                                </PrivateRoutes>
-                                            </Suspense>
+                                                </Suspense>
+                                            </PrivateRoutes>
                                         }
                                     />
 
@@ -85,10 +89,11 @@ const App = () => {
                                             </PrivateRoutes>
                                         }
                                     />
+                                    <Route path="/open-doors/new" element={<CreateReviewAccountPage />} />
                                     <Route path="/new" element={<CreateAccountPage />} />
                                     <Route path="/new/check-email" element={<CheckEmailPage />} />
-                                    <Route path="/new/company/confirm-account/:id/:token" element={<ConfirmAccountPage />} />
-                                    <Route path="/new/company/confirm-agreement" element={<ConfirmAgreementPage />} />
+                                    <Route path="/new/confirm-account/:id/:token" element={<ConfirmAccountPage />} />
+                                    <Route path="/new/confirm-agreement" element={<TermsAndAgreementsWrapperPage />} />
                                     <Route path="/new/company/create-profile" element={<NewCompanyPage />} />
                                     <Route
                                         path="/new/member/2"
@@ -103,6 +108,14 @@ const App = () => {
                                         element={
                                             <PrivateRoutes userDetail={user?.[0]}>
                                                 <AllMembersPage />
+                                            </PrivateRoutes>
+                                        }
+                                    />
+                                    <Route
+                                        path="/company/all"
+                                        element={
+                                            <PrivateRoutes userDetail={user?.[0]}>
+                                                <AllCompaniesPage />
                                             </PrivateRoutes>
                                         }
                                     />

@@ -285,7 +285,6 @@ export default function NewMemberPage() {
 
     return (
         <React.Fragment>
-            <CssBaseline />
             <AppBar
                 position="absolute"
                 color="default"

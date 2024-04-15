@@ -35,7 +35,7 @@ export const PrivateRoutes = ({ children, userDetail }) => {
                         return navigate('/new/check-email', { replace: false });
                     }
                     if (!companyAccountData?.is_confirm_service_agreement && userAccountInfo?.is_email_confirmed) {
-                        return navigate('/new/company/confirm-agreement', { replace: false });
+                        return navigate('/new/confirm-agreement', { replace: false });
                     }
                     navigate('/new/company/create-profile', { replace: false });
                     statusMessage.info('Please completed your onboarding to activate your account.');

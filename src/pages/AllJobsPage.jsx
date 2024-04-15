@@ -25,7 +25,8 @@ export default function AllJobsPage({}) {
     const [ currentPage, setCurrentPage ] = useState(1);
     const [ totalItems, setTotalItems ] = useState(0);
     const [ nextUrl, setNextUrl ] = useState();
-    const { isAuthenticated } = useAuth();
+    const { isAuthenticated, user } = useAuth();
+    const isReviewer = user && user[0]?.account_info?.is_open_doors;
     const itemsPerPage = 100;
     let totalPages = Math.ceil(totalItems / itemsPerPage);
 
@@ -104,7 +105,7 @@ export default function AllJobsPage({}) {
                 </CalloutCard>
             ) : (
                 <>
-                    {isAuthenticated && (
+                    {isAuthenticated && !isReviewer && (
                         <CalloutCard>
                             <Typography component="h5" variant="h5">
                                 Would you like to post a job?
