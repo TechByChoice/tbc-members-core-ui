@@ -2,14 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Button, ButtonGroup, Card, CardContent, CardMedia, Chip, CircularProgress, Divider, Grid, Hidden, Typography } from '@mui/material';
 import { useParams } from 'react-router';
 import { getCompanyDetails, getJobDetails } from '../api-calls';
-import Container from '@mui/material/Container';
-import CompanyCard from '../compoents/CompanyCard';
-import { Link } from 'react-router-dom';
-import { useStatus } from '../providers/MsgStatusProvider';
-import { useStatusMessage } from '../hooks/useStatusMessage';
-import { routes } from '@/lib/routes';
 import CompanyHeader from '@/compoents/CompanyHeader';
-import CompanyMission from '@/compoents/CompanyMission';
 import Box from '@mui/material/Box';
 
 const HtmlContentRenderer = ({ htmlContent }) => {
@@ -43,7 +36,6 @@ function ViewJobPage({ userDetail, isLoading }) {
 
     useEffect(() => {
         fetchData();
-        console.log(companyScore);
     }, [ id ]);
 
     if (isLoading) {

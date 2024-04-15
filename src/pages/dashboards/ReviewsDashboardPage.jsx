@@ -166,8 +166,6 @@ export default function ReviewsDashboard() {
                         </Suspense>
                     </ErrorBoundary>
                 )}
-
-                {/* Announcement */}
             </Grid>
         </>
     );
