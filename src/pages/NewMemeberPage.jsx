@@ -60,7 +60,7 @@ function validateBasicInfo(answers, setFormErrors) {
     const isValid = AnswerValidator.validateMany(answers, errors, {
         photo: 'Please upload your profile photo.',
         postal_code: 'Please enter your postal code.',
-        tech_journey: "Please specify how long you've been on your tech journey.",
+        years_of_experience: "Please specify how long you've been on your tech journey.",
         job_roles: 'Please specify titles that best fit you.',
     });
 
@@ -72,14 +72,21 @@ function validateBasicInfo(answers, setFormErrors) {
 function validateSkillsQuestionStep(answers, setFormErrors) {
     let errors = {};
 
-    const isValid = AnswerValidator.validateMany(answers, errors, {
-        talent_status: 'Job skills are required.',
+    let isValid = AnswerValidator.validateMany(answers, errors, {
+        talent_status: 'Talent profile status required.',
+        job_skills: 'Job skills are required.',
         job_department: 'Job department is required.',
     });
+    // Additional check for job_skills length
+    if (answers.job_skills && answers.job_skills.length > 5) {
+        errors.job_skills = 'You can only add up to 5 skills.';
+        // Mark the form as invalid if too many job_skills are added
+        isValid = false; // If you want the overall form validation to fail in this case
+    }
 
     setFormErrors(errors);
 
-    return isValid;
+    return isValid && Object.keys(errors).length === 0;
 }
 
 const validationFunctionMap = {
@@ -96,7 +103,7 @@ export default function NewMemberPage() {
     const [ isComplete, setIsComplete ] = useState(false);
     const [ completedSteps, setCompletedSteps ] = useState([]);
 
-    const { token, logout } = useAuth();
+    const { user, fetchUserDetails } = useAuth();
     const history = useNavigate();
     const statusMessage = useStatusMessage();
 
@@ -120,7 +127,7 @@ export default function NewMemberPage() {
         // Check if the value is an array (since Autocomplete can be multiple)
         if (Array.isArray(value)) {
             value = value.map(
-                item => item.pronouns || item.name || item.range || item.gender || item.identity || item.ethnicity || item, // the 'item' fallback is in case you have other Autocomplete instances with string values
+                item => item.pronouns || item.name || item.company_name || item.value || item.range || item.gender || item.identity || item.ethnicity || item, // the 'item' fallback is in case you have other Autocomplete instances with string values
             );
         }
         setAnswers(prev => ({ ...prev, [name]: value }));
@@ -217,6 +224,7 @@ export default function NewMemberPage() {
         }
 
         setActiveStep(activeStep + 1);
+        console.log(activeStep, 'handleNext');
         statusMessage.hide();
     };
 
@@ -238,10 +246,10 @@ export default function NewMemberPage() {
         }
 
         fetch(routes.api.users.updateProfile(), {
-            method: 'PATCH',
+            method: 'POST',
             credentials: 'include',
             body: formData,
-            headers: { Authorization: `Token ${token}` },
+            headers: { Authorization: `Token ${localStorage.getItem('token')}` },
         })
             .then(response => {
                 if (!response.ok) {
@@ -252,49 +260,31 @@ export default function NewMemberPage() {
             .then(data => {
                 // Handle the successful JSON response here, e.g.:
                 statusMessage.success("You're in!");
-                history('/');
+                history('/dashboard');
             })
             .catch(error => {
                 console.error('Fetch error:', error);
                 statusMessage.error('We ran into an error saving your profile');
             });
+        fetchUserDetails();
     };
 
     useEffect(() => {
         setIsComplete(activeStep === steps.length);
     }, [ activeStep ]);
 
-    useEffect(() => {
-        validationFunctionMap[activeStep]?.(answers, setFormErrors);
-    }, [ answers ]);
+    const navigate = useNavigate();
 
     useEffect(() => {
-        const url = import.meta.env.VITE_APP_API_BASE_URL + 'user/details/new-member';
-        fetch(url, {
-            method: 'GET',
-            credentials: 'include',
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Token ${localStorage.getItem('token')}`,
-                // 'credentials': 'include'
-            },
-        })
-            .then(response => response.json())
-            .then(data => {
-                if (data.status) {
-                    setQuestions(data);
-                    if (data.detail === 'Invalid token.') {
-                        logout();
-                    }
-                } else {
-                    console.error(data);
-                }
-            });
-    }, []);
+        // move user to dashboard if the user doesn't
+        if (user[0]?.account_info?.is_member_onboarding_complete) {
+            statusMessage.info("You've completed onboarding and no longer have access to this screen.");
+            navigate('/dashboard', { replace: false });
+        }
+    }, [ user ]);
 
     return (
         <React.Fragment>
-            <CssBaseline />
             <AppBar
                 position="absolute"
                 color="default"

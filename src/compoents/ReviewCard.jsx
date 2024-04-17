@@ -19,7 +19,7 @@ function ReviewCard({ talentDetails, setOpen }) {
         fetch(routes.api.mentors.review(talentDetails?.mentorship_program?.id), {
             method: 'POST',
             headers: {
-                Authorization: `Token ${token}`,
+                Authorization: `Token ${localStorage.getItem('token')}`,
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(formData),

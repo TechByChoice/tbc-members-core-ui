@@ -1,26 +1,31 @@
 import React, { useState, useEffect } from 'react';
 import { Autocomplete, FormControl, FormLabel, TextField } from '@mui/material';
-import { getBasicSystemInfo } from '../api-calls';
+import { getDropDrownItems } from '../api-calls';
 import { createFilterOptions } from '@mui/material/Autocomplete';
+import { useAuth } from '@/providers/AuthProvider';
 
 const filter = createFilterOptions();
-export default function DepartmentsDropdown({ isRequired, error, setAnswers }) {
+export default function DropdownDepartments({
+    isRequired, error, setAnswers = false, handleAutocompleteChange 
+}) {
     const [ departments, setDepartments ] = useState([]);
     const [ selectedDepartment, setSelectedDepartment ] = useState('');
+
+    const { token } = useAuth();
 
     useEffect(() => {
         // Fetch the list of companies when the component mounts
         async function fetchDepartments() {
             try {
-                const response = await getBasicSystemInfo();
-                setDepartments(response.job_department);
+                const response = await getDropDrownItems('job_departments');
+                setDepartments(response.job_departments);
             } catch (error) {
                 console.error('Error fetching departments:', error);
             }
         }
 
         fetchDepartments();
-    }, []);
+    }, [ token ]);
 
     return (
         <FormControl fullWidth variant="outlined">
@@ -36,9 +41,7 @@ export default function DepartmentsDropdown({ isRequired, error, setAnswers }) {
                 includeInputInList
                 handleHomeEndKeys
                 options={departments || []}
-                isOptionEqualToValue={(option, value) =>
-                    (option.inputValue && value.inputValue && option.inputValue === value.inputValue) || option === value
-                }
+                isOptionEqualToValue={(option, value) => (option.inputValue && value.inputValue && option.inputValue === value.inputValue) || option === value}
                 getOptionLabel={option => {
                     if (typeof option === 'string') {
                         return option;
@@ -67,10 +70,14 @@ export default function DepartmentsDropdown({ isRequired, error, setAnswers }) {
                 // value={selectedSkill}
                 onChange={(e, newValue) => {
                     setSelectedDepartment(newValue);
-                    setAnswers(prevState => ({
-                        ...prevState,
-                        department: newValue,
-                    }));
+                    if (handleAutocompleteChange) {
+                        handleAutocompleteChange('job_department', newValue);
+                    } else {
+                        setAnswers(prevState => ({
+                            ...prevState,
+                            department: newValue,
+                        }));
+                    }
                 }}
                 renderOption={(props, option) => <li {...props}>{option.name}</li>}
                 renderInput={params => <TextField error={!!error.department} name="job_departments" {...params} />}

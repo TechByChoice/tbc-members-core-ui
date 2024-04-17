@@ -1,18 +1,34 @@
-
 import BookMentorForm from '../compoents/BookMentorForm';
-import { getBasicSystemInfo, getMemberData } from '@/api-calls';
+import { getDropDrownItems, getMemberData } from '@/api-calls';
 import AddMemberNoteCard from '@/compoents/AddMemberNoteCard';
 import CompanyCard from '@/compoents/CompanyCard';
 import ReviewCard from '@/compoents/ReviewCard';
 import HtmlContentRenderer from '@/compoents/utils/HtmlContentRenderer';
 import { useAuth } from '@/providers/AuthProvider';
 import { GitHub, Instagram, Language, LinkedIn, Twitter, YouTube } from '@mui/icons-material';
-import { Box, Button, Card, CardContent, CardMedia, Chip, CircularProgress, Divider, Grid, Hidden, IconButton, Modal, Typography } from '@mui/material';
+import {Box,
+    Button,
+    Card,
+    CardContent,
+    CardMedia,
+    Chip,
+    CircularProgress,
+    Divider,
+    FormControl,
+    FormLabel,
+    Grid,
+    Hidden,
+    IconButton,
+    Modal,
+    Typography,
+    FormControlLabel,
+    RadioGroup,
+    Radio,} from '@mui/material';
 import Container from '@mui/material/Container';
-import Link from '@mui/material/Link';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import { routes } from '@/lib/routes';
+import { Link } from 'react-router-dom';
 
 function ViewMemberProfile() {
     const { id } = useParams();
@@ -28,13 +44,12 @@ function ViewMemberProfile() {
     const { user, isLoading, token } = useAuth();
     const loggedInUser = user[0];
     const mentor_roster = loggedInUser?.mentor_roster_data;
-    console.log(loggedInUser?.user_info?.id, mentor_roster, loggedInUser);
 
     useEffect(() => {
         async function fetchData() {
             try {
                 // eslint-disable-next-line no-undef
-                const [ memberResponse, basicResponse ] = await Promise.all([ getMemberData(id), getBasicSystemInfo() ]);
+                const [ memberResponse, basicResponse ] = await Promise.all([ getMemberData(id), getDropDrownItems('pronouns&fields=gender&fields=sexuality') ]);
 
                 setMemberData(memberResponse);
                 setBasicData(basicResponse);
@@ -60,7 +75,7 @@ function ViewMemberProfile() {
         fetch(routes.api.users.connectWithMentor(id), {
             method: 'post',
             headers: {
-                Authorization: `Token ${token}`,
+                Authorization: `Token ${localStorage.getItem('token')}`,
                 'Content-Type': 'application/json',
             },
         })
@@ -71,7 +86,7 @@ function ViewMemberProfile() {
                 return response.json();
             })
             .then(data => {
-                console.log(data, 'saved');
+                console.log('saved');
             })
             .catch(error => {
                 console.error('Fetch error:', error);
@@ -174,8 +189,8 @@ function ViewMemberProfile() {
                     Ready to Approve this Mentor?
                 </Typography>
                 <Typography variant="body1" component="p">
-                    We&apos;ve requested an the mentor to schedule an interview on{' '}
-                    {memberData?.data?.mentorship_program?.mentor_profile?.interview_requested_at_date}. Once passed we can approve or reject them.
+                    We&apos;ve requested an the mentor to schedule an interview on {memberData?.data?.mentorship_program?.mentor_profile?.interview_requested_at_date}.
+                    Once passed we can approve or reject them.
                 </Typography>
                 <Button onClick={handelApproveMentor} variant="contained" color="primary">
                     Approve Mentor
@@ -193,8 +208,8 @@ function ViewMemberProfile() {
                     Do you need to paused mentoring?
                 </Typography>
                 <Typography variant="body1" component="p">
-                    We don&apos;t want you to burnout, so we make it easy for you to pause your mentoring because life happens and we get it. When
-                    you&apos;re ready you can come back to your account and reactivate it later.
+                    We don&apos;t want you to burnout, so we make it easy for you to pause your mentoring because life happens and we get it. When you&apos;re ready you
+                    can come back to your account and reactivate it later.
                 </Typography>
                 <Button onClick={handelPauseMentorApplication} variant="contained" color="primary">
                     Pause Mentor Application
@@ -247,20 +262,19 @@ function ViewMemberProfile() {
         fetch(url, {
             method: 'POST',
             headers: {
-                Authorization: `Token ${token}`,
+                Authorization: `Token ${localStorage.getItem('token')}`,
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({ 'mentor-update-status': 'send-invite' }),
         })
             .then(response => {
-                console.log(response, 'response');
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
                 return response.json();
             })
             .then(data => {
-                console.log(data, 'saved');
+                console.log('saved');
             })
             .catch(error => {
                 console.error('Fetch error:', error);
@@ -272,20 +286,19 @@ function ViewMemberProfile() {
         fetch(url, {
             method: 'POST',
             headers: {
-                Authorization: `Token ${token}`,
+                Authorization: `Token ${localStorage.getItem('token')}`,
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({ 'mentor-update-status': 'approve-mentor' }),
         })
             .then(response => {
-                console.log(response, 'response');
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
                 return response.json();
             })
             .then(data => {
-                console.log(data, 'saved');
+                console.log('saved');
             })
             .catch(error => {
                 console.error('Fetch error:', error);
@@ -297,20 +310,20 @@ function ViewMemberProfile() {
         fetch(url, {
             method: 'POST',
             headers: {
-                Authorization: `Token ${token}`,
+                Authorization: `Token ${localStorage.getItem('token')}`,
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({ 'mentor-update-status': 'paused' }),
         })
             .then(response => {
-                console.log(response, 'response');
+                console.log('response');
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
                 return response.json();
             })
             .then(data => {
-                console.log(data, 'saved');
+                console.log('saved');
             })
             .catch(error => {
                 console.error('Fetch error:', error);
@@ -321,20 +334,19 @@ function ViewMemberProfile() {
         fetch(url, {
             method: 'POST',
             headers: {
-                Authorization: `Token ${token}`,
+                Authorization: `Token ${localStorage.getItem('token')}`,
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({ 'mentor-update-status': 'active' }),
         })
             .then(response => {
-                console.log(response, 'response');
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
                 return response.json();
             })
             .then(data => {
-                console.log(data, 'saved');
+                console.log('saved');
             })
             .catch(error => {
                 console.error('Fetch error:', error);
@@ -345,20 +357,20 @@ function ViewMemberProfile() {
         fetch(url, {
             method: 'POST',
             headers: {
-                Authorization: `Token ${token}`,
+                Authorization: `Token ${localStorage.getItem('token')}`,
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({ 'mentor-update-status': 'interview-reminder' }),
         })
             .then(response => {
-                console.log(response, 'response');
+                console.log('response');
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
                 return response.json();
             })
             .then(data => {
-                console.log(data, 'saved');
+                console.log('saved');
             })
             .catch(error => {
                 console.error('Fetch error:', error);
@@ -370,7 +382,7 @@ function ViewMemberProfile() {
         fetch(url, {
             method: 'POST',
             headers: {
-                Authorization: `Token ${token}`,
+                Authorization: `Token ${localStorage.getItem('token')}`,
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(rejectionForm),
@@ -382,7 +394,7 @@ function ViewMemberProfile() {
                 return response.json();
             })
             .then(data => {
-                console.log(data, 'saved');
+                console.log('saved');
             })
             .catch(error => {
                 console.error('Fetch error:', error);
@@ -453,9 +465,7 @@ function ViewMemberProfile() {
                     <Chip size="small" variant="outlined" label="TBC Volunteer" color="secondary" />
                 </div>
             )}
-            {memberData?.data?.user?.is_mentor &&
-                memberData?.data?.user?.is_mentor_training_complete &&
-                memberData?.data?.user?.is_mentor_profile_active && (
+            {memberData?.data?.user?.is_mentor && memberData?.data?.user?.is_mentor_training_complete && memberData?.data?.user?.is_mentor_profile_active && (
                 <div>
                     <Chip size="small" variant="outlined" label="Mentor" color="primary" />
                 </div>
@@ -477,7 +487,7 @@ function ViewMemberProfile() {
             {memberData?.data?.user_profile?.identity_gender && memberData?.data?.user_profile?.is_identity_gender_displayed && (
                 <>
                     {memberData?.data?.user_profile?.identity_gender.map(identity => {
-                        const identityItem = basicData.gender_identities.find(item => item.id === identity);
+                        const identityItem = basicData.gender.find(item => item.id === identity);
                         return (
                             <>
                                 <Chip size="small" variant="outlined" label={identityItem?.gender} />
@@ -489,7 +499,7 @@ function ViewMemberProfile() {
             {memberData?.data?.user_profile?.identity_sexuality && memberData?.data?.user_profile?.is_identity_sexuality_displayed && (
                 <>
                     {memberData?.data?.user_profile?.identity_sexuality.map(identity => {
-                        const identityItem = basicData.sexual_identities.find(item => item.id === identity);
+                        const identityItem = basicData.sexuality.find(item => item.id === identity);
                         return (
                             <>
                                 <Chip size="small" variant="outlined" label={identityItem?.identity} />
@@ -536,7 +546,7 @@ function ViewMemberProfile() {
                 return renderMentorEdgeCaseStateCard();
             }
         } else {
-            if (memberData?.data?.user?.is_mentor && !loggedInUser?.account_info?.is_staff) {
+            if (memberData?.data?.user?.is_mentor && memberData?.data?.user?.is_mentor_profile_active && !loggedInUser?.account_info?.is_staff) {
                 if (isUserConnectedWithMentor) {
                     return renderMatchedWithThisMentorCard();
                 } else {
@@ -580,8 +590,8 @@ function ViewMemberProfile() {
             <CardContent>
                 <Typography variant="h6">Do you need to pause mentoring?</Typography>
                 <Typography variant="body1">
-                    We don&apos;t want you to burnout, so we make it easy for you to pause your mentoring because life happens and we get it. When
-                    you&apos;re ready you can come back to your account and reactivate it later.
+                    We don&apos;t want you to burnout, so we make it easy for you to pause your mentoring because life happens and we get it. When you&apos;re ready you
+                    can come back to your account and reactivate it later.
                 </Typography>
                 <Button onClick={handelPauseMentorApplication} variant="contained" color="primary">
                     Pause Mentorship
@@ -593,9 +603,7 @@ function ViewMemberProfile() {
         <Card>
             <CardContent>
                 <Typography variant="h6">Your mentorship account is on pause.</Typography>
-                <Typography variant="body1">
-                    When you&apos;re ready to reactivate please feel free to click the button below when you&apos;re ready.
-                </Typography>
+                <Typography variant="body1">When you&apos;re ready to reactivate please feel free to click the button below when you&apos;re ready.</Typography>
                 <Button onClick={handelReactivateMentorApplication} variant="contained" color="primary">
                     Reactivate Mentor Application
                 </Button>
@@ -607,8 +615,8 @@ function ViewMemberProfile() {
             <CardContent>
                 <Typography variant="h6">We&apos;ve run into trouble with your mentor application.</Typography>
                 <Typography variant="body1">
-                    Please reach out to our support team at <Link href="mailTo:support@techbychoice.org">support@techbychoice.org</Link> to help you get
-                    you back on track.
+                    Please reach out to our support team at <Link href="mailTo:support@techbychoice.org">support@techbychoice.org</Link> to help you get you back on
+                    track.
                 </Typography>
             </CardContent>
         </Card>
@@ -632,12 +640,7 @@ function ViewMemberProfile() {
                         <Grid container display="flex" direction="row" alignItems="center" spacing={5}>
                             <Grid item xs={12} sm={4}>
                                 <Card>
-                                    <CardMedia
-                                        component="img"
-                                        height="140"
-                                        src={memberData?.data?.user_profile?.photo}
-                                        alt={memberData?.data?.user?.first_name}
-                                    />
+                                    <CardMedia component="img" height="100%" src={memberData?.data?.user_profile?.photo} alt={memberData?.data?.user?.first_name} />
                                 </Card>
                             </Grid>
                             <Grid item xs={12} sm={8}>
@@ -647,11 +650,10 @@ function ViewMemberProfile() {
                                             <span style={{ textTransform: 'capitalize' }}>
                                                 {memberData?.data?.user?.first_name} {memberData?.data?.user?.last_name.slice(0, 1)}.{' '}
                                             </span>
-                                            {memberData?.data?.user_profile?.identity_pronouns &&
-                                                memberData?.data?.user_profile?.is_pronouns_displayed && (
+                                            {memberData?.data?.user_profile?.identity_pronouns && memberData?.data?.user_profile?.is_pronouns_displayed && (
                                                 <>
                                                     {memberData?.data?.user_profile?.identity_pronouns.map(pronoun => {
-                                                        const identityItem = basicData.pronouns_identities.find(item => item.id === pronoun);
+                                                        const identityItem = basicData.pronouns.find(item => item.id === pronoun);
                                                         return (
                                                             <>
                                                                 <Typography variant="body2">{identityItem?.pronouns}</Typography>
@@ -680,15 +682,15 @@ function ViewMemberProfile() {
                                 <HtmlContentRenderer htmlContent={memberData?.data?.user_profile?.bio} />
                             </Typography>
                             {/*{memberData?.data?.user?.is_mentor_profile_active && (*/}
-                            {memberData?.data?.user?.is_mentor && renderMentorProfileSection()}
-                            <Container>
+                            {memberData?.data?.user?.is_mentor && memberData?.data?.user?.is_mentor_profile_active && renderMentorProfileSection()}
+                            <Container sx={{ mb: 3 }}>
                                 <Typography variant="h5">Skills:</Typography>
                                 {memberData?.data?.talent_profile?.skills && (
                                     <>
                                         {memberData?.data?.talent_profile?.skills.map(skill => {
                                             return (
                                                 <>
-                                                    <Chip key={skill.id} label={skill?.name} />
+                                                    <Chip sx={{ mr: 2 }} key={skill} label={skill} />
                                                 </>
                                             );
                                         })}
@@ -697,8 +699,12 @@ function ViewMemberProfile() {
                             </Container>
                             {memberData?.data?.current_company && (
                                 <Container>
-                                    <Typography variant="h5">Current Company</Typography>
-                                    <CompanyCard company={memberData?.data?.current_company} />
+                                    <Typography gutterBottom variant="h5">
+                                        Current Company
+                                    </Typography>
+                                    <Link to={`/company/${memberData?.data?.current_company.id}`}>
+                                        <CompanyCard company={memberData?.data?.current_company} />
+                                    </Link>
                                 </Container>
                             )}
                             {isUserConnectedWithMentor && (

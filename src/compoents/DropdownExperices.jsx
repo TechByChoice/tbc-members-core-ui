@@ -1,26 +1,28 @@
 import React, { useState, useEffect } from 'react';
 import { Autocomplete, FormControl, FormLabel, TextField } from '@mui/material';
-import { getBasicSystemInfo } from '../api-calls';
+import { getDropDrownItems } from '../api-calls';
 import { createFilterOptions } from '@mui/material/Autocomplete';
+import { useAuth } from '@/providers/AuthProvider';
 
 const filter = createFilterOptions();
 export default function ExperiencesDropdown({ isRequired, setAnswers, error }) {
     const [ experiences, setExperiences ] = useState([]);
     const [ experiencesSkill, setExperiencesSkill ] = useState('');
+    const { token } = useAuth();
 
     useEffect(() => {
         // Fetch the list of companies when the component mounts
         async function fetchExperiences() {
             try {
-                const response = await getBasicSystemInfo();
-                setExperiences(response.career_journey_choices);
+                const response = await getDropDrownItems('years_of_experience');
+                setExperiences(response.years_of_experience);
             } catch (error) {
-                console.error('Error fetching skills:', error);
+                console.error('Error fetching years_of_experience:', error);
             }
         }
 
         fetchExperiences();
-    }, []);
+    }, [ token ]);
 
     return (
         <FormControl fullWidth variant="outlined">
@@ -36,12 +38,10 @@ export default function ExperiencesDropdown({ isRequired, setAnswers, error }) {
                 includeInputInList
                 handleHomeEndKeys
                 options={experiences || []}
-                isOptionEqualToValue={(option, value) =>
-                    (option.inputValue && value.inputValue && option.inputValue === value.inputValue) || option === value
-                }
+                isOptionEqualToValue={(option, value) => (option.inputValue && value.inputValue && option.inputValue === value.inputValue) || option === value}
                 renderOption={(props, option) => (
                     <li {...props} key={option.id}>
-                        {option.name}
+                        {option.label}
                     </li>
                 )}
                 getOptionLabel={option => {
@@ -52,14 +52,14 @@ export default function ExperiencesDropdown({ isRequired, setAnswers, error }) {
                     if (option.inputValue) return option.inputValue;
 
                     // Existing logic
-                    return option.name;
+                    return option.label;
                 }}
                 filterOptions={(options, params) => {
                     const filtered = filter(options, params);
 
                     const { inputValue } = params;
                     // Suggest the creation of a new value
-                    const isExisting = options.some(option => inputValue === option.name);
+                    const isExisting = options.some(option => inputValue === option.label);
                     if (inputValue !== '' && !isExisting) {
                         filtered.push({
                             inputValue,

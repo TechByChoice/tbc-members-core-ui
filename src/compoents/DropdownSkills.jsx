@@ -1,18 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import { Autocomplete, FormControl, FormLabel, TextField } from '@mui/material';
-import { getBasicSystemInfo } from '../api-calls';
+import { getDropDrownItems } from '../api-calls';
 import { createFilterOptions } from '@mui/material/Autocomplete';
+import { useAuth } from '@/providers/AuthProvider';
 
 const filter = createFilterOptions();
-export default function SkillsDropdown({ isRequired, error, setAnswers }) {
+export default function DropdownSkills({
+    isRequired, error, setAnswers, handleInputChange, inputLabel = 'Skills', inputName = 'skills' 
+}) {
     const [ skills, setSkills ] = useState([]);
     const [ selectedSkill, setSelectedSkill ] = useState('');
+
+    const { token } = useAuth();
 
     useEffect(() => {
         // Fetch the list of companies when the component mounts
         async function fetchSkills() {
             try {
-                const response = await getBasicSystemInfo();
+                const response = await getDropDrownItems('job_skills');
                 setSkills(response.job_skills);
             } catch (error) {
                 console.error('Error fetching skills:', error);
@@ -20,25 +25,23 @@ export default function SkillsDropdown({ isRequired, error, setAnswers }) {
         }
 
         fetchSkills();
-    }, []);
+    }, [ token ]);
 
     return (
         <FormControl fullWidth variant="outlined">
-            <FormLabel id="skills-label">
+            <FormLabel id={inputName}>
                 {isRequired && <>*</>}
-                Skills
+                {inputLabel}
             </FormLabel>
             <Autocomplete
-                id="skills-label"
+                id={inputName}
                 multiple
                 required
                 selectOnFocus
                 includeInputInList
                 handleHomeEndKeys
                 options={skills || []}
-                isOptionEqualToValue={(option, value) =>
-                    (option.inputValue && value.inputValue && option.inputValue === value.inputValue) || option === value
-                }
+                isOptionEqualToValue={(option, value) => (option.inputValue && value.inputValue && option.inputValue === value.inputValue) || option === value}
                 renderOption={(props, option) => (
                     <li {...props} key={option.id}>
                         {option.name}
@@ -72,12 +75,21 @@ export default function SkillsDropdown({ isRequired, error, setAnswers }) {
                 // value={selectedSkill}
                 onChange={(e, newValue) => {
                     setSelectedSkill(newValue);
-                    setAnswers(prevState => ({
-                        ...prevState,
-                        skills: newValue,
-                    }));
+                    if (handleInputChange) {
+                        const valueArray = [];
+                        newValue.map((item, index) => {
+                            valueArray.push(item.name);
+                        });
+
+                        handleInputChange(inputName, newValue);
+                    } else {
+                        setAnswers(prevState => ({
+                            ...prevState,
+                            [inputName]: newValue,
+                        }));
+                    }
                 }}
-                renderInput={params => <TextField error={!!error.skills} name="job_skills" {...params} />}
+                renderInput={params => <TextField error={!!error.skills} name={inputName} {...params} />}
             />
         </FormControl>
     );

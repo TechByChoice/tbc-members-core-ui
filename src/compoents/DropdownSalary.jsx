@@ -1,26 +1,29 @@
-import React, {useState, useEffect} from 'react';
-import {Autocomplete, FormControl, FormLabel, TextField} from '@mui/material';
-import {getBasicSystemInfo} from "../api-calls";
-import {createFilterOptions} from "@mui/material/Autocomplete";
+import React, { useState, useEffect } from 'react';
+import { Autocomplete, FormControl, FormLabel, TextField } from '@mui/material';
+import { getDropDrownItems } from '../api-calls';
+import { createFilterOptions } from '@mui/material/Autocomplete';
+import { useAuth } from '@/providers/AuthProvider';
 
 const filter = createFilterOptions();
-export default function SalaryDropdown({setAnswers, labelName}) {
-    const [salaries, setSalaries] = useState([]);
-    const [selectedSalary, setSelectedSalary] = useState('');
+export default function DropdownSalary({ setAnswers, labelName }) {
+    const [ salaries, setSalaries ] = useState([]);
+    const [ selectedSalary, setSelectedSalary ] = useState('');
+
+    const { token } = useAuth();
 
     useEffect(() => {
         // Fetch the list of companies when the component mounts
         async function fetchSkills() {
             try {
-                const response = await getBasicSystemInfo();
+                const response = await getDropDrownItems('job_salary_range');
                 setSalaries(response.job_salary_range);
             } catch (error) {
-                console.error("Error fetching salaries:", error);
+                console.error('Error fetching salaries:', error);
             }
         }
 
         fetchSkills();
-    }, []);
+    }, [ token ]);
 
     return (
         <FormControl fullWidth variant="outlined">
@@ -33,10 +36,8 @@ export default function SalaryDropdown({setAnswers, labelName}) {
                 includeInputInList
                 handleHomeEndKeys
                 options={salaries || []}
-                isOptionEqualToValue={(option, value) =>
-                    (option.inputValue && value.inputValue && option.inputValue === value.inputValue) || option === value
-                }
-                getOptionLabel={(option) => {
+                isOptionEqualToValue={(option, value) => (option.inputValue && value.inputValue && option.inputValue === value.inputValue) || option === value}
+                getOptionLabel={option => {
                     if (typeof option === 'string') {
                         return option;
                     }
@@ -49,9 +50,9 @@ export default function SalaryDropdown({setAnswers, labelName}) {
                 filterOptions={(options, params) => {
                     const filtered = filter(options, params);
 
-                    const {inputValue} = params;
+                    const { inputValue } = params;
                     // Suggest the creation of a new value
-                    const isExisting = options.some((option) => inputValue === option.range);
+                    const isExisting = options.some(option => inputValue === option.range);
                     if (inputValue !== '' && !isExisting) {
                         filtered.push({
                             inputValue,
@@ -64,7 +65,7 @@ export default function SalaryDropdown({setAnswers, labelName}) {
                 // value={selectedSkill}
                 onChange={(e, newValue) => {
                     setSelectedSalary(e.target.value);
-                    if(labelName === 'Min Salary') {
+                    if (labelName === 'Min Salary') {
                         setAnswers(prevState => ({
                             ...prevState,
                             min_compensation: newValue,
@@ -75,11 +76,9 @@ export default function SalaryDropdown({setAnswers, labelName}) {
                             max_compensation: newValue,
                         }));
                     }
-
-
                 }}
-                renderOption={(props, option) => <li {...props}>{option.range }</li>}
-                renderInput={(params) => <TextField name={labelName == 'Min Compensation'? 'min_compensation' : 'max_compensation'} {...params} />}
+                renderOption={(props, option) => <li {...props}>{option.range}</li>}
+                renderInput={params => <TextField name={labelName === 'Min Compensation' ? 'min_compensation' : 'max_compensation'} {...params} />}
             />
         </FormControl>
     );

@@ -13,7 +13,7 @@ export default function ProfileMentorDetails() {
         fetch(routes.api.mentors.updateDetails(), {
             method: 'POST',
             headers: {
-                Authorization: `Token ${token}`,
+                Authorization: `Token ${localStorage.getItem('token')}`,
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(formData),
@@ -25,7 +25,7 @@ export default function ProfileMentorDetails() {
                 return response.json();
             })
             .then(data => {
-                console.log(data, 'saved');
+                console.log('saved');
             })
             .catch(error => {
                 console.error('Fetch error:', error);

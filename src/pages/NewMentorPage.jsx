@@ -13,7 +13,6 @@ import FormMentorApplication from '../compoents/mentorship/FormMentorApplication
 import FormMentorCareer from '../compoents/mentorship/FormMentorCareer';
 import FormMentorProfile from '../compoents/mentorship/FormMentorProfile';
 import FormMentorshipValues from '../compoents/mentorship/FormMentorshipValues';
-import { useStatus } from '../providers/MsgStatusProvider';
 import { useStatusMessage } from '../hooks/useStatusMessage';
 import { routes } from '@/lib/routes';
 
@@ -120,9 +119,7 @@ export default function NewMentorPage() {
             ),
             [STEP_CAREER_QUESTIONS]: () => <FormMentorCareer onFormDataChange={newData => onFormDataChange(STEP_CAREER_QUESTIONS, newData)} />,
             [STEP_VALUES]: () => <FormMentorshipValues onFormDataChange={newData => onFormDataChange(STEP_VALUES, newData)} />,
-            [STEP_PROFILE]: () => (
-                <FormMentorProfile questions={null} defaultData={null} setFormData={setFormData} formData={formData} formErrors={null} />
-            ),
+            [STEP_PROFILE]: () => <FormMentorProfile questions={null} defaultData={null} setFormData={setFormData} formData={formData} formErrors={null} />,
         };
 
         return contentMap[stepIndex]();
@@ -182,14 +179,12 @@ export default function NewMentorPage() {
         setActiveStep(activeStep - 1);
     };
 
-    
-React.useEffect(() => {
+    React.useEffect(() => {
         setHasCompleted(activeStep >= steps.length);
     }, [ activeStep ]);
 
     return (
         <React.Fragment>
-            <CssBaseline />
             <AppBar
                 position="absolute"
                 color="default"

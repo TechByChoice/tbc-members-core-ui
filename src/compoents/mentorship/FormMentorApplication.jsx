@@ -15,7 +15,7 @@ export default function FormMentorApplication({
     const { accountDetails } = useAuth();
 
     useEffect(() => {
-        fetch(routes.api.mentors.getDetails('commitment_level&fields=support_areas'))
+        fetch(routes.api.mentors.getDetails('commitment_level&fields=mentor_support_areas'))
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
@@ -24,7 +24,7 @@ export default function FormMentorApplication({
             })
             .then(data => {
                 setCommitmentQuestions(data.commitment_level);
-                setSupportAreas(data.support_areas);
+                setSupportAreas(data.mentor_support_areas);
             })
             .catch(error => {
                 console.error('Fetch error:', error);
@@ -41,7 +41,6 @@ export default function FormMentorApplication({
     };
 
     const handleSupportAreasChange = (event, newValue) => {
-        console.log(event, newValue);
         // Call the function passed from the parent component to update the formData state
         setFormData(preValue => ({
             ...preValue,
@@ -71,8 +70,8 @@ export default function FormMentorApplication({
                         <Grid container>
                             <Grid item xs={12} sm={8} spacing={3} mt={3}>
                                 <Typography variant="body">
-                                    We want to match you with a mentee who shares your values and beliefs, so we would love to learn more about you! Please
-                                    take a moment to answer the following questions regarding your personal values.
+                                    We want to match you with a mentee who shares your values and beliefs, so we would love to learn more about you! Please take a moment
+                                    to answer the following questions regarding your personal values.
                                 </Typography>
                             </Grid>
                         </Grid>

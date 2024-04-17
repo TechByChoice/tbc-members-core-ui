@@ -23,7 +23,7 @@ export default function ProfileCalLinkForm() {
         fetch(routes.api.mentors.updateCalLink(), {
             method: 'POST',
             headers: {
-                Authorization: `Token ${token}`,
+                Authorization: `Token ${localStorage.getItem('token')}`,
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
@@ -32,14 +32,13 @@ export default function ProfileCalLinkForm() {
             }),
         })
             .then(response => {
-                console.log(response, 'response');
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
                 return response.json();
             })
             .then(data => {
-                console.log(data, 'saved');
+                console.log('saved');
                 statusMessage.success('Updates have been saved');
             })
             .catch(error => {
@@ -57,7 +56,7 @@ export default function ProfileCalLinkForm() {
             ...FormData,
             [name]: updatedValue,
         });
-        console.log(FormData);
+        console.log('done');
     };
     return (
         <>

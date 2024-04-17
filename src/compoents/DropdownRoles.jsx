@@ -1,18 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { Autocomplete, FormControl, FormLabel, TextField } from '@mui/material';
-import { getBasicSystemInfo } from '../api-calls';
+import { getDropDrownItems } from '../api-calls';
 import { createFilterOptions } from '@mui/material/Autocomplete';
+import { useAuth } from '@/providers/AuthProvider';
 
 const filter = createFilterOptions();
-export default function RolesDropdown({ isRequired, error, setAnswers }) {
+export default function DropdownRoles({ isRequired, error, setAnswers }) {
     const [ roles, setRoles ] = useState([]);
     const [ selectedRoles, setSelectedRoles ] = useState('');
+
+    const { fetchUserDetails } = useAuth();
 
     useEffect(() => {
         // Fetch the list of companies when the component mounts
         async function fetchRoles() {
             try {
-                const response = await getBasicSystemInfo();
+                const response = await getDropDrownItems('job_roles');
                 setRoles(response.job_roles);
             } catch (error) {
                 console.error('Error fetching roles:', error);
@@ -20,7 +23,7 @@ export default function RolesDropdown({ isRequired, error, setAnswers }) {
         }
 
         fetchRoles();
-    }, []);
+    }, [ fetchUserDetails ]);
 
     return (
         <FormControl fullWidth variant="outlined">
@@ -36,9 +39,7 @@ export default function RolesDropdown({ isRequired, error, setAnswers }) {
                 handleHomeEndKeys
                 options={roles || []}
                 name="job_roles"
-                isOptionEqualToValue={(option, value) =>
-                    (option.inputValue && value.inputValue && option.inputValue === value.inputValue) || option === value
-                }
+                isOptionEqualToValue={(option, value) => (option.inputValue && value.inputValue && option.inputValue === value.inputValue) || option === value}
                 getOptionLabel={option => {
                     if (typeof option === 'string') {
                         return option;

@@ -5,6 +5,7 @@ function apiJoin(...endpoints) {
 export const routes = {
     api: {
         base: import.meta.env.VITE_APP_API_BASE_URL,
+        talent: import.meta.env.VITE_APP_API_TALENT_CHOICE_URL,
         auth: {
             checkToken: localToken => apiJoin(routes.api.base, `reviews/check/${localToken}`),
             verifyToken: token => apiJoin(routes.api.base, `reviews/verify-token/${token}`),
@@ -17,20 +18,20 @@ export const routes = {
         jobs: {
             list: () => apiJoin(routes.api.base, 'company/new/jobs/all-jobs/'),
             createReferral: () => apiJoin(routes.api.base, 'company/new/jobs/create-referral/'),
-            publish: id => apiJoin(routes.api.base, `company/new/jobs/${id}/referral/publish`),
-            pause: id => apiJoin(routes.api.base, `company/new/jobs/${id}/referral/pause`),
-            close: id => apiJoin(routes.api.base, `company/new/jobs/${id}/referral/closed`),
-            activate: id => apiJoin(routes.api.base, `company/new/jobs/${id}/referral/active`),
+            publish: id => apiJoin(routes.api.base, `company/new/jobs/${id}/referral/publish/`),
+            pause: id => apiJoin(routes.api.base, `company/new/jobs/${id}/referral/pause/`),
+            close: id => apiJoin(routes.api.base, `company/new/jobs/${id}/referral/closed/`),
+            activate: id => apiJoin(routes.api.base, `company/new/jobs/${id}/referral/active/`),
             details: id => apiJoin(routes.api.base, `company/new/jobs/${id}/get-job/`),
             match: () => apiJoin(routes.api.base, 'company/new/jobs/job-match/'),
         },
         mentors: {
             list: () => apiJoin(routes.api.base, 'mentorship/'),
             signup: {
-                commitmentLevel: () => apiJoin(routes.api.base, 'mentorship/update/support'),
-                career: () => apiJoin(routes.api.base, 'mentorship/update/career'),
-                values: () => apiJoin(routes.api.base, 'mentorship/update/value'),
-                profile: () => apiJoin(routes.api.base, 'mentorship/update/profile'),
+                commitmentLevel: () => apiJoin(routes.api.base, 'mentorship/update/support/'),
+                career: () => apiJoin(routes.api.base, 'mentorship/update/career/'),
+                values: () => apiJoin(routes.api.base, 'mentorship/update/value/'),
+                profile: () => apiJoin(routes.api.base, 'mentorship/update/profile/'),
             },
             connect: {
                 // We can add other paths here like booking sessions once cal.com integration is done
@@ -38,18 +39,22 @@ export const routes = {
             },
             match: () => apiJoin(routes.api.base, 'mentorship/mentor-match/'),
             review: programId => apiJoin(routes.api.base, `mentorship/reviews/${programId}`),
-            updateDetails: () => apiJoin(routes.api.base, 'mentorship/update/profile'),
+            // TODO: this is the same as signup.profile
+            updateDetails: () => apiJoin(routes.api.base, 'mentorship/update/profile/'),
             updateCalLink: () => apiJoin(routes.api.base, 'mentorship/update/calendar-link'),
             getDetails: details => apiJoin(routes.api.base, `mentorship/details/?fields=${details}`),
         },
         users: {
             signUp: () => apiJoin(routes.api.base, 'user/new/'),
+            companySignUp: () => apiJoin(routes.api.base, 'user/new/company'),
             updateProfile: () => apiJoin(routes.api.base, 'user/new-member/profile/create'),
             getProfile: () => apiJoin(routes.api.base, 'user/details/new-member'),
             getUsersDetails: () => apiJoin(routes.api.base, 'user/details/'),
             connectWithMentor: id => apiJoin(routes.api.base, `mentorship/mentor/${id}/connect/roster/add`),
-            getMemberData: id => apiJoin(routes.api.base, `member/member-details/${id}`),
+            getAllMembers: () => apiJoin(routes.api.base, `app/member/all/`),
+            getMemberData: id => apiJoin(routes.api.base, `member/member-details/${id}/`),
             basicSystemInfo: () => apiJoin(routes.api.base, 'user/details/new-member'),
+            basicSystemInfoUpdate: details => apiJoin(routes.api.base, `app/details/?fields=${details}`),
             updateAccountDetails: () => apiJoin(routes.api.base, 'user/profile/update/account-details'),
             updateProfileIdentity: () => apiJoin(routes.api.base, 'user/profile/update/idenity'),
             updateSkills: () => apiJoin(routes.api.base, 'user/profile/update/skills-roles'),
@@ -58,5 +63,17 @@ export const routes = {
             workplace: () => apiJoin(routes.api.base, 'user/profile/update/work-place'),
         },
         announcements: { list: () => apiJoin(routes.api.base, 'user/details/announcement') },
+        companies: {
+            get: id => apiJoin(routes.api.base, `company-profile/info/${id}/`),
+            getAll: () => apiJoin(routes.api.base, `company-profile/info/`),
+            activateAccount: (id, token) => apiJoin(routes.api.base, `talent-choice/company/confirm-email/${id}/${token}/`),
+            confirmAgreement: () => apiJoin(routes.api.base, `talent-choice/company/confirm-agreement/`),
+            createOnboardingProfile: () => apiJoin(routes.api.base, `talent-choice/company/onboarding/create/profile/`),
+            createOnboardingOpenRoles: () => apiJoin(routes.api.base, `talent-choice/company/complete-onboarding/`),
+        },
+        openDoors: {
+            createAccount: () => apiJoin(routes.api.base, 'open-doors/onboarding/'),
+            confirmAgreement: () => apiJoin(routes.api.base, `open-doors/onboarding/confirm-agreement/`),
+        },
     },
 };

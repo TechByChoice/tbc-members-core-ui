@@ -1,40 +1,41 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { FormControl, FormLabel, TextField, Autocomplete } from '@mui/material';
-import { getBasicSystemInfo } from '../api-calls';
+import { getDropDrownItems } from '../api-calls';
 import { createFilterOptions } from '@mui/material/Autocomplete';
+import { useAuth } from '@/providers/AuthProvider';
 
 const filter = createFilterOptions();
 
-export default function CompanyDropdownUpdate({
-    error, answers, setAnswers, onCompanySelect, isRequired 
+export default function DropdownCompanyUpdate({
+    error, answers, setAnswers, isRequired, onCompanySelect 
 }) {
     const [ companies, setCompanies ] = useState([]);
-    const [ selectedCompany, setSelectedCompany ] = useState(null);
+    const [ selectedCompany, setSelectedCompany ] = useState(answers.select_company || null);
+
+    const { token } = useAuth();
 
     useEffect(() => {
-        const firstCompany = Array.isArray(answers?.company) ? answers?.company[0] : null;
-        setSelectedCompany(answers.select_company || firstCompany || null);
-    }, [ answers?.select_company || answers?.company ]);
+        setSelectedCompany(answers.select_company || null);
+    }, [ answers.select_company ]);
 
     useEffect(() => {
         // Fetch the list of companies when the component mounts
         async function fetchCompanies() {
             try {
-                const response = await getBasicSystemInfo();
-                setCompanies(response.company_list);
+                const response = await getDropDrownItems('companies');
+                setCompanies(response.companies);
             } catch (error) {
                 console.error('Error fetching companies:', error);
             }
         }
 
         fetchCompanies();
-    }, []);
+    }, [ token ]);
 
     return (
         <FormControl fullWidth variant="outlined">
-            <FormLabel id="company-label">{isRequired && <>*</>} Company</FormLabel>
+            <FormLabel id="company-label">* Company</FormLabel>
             <Autocomplete
-                required
                 selectOnFocus
                 includeInputInList
                 handleHomeEndKeys
@@ -43,7 +44,6 @@ export default function CompanyDropdownUpdate({
                 getOptionLabel={option => {
                     return typeof option === 'object' ? option.company_name : '';
                 }}
-                isOptionEqualToValue={(option, value) => option?.id === value?.id}
                 renderOption={(props, option) => (
                     <li {...props} key={option.id}>
                         {option.company_name}
@@ -63,7 +63,9 @@ export default function CompanyDropdownUpdate({
                         company_id: newValue?.id,
                     }));
                 }}
-                renderInput={params => <TextField {...params} name="company_name" error={!!error.company_name} inputProps={{ ...params.inputProps }} />}
+                renderInput={params => (
+                    <TextField {...params} required={isRequired} name="company_name" error={!!error.company_name} inputProps={{ ...params.inputProps }} />
+                )}
             />
         </FormControl>
     );

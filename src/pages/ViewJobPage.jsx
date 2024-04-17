@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom';
 import { useStatus } from '../providers/MsgStatusProvider';
 import { useStatusMessage } from '../hooks/useStatusMessage';
 import { routes } from '@/lib/routes';
+import { useAuth } from '@/providers/AuthProvider';
 
 const HtmlContentRenderer = ({ htmlContent }) => {
     return <div dangerouslySetInnerHTML={{ __html: htmlContent }} />;
@@ -23,23 +24,24 @@ function ViewJobPage({ userDetail, isLoading }) {
     /** @type {any} jobData */
     const [ jobData, setJobData ] = useState();
     const [ jobStatusCard, setJobStatusCard ] = useState(null);
-    const { setStatusMessage, setIsAlertOpen, setStatusType } = useStatus();
     const statusMessage = useStatusMessage();
+    const { user } = useAuth();
+    console.log(user);
 
-    const isOwnProfile = userDetail?.user_info.id === jobData?.created_by_id;
-    const isStaffOrEditor = userDetail?.account_info?.is_staff || jobData?.created_by_id === userDetail?.user_info?.id;
+    const isOwnProfile = user?.[0]?.user_info.id === jobData?.created_by_id;
+    const isStaffOrEditor = user?.[0]?.account_info?.is_staff || jobData?.created_by_id === user?.[0]?.user_info?.id;
+
+    async function fetchData() {
+        try {
+            const jobResponse = await getJobDetails(id);
+
+            setJobData(jobResponse);
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    }
 
     useEffect(() => {
-        async function fetchData() {
-            try {
-                const jobResponse = await getJobDetails(id);
-
-                setJobData(jobResponse);
-            } catch (error) {
-                console.error('Error fetching data:', error);
-            }
-        }
-
         fetchData();
     }, [ id ]);
 
@@ -75,13 +77,11 @@ function ViewJobPage({ userDetail, isLoading }) {
             })
             .then(data => {
                 statusMessage.success("We're reviewing your job now");
+                fetchData();
             })
             .catch(error => {
                 console.error('There was an error publish the job', error);
             });
-        // } else {
-        //     alert("don't have access")
-        // }
     };
     const handelPauseJob = () => {
         fetch(routes.api.jobs.pause(id), {
@@ -103,6 +103,7 @@ function ViewJobPage({ userDetail, isLoading }) {
             })
             .then(data => {
                 statusMessage.success("We've paused your job");
+                fetchData();
             })
             .catch(error => {
                 console.error('There was an error publish the job', error);
@@ -132,6 +133,7 @@ function ViewJobPage({ userDetail, isLoading }) {
             })
             .then(data => {
                 statusMessage.success("We've closed your job now");
+                fetchData();
             })
             .catch(error => {
                 console.error('There was an error publish the job', error);
@@ -139,7 +141,7 @@ function ViewJobPage({ userDetail, isLoading }) {
         // }
     };
     const handelActiveJob = () => {
-        if (userDetail?.account_info?.is_staff) {
+        if (user?.[0]?.account_info?.is_staff) {
             fetch(routes.api.jobs.activate(id), {
                 method: 'GET',
                 credentials: 'include',
@@ -160,6 +162,7 @@ function ViewJobPage({ userDetail, isLoading }) {
                 })
                 .then(data => {
                     statusMessage.success('Job is now active');
+                    fetchData();
                 })
                 .catch(error => {
                     console.error('There was an error publish the job', error);
@@ -170,8 +173,11 @@ function ViewJobPage({ userDetail, isLoading }) {
     const renderPublishCard = () => {
         return (
             <CardContent>
-                <Typography variant="h6">Ready to publish this job?</Typography>
-                <Button variant="contained" onClick={handelPublishJob} color="primary">
+                <Typography variant="h5">Ready to publish this job?</Typography>
+                <Typography mb={2} variant="body1">
+                    One published a team member will review and once approved, the post will go live on our site.
+                </Typography>
+                <Button sx={{ marginRight: 3 }} variant="contained" onClick={handelPublishJob} color="primary">
                     Publish Now
                 </Button>
                 <Button variant="contained" onClick={handelCloseJob} color="primary">
@@ -182,14 +188,14 @@ function ViewJobPage({ userDetail, isLoading }) {
     };
     const renderCloseCard = () => (
         <CardContent>
-            <Typography variant="h6">Thanks for thinking of the community!</Typography>
+            <Typography variant="h5">Thanks for thinking of the community!</Typography>
             <Typography variant="body1">This job post has been closed but your support for the community is everlasting.</Typography>
         </CardContent>
     );
 
     const renderAdminPendingCard = () => (
         <CardContent>
-            <Typography variant="h6">Admin! Do your thing!</Typography>
+            <Typography variant="h5">Admin! Do your thing!</Typography>
             <Typography variant="body1">Once you review the job, we can update this.</Typography>
             <Button variant="contained" onClick={handelActiveJob} color="primary">
                 Mark as Active
@@ -199,21 +205,17 @@ function ViewJobPage({ userDetail, isLoading }) {
 
     const renderPendingCard = () => (
         <CardContent>
-            <Typography variant="h6">We&apos;re reviewing your job post</Typography>
+            <Typography variant="h5">We&apos;re reviewing your job post</Typography>
             <Typography variant="body1">You&apos;ll receive an email once the job is live.</Typography>
         </CardContent>
     );
 
     const renderActiveCard = () => (
         <CardContent>
-            <Typography variant="h6">Your job is now live!</Typography>
+            <Typography variant="h5">Your job is now live!</Typography>
             <Typography variant="body1">This post will be on our site for 3 months unless you close the opening first</Typography>
             <ButtonGroup orientation="horizontal" aria-label="horizontal outlined button group">
-                {jobData?.status === 'pause' ? (
-                    <Button onClick={handelPublishJob}>Publish Job</Button>
-                ) : (
-                    <Button onClick={handelPauseJob}>Pause Job</Button>
-                )}
+                {jobData?.status === 'pause' ? <Button onClick={handelPublishJob}>Publish Job</Button> : <Button onClick={handelPauseJob}>Pause Job</Button>}
 
                 <Button onClick={handelCloseJob}>Close Job</Button>
             </ButtonGroup>
@@ -221,8 +223,8 @@ function ViewJobPage({ userDetail, isLoading }) {
     );
 
     const renderJobStatusSpecificCard = () => {
-        const isStaffOrEditor = userDetail?.account_info?.is_staff || jobData?.created_by_id === userDetail?.user_info?.id;
-        const isStaff = userDetail?.account_info?.is_staff;
+        const isStaffOrEditor = user?.[0]?.account_info?.is_staff || jobData?.created_by_id === user?.[0]?.user_info?.id;
+        const isStaff = user?.[0]?.account_info?.is_staff;
         const jobStatus = jobData?.status;
 
         switch (jobStatus) {
@@ -263,14 +265,14 @@ function ViewJobPage({ userDetail, isLoading }) {
             <CardContent>
                 <Typography variant="h6">Want to apply?</Typography>
                 <Typography variant="body1">
-                    Learn how to apply by
-                    <Link to="/new/member/1">creating an account today</Link>.
+                    Learn how to apply by <Link to="/new">creating an account today</Link>.
                 </Typography>
             </CardContent>
         </Card>
     );
 
     const renderApplyCard = () => {
+        console.log(userDetail);
         if (userDetail) {
             return renderApplyNowCard();
         } else {
@@ -282,7 +284,7 @@ function ViewJobPage({ userDetail, isLoading }) {
         <Grid container spacing={3}>
             {/*{isOwnProfile && (*/}
             <Grid item xs={12}>
-                {renderJobPosterCard()}
+                {user.length > 0 && (user?.[0]?.account_info?.is_staff || jobData?.created_by_id === user?.[0]?.user_info?.id) && <>{renderJobPosterCard()}</>}
             </Grid>
             {/*)}*/}
             {/* 1/3 Contact Card */}
@@ -298,12 +300,14 @@ function ViewJobPage({ userDetail, isLoading }) {
                         <Grid container display="flex" direction="row" alignItems="center" spacing={5}>
                             <Grid item xs={12} sm={4}>
                                 <Card>
-                                    <CardMedia
-                                        component="img"
-                                        height="140"
-                                        src={jobData?.parent_company?.logo}
-                                        alt={`${jobData?.parent_company?.company_name} Logo`}
-                                    />
+                                    <Link to={`/company/${jobData?.parent_company?.id}`}>
+                                        <CardMedia
+                                            component="img"
+                                            height="140"
+                                            src={jobData?.parent_company?.logo}
+                                            alt={`${jobData?.parent_company?.company_name} Logo`}
+                                        />
+                                    </Link>
                                 </Card>
                             </Grid>
                         </Grid>
@@ -362,8 +366,8 @@ function ViewJobPage({ userDetail, isLoading }) {
                         <Divider sx={{ m: 2 }} variant="middle" />
                         {/* Body Section */}
                         <section>
-                            <Typography variant="body1">{userDetail?.bio}</Typography>
-                            <Typography variant="body1">{userDetail?.bio}</Typography>
+                            <Typography variant="body1">{user?.[0]?.bio}</Typography>
+                            <Typography variant="body1">{user?.[0]?.bio}</Typography>
                             <Container>
                                 <div>
                                     <Typography variant="h5">Job Description:</Typography>

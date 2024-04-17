@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import { useAuth } from '../providers/AuthProvider';
+import { useAuth } from '@/providers/AuthProvider';
 import { useNavigate } from 'react-router';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
-import { useStatus } from '../providers/MsgStatusProvider';
-import Link from '@mui/material/Link';
+import { useStatus } from '@/providers/MsgStatusProvider';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import styled from '@emotion/styled';
 import Alert from '@mui/material/Alert';
 import { useStatusMessage } from '../hooks/useStatusMessage';
+import { Link } from 'react-router-dom';
+import MuiLink from '@mui/material/Link';
 
 const CenteredContent = styled.div`
     display: flex;
@@ -55,7 +56,7 @@ function LoginPage() {
 
     useEffect(() => {
         if (user?.length > 0) {
-            navigate('/', { replace: true });
+            navigate('/dashboard', { replace: true });
         }
     }, [ user ]);
 
@@ -84,7 +85,7 @@ function LoginPage() {
                             </Typography>
                         ) : (
                             <>
-                                <Typography variant="h3" component="h1" align="center">
+                                <Typography variant="h2" component="h1" align="center">
                                     Login
                                 </Typography>
                                 {errorMessage?.length > 0 &&
@@ -122,15 +123,21 @@ function LoginPage() {
                                         control={<Checkbox checked={rememberMe} onChange={handleRememberMeChange} name="rememberMe" color="primary" />}
                                         label="Remember me"
                                     />
-                                    <Button variant="contained" color="primary" fullWidth={true} type="submit">
+                                    <Button variant="contained" sx={{ marginBottom: 2 }} color="primary" fullWidth={true} type="submit">
                                         Log in
                                     </Button>
-                                    <Link href="/forgot-password" variant="body2">
-                                        Forgot password?
-                                    </Link>
-                                    <Link href="/create-account" variant="body2">
-                                        {"Don't have an account? Sign Up"}
-                                    </Link>
+                                    <Grid display="flex" direction="column" justifyContent="start" container>
+                                        <Grid item>
+                                            <Button component={Link} to="/forgot-password" variant="text">
+                                                Forgot password?
+                                            </Button>
+                                        </Grid>
+                                        <Grid item>
+                                            <Button component={Link} to="/new" variant="text">
+                                                Don&apos;t have an account? Sign Up
+                                            </Button>
+                                        </Grid>
+                                    </Grid>
                                 </form>
                             </>
                         )}
@@ -142,10 +149,7 @@ function LoginPage() {
             <Grid item xs={12} sm={6}>
                 <ImageBG
                     id="right"
-                    style={{
-                        backgroundImage:
-                            'https://uploads-ssl.webflow.com/5fc4802f4edc553647330622/5fd04d6d1ea5ad04a37db102_pexels-jopwell-2422290-p-1600.jpeg',
-                    }}
+                    style={{ backgroundImage: 'https://uploads-ssl.webflow.com/5fc4802f4edc553647330622/5fd04d6d1ea5ad04a37db102_pexels-jopwell-2422290-p-1600.jpeg' }}
                 />
             </Grid>
         </Grid>

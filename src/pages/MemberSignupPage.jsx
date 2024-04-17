@@ -6,11 +6,11 @@ import { useNavigate } from 'react-router';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import { useStatus } from '../providers/MsgStatusProvider';
-import Link from '@mui/material/Link';
 import styled from '@emotion/styled';
 import Alert from '@mui/material/Alert';
 import { useStatusMessage } from '../hooks/useStatusMessage';
 import { routes } from '@/lib/routes';
+import { Link } from 'react-router-dom';
 
 const CenteredContent = styled.div`
     display: flex;
@@ -46,7 +46,7 @@ function LoginPage() {
     });
     const navigate = useNavigate();
     const isAuthenticated = false;
-    const { setToken } = useAuth();
+    const { setToken, fetchUserDetails } = useAuth();
 
     const handleSubmit = async event => {
         event.preventDefault();
@@ -66,6 +66,7 @@ function LoginPage() {
                     localStorage.setItem('token', data.token);
                     statusMessage.success('Welcome to Tech by Choice');
                     navigate('/new/member/2');
+                    fetchUserDetails();
                 } else {
                     console.error('Error:', data.message);
                     statusMessage.error(data.message);
@@ -75,6 +76,8 @@ function LoginPage() {
                 console.error('Error:', error);
                 statusMessage.error(error.message);
             });
+
+        // fetchUserDetails();
     };
 
     const handleChange = event => {
@@ -85,8 +88,10 @@ function LoginPage() {
     useEffect(() => {
         if (auth?.user?.length > 0) {
             navigate('/', { replace: true });
+        } else {
+            fetchUserDetails();
         }
-    }, [ auth.user ]);
+    }, []);
 
     useEffect(() => {
         if (!auth.errorMessage) {
@@ -100,97 +105,39 @@ function LoginPage() {
     }, [ auth.errorMessage ]);
 
     return (
-        <Grid container id="top">
-            <Grid item xs={12} sm={6} id="left">
-                {/* Left side */}
-                <CenteredContent>
-                    <FormContainer>
-                        {auth.isAuthenticated ? (
-                            <Typography variant="h3" align="center">
-                                You are already logged in
-                            </Typography>
-                        ) : (
-                            <>
-                                <Typography variant="h3" component="h1" align="center">
-                                    Join Today
-                                </Typography>
-                                {auth.errorMessage?.length > 0 &&
-                                    auth.errorMessage.map((error, index) => (
-                                        <Alert key={index} severity={statusType}>
-                                            {error} test
-                                        </Alert>
-                                    ))}
+        <>
+            <Typography variant="h4" component="h1" align="center">
+                Join the Community
+            </Typography>
+            {auth.errorMessage?.length > 0 &&
+                auth.errorMessage.map((error, index) => (
+                    <Alert key={index} severity={statusType}>
+                        {error} test
+                    </Alert>
+                ))}
 
-                                <form onSubmit={handleSubmit}>
-                                    <TextField
-                                        required
-                                        variant="outlined"
-                                        id="first_name"
-                                        name="first_name"
-                                        label="First Name"
-                                        type="text"
-                                        onChange={handleChange}
-                                        margin="normal"
-                                        fullWidth
-                                    />
-                                    <TextField
-                                        required
-                                        variant="outlined"
-                                        id="last_name"
-                                        name="last_name"
-                                        label="Last Name"
-                                        type="text"
-                                        onChange={handleChange}
-                                        margin="normal"
-                                        fullWidth
-                                    />
-                                    <TextField
-                                        required
-                                        variant="outlined"
-                                        id="email"
-                                        name="email"
-                                        label="Email"
-                                        type="text"
-                                        onChange={handleChange}
-                                        margin="normal"
-                                        fullWidth
-                                    />
-                                    <TextField
-                                        required
-                                        variant="outlined"
-                                        id="password"
-                                        name="password"
-                                        label="Password"
-                                        type="password"
-                                        onChange={handleChange}
-                                        margin="normal"
-                                        fullWidth
-                                    />
-
-                                    <Button variant="contained" color="primary" fullWidth={true} type="submit">
-                                        Create Account
-                                    </Button>
-                                    <Link href="/login" variant="body2">
-                                        Have an account? Login
-                                    </Link>
-                                </form>
-                            </>
-                        )}
-                    </FormContainer>
-                </CenteredContent>
-
-                {/*    */}
-            </Grid>
-            <Grid item xs={12} sm={6}>
-                <ImageBG
-                    id="right"
-                    style={{
-                        backgroundImage:
-                            'https://uploads-ssl.webflow.com/5fc4802f4edc553647330622/5fd04d6d1ea5ad04a37db102_pexels-jopwell-2422290-p-1600.jpeg',
-                    }}
+            <form onSubmit={handleSubmit}>
+                <TextField
+                    required
+                    variant="outlined"
+                    id="first_name"
+                    name="first_name"
+                    label="First Name"
+                    type="text"
+                    onChange={handleChange}
+                    margin="normal"
+                    fullWidth
                 />
-            </Grid>
-        </Grid>
+                <TextField required variant="outlined" id="last_name" name="last_name" label="Last Name" type="text" onChange={handleChange} margin="normal" fullWidth />
+                <TextField required variant="outlined" id="email" name="email" label="Email" type="text" onChange={handleChange} margin="normal" fullWidth />
+                <TextField required variant="outlined" id="password" name="password" label="Password" type="password" onChange={handleChange} margin="normal" fullWidth />
+
+                <Button variant="contained" color="primary" fullWidth={true} type="submit">
+                    Create Account
+                </Button>
+                <Link to="/">Have an account? Login</Link>
+            </form>
+        </>
     );
 }
 

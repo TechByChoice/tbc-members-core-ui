@@ -7,7 +7,7 @@ import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import { Link } from 'react-router-dom';
 
 function JobCard({
-    companyLogo, companyName, jobTitle, jobType, location, salary, description, jobId, match 
+    companyLogo, companyName, companyId, jobTitle, jobType, location, salary, description, jobId, match 
 }) {
     return (
         <Card sx={{ maxWidth: 345, position: 'relative' }}>
@@ -27,11 +27,15 @@ function JobCard({
                     </Typography>
                 </Box>
             )}
-            <CardMedia component="img" height="140" image={companyLogo} alt={companyName} sx={{ objectFit: 'contain', background: '#fff', p: 2 }} />
+            <Link to={`/company/${companyId}`}>
+                <CardMedia component="img" height="140" image={companyLogo} alt={companyName} sx={{ objectFit: 'contain', background: '#fff', p: 2 }} />
+            </Link>
             <CardContent>
-                <Typography gutterBottom variant="h5" component="div">
-                    {jobTitle}
-                </Typography>
+                <Link to={`/job/${jobId}`}>
+                    <Typography gutterBottom variant="h5" component="div">
+                        {jobTitle}
+                    </Typography>
+                </Link>
                 <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
                     <Chip label={jobType} variant="outlined" sx={{ mr: 1, bgcolor: 'warning.light' }} icon={<WorkOutlineIcon />} />
                     <Typography variant="body2" color="text.secondary">
