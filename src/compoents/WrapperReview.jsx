@@ -15,7 +15,7 @@ export default function WrapperReview() {
             {reviewAccess ? (
                 <>
                     <Suspense fallback={<div>Loading...</div>}>
-                        <Review />
+                        <Review user={user?.[0]?.user_info?.id} />
                     </Suspense>
                 </>
             ) : (
