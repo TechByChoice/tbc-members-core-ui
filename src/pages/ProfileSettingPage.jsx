@@ -33,7 +33,7 @@ const SubmitButton = styled(Button)`
 
 function TabPanel(props) {
     const {
-        children, value, index, ...other
+        children, value, index, ...other 
     } = props;
 
     return (
@@ -75,11 +75,7 @@ function ProfileSettingPage({ userDetail }) {
         async function fetchData() {
             try {
                 // eslint-disable-next-line no-undef
-                const [ basicResponse ] = await Promise.all([
-                    getDropDrownItems(
-                        'pronouns&fields=gender&fields=sexuality&fields=ethic&fields=job_roles&fields=companies&fields=job_skills&fields=job_departments',
-                    ),
-                ]);
+                const [ basicResponse ] = await Promise.all([ getDropDrownItems('pronouns&fields=gender&fields=sexuality&fields=ethic&fields=job_roles&fields=companies&fields=job_skills&fields=job_departments'), ]);
 
                 setQuestions(basicResponse);
             } catch (error) {

@@ -38,9 +38,7 @@ export default function ExperiencesDropdown({ isRequired, setAnswers, error }) {
                 includeInputInList
                 handleHomeEndKeys
                 options={experiences || []}
-                isOptionEqualToValue={(option, value) =>
-                    (option.inputValue && value.inputValue && option.inputValue === value.inputValue) || option === value
-                }
+                isOptionEqualToValue={(option, value) => (option.inputValue && value.inputValue && option.inputValue === value.inputValue) || option === value}
                 renderOption={(props, option) => (
                     <li {...props} key={option.id}>
                         {option.label}

@@ -30,9 +30,7 @@ function SkillsQuestionStep({
         <Grid container spacing={3}>
             <Grid item xs={12}>
                 <Typography variant="h5">Job Related Questions</Typography>
-                <Typography variant="subtitle1">
-                    The following questions will help you land your next role, and find resources related to your skills.
-                </Typography>
+                <Typography variant="subtitle1">The following questions will help you land your next role, and find resources related to your skills.</Typography>
             </Grid>
 
             <Grid item xs={12}>
@@ -102,9 +100,7 @@ function SkillsQuestionStep({
                         handleHomeEndKeys
                         id="autocomplete-job_salary_range"
                         options={salaries || []} // <-- directly provide a default value here
-                        isOptionEqualToValue={(option, value) =>
-                            (option.inputValue && value.inputValue && option.inputValue === value.inputValue) || option === value
-                        }
+                        isOptionEqualToValue={(option, value) => (option.inputValue && value.inputValue && option.inputValue === value.inputValue) || option === value}
                         getOptionLabel={option => {
                             if (typeof option === 'string') {
                                 return option;
@@ -151,9 +147,7 @@ function SkillsQuestionStep({
                         handleHomeEndKeys
                         id="autocomplete-job_salary_range"
                         options={salaries || []} // <-- directly provide a default value here
-                        isOptionEqualToValue={(option, value) =>
-                            (option.inputValue && value.inputValue && option.inputValue === value.inputValue) || option === value
-                        }
+                        isOptionEqualToValue={(option, value) => (option.inputValue && value.inputValue && option.inputValue === value.inputValue) || option === value}
                         getOptionLabel={option => {
                             if (typeof option === 'string') {
                                 return option;

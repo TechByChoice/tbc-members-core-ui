@@ -149,7 +149,7 @@ function LoginPage() {
             <Grid item xs={12} sm={6}>
                 <ImageBG
                     id="right"
-                    style={{backgroundImage: 'https://uploads-ssl.webflow.com/5fc4802f4edc553647330622/5fd04d6d1ea5ad04a37db102_pexels-jopwell-2422290-p-1600.jpeg',}}
+                    style={{ backgroundImage: 'https://uploads-ssl.webflow.com/5fc4802f4edc553647330622/5fd04d6d1ea5ad04a37db102_pexels-jopwell-2422290-p-1600.jpeg' }}
                 />
             </Grid>
         </Grid>

@@ -13,6 +13,7 @@ import { useAuth } from '@/providers/AuthProvider';
 import { FeatureCard } from '@/compoents/FeatuerCards';
 import CardMedia from '@mui/material/CardMedia';
 import Box from '@mui/material/Box';
+import BasicCardComonent from '../../compoents/BasicCardComonent/BasicCardComonent';
 
 const StyledContainer = styled(Grid)(({ theme: { breakpoints } }) => ({
     display: 'flex',
@@ -278,7 +279,23 @@ export default function MemberDashboard() {
                         </Grid>
                     </Grid>
                 </Grid>
+                {/* <Grid item xs={12} sm={4}>
+                    <div>
+                        <BasicCardComonent
+                            imageUrl={event}
+                            headerText="Software Developer"
+                            bodyText={job?.role?.name}
+                            icon={job?.role?.name}
+                            hourlyRate={20} // Example hourly rate
+                            buttonText="Click Me"
+                            // companyName={job?.parent_company?.name}
+                        />
+                    </div>
+                </Grid> */}
             </Grid>
         </>
     );
 }
+
+// {<YourIconComponent />}
+// "front end role"

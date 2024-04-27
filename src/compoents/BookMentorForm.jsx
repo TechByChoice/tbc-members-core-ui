@@ -155,9 +155,7 @@ function BookMentorForm({ talentDetails, setOpen }) {
                         </>
                         <>
                             <FormControl fullWidth>
-                                <FormLabel id="mentor_booking_note">
-                                    Please share any additional details that will help your mentor prep for your next session.
-                                </FormLabel>
+                                <FormLabel id="mentor_booking_note">Please share any additional details that will help your mentor prep for your next session.</FormLabel>
                                 <TextField
                                     multiline
                                     name="mentor_booking_note"

@@ -6,7 +6,7 @@ import { useAuth } from '@/providers/AuthProvider';
 
 const filter = createFilterOptions();
 export default function EthicDropdown({
-    isRequired, setAnswers, formErrors, handleChange
+    isRequired, setAnswers, formErrors, handleChange 
 }) {
     const [ ethic, setEthic ] = useState([]);
     const { token } = useAuth();

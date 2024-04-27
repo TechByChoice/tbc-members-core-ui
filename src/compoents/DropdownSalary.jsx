@@ -36,9 +36,7 @@ export default function DropdownSalary({ setAnswers, labelName }) {
                 includeInputInList
                 handleHomeEndKeys
                 options={salaries || []}
-                isOptionEqualToValue={(option, value) =>
-                    (option.inputValue && value.inputValue && option.inputValue === value.inputValue) || option === value
-                }
+                isOptionEqualToValue={(option, value) => (option.inputValue && value.inputValue && option.inputValue === value.inputValue) || option === value}
                 getOptionLabel={option => {
                     if (typeof option === 'string') {
                         return option;

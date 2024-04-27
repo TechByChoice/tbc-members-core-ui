@@ -17,7 +17,7 @@ const theme = createTheme({
     },
     typography: {
         fontFamily: '"Barlow", sans-serif',
-        h2: {fontWeight: 'bold',},
+        h2: { fontWeight: 'bold' },
         h4: {
             fontFamily: SPACE_MONO,
             fontWeight: 'bold',

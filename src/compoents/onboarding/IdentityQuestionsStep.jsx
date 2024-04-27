@@ -10,7 +10,7 @@ import SexualityDropdown from '@/compoents/DropdownSexuality';
 const filter = createFilterOptions();
 
 function IdentityQuestionsStep({
-    answers, questions, handleAutocompleteChange, handleInputChange
+    answers, questions, handleAutocompleteChange, handleInputChange 
 }) {
     const filterOptions = (options, { inputValue }) => {
         const matcher = new RegExp(inputValue, 'i');
@@ -22,9 +22,9 @@ function IdentityQuestionsStep({
                 {/* Title */}
                 <Typography variant="h5">Identity Related Questions</Typography>
                 <Typography variant="subtitle1">
-                    Thanks for all of that info! The next few questions will be about how you self identify. Please feel free to use the &apos;Other&apos;
-                    option to type in any part of your identity that&apos;s not listed. This information will be used to help send you resources and events
-                    you may be interested in. We will not share the following information with anyone.
+                    Thanks for all of that info! The next few questions will be about how you self identify. Please feel free to use the &apos;Other&apos; option to type
+                    in any part of your identity that&apos;s not listed. This information will be used to help send you resources and events you may be interested in. We
+                    will not share the following information with anyone.
                 </Typography>
             </Grid>
 
@@ -34,8 +34,7 @@ function IdentityQuestionsStep({
                     <FormLabel htmlFor="identity_sexuality">Please select the sexual identities that best describe you today.</FormLabel>
                     <SexualityDropdown isRequired={false} handleChange={handleAutocompleteChange} setAnswers={handleAutocompleteChange} />
                     <FormLabel>
-                        If you see any terms you&apos;re not sure about we encourage you to check out this site to learn more about people&apos;s
-                        experiences
+                        If you see any terms you&apos;re not sure about we encourage you to check out this site to learn more about people&apos;s experiences
                     </FormLabel>
                     <FormControlLabel
                         control={<Checkbox onChange={handleInputChange} name="is_identity_sexuality_displayed" color="primary" size="small" />}

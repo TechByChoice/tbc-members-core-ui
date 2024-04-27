@@ -39,9 +39,7 @@ export default function DropdownRoles({ isRequired, error, setAnswers }) {
                 handleHomeEndKeys
                 options={roles || []}
                 name="job_roles"
-                isOptionEqualToValue={(option, value) =>
-                    (option.inputValue && value.inputValue && option.inputValue === value.inputValue) || option === value
-                }
+                isOptionEqualToValue={(option, value) => (option.inputValue && value.inputValue && option.inputValue === value.inputValue) || option === value}
                 getOptionLabel={option => {
                     if (typeof option === 'string') {
                         return option;

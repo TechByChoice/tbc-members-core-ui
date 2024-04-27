@@ -41,9 +41,7 @@ export default function DropdownSkills({
                 includeInputInList
                 handleHomeEndKeys
                 options={skills || []}
-                isOptionEqualToValue={(option, value) =>
-                    (option.inputValue && value.inputValue && option.inputValue === value.inputValue) || option === value
-                }
+                isOptionEqualToValue={(option, value) => (option.inputValue && value.inputValue && option.inputValue === value.inputValue) || option === value}
                 renderOption={(props, option) => (
                     <li {...props} key={option.id}>
                         {option.name}

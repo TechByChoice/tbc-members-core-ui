@@ -41,9 +41,7 @@ export default function DropdownDepartments({
                 includeInputInList
                 handleHomeEndKeys
                 options={departments || []}
-                isOptionEqualToValue={(option, value) =>
-                    (option.inputValue && value.inputValue && option.inputValue === value.inputValue) || option === value
-                }
+                isOptionEqualToValue={(option, value) => (option.inputValue && value.inputValue && option.inputValue === value.inputValue) || option === value}
                 getOptionLabel={option => {
                     if (typeof option === 'string') {
                         return option;

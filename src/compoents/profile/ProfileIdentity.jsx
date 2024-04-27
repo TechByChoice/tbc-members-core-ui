@@ -239,8 +239,7 @@ export default function ProfileIdentity({ questions }) {
                                     renderInput={params => <TextField name="identity_sexuality" {...params} />}
                                 />
                                 <FormLabel>
-                                    If you see any terms you&apos;re not sure about we encourage you to check out this site to learn more about
-                                    people&apos;s experiences
+                                    If you see any terms you&apos;re not sure about we encourage you to check out this site to learn more about people&apos;s experiences
                                 </FormLabel>
                                 <FormControlLabel
                                     control={

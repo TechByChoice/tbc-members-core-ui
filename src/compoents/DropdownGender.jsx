@@ -6,7 +6,7 @@ import { useAuth } from '@/providers/AuthProvider';
 
 const filter = createFilterOptions();
 export default function GenderDropdown({
-    isRequired, setAnswers, formErrors, handleChange
+    isRequired, setAnswers, formErrors, handleChange 
 }) {
     const [ gender, setGender ] = useState([]);
     const { token } = useAuth();

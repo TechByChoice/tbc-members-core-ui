@@ -70,8 +70,8 @@ export default function FormMentorApplication({
                         <Grid container>
                             <Grid item xs={12} sm={8} spacing={3} mt={3}>
                                 <Typography variant="body">
-                                    We want to match you with a mentee who shares your values and beliefs, so we would love to learn more about you! Please
-                                    take a moment to answer the following questions regarding your personal values.
+                                    We want to match you with a mentee who shares your values and beliefs, so we would love to learn more about you! Please take a moment
+                                    to answer the following questions regarding your personal values.
                                 </Typography>
                             </Grid>
                         </Grid>

@@ -38,9 +38,7 @@ export default function PickCompany({ formErrors, answers, setAnswers }) {
                     </Grid>
                     <Grid item xs={12}>
                         <FormControlLabel
-                            control={
-                                <Checkbox aria-label="Add a new company" onChange={toggleDisplayCompanyForm} inputProps={{ 'aria-label': 'controlled' }} />
-                            }
+                            control={<Checkbox aria-label="Add a new company" onChange={toggleDisplayCompanyForm} inputProps={{ 'aria-label': 'controlled' }} />}
                             label="Add a new company"
                         />
                     </Grid>
@@ -51,11 +49,7 @@ export default function PickCompany({ formErrors, answers, setAnswers }) {
 
     return (
         <React.Fragment>
-            {!displayCompanyForm ? (
-                <SelectCompany />
-            ) : (
-                <AddCompanyForm setAnswers={setAnswers} answers={answers} toggleDisplayCompanyForm={toggleDisplayCompanyForm} />
-            )}
+            {!displayCompanyForm ? <SelectCompany /> : <AddCompanyForm setAnswers={setAnswers} answers={answers} toggleDisplayCompanyForm={toggleDisplayCompanyForm} />}
         </React.Fragment>
     );
 }

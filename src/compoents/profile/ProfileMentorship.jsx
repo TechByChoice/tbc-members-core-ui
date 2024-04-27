@@ -66,12 +66,7 @@ export default function ProfileMentorship({ questions }) {
             <Grid container>
                 {user[0]?.account_info?.is_mentor ? (
                     <>
-                        <FormMentorApplication
-                            defaultValues={user[0]?.mentor_details}
-                            formData={formData}
-                            setFormData={setFormData}
-                            questions={questions}
-                        />
+                        <FormMentorApplication defaultValues={user[0]?.mentor_details} formData={formData} setFormData={setFormData} questions={questions} />
                         <Button variant="contained" color="primary" onClick={handelFormSubmit}>
                             Save
                         </Button>
