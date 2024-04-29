@@ -9,10 +9,9 @@ export default function NavBarWrapper() {
     const isMember = user[0]?.account_info?.is_member;
     const isReviewer = user[0]?.account_info?.is_open_doors;
 
-    console.log(isMember, isReviewer, userDetails);
     return (
         <>
-            {isMember && <NavBar />}
+            {(isMember || !isAuthenticated) && <NavBar />}
             {isReviewer && <NavBarReviews />}
         </>
     );
