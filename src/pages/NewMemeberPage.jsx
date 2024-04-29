@@ -224,7 +224,6 @@ export default function NewMemberPage() {
         }
 
         setActiveStep(activeStep + 1);
-        console.log(activeStep, 'handleNext');
         statusMessage.hide();
     };
 

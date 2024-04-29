@@ -26,7 +26,6 @@ function ViewJobPage({ userDetail, isLoading }) {
     const [ jobStatusCard, setJobStatusCard ] = useState(null);
     const statusMessage = useStatusMessage();
     const { user } = useAuth();
-    console.log(user);
 
     const isOwnProfile = user?.[0]?.user_info.id === jobData?.created_by_id;
     const isStaffOrEditor = user?.[0]?.account_info?.is_staff || jobData?.created_by_id === user?.[0]?.user_info?.id;
@@ -272,7 +271,6 @@ function ViewJobPage({ userDetail, isLoading }) {
     );
 
     const renderApplyCard = () => {
-        console.log(userDetail);
         if (userDetail) {
             return renderApplyNowCard();
         } else {

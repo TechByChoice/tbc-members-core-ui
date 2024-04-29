@@ -63,7 +63,6 @@ function a11yProps(index) {
 function ProfileSettingPage() {
     const [ value, setValue ] = useState(0);
     const { user } = useAuth();
-    console.log(user, 'user');
     const auth = useAuth();
     const profile_url = import.meta.env.VITE_APP_STRIPE_PPROFILE_URL;
     const formError = {};

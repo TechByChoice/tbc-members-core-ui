@@ -25,7 +25,6 @@ function ConfirmAccountPage() {
     }, [ user ]);
 
     useEffect(() => {
-        console.log(id, token);
         fetch(routes.api.companies.activateAccount(id, token), {
             method: 'GET',
             headers: {

@@ -56,7 +56,6 @@ export default function ProfileCalLinkForm() {
             ...FormData,
             [name]: updatedValue,
         });
-        console.log('done');
     };
     return (
         <>

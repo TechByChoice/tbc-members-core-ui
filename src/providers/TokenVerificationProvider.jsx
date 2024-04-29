@@ -59,7 +59,6 @@ export const TokenVerificationProvider = ({ children }) => {
         if (localToken) {
             //  check if the token is still valid
             console.info('found token need to check if active');
-            console.info('local token: ', localToken);
 
             fetch(routes.api.auth.checkToken(localToken), {
                 method: 'GET',
@@ -88,7 +87,6 @@ export const TokenVerificationProvider = ({ children }) => {
                     console.error('found token need not active');
                 });
         } else {
-            console.info('NO localstorge tokenfound');
             if (isValidToken) {
                 verifyTokenCall(routes.api.auth.verifyToken(urlToken));
             } else {
