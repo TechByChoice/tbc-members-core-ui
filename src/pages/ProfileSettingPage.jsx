@@ -60,8 +60,9 @@ function a11yProps(index) {
     };
 }
 
-function ProfileSettingPage({ userDetail }) {
+function ProfileSettingPage() {
     const [ value, setValue ] = useState(0);
+    const { user } = useAuth();
     const auth = useAuth();
     const profile_url = import.meta.env.VITE_APP_STRIPE_PPROFILE_URL;
     const formError = {};
@@ -124,10 +125,14 @@ function ProfileSettingPage({ userDetail }) {
                 aria-label="Vertical tabs example"
                 sx={{ borderRight: 1, minWidth: '15vw', borderColor: 'divider' }}>
                 <Tab label="Account Details" {...a11yProps(0)} />
-                <Tab label="Interests" {...a11yProps(1)} />
                 <Tab label="Identity" {...a11yProps(2)} />
-                <Tab label="Notifications" {...a11yProps(3)} />
-                <Tab label="Mentorship" {...a11yProps(4)} />
+                {user?.[0]?.account_info?.is_member && (
+                    <>
+                        <Tab label="Interests" {...a11yProps(1)} />
+                        <Tab label="Notifications" {...a11yProps(3)} />
+                        <Tab label="Mentorship" {...a11yProps(4)} />
+                    </>
+                )}
             </Tabs>
             <TabPanel value={value} index={0}>
                 <ProfileBasicInfo questions={questions} formErrors={formError} handleChange={handleChange} />
@@ -147,4 +152,5 @@ function ProfileSettingPage({ userDetail }) {
         </Root>
     );
 }
+
 export default ProfileSettingPage;

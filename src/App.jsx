@@ -38,6 +38,7 @@ import { useStatusMessage } from '@/hooks/useStatusMessage';
 import CreateReviewAccountPage from '@/pages/CreateReviewAccountPage';
 import TermsAndAgreementsWrapperPage from '@/pages/TermsAndAgreementsWrapperPage';
 import NavBarWrapper from '@/compoents/layout/NavBarWrapper';
+import WrapperQuestions from '@/compoents/WrapperQuestions';
 
 const SurveyQuestions = React.lazy(() => import('open_doors/SurveyQuestions'));
 
@@ -74,9 +75,7 @@ const App = () => {
                                         path="/questions/:id"
                                         element={
                                             <PrivateRoutes userDetail={user?.[0]}>
-                                                <Suspense fallback={<div>Loading...</div>}>
-                                                    <SurveyQuestions />
-                                                </Suspense>
+                                                <WrapperQuestions />
                                             </PrivateRoutes>
                                         }
                                     />

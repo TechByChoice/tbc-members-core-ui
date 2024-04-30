@@ -36,7 +36,6 @@ export const AuthProvider = ({ children }) => {
                         setIsAuthenticated(true);
                     } else {
                         setErrorMessage(data[0]);
-                        console.error(data);
                         setUser([]);
                         setAccountDetails([]);
                     }

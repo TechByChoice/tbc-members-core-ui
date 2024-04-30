@@ -53,10 +53,7 @@ function LoginPage() {
 
         fetch(routes.api.users.signUp(), {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Token ${localStorage.getItem('token')}`,
-            },
+            headers: {'Content-Type': 'application/json',},
             body: JSON.stringify(formData),
         })
             .then(response => response.json())
