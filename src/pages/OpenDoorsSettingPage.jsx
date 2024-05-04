@@ -121,9 +121,7 @@ function ProfileSettingPage() {
                 sx={{ borderRight: 1, minWidth: '15vw', borderColor: 'divider' }}>
                 <Tab label="Account Details" {...a11yProps(0)} />
                 <Tab label="Identity" {...a11yProps(2)} />
-                <Tab label="Interests" {...a11yProps(1)} />
                 <Tab label="Notifications" {...a11yProps(3)} />
-                <Tab label="Mentorship" {...a11yProps(4)} />
             </Tabs>
             <TabPanel value={value} index={0}>
                 <ProfileBasicInfo questions={questions} formErrors={formError} handleChange={handleChange} />
@@ -131,14 +129,8 @@ function ProfileSettingPage() {
             <TabPanel value={value} index={2}>
                 <ProfileIdentity questions={questions} />
             </TabPanel>
-            <TabPanel value={value} index={1}>
-                <ProfileInterests questions={questions} handleChange={handleChange} />
-            </TabPanel>
             <TabPanel value={value} index={3}>
                 <ProfileNotifications />
-            </TabPanel>
-            <TabPanel value={value} index={4}>
-                <ProfileMentorship questions={questions} />
             </TabPanel>
         </Root>
     );
