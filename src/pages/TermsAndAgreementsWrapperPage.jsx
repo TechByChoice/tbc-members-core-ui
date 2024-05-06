@@ -7,7 +7,6 @@ export default function TermsAndAgreementsWrapperPage() {
     const isMember = user?.[0]?.account_info?.is_member;
     const isReview = user?.[0]?.account_info?.is_open_doors;
     const isCompany = user?.[0]?.account_info?.is_company_account;
-    alert(isReview);
 
     return (
         <>
