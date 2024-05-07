@@ -71,21 +71,6 @@ function CompanySettingPage() {
     /** @type {any} fromData */
     const [ fromData, setFormData ] = useState();
 
-    useEffect(() => {
-        async function fetchData() {
-            try {
-                // eslint-disable-next-line no-undef
-                const [ basicResponse ] = await Promise.all([ getDropDrownItems('pronouns&fields=gender&fields=sexuality&fields=ethic&fields=job_roles&fields=companies&fields=job_skills&fields=job_departments'), ]);
-
-                setQuestions(basicResponse);
-            } catch (error) {
-                console.error('Error fetching data:', error);
-            }
-        }
-
-        fetchData();
-    }, []);
-
     const handleChange = event => {
         const { name, value } = event.target;
         setFormData({ ...fromData, [name]: value });
@@ -120,7 +105,6 @@ function CompanySettingPage() {
                 aria-label="Vertical tabs example"
                 sx={{ borderRight: 1, minWidth: '15vw', borderColor: 'divider' }}>
                 <Tab label="Account Details" {...a11yProps(0)} />
-                <Tab label="Identity" {...a11yProps(2)} />
                 <Tab label="Notifications" {...a11yProps(3)} />
             </Tabs>
             <TabPanel value={value} index={0}>

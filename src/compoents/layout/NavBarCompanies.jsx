@@ -297,19 +297,6 @@ export default function NavBarCompanies() {
                     {renderMenuButton(section.label, section.children)}
                 </Grid>
             ))}
-            {auth.isAuthenticated && (
-                <>
-                    <Grid item>
-                        <StyledNavLink to="/job/all">Job Board</StyledNavLink>
-                    </Grid>
-                    <Grid item>
-                        <StyledNavLink to="/company/all">View Companies</StyledNavLink>
-                    </Grid>
-                    <Grid item>
-                        <StyledNavLink to="/reviews">Open Doors</StyledNavLink>
-                    </Grid>
-                </>
-            )}
             <Grid item>{renderDonateButton()}</Grid>
             <Grid item>{renderProfileDropdown()}</Grid>
         </Grid>
