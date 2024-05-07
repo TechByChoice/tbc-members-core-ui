@@ -126,9 +126,7 @@ function OpenDoorsSettingPage() {
             <TabPanel value={value} index={0}>
                 <ProfileBasicInfo questions={questions} formErrors={formError} handleChange={handleChange} />
             </TabPanel>
-            <TabPanel value={value} index={2}>
-                <ProfileIdentity questions={questions} />
-            </TabPanel>
+
             <TabPanel value={value} index={3}>
                 <ProfileNotifications />
             </TabPanel>

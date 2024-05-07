@@ -2,6 +2,7 @@ import React from 'react';
 import { useAuth } from '@/providers/AuthProvider';
 import NavBar from '@/compoents/layout/NavBar';
 import NavBarReviews from '@/compoents/layout/NavBarReviews';
+import NavBarCompanies from '@/compoents/layout/NavBarCompanies';
 
 export default function NavBarWrapper() {
     const { user, isAuthenticated } = useAuth();
@@ -13,7 +14,7 @@ export default function NavBarWrapper() {
     return (
         <>
             {(isMember || !isAuthenticated) && <NavBar />}
-            {(isCompany || !isAuthenticated) && <NavBar />}
+            {isCompany && isAuthenticated && <NavBarCompanies />}
             {isReviewer && <NavBarReviews />}
         </>
     );
