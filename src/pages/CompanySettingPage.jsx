@@ -60,7 +60,7 @@ function a11yProps(index) {
     };
 }
 
-function OpenDoorsSettingPage() {
+function CompanySettingPage() {
     const [ value, setValue ] = useState(0);
     const auth = useAuth();
     const profile_url = import.meta.env.VITE_APP_STRIPE_PPROFILE_URL;
@@ -134,4 +134,4 @@ function OpenDoorsSettingPage() {
     );
 }
 
-export default OpenDoorsSettingPage;
+export default CompanySettingPage;
