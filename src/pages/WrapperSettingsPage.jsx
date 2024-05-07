@@ -9,9 +9,9 @@ const WrapperSettingsPage = () => {
 
     return (
         <>
-            {user?.[0]?.account_info?.is_member && <ProfileSettingPage />}
-            {user?.[0]?.account_info?.is_company_account && <CompanySettingPage />}
-            {user?.[0]?.account_info?.is_open_doors && <OpenDoorsSettingPage />}
+            {user[0]?.account_info?.is_member && <ProfileSettingPage />}
+            {user[0]?.account_info?.is_company_account && <CompanySettingPage />}
+            {user[0]?.account_info?.is_open_doors && <OpenDoorsSettingPage />}
         </>
     );
 };
