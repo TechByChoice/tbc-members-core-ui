@@ -14,9 +14,9 @@ const WrapperSettingsPage = () => {
 
     return (
         <>
-            {accountInfo.is_member && <ProfileSettingPage />}
-            {accountInfo.is_company_account && <CompanySettingPage />}
-            {accountInfo.is_open_doors && <OpenDoorsSettingPage />}
+            {accountInfo?.is_member && <ProfileSettingPage />}
+            {accountInfo?.is_company_account && <CompanySettingPage />}
+            {accountInfo?.is_open_doors && <OpenDoorsSettingPage />}
         </>
     );
 };

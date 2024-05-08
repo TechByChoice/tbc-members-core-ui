@@ -35,7 +35,7 @@ function ConfirmAccountPage() {
             .then(response => response.json())
             .then(data => {
                 if (data.status) {
-                    statusMessage.error(data.message);
+                    statusMessage.success(data.message);
                     navigate('/new/confirm-agreement/');
                 } else {
                     statusMessage.error(data.message);

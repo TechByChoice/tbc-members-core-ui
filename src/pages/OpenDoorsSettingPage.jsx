@@ -107,9 +107,6 @@ function OpenDoorsSettingPage() {
         setValue(newValue);
     };
 
-    if (!questions || Object.keys(questions).length === 0) {
-        return <div>Loading...</div>;
-    }
     return (
         <Root sx={{ flexGrow: 1, bgcolor: 'background.paper', display: 'flex' }}>
             <Tabs

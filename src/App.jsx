@@ -1,5 +1,4 @@
 import StatusAlert from '@/compoents/Alerts';
-import NavBar from '@/compoents/layout/NavBar';
 import '@/index.css';
 import theme from './temp-theme';
 import AllEventsPage from '@/pages/AllEventsPage';
@@ -10,7 +9,6 @@ import JobReferralPage from '@/pages/JobReferralPage';
 import LoginPage from '@/pages/LoginPage';
 import NewMemberPage from '@/pages/NewMemeberPage';
 import NewMentorPage from '@/pages/NewMentorPage';
-import ProfileSettingPage from '@/pages/ProfileSettingPage';
 import ViewJobPage from '@/pages/ViewJobPage';
 import ViewMemberProfile from '@/pages/ViewMemberProfile';
 import { AuthProvider, useAuth } from '@/providers/AuthProvider';
@@ -22,23 +20,21 @@ import * as React from 'react';
 import { createRoot } from 'react-dom/client';
 import { Route, Routes } from 'react-router';
 import { BrowserRouter, useNavigate } from 'react-router-dom';
-import { Suspense, useEffect, useState } from 'react';
+import { useState } from 'react';
 import ViewCompanyPage from '@/pages/ViewCompanyPage';
 import AllMembersPage from '@/pages/AllMembersPage';
 import AllCompaniesPage from '@/pages/AllCompaniesPage';
-import ErrorBoundary from '@/compoents/ErrorBoundary';
 import CreateAccountPage from '@/pages/CreateAccountPage';
 import CheckEmailPage from '@/pages/CheckEmailPage';
 import ConfirmAccountPage from '@/pages/onboarding/company/ConfirmAccountPage';
 import NewCompanyPage from '@/pages/NewCompanyPage';
-import ConfirmAgreementPage from '@/pages/onboarding/company/ConfirmAgreementPage';
 import WrapperReview from '@/compoents/WrapperReview';
 import { ThemeProvider } from '@mui/material/styles';
-import { useStatusMessage } from '@/hooks/useStatusMessage';
 import CreateReviewAccountPage from '@/pages/CreateReviewAccountPage';
 import TermsAndAgreementsWrapperPage from '@/pages/TermsAndAgreementsWrapperPage';
 import NavBarWrapper from '@/compoents/layout/NavBarWrapper';
 import WrapperQuestions from '@/compoents/WrapperQuestions';
+import WrapperSettingsPage from '@/pages/WrapperSettingsPage';
 
 const SurveyQuestions = React.lazy(() => import('open_doors/SurveyQuestions'));
 
@@ -84,7 +80,7 @@ const App = () => {
                                         path="/profile"
                                         element={
                                             <PrivateRoutes userDetail={user?.[0]}>
-                                                <ProfileSettingPage userDetail={user?.[0]} />
+                                                <WrapperSettingsPage />
                                             </PrivateRoutes>
                                         }
                                     />
