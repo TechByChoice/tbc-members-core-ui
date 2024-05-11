@@ -95,6 +95,11 @@ function BasicInfoStep({
                             />
                         </FormControl>
                     </Grid>
+                    <Grid item xs={12}>
+                        <FormControl>
+                            <FormControlLabel onChange={(event, checked) => setViewNewCompany(checked)} control={<Checkbox />} label="Select company from dropdown" />
+                        </FormControl>
+                    </Grid>
                 </>
             ) : (
                 <Grid item xs={12}>
@@ -102,6 +107,11 @@ function BasicInfoStep({
                         <FormLabel id="company-label">Please select the company you work with.</FormLabel>
                         <DropdownCompanySimple error={formErrors} isRequired={false} setAnswers={handleAutocompleteChange} answers={questions} />
                     </FormControl>
+                    <Grid item xs={12}>
+                        <FormControl>
+                            <FormControlLabel onChange={(event, checked) => setViewNewCompany(checked)} control={<Checkbox />} label="Add a company" />
+                        </FormControl>
+                    </Grid>
                 </Grid>
             )}
 
