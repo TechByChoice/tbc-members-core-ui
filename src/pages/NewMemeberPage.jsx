@@ -259,7 +259,9 @@ export default function NewMemberPage() {
             .then(data => {
                 // Handle the successful JSON response here, e.g.:
                 statusMessage.success("You're in!");
-                history('/dashboard');
+                fetchUserDetails().then(() => {
+                    history('/dashboard');
+                });
             })
             .catch(error => {
                 console.error('Fetch error:', error);
