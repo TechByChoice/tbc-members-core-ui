@@ -27,20 +27,23 @@ function ConfirmAccountPage() {
     useEffect(() => {
         fetch(routes.api.companies.activateAccount(id, token), {
             method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Token ${localStorage.getItem('token')}`,
-            },
+            headers: {'Content-Type': 'application/json',},
         })
             .then(response => response.json())
             .then(data => {
                 if (data.status) {
-                    statusMessage.success(data.message);
-                    navigate('/new/confirm-agreement/');
+                    if (data.message === 'Email already confirmed!') {
+                        statusMessage.success(`${data.message} Please login.`);
+                        setToken('');
+                        navigate('/');
+                    } else {
+                        statusMessage.success(data.message);
+                        setToken(data.token);
+                        navigate('/new/confirm-agreement/');
+                    }
                 } else {
-                    statusMessage.error(data.message);
-                    console.error('Error:', data.message);
-                    navigate('/dashboard/');
+                    statusMessage.error(data.detail || data.message);
+                    console.error('Error:', data.detail);
                 }
             })
             .catch(error => {
