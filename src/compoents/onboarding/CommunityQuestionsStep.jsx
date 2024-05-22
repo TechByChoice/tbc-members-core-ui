@@ -6,7 +6,9 @@ import { getDropDrownItems } from '@/api-calls';
 
 const filter = createFilterOptions();
 
-function CommunityQuestionsStep({ questions, handleAutocompleteChange, handleInputChange }) {
+function CommunityQuestionsStep({
+    questions, handleAutocompleteChange, handleInputChange, handleInputCheckboxChange 
+}) {
     const [ communityNeeds, setSetCommunityNeeds ] = useState([]);
     const [ connectionMade, setConnectionMade ] = useState([]);
 
@@ -44,13 +46,13 @@ function CommunityQuestionsStep({ questions, handleAutocompleteChange, handleInp
 
             <Grid item xs={12}>
                 <FormControl>
-                    <FormControlLabel control={<Checkbox onChange={handleInputChange} name="is_mentor" />} label="Would you like to be a mentor?" />
+                    <FormControlLabel control={<Checkbox onChange={handleInputCheckboxChange} name="is_mentor" />} label="Would you like to be a mentor?" />
                 </FormControl>
             </Grid>
 
             <Grid item xs={12}>
                 <FormControl>
-                    <FormControlLabel control={<Checkbox onChange={handleInputChange} name="is_mentee" />} label="Would you like to have a mentor?" />
+                    <FormControlLabel control={<Checkbox onChange={handleInputCheckboxChange} name="is_mentee" />} label="Would you like to have a mentor?" />
                 </FormControl>
             </Grid>
 
@@ -78,9 +80,7 @@ function CommunityQuestionsStep({ questions, handleAutocompleteChange, handleInp
                         id="tbc_program_interest"
                         aria-labelledby="tbc_program_interest-label"
                         options={communityNeeds || []} // <-- directly provide a default value here
-                        isOptionEqualToValue={(option, value) =>
-                            (option.inputValue && value.inputValue && option.inputValue === value.inputValue) || option === value
-                        }
+                        isOptionEqualToValue={(option, value) => (option.inputValue && value.inputValue && option.inputValue === value.inputValue) || option === value}
                         getOptionLabel={option => {
                             if (typeof option === 'string') {
                                 return option;

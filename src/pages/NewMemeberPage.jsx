@@ -112,6 +112,15 @@ export default function NewMemberPage() {
         setAnswers(prev => ({ ...prev, [name]: value }));
     };
 
+    const handleInputCheckboxChange = e => {
+        const { name, value } = e.target;
+        let isSet = false;
+        if (value === 'on') {
+            isSet = true;
+        }
+        setAnswers(prev => ({ ...prev, [name]: isSet }));
+    };
+
     const handleFileChange = e => {
         if (!e) {
             return;
@@ -180,6 +189,7 @@ export default function NewMemberPage() {
                         formErrors={formErrors}
                         handleAutocompleteChange={handleAutocompleteChange}
                         handleInputChange={handleInputChange}
+                        handleInputCheckboxChange={handleInputCheckboxChange}
                         handleFileChange={handleFileChange}
                         questions={questions}
                         answers={answers}
@@ -278,10 +288,10 @@ export default function NewMemberPage() {
 
     useEffect(() => {
         // move user to dashboard if the user doesn't
-        if (user[0]?.account_info?.is_member_onboarding_complete) {
-            statusMessage.info("You've completed onboarding and no longer have access to this screen.");
-            navigate('/dashboard', { replace: false });
-        }
+        // if (user[0]?.account_info?.is_member_onboarding_complete) {
+        //     statusMessage.info("You've completed onboarding and no longer have access to this screen.");
+        //     navigate('/dashboard', { replace: false });
+        // }
     }, [ user ]);
 
     return (
