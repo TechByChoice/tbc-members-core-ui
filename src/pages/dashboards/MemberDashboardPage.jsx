@@ -42,6 +42,8 @@ export default function MemberDashboard() {
     const isTablet = useMediaQuery(theme.breakpoints.down('md'));
     const { user } = useAuth();
     const reviewAccess = user[0]?.account_info?.is_company_review_access_active;
+    const isNeedsToSubmitMentorshipApplication =
+        (user[0]?.account_info?.is_mentor_application_submitted && user[0]?.account_info?.is_mentee) || user[0]?.account_info?.is_mentor;
 
     useEffect(() => {
         fetch(routes.api.events.list(), {
@@ -131,6 +133,17 @@ export default function MemberDashboard() {
         <>
             <Grid container spacing={3}>
                 {/* Top three items */}
+                {isNeedsToSubmitMentorshipApplication && (
+                    <Grid item xs={12} sm={reviewAccess ? 4 : 6}>
+                        <FeatureCard
+                            image="https://uploads-ssl.webflow.com/5fc123904bcd576087dd38e2/6608a822eef4f37b6097e8e8_Event%20Icon%20(1).png"
+                            subTitle="Mentorship Program"
+                            linkEndpoint="/mentor/create"
+                            btnText="Apply"
+                            title="Apply to Today"
+                        />
+                    </Grid>
+                )}
                 <Grid item xs={12} sm={reviewAccess ? 4 : 6}>
                     <FeatureCard
                         image="https://uploads-ssl.webflow.com/5fc123904bcd576087dd38e2/6608a822eef4f37b6097e8e8_Event%20Icon%20(1).png"
