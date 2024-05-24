@@ -33,6 +33,7 @@ export default function TipTapEditor({
         ],
         onUpdate: ({ editor }) => {
             onFormDataChange(id, editor.getHTML());
+            console.log('TEST: ', id, editor.getHTML());
         },
     });
     // Set editor content when `value` prop changes

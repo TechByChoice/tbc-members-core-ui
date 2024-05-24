@@ -15,6 +15,7 @@ import FormMentorProfile from '../compoents/mentorship/FormMentorProfile';
 import FormMentorshipValues from '../compoents/mentorship/FormMentorshipValues';
 import { useStatusMessage } from '../hooks/useStatusMessage';
 import { routes } from '@/lib/routes';
+import { useNavigate } from 'react-router';
 
 const steps = [
     'Commitment Level',
@@ -79,9 +80,10 @@ export default function NewMentorPage() {
     const [ hasCompleted, setHasCompleted ] = React.useState(false);
     const [ activeStep, setActiveStep ] = React.useState(0);
     const statusMessage = useStatusMessage();
+    const navigate = useNavigate();
 
     const [ formData, setFormData ] = React.useState({
-        commitmentLevel: null,
+        commitmentQuestions: null,
         careerQuestions: null,
         values: null,
         profile: null,
@@ -93,7 +95,7 @@ export default function NewMentorPage() {
 
         const newFormDataState = { ...formData };
         const keyMap = {
-            [STEP_COMMITMENT_LEVEL]: 'commitmentLevel',
+            [STEP_COMMITMENT_LEVEL]: 'commitmentQuestions',
             [STEP_CAREER_QUESTIONS]: 'careerQuestions',
             [STEP_VALUES]: 'values',
             [STEP_PROFILE]: 'profile',
@@ -117,7 +119,9 @@ export default function NewMentorPage() {
                     onFormDataChange={newData => onFormDataChange(STEP_COMMITMENT_LEVEL, newData)}
                 />
             ),
-            [STEP_CAREER_QUESTIONS]: () => <FormMentorCareer onFormDataChange={newData => onFormDataChange(STEP_CAREER_QUESTIONS, newData)} />,
+            [STEP_CAREER_QUESTIONS]: () => (
+                <FormMentorCareer mainFormData={formData} setMainFormData={setFormData} onFormDataChange={newData => onFormDataChange(STEP_CAREER_QUESTIONS, newData)} />
+            ),
             [STEP_VALUES]: () => <FormMentorshipValues onFormDataChange={newData => onFormDataChange(STEP_VALUES, newData)} />,
             [STEP_PROFILE]: () => <FormMentorProfile questions={null} defaultData={null} setFormData={setFormData} formData={formData} formErrors={null} />,
         };
@@ -137,13 +141,16 @@ export default function NewMentorPage() {
                     headers: {
                         'Content-Type': 'application/json',
                         Authorization: `Token ${localStorage.getItem('token')}`,
-                        // 'credentials': 'include',
                     },
                     body: JSON.stringify(data),
                 });
 
                 if (!response.status) {
                     throw new Error('Network response was not ok');
+                } else {
+                    if (steps.length === activeStep) {
+                        navigate('/dashboard');
+                    }
                 }
 
                 return await response.json();
@@ -154,7 +161,7 @@ export default function NewMentorPage() {
         };
 
         const saveStepHandlerMap = {
-            [STEP_COMMITMENT_LEVEL]: async () => await saveStepToEndpoint(routes.api.mentors.signup.commitmentLevel(), formData.commitmentLevel),
+            [STEP_COMMITMENT_LEVEL]: async () => await saveStepToEndpoint(routes.api.mentors.signup.commitmentLevel(), formData.commitmentQuestions),
             [STEP_CAREER_QUESTIONS]: async () => await saveStepToEndpoint(routes.api.mentors.signup.career(), formData.careerQuestions),
             [STEP_VALUES]: async () => await saveStepToEndpoint(routes.api.mentors.signup.values(), formData.values),
             [STEP_PROFILE]: async () => await saveStepToEndpoint(routes.api.mentors.signup.profile(), formData.profile),

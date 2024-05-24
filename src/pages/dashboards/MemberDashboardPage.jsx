@@ -42,8 +42,8 @@ export default function MemberDashboard() {
     const isTablet = useMediaQuery(theme.breakpoints.down('md'));
     const { user } = useAuth();
     const reviewAccess = user[0]?.account_info?.is_company_review_access_active;
-    const isNeedsToSubmitMentorshipApplication =
-        (user[0]?.account_info?.is_mentor_application_submitted && user[0]?.account_info?.is_mentee) || user[0]?.account_info?.is_mentor;
+    const isMentorshipProgram = user[0]?.account_info?.is_mentee || user[0]?.account_info?.is_mentor;
+    const isNeedsToSubmitMentorshipApplication = !user[0]?.account_info?.is_mentor_application_submitted && isMentorshipProgram;
 
     useEffect(() => {
         fetch(routes.api.events.list(), {

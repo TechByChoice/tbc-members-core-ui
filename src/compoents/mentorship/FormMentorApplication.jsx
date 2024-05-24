@@ -15,7 +15,10 @@ export default function FormMentorApplication({
     const { accountDetails } = useAuth();
 
     useEffect(() => {
-        fetch(routes.api.mentors.getDetails('commitment_level&fields=mentor_support_areas'))
+        fetch(routes.api.mentors.getDetails('commitment_level&fields=mentor_support_areas'), {
+            method: 'GET',
+            headers: { Authorization: `Token ${localStorage.getItem('token')}` },
+        })
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
@@ -35,8 +38,11 @@ export default function FormMentorApplication({
         // Call the function passed from the parent component to update the formData state
         setFormData(preValue => ({
             ...preValue,
-            commitment_level_id: newValue.map(item => item.id),
-            commitment_level: newValue,
+            commitmentQuestions: {
+                ...preValue.commitmentQuestions,
+                commitment_level_id: newValue.map(item => item.id),
+                commitment_level: newValue,
+            },
         }));
     };
 
@@ -44,8 +50,11 @@ export default function FormMentorApplication({
         // Call the function passed from the parent component to update the formData state
         setFormData(preValue => ({
             ...preValue,
-            mentor_support_areas_id: newValue.map(item => item.id),
-            mentor_support_areas: newValue,
+            commitmentQuestions: {
+                ...preValue.commitmentQuestions,
+                mentor_support_areas_id: newValue.map(item => item.id),
+                mentor_support_areas: newValue,
+            },
         }));
     };
 
@@ -53,8 +62,11 @@ export default function FormMentorApplication({
         // Call the function passed from the parent component to update the formData state
         setFormData(preValue => ({
             ...preValue,
-            mentee_support_areas_id: newValue.map(item => item.id),
-            mentee_support_areas: newValue,
+            commitmentQuestions: {
+                ...preValue.commitmentQuestions,
+                mentee_support_areas_id: newValue.map(item => item.id),
+                mentee_support_areas: newValue,
+            },
         }));
     };
 
@@ -69,9 +81,9 @@ export default function FormMentorApplication({
                     <Grid item xs={4}>
                         <Grid container>
                             <Grid item xs={12} sm={8} spacing={3} mt={3}>
-                                <Typography variant="body">
-                                    We want to match you with a mentee who shares your values and beliefs, so we would love to learn more about you! Please
-                                    take a moment to answer the following questions regarding your personal values.
+                                <Typography variant="body1">
+                                    We want to match you with a mentee who shares your values and beliefs, so we would love to learn more about you! Please take a moment
+                                    to answer the following questions regarding your personal values.
                                 </Typography>
                             </Grid>
                         </Grid>
@@ -88,7 +100,7 @@ export default function FormMentorApplication({
                                         onChange={handleCommitmentLevelChange}
                                         id="combo-box-demo"
                                         options={commitmentQuestions}
-                                        value={formData?.commitment_level || []}
+                                        value={formData?.commitmentQuestions?.commitment_level || []}
                                         getOptionLabel={option => {
                                             return option ? option.name : '';
                                         }}
@@ -106,7 +118,7 @@ export default function FormMentorApplication({
                                         selectOnFocus
                                         includeInputInList
                                         handleHomeEndKeys
-                                        value={formData?.mentor_support_areas || []}
+                                        value={formData?.commitmentQuestions?.mentor_support_areas || []}
                                         id="mentor_support_areas"
                                         aria-labelledby="mentor_support_areas-label"
                                         options={supportAreas || []} // <-- directly provide a default value here
@@ -128,7 +140,7 @@ export default function FormMentorApplication({
                                             selectOnFocus
                                             includeInputInList
                                             handleHomeEndKeys
-                                            value={formData?.mentee_support_areas || []}
+                                            value={formData?.commitmentQuestions?.mentee_support_areas || []}
                                             id="mentee_support_areas"
                                             aria-labelledby="mentee_support_areas-label"
                                             options={supportAreas || []}
