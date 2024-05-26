@@ -267,11 +267,12 @@ export default function NewMemberPage() {
                 return response.json();
             })
             .then(data => {
-                // Handle the successful JSON response here, e.g.:
-                statusMessage.success("You're in!");
-                fetchUserDetails().then(() => {
-                    history('/dashboard');
-                });
+                if (data.status) {
+                    statusMessage.success("You're in!");
+                    fetchUserDetails().then(() => {
+                        history('/dashboard');
+                    });
+                }
             })
             .catch(error => {
                 console.error('Fetch error:', error);

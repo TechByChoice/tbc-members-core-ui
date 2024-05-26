@@ -7,12 +7,12 @@ import { routes } from '@/lib/routes';
 const filter = createFilterOptions();
 
 export default function FormMentorApplication({
-    formData, setFormData, defaultValues = false, onFormDataChange 
+    formData, setFormData, defaultValues, onFormDataChange 
 }) {
     const [ commitmentQuestions, setCommitmentQuestions ] = useState([]);
     const [ newData, setNewData ] = useState([]);
     const [ supportAreas, setSupportAreas ] = useState();
-    const { accountDetails } = useAuth();
+    const { accountDetails, user } = useAuth();
 
     useEffect(() => {
         fetch(routes.api.mentors.getDetails('commitment_level&fields=mentor_support_areas'), {
@@ -33,6 +33,22 @@ export default function FormMentorApplication({
                 console.error('Fetch error:', error);
             });
     }, []);
+
+    useEffect(() => {
+        // Initialize formData with defaultValues when the component mounts or defaultValues change
+        if (defaultValues) {
+            setFormData(prevValue => ({
+                commitmentQuestions: {
+                    commitment_level: defaultValues?.mentor_profile?.mentor_commitment_level || [],
+                    mentor_support_areas: defaultValues?.mentor_support_areas || [],
+                    mentee_support_areas: defaultValues?.mentee_profile?.mentee_support_areas || [],
+                    commitment_level_id: defaultValues?.mentor_profile?.mentor_commitment_level?.map(item => item.id) || [],
+                    mentor_support_areas_id: defaultValues?.mentor_support_areas?.map(item => item.id) || [],
+                    mentee_support_areas_id: defaultValues?.mentee_profile?.mentee_support_areas?.map(item => item.id) || [],
+                },
+            }));
+        }
+    }, [ defaultValues, setFormData ]);
 
     const handleCommitmentLevelChange = (event, newValue) => {
         // Call the function passed from the parent component to update the formData state

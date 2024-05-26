@@ -5,7 +5,7 @@ import TipTapEditor from '../TipTapEditor';
 import { useAuth } from '@/providers/AuthProvider';
 
 export default function FormMentorProfile({
-    questions, formErrors, formData, setFormData, defaultData 
+    questions, formErrors, formData, setFormData, defaultData, defaultValues 
 }) {
     const { user } = useAuth();
     const handleQuillChange = (editorId, content) => {
@@ -42,7 +42,11 @@ export default function FormMentorProfile({
                                         <FormLabel id="mentorship_goals">
                                             What goals do you have as a mentor and how do you see yourself making a positive impact?
                                         </FormLabel>
-                                        <TipTapEditor value={defaultData?.mentorship_goals} id="mentorship_goals" onFormDataChange={handleQuillChange} />
+                                        <TipTapEditor
+                                            value={defaultValues?.mentor_profile?.mentorship_goals}
+                                            id="mentorship_goals"
+                                            onFormDataChange={handleQuillChange}
+                                        />
                                     </FormControl>
                                 </Grid>
 
@@ -51,7 +55,11 @@ export default function FormMentorProfile({
                                         <FormLabel id="mentor_how_to_help">
                                             In what ways would you like to contribute and support your mentee&apos;s growth and development?
                                         </FormLabel>
-                                        <TipTapEditor value={defaultData?.mentor_how_to_help} id="mentor_how_to_help" onFormDataChange={handleQuillChange} />
+                                        <TipTapEditor
+                                            value={defaultValues?.mentor_profile?.mentor_how_to_help}
+                                            id="mentor_how_to_help"
+                                            onFormDataChange={handleQuillChange}
+                                        />
                                     </FormControl>
                                 </Grid>
                             </Grid>
@@ -79,14 +87,14 @@ export default function FormMentorProfile({
                                 <Grid item xs={12}>
                                     <FormControl fullWidth>
                                         <FormLabel id="mentorship_goals">What are some of your long-term career goals?</FormLabel>
-                                        <TipTapEditor value={defaultData?.long_term_career_goals} id="long_term_career_goals" onFormDataChange={handleQuillChange} />
+                                        <TipTapEditor value={defaultValues?.career_goals} id="long_term_career_goals" onFormDataChange={handleQuillChange} />
                                     </FormControl>
                                 </Grid>
 
                                 <Grid item xs={12}>
                                     <FormControl fullWidth>
                                         <FormLabel id="mentor_how_to_help">What keeps you motivated at work?</FormLabel>
-                                        <TipTapEditor value={defaultData?.what_motivated_at_work} id="what_motivated_at_work" onFormDataChange={handleQuillChange} />
+                                        <TipTapEditor value={defaultValues?.work_motivation} id="what_motivated_at_work" onFormDataChange={handleQuillChange} />
                                     </FormControl>
                                 </Grid>
                             </Grid>

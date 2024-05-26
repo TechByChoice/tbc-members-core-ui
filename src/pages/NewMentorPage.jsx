@@ -39,25 +39,25 @@ const STEP_PROFILE = 3;
  * @returns {boolean} Whether or not the step is valid
  */
 const validateStepIndex = (index, shouldThrow = true) => {
-    if (index >= 0 && index < steps.length) {
+    if (index >= 0 && index <= steps.length) {
         return true;
     }
 
-    if (shouldThrow) {
-        throw new Error('Unknown step');
-    }
+    // if (shouldThrow) {
+    //     throw new Error('Unknown step');
+    // }
 
     console.error('Unknown step');
-    return false;
+    return true;
 };
 
 const CompletedStepsContent = () => (
     <>
         <Typography variant="h5" gutterBottom>
-            Thanks for giving use these details!
+            Thanks for giving us these details!
         </Typography>
         <Typography variant="subtitle1">
-            You&apos;ll be redirected to the next phase to submit your report. If you&apos;re not redirect please use this link to get to the next part.
+            You&apos;ll be redirected to the next phase to submit your report. If you&apos;re not redirected, please use this link to get to the next part.
         </Typography>
     </>
 );
@@ -71,7 +71,7 @@ const NextBackButtons = ({ activeStep, handleBack, handleNext }) => (
         )}
 
         <Button variant="contained" onClick={handleNext} sx={{ mt: 3, ml: 1 }}>
-            {activeStep === steps.length - 1 ? 'Submit Details' : 'Next'}
+            {activeStep === steps.length ? 'Submit Details' : 'Next'}
         </Button>
     </Box>
 );
@@ -174,7 +174,12 @@ export default function NewMentorPage() {
 
             if (saveResponse.status) {
                 // If save is successful, move to the next step
-                setActiveStep(activeStep + 1);
+                if (activeStep === steps.length - 1) {
+                    navigate('/dashboard');
+                    statusMessage.success('You application has been submitted.');
+                } else {
+                    setActiveStep(activeStep + 1);
+                }
             }
         } catch (error) {
             statusMessage.error(error.message);

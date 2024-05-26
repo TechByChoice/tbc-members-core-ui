@@ -1,22 +1,17 @@
-import {Autocomplete,
-    Button,
-    Checkbox,
-    FormControl,
-    FormControlLabel,
-    FormHelperText,
-    FormLabel,
-    Grid,
-    OutlinedInput,
-    TextField,
-    Typography,} from '@mui/material';
+import { Autocomplete, Button, Checkbox, FormControl, FormControlLabel, FormHelperText, FormLabel, Grid, OutlinedInput, TextField, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { createFilterOptions } from '@mui/material/Autocomplete';
+import TipTapEditor from '@/compoents/TipTapEditor';
 
 const filter = createFilterOptions();
 
 export default function FormMenteeApplication({
-    handleChange, questions, formErrors, formData 
+    questions, formErrors, formData, setFormData, defaultData 
 }) {
+    const handleQuillChange = (editorId, content) => {
+        const newFormData = { ...formData, [editorId]: content };
+        setFormData(newFormData);
+    };
     function handleSave() {
         console.log('saved');
     }
@@ -25,18 +20,19 @@ export default function FormMenteeApplication({
         <>
             <Grid container>
                 <Grid item xs={12}>
-                    <Typography variant="h6">Mentee Application</Typography>
+                    <Typography variant="h6">Your Mentee Profile</Typography>
                     <hr />
                 </Grid>
                 <Grid item xs={12} md={4} spacing={3} mt={3}>
-                    <Typography variant="body">Update how and when we reach out to you</Typography>
+                    <Typography variant="body1">The following questions will be displayed on your mentee profile.</Typography>
                 </Grid>
                 <Grid item xs={8}>
                     <Grid container>
                         {/* Checkbox for Community Updates */}
                         <Grid item xs={12}>
-                            <FormControl>
-                                <FormControlLabel control={<Checkbox onChange={handleChange} name="marketing_org_updates" />} label="Community Updates" />
+                            <FormControl fullWidth>
+                                <FormLabel id="mentorship_goals">What goals do you have as a mentor and how do you see yourself making a positive impact?</FormLabel>
+                                <TipTapEditor error={false} value={defaultData?.mentorship_goals} id="mentorship_goals" onFormDataChange={handleQuillChange} />
                             </FormControl>
                         </Grid>
                         <Grid item xs={12} sm={8}>

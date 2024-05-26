@@ -27,15 +27,18 @@ export default function ProfileMentorship({ questions }) {
     // Update formData when userData changes
     useEffect(() => {
         // commitment_level: userData.mentor_details.commitment_level || [],
-        if (userData?.mentor_details) {
-            setFormData({
-                commitment_level: userData?.mentor_details?.mentor_profile?.mentor_commitment_level || [],
-                mentee_support_areas: userData?.mentor_details?.mentee_support_areas || [],
-                mentor_support_areas: userData?.mentor_details?.mentor_support_areas || [],
-                commitment_level_id: userData?.mentor_details?.mentor_profile?.mentor_commitment_level.map(item => item.id) || [],
-                mentee_support_areas_id: userData?.mentor_details?.mentee_support_areas?.map(item => item.id) || [],
-                mentor_support_areas_id: userData?.mentor_details?.mentor_support_areas?.map(item => item.id) || [],
-            });
+        if (userData?.mentor_data) {
+            setFormData(preValue => ({
+                ...preValue,
+                commitmentQuestions: {
+                    commitment_level: userData?.mentor_data?.mentor_profile?.mentor_commitment_level || [],
+                    mentee_support_areas: userData?.mentor_data?.mentee_support_areas || [],
+                    mentor_support_areas: userData?.mentor_data?.mentor_support_areas || [],
+                    commitment_level_id: userData?.mentor_data?.mentor_profile?.mentor_commitment_level.map(item => item.id) || [],
+                    mentee_support_areas_id: userData?.mentor_data?.mentee_support_areas?.map(item => item.id) || [],
+                    mentor_support_areas_id: userData?.mentor_data?.mentor_support_areas?.map(item => item.id) || [],
+                },
+            }));
         }
     }, [ userData ]);
 
@@ -66,16 +69,11 @@ export default function ProfileMentorship({ questions }) {
             <Grid container>
                 {user[0]?.account_info?.is_mentor ? (
                     <>
-                        <FormMentorApplication
-                            defaultValues={user[0]?.mentor_details}
-                            formData={formData}
-                            setFormData={setFormData}
-                            questions={questions}
-                        />
+                        <FormMentorApplication defaultValues={user[0]?.mentor_details} formData={formData} setFormData={setFormData} onFormDataChange={undefined} />
                         <Button variant="contained" color="primary" onClick={handelFormSubmit}>
                             Save
                         </Button>
-                        <ProfileMentorDetails />
+                        <ProfileMentorDetails defaultValues={user[0]?.mentor_details} />
                         {!user[0]?.account_info?.is_mentor_profile_active ||
                             (user[0]?.account_info?.is_mentor_profile_approved && user[0].mentor_details && (
                                 <>

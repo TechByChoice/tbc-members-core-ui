@@ -2,12 +2,12 @@ import { FormControl, FormLabel, Grid, Typography } from '@mui/material';
 import React, { useState } from 'react';
 import { RichTextEditor } from '../RichTextEditor';
 
-const FormQuestion = (question, propName, onUpdate) => {
+const FormQuestion = ({ question, propName, onUpdate }) => {
     return (
         <>
             <Grid item xs={12}>
                 <FormControl fullWidth>
-                    <FormLabel id="company-label">{question.question}</FormLabel>
+                    <FormLabel id="company-label">{question}</FormLabel>
                     <RichTextEditor onFormDataChange={onUpdate} id={propName} />
                 </FormControl>
             </Grid>
@@ -16,14 +16,6 @@ const FormQuestion = (question, propName, onUpdate) => {
 };
 
 const questions = [
-    {
-        question: 'What do you consider to be your biggest strengths in your current role?',
-        propName: 'biggest_strengths',
-    },
-    {
-        question: 'What do you believe is the key to success in your career?',
-        propName: 'career_success',
-    },
     {
         question: 'What are your biggest career milestones and things you would like to celebrate?',
         propName: 'career_milestones',
@@ -38,19 +30,22 @@ const questions = [
     },
 ];
 
-export default function FormMentorCareer({ onFormDataChange }) {
+export default function FormMentorCareer({ onFormDataChange, setMainFormData, mainFormData }) {
     const [ formData, setFormData ] = useState({
-        biggest_strengths: '',
-        career_success: '',
         career_milestones: '',
         career_goals: '',
         work_motivation: '',
     });
 
     const handleEditorUpdate = (editorId, content) => {
-        const newFormData = { ...formData, [editorId]: content };
+        const updatedCareerData = { ...mainFormData.careerQuestions, [editorId]: content };
+        const newFormData = { ...formData, careerQuestions: updatedCareerData };
+        console.log('updatedCareerData', updatedCareerData);
         setFormData(newFormData);
-        onFormDataChange(newFormData);
+        setMainFormData(prevMainFormData => ({
+            ...prevMainFormData,
+            careerQuestions: updatedCareerData,
+        }));
     };
 
     return (
@@ -63,9 +58,9 @@ export default function FormMentorCareer({ onFormDataChange }) {
                 <Grid item xs={4}>
                     <Grid container>
                         <Grid item xs={10} sm={10}>
-                            <Typography variant="body">
-                                Let&apos;s get to know you better! Your career success and goals are essential in matching you with a mentee who shares a
-                                similar path. Please take a moment to answer the following career based questions below.
+                            <Typography variant="body1">
+                                Let&apos;s get to know you better! Your career success and goals are essential in matching you with a mentee who shares a similar path.
+                                Please take a moment to answer the following career based questions below.
                             </Typography>
                         </Grid>
                     </Grid>
@@ -74,7 +69,7 @@ export default function FormMentorCareer({ onFormDataChange }) {
                 <Grid item xs={8}>
                     <Grid container>
                         {questions.map(q => (
-                            <FormQuestion key={q.propName} {...q} onUpdate={handleEditorUpdate} />
+                            <FormQuestion key={q.propName} question={q.question} propName={q.propName} onUpdate={handleEditorUpdate} />
                         ))}
                     </Grid>
                 </Grid>

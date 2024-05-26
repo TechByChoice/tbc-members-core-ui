@@ -66,29 +66,17 @@ export default function FormMentorshipValues({ onFormDataChange }) {
                     <hr />
                 </Grid>
                 <Grid item xs={12} md={4} spacing={3} mt={3}>
-                    <Typography variant="body">
-                        We want to match you with a mentee who shares your values and beliefs, so we would love to learn more about you! Please take a
-                        moment to answer the following questions regarding your personal values.
+                    <Typography variant="body1">
+                        We want to match you with a mentee who shares your values and beliefs, so we would love to learn more about you! Please take a moment to answer
+                        the following questions regarding your personal values.
                     </Typography>
                 </Grid>
                 <Grid item xs={8}>
                     <Grid container>
                         <ValueItem description="POWER (social power, authority, wealth)" name="power" onChange={handleChange} />
-                        <ValueItem
-                            description="ACHIEVEMENT (success, capability, ambition, influence on people and events)"
-                            name="achievement"
-                            onChange={handleChange}
-                        />
-                        <ValueItem
-                            description="HEDONISM (gratification of desires, enjoyment in life, self-indulgence)"
-                            name="hedonism"
-                            onChange={handleChange}
-                        />
-                        <ValueItem
-                            description="STIMULATION (daring, a varied and challenging life, an exciting life)"
-                            name="stimulation"
-                            onChange={handleChange}
-                        />
+                        <ValueItem description="ACHIEVEMENT (success, capability, ambition, influence on people and events)" name="achievement" onChange={handleChange} />
+                        <ValueItem description="HEDONISM (gratification of desires, enjoyment in life, self-indulgence)" name="hedonism" onChange={handleChange} />
+                        <ValueItem description="STIMULATION (daring, a varied and challenging life, an exciting life)" name="stimulation" onChange={handleChange} />
                         <ValueItem
                             description="SELF DIRECTION (creativity, freedom, curiosity, independence, choosing one’s own goals)"
                             name="selfDirection"
@@ -99,11 +87,7 @@ export default function FormMentorshipValues({ onFormDataChange }) {
                             name="universalism"
                             onChange={handleChange}
                         />
-                        <ValueItem
-                            description="BENEVOLENCE (helpfulness, honesty, forgiveness, loyalty, responsibility)"
-                            name="benevolence"
-                            onChange={handleChange}
-                        />
+                        <ValueItem description="BENEVOLENCE (helpfulness, honesty, forgiveness, loyalty, responsibility)" name="benevolence" onChange={handleChange} />
                         <ValueItem
                             description="TRADITION (respect for tradition, humbleness, accepting one's portion in life, devotion, modesty)"
                             name="tradition"

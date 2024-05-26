@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { createFilterOptions } from '@mui/material/Autocomplete';
 import FormMentorProfile from '../mentorship/FormMentorProfile';
 import { Button, Grid } from '@mui/material';
 import { useAuth } from '../../providers/AuthProvider';
 import { routes } from '../../lib/routes';
 
-export default function ProfileMentorDetails() {
+export default function ProfileMentorDetails({ defaultValues }) {
     const [ formData, setFormData ] = useState({});
     const { user, token } = useAuth();
 
@@ -35,7 +35,7 @@ export default function ProfileMentorDetails() {
     return (
         <>
             <>
-                <FormMentorProfile defaultData={user[0]?.mentor_details?.mentor_profile} formData={formData} setFormData={setFormData} />
+                <FormMentorProfile defaultValues={user[0]?.mentor_data} formData={formData} setFormData={setFormData} />
                 <Grid item xs={12} sm={8}>
                     <Button variant="contained" color="primary" onClick={handleSave}>
                         Save
