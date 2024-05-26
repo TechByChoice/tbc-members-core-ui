@@ -511,6 +511,7 @@ function ViewMemberProfile() {
         </Grid>
     );
     const renderUserSpecificCard = () => {
+        // Admin view on handeling a mentors profile
         if (loggedInUser?.account_info?.is_staff) {
             if (memberData?.data?.user?.is_mentor_profile_active) {
                 return renderPauseMentoringCard();
@@ -526,21 +527,28 @@ function ViewMemberProfile() {
                 return renderStaffReviewCard();
             }
         }
-
+        // If the user viewing is the onwer of this profile
         if (isOwnProfile && memberData?.data?.user?.is_mentor) {
             if (
                 memberData?.data?.user?.is_mentor_profile_approved &&
                 !memberData?.data?.mentorship_program?.calendar_link &&
                 !memberData?.data?.user?.is_mentor_profile_active
             ) {
+                // if account is approved but not active because they don't have a calendar link
                 return renderSetBookingLinkCard();
             }
             // data.mentorship_program.calendar_link
             if (memberData?.data?.mentorship_program?.calendar_link && memberData?.data?.user?.is_mentor_profile_active) {
+                // Account is active and people can book with them so the mentor can pause mentorship
                 return renderPauseMentoringCard();
-            } else if (memberData?.data?.user?.is_mentor_application_submitted && !memberData?.data?.user?.is_mentor_interviewing) {
+            } else if (
+                memberData?.data?.mentorship_program?.mentor_profile?.user?.is_mentor_application_submitted &&
+                !memberData?.data?.mentorship_program?.mentor_profile?.user?.is_mentor_interviewing
+            ) {
+                // Mentorship application submitted and we're reviewing the app
                 return renderApplicationReviewCard();
             } else if (memberData?.data?.user?.is_mentor_interviewing && !memberData?.data?.is_mentor_profile_approved) {
+                // Mentorship application submitted and we want to interview them
                 return renderSentInterviewCard();
             } else {
                 return renderMentorEdgeCaseStateCard();
