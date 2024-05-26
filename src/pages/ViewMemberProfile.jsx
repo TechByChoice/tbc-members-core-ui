@@ -110,6 +110,22 @@ function ViewMemberProfile() {
         </Card>
     );
 
+    const renderCompleteAppCard = () => (
+        <Card>
+            <CardContent>
+                <Typography variant="h6">Please complete the mentorship application!</Typography>
+                <Typography variant="body1">
+                    When you created your account you shared you wanted to be apart of the mentorship program. Please complete the application to get access to our
+                    mentorship program.
+                </Typography>
+                <Link to="/mentor/create">
+                    {' '}
+                    <strong>Apply to Program </strong>
+                </Link>
+            </CardContent>
+        </Card>
+    );
+
     const renderSentInterviewCard = () => (
         <Card>
             <CardContent>
@@ -529,30 +545,42 @@ function ViewMemberProfile() {
         }
         // If the user viewing is the onwer of this profile
         if (isOwnProfile && memberData?.data?.user?.is_mentor) {
-            if (
-                memberData?.data?.user?.is_mentor_profile_approved &&
-                !memberData?.data?.mentorship_program?.calendar_link &&
-                !memberData?.data?.user?.is_mentor_profile_active
-            ) {
+            const {
+                user,
+                mentorship_program: { calendar_link, mentor_profile },
+            } = memberData?.data || {};
+
+            const {
+                is_mentor_profile_approved, is_mentor_profile_active, is_mentor_application_submitted, is_mentor_interviewing 
+            } = user || {};
+            // alert((!is_mentor_ap) + ' ' + !is_mentor_application_submitted + ' ' +is_mentor_interviewing)
+            if (calendar_link && is_mentor_profile_active) {
+                // Account is active and people can book with them so the mentor can pause mentorship
+                return renderPauseMentoringCard();
+            }
+
+            if (is_mentor_profile_approved && !calendar_link && !is_mentor_profile_active) {
                 // if account is approved but not active because they don't have a calendar link
                 return renderSetBookingLinkCard();
             }
-            // data.mentorship_program.calendar_link
-            if (memberData?.data?.mentorship_program?.calendar_link && memberData?.data?.user?.is_mentor_profile_active) {
-                // Account is active and people can book with them so the mentor can pause mentorship
-                return renderPauseMentoringCard();
-            } else if (
-                memberData?.data?.mentorship_program?.mentor_profile?.user?.is_mentor_application_submitted &&
-                !memberData?.data?.mentorship_program?.mentor_profile?.user?.is_mentor_interviewing
-            ) {
-                // Mentorship application submitted and we're reviewing the app
-                return renderApplicationReviewCard();
-            } else if (memberData?.data?.mentorship_program?.mentor_profile?.user?.is_mentor_interviewing && !memberData?.data?.is_mentor_profile_approved) {
+
+            if (is_mentor_interviewing && !is_mentor_profile_approved) {
                 // Mentorship application submitted and we want to interview them
                 return renderSentInterviewCard();
-            } else {
-                return renderMentorEdgeCaseStateCard();
             }
+
+            if (is_mentor_application_submitted && !is_mentor_interviewing) {
+                // Mentorship application submitted and we're reviewing the app
+                return renderApplicationReviewCard();
+            }
+
+            if (!is_mentor_application_submitted && !is_mentor_interviewing) {
+                // User request to be in the mentorship program but hasn't submitted application
+                // They need to submit the application to get to the next step
+                return renderCompleteAppCard();
+            }
+
+            return renderMentorEdgeCaseStateCard();
         } else {
             if (memberData?.data?.user?.is_mentor && memberData?.data?.user?.is_mentor_profile_active && !loggedInUser?.account_info?.is_staff) {
                 if (isUserConnectedWithMentor) {
