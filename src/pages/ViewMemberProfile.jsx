@@ -412,7 +412,7 @@ function ViewMemberProfile() {
             )}
             {memberData?.data?.user_profile?.instagram && (
                 <Grid item>
-                    <IconButton href={memberData?.data?.user_profile?.instagram} target="_blank">
+                    <IconButton href={`https://instagram.com/${memberData?.data?.user_profile?.instagram}`} target="_blank">
                         <Instagram />
                     </IconButton>
                 </Grid>
@@ -426,7 +426,7 @@ function ViewMemberProfile() {
             )}
             {memberData?.data?.user_profile?.twitter && (
                 <Grid item>
-                    <IconButton href={memberData?.data?.user_profile?.twitter} target="_blank">
+                    <IconButton href={`https://twitter.com/${memberData?.data?.user_profile?.twitter}`} target="_blank">
                         <Twitter />
                     </IconButton>
                 </Grid>
@@ -520,10 +520,10 @@ function ViewMemberProfile() {
             if (!memberData?.data?.user?.is_mentor_profile_active && memberData?.data?.user?.is_mentor_profile_approved) {
                 return renderPauseMentoringCard();
             }
-            if (memberData?.data?.user?.is_mentor_interviewing) {
+            if (memberData?.data?.mentorship_program?.mentor_profile?.user?.is_mentor_interviewing) {
                 return renderStaffInterviewApprovalCard();
             }
-            if (memberData?.data?.user?.is_mentor_application_submitted) {
+            if (memberData?.data?.mentorship_program?.mentor_profile?.user?.is_mentor_application_submitted) {
                 return renderStaffReviewCard();
             }
         }
@@ -547,7 +547,7 @@ function ViewMemberProfile() {
             ) {
                 // Mentorship application submitted and we're reviewing the app
                 return renderApplicationReviewCard();
-            } else if (memberData?.data?.user?.is_mentor_interviewing && !memberData?.data?.is_mentor_profile_approved) {
+            } else if (memberData?.data?.mentorship_program?.mentor_profile?.user?.is_mentor_interviewing && !memberData?.data?.is_mentor_profile_approved) {
                 // Mentorship application submitted and we want to interview them
                 return renderSentInterviewCard();
             } else {
@@ -690,7 +690,7 @@ function ViewMemberProfile() {
                                 <HtmlContentRenderer htmlContent={memberData?.data?.user_profile?.bio} />
                             </Typography>
                             {/*{memberData?.data?.user?.is_mentor_profile_active && (*/}
-                            {memberData?.data?.user?.is_mentor && memberData?.data?.user?.is_mentor_profile_active && renderMentorProfileSection()}
+                            {memberData?.data?.user?.is_mentor && (memberData?.data?.user?.is_mentor_profile_active || isOwnProfile) && renderMentorProfileSection()}
                             <Container sx={{ mb: 3 }}>
                                 <Typography variant="h5">Skills:</Typography>
                                 {memberData?.data?.talent_profile?.skills && (
