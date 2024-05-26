@@ -274,7 +274,7 @@ function ViewMemberProfile() {
     );
 
     const handelInterviewRequest = () => {
-        const url = process.env.REACT_APP_API_BASE_URL + `mentorship/mentor/${id}/update-status/`;
+        const url = import.meta.env.VITE_APP_API_BASE_URL + `mentorship/mentor/${id}/update-status/`;
         fetch(url, {
             method: 'POST',
             headers: {
@@ -298,7 +298,7 @@ function ViewMemberProfile() {
     };
 
     const handelApproveMentor = () => {
-        const url = process.env.REACT_APP_API_BASE_URL + `mentorship/mentor/${id}/update-status/`;
+        const url = import.meta.env.VITE_APP_API_BASE_URL + `mentorship/mentor/${id}/update-status/`;
         fetch(url, {
             method: 'POST',
             headers: {
@@ -322,7 +322,7 @@ function ViewMemberProfile() {
     };
 
     const handelPauseMentorApplication = () => {
-        const url = process.env.REACT_APP_API_BASE_URL + `mentorship/mentor/${id}/update-status/`;
+        const url = import.meta.env.VITE_APP_API_BASE_URL + `mentorship/mentor/${id}/update-status/`;
         fetch(url, {
             method: 'POST',
             headers: {
@@ -346,7 +346,7 @@ function ViewMemberProfile() {
             });
     };
     const handelReactivateMentorApplication = () => {
-        const url = process.env.REACT_APP_API_BASE_URL + `mentorship/mentor/${id}/update-status/`;
+        const url = import.meta.env.VITE_APP_API_BASE_URL + `mentorship/mentor/${id}/update-status/`;
         fetch(url, {
             method: 'POST',
             headers: {
@@ -369,7 +369,7 @@ function ViewMemberProfile() {
             });
     };
     const handelSendReminderMentor = () => {
-        const url = process.env.REACT_APP_API_BASE_URL + `mentorship/mentor/${id}/update-status/`;
+        const url = import.meta.env.VITE_APP_API_BASE_URL + `mentorship/mentor/${id}/update-status/`;
         fetch(url, {
             method: 'POST',
             headers: {
@@ -394,7 +394,7 @@ function ViewMemberProfile() {
     };
 
     const handelMentorAppRejection = () => {
-        const url = process.env.REACT_APP_API_BASE_URL + `mentorship/mentor/${id}/update-status/`;
+        const url = import.meta.env.VITE_APP_API_BASE_URL + `mentorship/mentor/${id}/update-status/`;
         fetch(url, {
             method: 'POST',
             headers: {
