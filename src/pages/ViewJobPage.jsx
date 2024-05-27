@@ -271,7 +271,7 @@ function ViewJobPage({ userDetail, isLoading }) {
     );
 
     const renderApplyCard = () => {
-        if (userDetail) {
+        if (user) {
             return renderApplyNowCard();
         } else {
             return renderAnonymousUserCard();
