@@ -206,10 +206,18 @@ function ViewMemberProfile() {
                 </Typography>
                 <Typography variant="body1" component="p">
                     We&apos;ve requested an the mentor to schedule an interview on {memberData?.data?.mentorship_program?.mentor_profile?.interview_requested_at_date}.
-                    Once passed we can approve or reject them.
+                    Once interviewed, you can passed approve or reject them.
                 </Typography>
                 <Button onClick={handelApproveMentor} variant="contained" color="primary">
                     Approve Mentor
+                </Button>
+                <Button
+                    onClick={() => {
+                        setOpenRejectModal(true);
+                    }}
+                    variant="contained"
+                    color="error">
+                    Reject Mentor
                 </Button>
                 <Button onClick={handelSendReminderMentor} variant="contained" color="primary">
                     Send Interview Reminder
@@ -528,7 +536,12 @@ function ViewMemberProfile() {
     );
     const renderUserSpecificCard = () => {
         // Admin view on handeling a mentors profile
+
         if (loggedInUser?.account_info?.is_staff) {
+            if (memberData?.data?.user?.is_mentor_profile_removed) {
+                // user was a mentor but they were removed from our community
+                return renderMentorRemovedCard();
+            }
             if (memberData?.data?.user?.is_mentor_profile_active) {
                 return renderPauseMentoringCard();
             }
@@ -536,7 +549,7 @@ function ViewMemberProfile() {
             if (!memberData?.data?.user?.is_mentor_profile_active && memberData?.data?.user?.is_mentor_profile_approved) {
                 return renderPauseMentoringCard();
             }
-            if (memberData?.data?.mentorship_program?.mentor_profile?.user?.is_mentor_interviewing) {
+            if (memberData?.data?.mentorship_program?.mentor_profile?.mentor_status === 'interviewing') {
                 return renderStaffInterviewApprovalCard();
             }
             if (memberData?.data?.mentorship_program?.mentor_profile?.user?.is_mentor_application_submitted) {
@@ -544,16 +557,21 @@ function ViewMemberProfile() {
             }
         }
         // If the user viewing is the onwer of this profile
-        if (isOwnProfile && memberData?.data?.user?.is_mentor) {
+
+        if ((isOwnProfile && memberData?.data?.user?.is_mentor) || memberData?.data?.user?.is_mentor_profile_removed) {
             const {
                 user,
                 mentorship_program: { calendar_link, mentor_profile },
             } = memberData?.data || {};
 
             const {
-                is_mentor_profile_approved, is_mentor_profile_active, is_mentor_application_submitted, is_mentor_interviewing 
-            } = user || {};
-            // alert((!is_mentor_ap) + ' ' + !is_mentor_application_submitted + ' ' +is_mentor_interviewing)
+                is_mentor_profile_approved, is_mentor_profile_active, is_mentor_profile_removed, is_mentor_application_submitted, is_mentor_interviewing 
+            } =
+                user || {};
+            if (is_mentor_profile_removed) {
+                // user was a mentor but they were removed from our community
+                return renderMentorRemovedCard();
+            }
             if (calendar_link && is_mentor_profile_active) {
                 // Account is active and people can book with them so the mentor can pause mentorship
                 return renderPauseMentoringCard();
@@ -586,7 +604,11 @@ function ViewMemberProfile() {
                 if (isUserConnectedWithMentor) {
                     return renderMatchedWithThisMentorCard();
                 } else {
-                    return renderConnectWithMentorCard();
+                    if (memberData?.data?.user?.is_mentor_profile_removed) {
+                        return renderPausePublicMentorCard();
+                    } else {
+                        return renderConnectWithMentorCard();
+                    }
                 }
             }
         }
@@ -611,16 +633,36 @@ function ViewMemberProfile() {
             if (memberData?.data?.user?.is_mentor_application_submitted && !memberData?.data?.user?.is_mentor_training_complete) {
                 // under review or interviewing
                 return renderReviewingPublicMentorCard();
-            } else if (memberData?.data?.user?.is_mentor_profile_paused) {
+            } else if (memberData?.data?.user?.is_mentor_profile_paused || memberData?.data?.user?.is_mentor_profile_active) {
                 // paused
                 return renderPausePublicMentorCard();
             } else {
                 // active
-                return renderConnectWithMentorCard();
+                if (memberData?.data?.user?.is_mentor_profile_removed) {
+                    return renderPausePublicMentorCard();
+                } else {
+                    return renderConnectWithMentorCard();
+                }
             }
         }
         return null;
     };
+    const renderMentorRemovedCard = () => (
+        <Card>
+            <CardContent>
+                <Typography variant="h6">Your mentor profile was removed.</Typography>
+                <Typography variant="body1">
+                    We&apos;ve sent you an email with more detail about why your mentor profile was removed but if you would like to chat with someone on the team about
+                    this please email us at hello@techbychoice.org.
+                </Typography>
+                {loggedInUser?.account_info?.is_staff && (
+                    <Button onClick={handelReactivateMentorApplication} variant="contained" color="primary">
+                        Reactivate Profile
+                    </Button>
+                )}
+            </CardContent>
+        </Card>
+    );
     const renderPauseMentoringCard = () => (
         <Card>
             <CardContent>
