@@ -12,8 +12,8 @@ export default defineConfig({
             name: 'hostApp',
             filename: 'remoteEntry.js',
             remotes: {
-                open_doors: isProd ? 'https://opendoors.techbychoice.org/assets/remoteEntry.js' : 'http://localhost:4000/dist/assets/remoteEntry.js',
-                talent_choice: isProd ? 'https://talentchoice.techbychoice.org/assets/remoteEntry.js' : 'http://localhost:3000/dist/assets/remoteEntry.js'
+                open_doors: isProd ? 'https://opendoors.techbychoice.org/dist/assets/remoteEntry.js' : 'http://localhost:4000/dist/assets/remoteEntry.js',
+                talent_choice: isProd ? 'https://talentchoice.techbychoice.org/dist/assets/remoteEntry.js' : 'http://localhost:3000/dist/assets/remoteEntry.js'
             },
             shared: ['react', 'react-dom', 'react-router-dom'],
         }),
