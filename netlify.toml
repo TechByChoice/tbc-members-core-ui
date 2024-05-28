@@ -4,7 +4,7 @@
   status = 200
 
 [[redirects]]
-  from = "/remoteEntry.js"
+  from = "/open-doors/remoteEntry.js"
   to = "https://opendoors.techbychoice.org/assets/remoteEntry.js"
   status = 200
   force = true
