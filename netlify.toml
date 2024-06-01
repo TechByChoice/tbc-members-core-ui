@@ -2,3 +2,15 @@
   from = "/*"
   to = "/index.html"
   status = 200
+
+[[redirects]]
+  from = "http://beta.techbychoice.org/*"
+  to = "https://www.beta.techbychoice.org/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "https://beta.techbychoice.org/*"
+  to = "https://www.beta.techbychoice.org/:splat"
+  status = 301
+  force = true
