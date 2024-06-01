@@ -289,10 +289,10 @@ export default function NewMemberPage() {
 
     useEffect(() => {
         // move user to dashboard if the user doesn't
-        // if (user[0]?.account_info?.is_member_onboarding_complete) {
-        //     statusMessage.info("You've completed onboarding and no longer have access to this screen.");
-        //     navigate('/dashboard', { replace: false });
-        // }
+        if (user[0]?.account_info?.is_member_onboarding_complete) {
+            statusMessage.info("You've completed onboarding and no longer have access to this screen.");
+            navigate('/dashboard', { replace: false });
+        }
     }, [ user ]);
 
     return (
@@ -326,7 +326,7 @@ export default function NewMemberPage() {
                                     Thanks for letting us get to know you!
                                 </Typography>
                                 <Typography variant="subtitle1">
-                                    Now that you&apos;re in our community, make sure you check your eamil to get access to our Slack group!
+                                    Now that you&apos;re in our community, make sure you check your email to get access to our Slack group!
                                 </Typography>
                             </React.Fragment>
                         )}
@@ -341,8 +341,8 @@ export default function NewMemberPage() {
                                     )}
                                     <Button
                                         variant="contained"
-                                        onClick={activeStep === steps.length - 1 ? null : handleNext}
-                                        type={activeStep === steps.length - 1 ? 'submit' : 'button'}
+                                        onClick={activeStep === steps.length - 1 ? handleFormSubmit : handleNext}
+                                        type="button"
                                         sx={{ mt: 3, ml: 1 }}>
                                         {activeStep === steps.length - 1 ? 'Submit Details' : 'Next'}
                                     </Button>
