@@ -2,9 +2,3 @@
   from = "/*"
   to = "/index.html"
   status = 200
-
-[[redirects]]
-  from = "/open-doors/remoteEntry.js"
-  to = "https://opendoors.techbychoice.org/assets/remoteEntry.js"
-  status = 200
-  force = true
