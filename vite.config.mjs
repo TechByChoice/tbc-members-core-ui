@@ -7,29 +7,12 @@ import federation from "@originjs/vite-plugin-federation";
 const getFederationPlugin = () => {
     const isProd = process.env.NODE_ENV === 'production';
 
-    const loadRemoteEntry = (url) => {
-        return new Promise((resolve, reject) => {
-            if (typeof document === 'undefined') {
-                reject(new Error('Cannot load remote entries server-side'));
-                return;
-            }
-
-            const script = document.createElement('script');
-            script.src = url;
-            script.type = 'module';
-            script.crossOrigin = 'use-credentials';
-            script.onload = () => resolve(url);
-            script.onerror = () => reject(new Error('Failed to load ' + url));
-            document.head.appendChild(script);
-        });
-    };
-
     return federation({
         name: 'hostApp',
         filename: 'remoteEntry.js',
         remotes: {
-            open_doors: isProd ? new Promise(resolve => loadRemoteEntry('https://opendoors.techbychoice.org/assets/remoteEntry.js').then(resolve)) : 'http://localhost:4000/dist/assets/remoteEntry.js',
-            talent_choice: isProd ? new Promise(resolve => loadRemoteEntry('https://talentchoice.techbychoice.org/assets/remoteEntry.js').then(resolve)) : 'http://localhost:3000/dist/assets/remoteEntry.js'
+            open_doors: isProd ? 'https://opendoors.techbychoice.org/assets/remoteEntry.js' : 'http://localhost:4000/dist/assets/remoteEntry.js',
+            talent_choice: isProd ? 'https://talentchoice.techbychoice.org/assets/remoteEntry.js' : 'http://localhost:3000/dist/assets/remoteEntry.js'
         },
         shared: ['react', 'react-dom', 'react-router-dom'],
     });
