@@ -59,6 +59,7 @@ function InputLocation({ formErrors, handleAutocompleteChange, fieldName = 'loca
         handleAutocompleteChange('city', location.city);
         handleAutocompleteChange('state', location.state);
         handleAutocompleteChange('postalCode', location.postalCode);
+        handleAutocompleteChange('postal_code', location.postalCode);
         handleAutocompleteChange('location', `${location.city}, ${location.state} ${location.postalCode}`);
     };
 

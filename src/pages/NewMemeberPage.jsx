@@ -2,7 +2,6 @@ import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
-import CssBaseline from '@mui/material/CssBaseline';
 import Paper from '@mui/material/Paper';
 import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';

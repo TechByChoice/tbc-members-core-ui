@@ -18,6 +18,7 @@ import DropdownPronouns from '@/compoents/DropdownPronouns';
 import DropdownJobRole from '@/compoents/DropdownJobRole';
 import DropdownCompanySimple from '@/compoents/DropdownCompanySimple';
 import YearsOfExperienceDropdown from '@/compoents/DropdownYearsOfExperience';
+import InputLocation from '@/compoents/InputLocation';
 
 const filter = createFilterOptions();
 
@@ -57,7 +58,7 @@ function BasicInfoStep({
             <Grid item xs={12}>
                 <FormControl fullWidth error={!!formErrors.postal_code}>
                     <FormLabel htmlFor="postal_code">* What&apos;s your postal code?</FormLabel>
-                    <OutlinedInput onChange={handleInputChange} name="postal_code" />
+                    <InputLocation formErrors={formErrors} fieldName="postal_code" handleAutocompleteChange={handleAutocompleteChange} />
                     {!!formErrors.postal_code && <FormHelperText>{formErrors.postal_code}</FormHelperText>}
                 </FormControl>
             </Grid>
