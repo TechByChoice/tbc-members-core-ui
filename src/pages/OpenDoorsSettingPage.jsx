@@ -1,15 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Avatar, Button, FormLabel, OutlinedInput, Grid, Typography, FormControl, Tabs, Tab } from '@mui/material';
+import { Avatar, Button, Typography, FormControl, Tabs, Tab } from '@mui/material';
 import styled from '@emotion/styled';
 import { useAuth } from '../providers/AuthProvider';
 import Box from '@mui/material/Box';
 import PropTypes from 'prop-types';
 import ProfileBasicInfo from '../compoents/profile/ProfileBasicInfo';
-import ProfileInterests from '../compoents/profile/ProfileInterests';
-import ProfileMentorship from '../compoents/profile/ProfileMentorship';
 import ProfileNotifications from '../compoents/profile/ProfileNotifications';
 import ProfileIdentity from '../compoents/profile/ProfileIdentity';
-import { routes } from '@/lib/routes';
 import { getDropDrownItems } from '@/api-calls';
 
 const Root = styled(Box)`
@@ -117,16 +114,16 @@ function OpenDoorsSettingPage() {
                 aria-label="Vertical tabs example"
                 sx={{ borderRight: 1, minWidth: '15vw', borderColor: 'divider' }}>
                 <Tab label="Account Details" {...a11yProps(0)} />
-                <Tab label="Identity" {...a11yProps(2)} />
-                <Tab label="Notifications" {...a11yProps(3)} />
+                <Tab label="Identity" {...a11yProps(1)} />
+                <Tab label="Notifications" {...a11yProps(2)} />
             </Tabs>
             <TabPanel value={value} index={0}>
                 <ProfileBasicInfo questions={questions} formErrors={formError} handleChange={handleChange} />
             </TabPanel>
-            <TabPanel value={value} index={2}>
+            <TabPanel value={value} index={1}>
                 <ProfileIdentity questions={questions} />
             </TabPanel>
-            <TabPanel value={value} index={3}>
+            <TabPanel value={value} index={2}>
                 <ProfileNotifications />
             </TabPanel>
         </Root>
