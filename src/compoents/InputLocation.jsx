@@ -1,13 +1,19 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { OutlinedInput, FormControl, FormLabel, FormHelperText, Grid, List, ListItem, Paper } from '@mui/material';
 import mbxGeocoding from '@mapbox/mapbox-sdk/services/geocoding';
 import _ from 'lodash';
 
 const mapboxClient = mbxGeocoding({ accessToken: import.meta.env.VITE_APP_MAPBOX_ACCESS_TOKEN });
 
-function InputLocation({ formErrors, handleAutocompleteChange, fieldName = 'location' }) {
-    const [ inputValue, setInputValue ] = useState(''); // Store input value
+function InputLocation({
+    formErrors, handleAutocompleteChange, fieldName = 'location', defaultValue 
+}) {
+    const [ inputValue, setInputValue ] = useState(defaultValue); // Store input value
     const [ suggestions, setSuggestions ] = useState([]);
+
+    useEffect(() => {
+        setInputValue(defaultValue);
+    }, [ defaultValue ]);
 
     // Debounced function to fetch location suggestions
     const fetchSuggestions = _.debounce(value => {
@@ -65,12 +71,7 @@ function InputLocation({ formErrors, handleAutocompleteChange, fieldName = 'loca
 
     return (
         <>
-            <OutlinedInput
-                onChange={handleInputChange}
-                name={fieldName}
-                value={inputValue}
-                autoComplete="off" // Disable browser autocomplete
-            />
+            <OutlinedInput onChange={handleInputChange} name={fieldName} value={inputValue} autoComplete="off" />
             {suggestions.length > 0 && (
                 <Paper square>
                     <List>

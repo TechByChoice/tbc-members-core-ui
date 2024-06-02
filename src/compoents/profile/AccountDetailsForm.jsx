@@ -1,9 +1,10 @@
 import { Button, FormControl, FormHelperText, FormLabel, Grid, OutlinedInput, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import { useAuth } from '../../providers/AuthProvider';
-import { useStatus } from '../../providers/MsgStatusProvider';
-import { routes } from '../../lib/routes';
+import { useAuth } from '@/providers/AuthProvider';
+import { useStatus } from '@/providers/MsgStatusProvider';
+import { routes } from '@/lib/routes';
 import { useStatusMessage } from '@/hooks/useStatusMessage';
+import InputLocation from '@/compoents/InputLocation';
 
 export default function AccountDetailsForm() {
     const { user } = useAuth();
@@ -30,7 +31,7 @@ export default function AccountDetailsForm() {
                 first_name: userDetails?.user_info?.first_name,
                 last_name: userDetails?.user_info?.last_name,
                 email: userDetails?.user_info?.email,
-                postal_code: userDetails?.user_info?.userprofile?.postal_code,
+                postal_code: userDetails?.user_info?.userprofile?.location,
             });
         }
     }, [ userDetails ]);
@@ -65,6 +66,13 @@ export default function AccountDetailsForm() {
                 console.error('Error:', error);
                 statusMessage.error('We ran into an issue saving. Please try again.');
             });
+    };
+    const handleAutocompleteChange = (name, value) => {
+        // Check if the value is an array (since Autocomplete can be multiple)
+        if (Array.isArray(value)) {
+            value = value.map(item => item.name || item);
+        }
+        setFormAccountData(prev => ({ ...prev, [name]: value }));
     };
 
     const handleAccountChange = e => {
@@ -121,13 +129,7 @@ export default function AccountDetailsForm() {
                                 <FormLabel required htmlFor="email">
                                     Email
                                 </FormLabel>
-                                <OutlinedInput
-                                    variant="outlined"
-                                    name="email"
-                                    error={!!formErrors.email}
-                                    value={formAccountData.email}
-                                    onChange={handleAccountChange}
-                                />
+                                <OutlinedInput variant="outlined" name="email" error={!!formErrors.email} value={formAccountData.email} onChange={handleAccountChange} />
                                 {!!formErrors.email && <FormHelperText>{formErrors.email}</FormHelperText>}
                             </FormControl>
                         </Grid>
@@ -136,7 +138,12 @@ export default function AccountDetailsForm() {
                                 <FormLabel required htmlFor="postal_code">
                                     What&apos;s your postal code?
                                 </FormLabel>
-                                <OutlinedInput onChange={handleAccountChange} value={formAccountData.postal_code} name="postal_code" />
+                                <InputLocation
+                                    formErrors={formErrors.postal_code}
+                                    fieldName="postal_code"
+                                    defaultValue={formAccountData.postal_code}
+                                    handleAutocompleteChange={handleAutocompleteChange}
+                                />
                                 {!!formErrors.postal_code && <FormHelperText>{formErrors.postal_code}</FormHelperText>}
                             </FormControl>
                         </Grid>
