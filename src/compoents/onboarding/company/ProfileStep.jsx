@@ -52,7 +52,7 @@ function ProfileStep({
 
             <Grid item xs={12}>
                 <FormControl fullWidth error={!!formErrors.location}>
-                    <FormLabel htmlFor="location">* Company Location</FormLabel>
+                    <FormLabel htmlFor="location">* Company Postal Code</FormLabel>
                     <InputLocation formErrors={formErrors} handleAutocompleteChange={handleAutocompleteChange} />
                     {!!formErrors.location && <FormHelperText>{formErrors.location}</FormHelperText>}
                 </FormControl>

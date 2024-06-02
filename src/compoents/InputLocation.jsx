@@ -6,7 +6,7 @@ import _ from 'lodash';
 const mapboxClient = mbxGeocoding({ accessToken: import.meta.env.VITE_APP_MAPBOX_ACCESS_TOKEN });
 
 function InputLocation({
-    formErrors, handleAutocompleteChange, fieldName = 'location', defaultValue 
+    formErrors, handleAutocompleteChange, fieldName = 'location', defaultValue = null 
 }) {
     const [ inputValue, setInputValue ] = useState(defaultValue); // Store input value
     const [ suggestions, setSuggestions ] = useState([]);
