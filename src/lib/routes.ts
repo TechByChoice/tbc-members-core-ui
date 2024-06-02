@@ -61,6 +61,7 @@ export const routes = {
             profileNotifications: () => apiJoin(routes.api.base, 'user/profile/update/notifications'),
             socialAccounts: () => apiJoin(routes.api.base, 'user/profile/update/social-accounts'),
             workplace: () => apiJoin(routes.api.base, 'user/profile/update/work-place'),
+            confirmPasswordReset: (id, token) => apiJoin(routes.api.base, `auth/password-reset-confirm/${id}/${token}/`),
         },
         announcements: { list: () => apiJoin(routes.api.base, 'user/details/announcement') },
         companies: {
