@@ -6,13 +6,10 @@ import { useNavigate } from 'react-router';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import { useStatus } from '@/providers/MsgStatusProvider';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import styled from '@emotion/styled';
 import Alert from '@mui/material/Alert';
-import { useStatusMessage } from '../hooks/useStatusMessage';
+import { useStatusMessage } from '@/hooks/useStatusMessage';
 import { Link } from 'react-router-dom';
-import MuiLink from '@mui/material/Link';
 
 const CenteredContent = styled.div`
     display: flex;
@@ -25,17 +22,7 @@ const FormContainer = styled.div`
     width: 80%;
     max-width: 500px;
 `;
-
-const ImageBG = styled.div`
-    width: 100%;
-    height: 100%;
-    background-image: url('https://uploads-ssl.webflow.com/5fc4802f4edc553647330622/5fd04d6d1ea5ad04a37db102_pexels-jopwell-2422290-p-1600.jpeg');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-`;
-
-function LoginPage() {
+function ResetPasswordPage() {
     const {
         login, user, isAuthenticated, errorMessage 
     } = useAuth();
@@ -43,15 +30,31 @@ function LoginPage() {
     const statusMessage = useStatusMessage();
 
     const [ username, setUsername ] = useState('');
-    const [ password, setPassword ] = useState('');
-    const [ rememberMe, setRememberMe ] = useState(false);
     const navigate = useNavigate();
 
     const handleSubmit = async event => {
         event.preventDefault();
-        let timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-        let emailLower = username.toLocaleLowerCase();
-        await login(emailLower, emailLower, password, timezone);
+        const url = import.meta.env.VITE_APP_API_BASE_URL + `/auth/password-reset/`;
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                // Authorization: `Token ${localStorage.getItem('token')}`,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ email: username.toLocaleLowerCase() }),
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('saved');
+            })
+            .catch(error => {
+                console.error('Fetch error:', error);
+            });
     };
 
     useEffect(() => {
@@ -75,7 +78,7 @@ function LoginPage() {
 
     return (
         <Grid container id="top">
-            <Grid item xs={12} sm={6} id="left">
+            <Grid item xs={12} id="left">
                 {/* Left side */}
                 <CenteredContent>
                     <FormContainer>
@@ -85,8 +88,11 @@ function LoginPage() {
                             </Typography>
                         ) : (
                             <>
-                                <Typography variant="h2" component="h1" align="center">
-                                    Login
+                                <Typography variant="h3" component="h1" align="center">
+                                    Forgot Password?
+                                </Typography>
+                                <Typography variant="h6" component="h2" align="left">
+                                    No worries, we&apos;ll send you details on how to reset your password to your email.
                                 </Typography>
                                 {errorMessage?.length > 0 &&
                                     errorMessage.map((error, index) => (
@@ -107,29 +113,14 @@ function LoginPage() {
                                         margin="normal"
                                         fullWidth
                                     />
-                                    <TextField
-                                        required
-                                        variant="outlined"
-                                        autoComplete="current-password"
-                                        id="password"
-                                        label="Password"
-                                        type="password"
-                                        value={password}
-                                        onChange={event => setPassword(event.target.value)}
-                                        margin="normal"
-                                        fullWidth
-                                    />
-                                    <FormControlLabel
-                                        control={<Checkbox checked={rememberMe} onChange={handleRememberMeChange} name="rememberMe" color="primary" />}
-                                        label="Remember me"
-                                    />
+
                                     <Button variant="contained" sx={{ marginBottom: 2 }} color="primary" fullWidth={true} type="submit">
-                                        Log in
+                                        Reset Password
                                     </Button>
                                     <Grid display="flex" direction="column" justifyContent="start" container>
                                         <Grid item>
-                                            <Button component={Link} to="/password-reset" variant="text">
-                                                Forgot password?
+                                            <Button component={Link} to="/" variant="text">
+                                                Login
                                             </Button>
                                         </Grid>
                                         <Grid item>
@@ -146,14 +137,8 @@ function LoginPage() {
 
                 {/*    */}
             </Grid>
-            <Grid item xs={12} sm={6}>
-                <ImageBG
-                    id="right"
-                    style={{ backgroundImage: 'https://uploads-ssl.webflow.com/5fc4802f4edc553647330622/5fd04d6d1ea5ad04a37db102_pexels-jopwell-2422290-p-1600.jpeg' }}
-                />
-            </Grid>
         </Grid>
     );
 }
 
-export default LoginPage;
+export default ResetPasswordPage;

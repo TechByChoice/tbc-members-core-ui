@@ -19,7 +19,7 @@ import { TbcThemeProvider } from '@techbychoice/tbc-component-library';
 import * as React from 'react';
 import { createRoot } from 'react-dom/client';
 import { Route, Routes } from 'react-router';
-import { BrowserRouter, useNavigate } from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom';
 import { useState } from 'react';
 import ViewCompanyPage from '@/pages/ViewCompanyPage';
 import AllMembersPage from '@/pages/AllMembersPage';
@@ -35,6 +35,8 @@ import TermsAndAgreementsWrapperPage from '@/pages/TermsAndAgreementsWrapperPage
 import NavBarWrapper from '@/compoents/layout/NavBarWrapper';
 import WrapperQuestions from '@/compoents/WrapperQuestions';
 import WrapperSettingsPage from '@/pages/WrapperSettingsPage';
+import ResetPasswordPage from '@/pages/ResetPasswordPage';
+import CreateNewPasswordPage from '@/pages/CreateNewPasswordPage';
 
 const SurveyQuestions = React.lazy(() => import('open_doors/SurveyQuestions'));
 
@@ -58,6 +60,8 @@ const App = () => {
                             <Container id="mainContent">
                                 <Routes>
                                     <Route path="/" element={<LoginPage />} />
+                                    <Route path="/password-reset" element={<ResetPasswordPage />} />
+                                    <Route path="/password-reset/confirm-password/:id/:token" element={<CreateNewPasswordPage />} />
                                     <Route
                                         path="/reviews"
                                         element={
