@@ -14,7 +14,7 @@ export default function ProfileCalLinkForm() {
 
     useEffect(() => {
         if (userDetails) {
-            setFormData({ calendar_link: userDetails?.mentor_details?.calendar_link?.replace(/https:\/\//g, '') || '' });
+            setFormData({ calendar_link: userDetails?.mentor_data?.calendar_link?.replace(/https:\/\//g, '') || '' });
         }
     }, [ userDetails ]);
 

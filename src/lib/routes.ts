@@ -41,7 +41,7 @@ export const routes = {
             review: programId => apiJoin(routes.api.base, `mentorship/reviews/${programId}`),
             // TODO: this is the same as signup.profile
             updateDetails: () => apiJoin(routes.api.base, 'mentorship/update/profile/'),
-            updateCalLink: () => apiJoin(routes.api.base, 'mentorship/update/calendar-link'),
+            updateCalLink: () => apiJoin(routes.api.base, 'mentorship/update/calendar-link/'),
             getDetails: details => apiJoin(routes.api.base, `mentorship/details/?fields=${details}`),
         },
         users: {

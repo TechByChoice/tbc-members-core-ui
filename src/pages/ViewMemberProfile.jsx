@@ -197,6 +197,29 @@ function ViewMemberProfile() {
             </CardContent>
         </Card>
     );
+    const renderMentorshipApplicationCard = () => (
+        <Card>
+            <CardContent>
+                <Typography variant="h4" component="h1">
+                    Mentor Application
+                </Typography>
+                <Typography variant="body1" component="p">
+                    Question
+                </Typography>
+                <Button onClick={handelInterviewRequest} variant="contained" color="primary">
+                    Send Interview Request
+                </Button>
+                <Button
+                    onClick={() => {
+                        setOpenRejectModal(true);
+                    }}
+                    variant="contained"
+                    color="primary">
+                    Reject The Application
+                </Button>
+            </CardContent>
+        </Card>
+    );
 
     const renderStaffInterviewApprovalCard = () => (
         <Card>
@@ -536,17 +559,21 @@ function ViewMemberProfile() {
     );
     const renderUserSpecificCard = () => {
         // Admin view on handeling a mentors profile
-
+        // alert(loggedInUser?.account_info?.is_staff)
         if (loggedInUser?.account_info?.is_staff) {
             if (memberData?.data?.user?.is_mentor_profile_removed) {
                 // user was a mentor but they were removed from our community
                 return renderMentorRemovedCard();
             }
-            if (memberData?.data?.user?.is_mentor_profile_active) {
-                return renderPauseMentoringCard();
+            if (!memberData?.data?.user?.is_mentor_profile_active && memberData?.data?.user?.is_mentor_profile_approved) {
+                if (memberData?.data?.mentorship_program?.calendar_link) {
+                    return renderPauseMentoringCard();
+                } else {
+                    return renderSetBookingLinkCard();
+                }
             }
 
-            if (!memberData?.data?.user?.is_mentor_profile_active && memberData?.data?.user?.is_mentor_profile_approved) {
+            if (memberData?.data?.user?.is_mentor_profile_active && memberData?.data?.user?.is_mentor_profile_approved) {
                 return renderPauseMentoringCard();
             }
             if (memberData?.data?.mentorship_program?.mentor_profile?.mentor_status === 'interviewing') {
@@ -558,7 +585,7 @@ function ViewMemberProfile() {
         }
         // If the user viewing is the onwer of this profile
 
-        if ((isOwnProfile && memberData?.data?.user?.is_mentor) || memberData?.data?.user?.is_mentor_profile_removed) {
+        if (isOwnProfile && memberData?.data?.user?.is_mentor && !memberData?.data?.user?.is_mentor_profile_removed) {
             const {
                 user,
                 mentorship_program: { calendar_link, mentor_profile },
@@ -568,6 +595,7 @@ function ViewMemberProfile() {
                 is_mentor_profile_approved, is_mentor_profile_active, is_mentor_profile_removed, is_mentor_application_submitted, is_mentor_interviewing 
             } =
                 user || {};
+            alert(calendar_link);
             if (is_mentor_profile_removed) {
                 // user was a mentor but they were removed from our community
                 return renderMentorRemovedCard();
@@ -578,6 +606,7 @@ function ViewMemberProfile() {
             }
 
             if (is_mentor_profile_approved && !calendar_link && !is_mentor_profile_active) {
+                alert('not iit');
                 // if account is approved but not active because they don't have a calendar link
                 return renderSetBookingLinkCard();
             }
@@ -626,6 +655,31 @@ function ViewMemberProfile() {
                 <Typography variant="h5">How They Plan to Help:</Typography>
                 <HtmlContentRenderer htmlContent={memberData?.data?.mentorship_program?.mentor_profile?.mentor_how_to_help} />
             </Container>
+            {loggedInUser?.account_info?.is_staff && (
+                <Card>
+                    <Container>
+                        <Typography variant="h4">Mentorship Applications</Typography>
+                        <Typography variant="h5">What Motivates you at work:</Typography>
+                        <HtmlContentRenderer htmlContent={memberData?.data?.mentorship_program?.work_motivation} />
+                    </Container>
+                    <Container>
+                        <Typography variant="h5">Their long term career goals:</Typography>
+                        <HtmlContentRenderer htmlContent={memberData?.data?.mentorship_program?.career_goals} />
+                    </Container>
+                    <Container>
+                        <Typography variant="h5">Their career milestones:</Typography>
+                        <HtmlContentRenderer htmlContent={memberData?.data?.mentorship_program?.career_milestones} />
+                    </Container>
+                    <Container>
+                        <Typography variant="h5">Their view of key to success:</Typography>
+                        <HtmlContentRenderer htmlContent={memberData?.data?.mentorship_program?.career_success} />
+                    </Container>
+                    <Container>
+                        <Typography variant="h5">Their biggest strengths:</Typography>
+                        <HtmlContentRenderer htmlContent={memberData?.data?.mentorship_program?.biggest_strengths} />
+                    </Container>
+                </Card>
+            )}
         </>
     );
     const renderMentorContactSpecificCard = () => {
@@ -760,7 +814,9 @@ function ViewMemberProfile() {
                                 <HtmlContentRenderer htmlContent={memberData?.data?.user_profile?.bio} />
                             </Typography>
                             {/*{memberData?.data?.user?.is_mentor_profile_active && (*/}
-                            {memberData?.data?.user?.is_mentor && (memberData?.data?.user?.is_mentor_profile_active || isOwnProfile) && renderMentorProfileSection()}
+                            {memberData?.data?.user?.is_mentor &&
+                                (memberData?.data?.user?.is_mentor_profile_active || isOwnProfile || loggedInUser?.account_info?.is_staff) &&
+                                renderMentorProfileSection()}
                             <Container sx={{ mb: 3 }}>
                                 <Typography variant="h5">Skills:</Typography>
                                 {memberData?.data?.talent_profile?.skills && (
