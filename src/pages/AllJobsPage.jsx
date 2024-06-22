@@ -35,7 +35,7 @@ export default function AllJobsPage({}) {
         if (nextUrl) {
             jobsUrl = nextUrl;
         } else {
-            jobsUrl = `${routes.api.jobs.list()}?page=${currentPage}&limit=100`;
+            jobsUrl = `${routes.api.jobs.list()}?page=${currentPage}&limit=10`;
         }
         fetch(jobsUrl, {
             method: 'GET',
