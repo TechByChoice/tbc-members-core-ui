@@ -51,7 +51,7 @@ export default function AllJobsPage({}) {
                 return response.json();
             })
             .then(data => {
-                setJobs(data.all_jobs.results);
+                setJobs(data.all_jobs);
                 setTotalItems(data.all_jobs.count);
                 setNextUrl(data.all_jobs.next);
                 setUserPostedJobs(data.posted_jobs);
