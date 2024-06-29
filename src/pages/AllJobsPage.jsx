@@ -35,7 +35,7 @@ export default function AllJobsPage({}) {
         if (nextUrl) {
             jobsUrl = nextUrl;
         } else {
-            jobsUrl = `${routes.api.jobs.list()}?page=${currentPage}&limit=100`;
+            jobsUrl = `${routes.api.jobs.list()}?page=${currentPage}&limit=10`;
         }
         fetch(jobsUrl, {
             method: 'GET',
@@ -51,7 +51,7 @@ export default function AllJobsPage({}) {
                 return response.json();
             })
             .then(data => {
-                setJobs(data.all_jobs.results);
+                setJobs(data.all_jobs);
                 setTotalItems(data.all_jobs.count);
                 setNextUrl(data.all_jobs.next);
                 setUserPostedJobs(data.posted_jobs);
@@ -119,7 +119,7 @@ export default function AllJobsPage({}) {
             )}
 
             <Grid container spacing={4}>
-                {jobs ? (
+                {jobs?.length > 0 ? (
                     jobs.map((job, index) => (
                         <Grid item xs={12} sm={6} md={4} key={index}>
                             <JobCard
@@ -140,7 +140,7 @@ export default function AllJobsPage({}) {
                     <p>Loading events...</p>
                 )}
             </Grid>
-            {jobs.length > 0 ? (
+            {jobs?.length > 0 ? (
                 <>
                     <Button onClick={handlePrevious} disabled={currentPage === 1}>
                         Previous
