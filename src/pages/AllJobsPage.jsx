@@ -119,7 +119,7 @@ export default function AllJobsPage({}) {
             )}
 
             <Grid container spacing={4}>
-                {jobs ? (
+                {jobs?.length > 0 ? (
                     jobs.map((job, index) => (
                         <Grid item xs={12} sm={6} md={4} key={index}>
                             <JobCard
@@ -140,7 +140,7 @@ export default function AllJobsPage({}) {
                     <p>Loading events...</p>
                 )}
             </Grid>
-            {jobs.length > 0 ? (
+            {jobs?.length > 0 ? (
                 <>
                     <Button onClick={handlePrevious} disabled={currentPage === 1}>
                         Previous
