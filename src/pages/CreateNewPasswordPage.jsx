@@ -26,7 +26,7 @@ function CreateNewPasswordPage() {
         setPasswordErrors(validatePassword(password, confirmPassword));
     }, [ password, confirmPassword ]);
     const handleSubmit = () => {
-        fetch(routes.api.users.confirmPasswordReset(id, token), {
+        fetch(routes.api.auth.confirmPasswordReset(id, token), {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ password: password, id: id, token: token }),
@@ -34,7 +34,7 @@ function CreateNewPasswordPage() {
             .then(response => response.json())
             .then(data => {
                 setIsLoading(false);
-                if (data.status) {
+                if (data.status === 'success') {
                     console.log(data);
                     if (data.message === 'Email already confirmed!') {
                         statusMessage.success(`${data.message} Please login.`);

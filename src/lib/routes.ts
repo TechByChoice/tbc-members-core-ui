@@ -8,6 +8,7 @@ export const routes = {
         talent: import.meta.env.VITE_APP_API_TALENT_CHOICE_URL,
         auth: {
             passwordReset: () => apiJoin(routes.api.base, 'api/core/password-reset/'),
+            confirmPasswordReset: (id, token) => apiJoin(routes.api.base, `api/core/password-reset-confirm/${id}/${token}/`),
             checkToken: localToken => apiJoin(routes.api.base, `reviews/check/${localToken}`),
             verifyToken: token => apiJoin(routes.api.base, `reviews/verify-token/${token}`),
             newMembers: {
@@ -62,7 +63,6 @@ export const routes = {
             profileNotifications: () => apiJoin(routes.api.base, 'user/profile/update/notifications'),
             socialAccounts: () => apiJoin(routes.api.base, 'user/profile/update/social-accounts'),
             workplace: () => apiJoin(routes.api.base, 'user/profile/update/work-place'),
-            confirmPasswordReset: (id, token) => apiJoin(routes.api.base, `auth/password-reset-confirm/${id}/${token}/`),
         },
         announcements: { list: () => apiJoin(routes.api.base, 'user/details/announcement') },
         companies: {

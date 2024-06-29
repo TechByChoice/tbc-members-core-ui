@@ -52,7 +52,9 @@ function ResetPasswordPage() {
                 return response.json();
             })
             .then(data => {
-                console.log('saved');
+                if (data.status === 'success') {
+                    statusMessage.success('If you have an account with an email has been sent with details.');
+                }
             })
             .catch(error => {
                 console.error('Fetch error:', error);
