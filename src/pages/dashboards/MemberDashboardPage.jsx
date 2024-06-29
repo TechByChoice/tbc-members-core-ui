@@ -136,7 +136,7 @@ export default function MemberDashboard() {
                 {isNeedsToSubmitMentorshipApplication && (
                     <Grid item xs={12} sm={reviewAccess ? 4 : 6}>
                         <FeatureCard
-                            image="https://uploads-ssl.webflow.com/5fc123904bcd576087dd38e2/66707a4287eb7ff3a6609324_Group%20238.png"
+                            image="https://uploads-ssl.webflow.com/5fc123904bcd576087dd38e2/6671cc4505016af9986993cc_Paperwork%20Icon.svg"
                             subTitle="Mentorship Program"
                             linkEndpoint="/mentor/create"
                             btnText="Apply"
