@@ -35,7 +35,7 @@ function ResetPasswordPage() {
 
     const handleSubmit = async event => {
         event.preventDefault();
-        // const url = import.meta.env.VITE_APP_API_BASE_URL + `/api/core/password-reset/`;
+
         const url = routes.api.auth.passwordReset();
         fetch(url, {
             method: 'POST',
