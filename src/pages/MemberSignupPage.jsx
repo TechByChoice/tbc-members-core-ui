@@ -51,16 +51,16 @@ function LoginPage() {
     const handleSubmit = async event => {
         event.preventDefault();
 
-        fetch(routes.api.users.signUp(), {
+        fetch(routes.api.auth.newMembers.create(), {
             method: 'POST',
-            headers: {'Content-Type': 'application/json',},
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(formData),
         })
             .then(response => response.json())
             .then(data => {
-                if (data.status) {
+                if (data.status === 'success') {
                     setToken(data.token);
-                    localStorage.setItem('token', data.token);
+                    localStorage.setItem('token', data.data.token);
                     statusMessage.success('Welcome to Tech by Choice');
                     navigate('/new/member/2');
                     fetchUserDetails();

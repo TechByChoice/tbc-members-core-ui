@@ -94,7 +94,7 @@ export const AuthProvider = ({ children }) => {
     );
 
     const logout = useCallback(() => {
-        const url = import.meta.env.VITE_APP_API_BASE_URL + '/user/logout/';
+        const url = routes.api.auth.logout();
 
         fetch(url, {
             method: 'POST',

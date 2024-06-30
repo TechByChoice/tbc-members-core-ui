@@ -253,7 +253,7 @@ export default function NewMemberPage() {
             formData.append(name, answers[name]);
         }
 
-        fetch(routes.api.users.updateProfile(), {
+        fetch(routes.api.auth.newMembers.createMemberProfile(), {
             method: 'POST',
             credentials: 'include',
             body: formData,

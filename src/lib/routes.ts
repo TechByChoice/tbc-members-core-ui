@@ -8,11 +8,13 @@ export const routes = {
         talent: import.meta.env.VITE_APP_API_TALENT_CHOICE_URL,
         auth: {
             passwordReset: () => apiJoin(routes.api.base, 'api/core/password-reset/'),
+            logout: () => apiJoin(routes.api.base, 'api/core/logout/'),
             confirmPasswordReset: (id, token) => apiJoin(routes.api.base, `api/core/password-reset-confirm/${id}/${token}/`),
             checkToken: localToken => apiJoin(routes.api.base, `reviews/check/${localToken}`),
             verifyToken: token => apiJoin(routes.api.base, `reviews/verify-token/${token}`),
             newMembers: {
-                create: () => apiJoin(routes.api.base, 'user/new-member/profile/create'),
+                create: () => apiJoin(routes.api.base, 'api/core/register/'),
+                createMemberProfile: () => apiJoin(routes.api.base, 'api/core/create-new-member/'),
                 profileData: () => apiJoin(routes.api.base, 'user/details/new-member'),
             },
         },
@@ -41,15 +43,12 @@ export const routes = {
             },
             match: () => apiJoin(routes.api.base, 'mentorship/mentor-match/'),
             review: programId => apiJoin(routes.api.base, `mentorship/reviews/${programId}`),
-            // TODO: this is the same as signup.profile
-            updateDetails: () => apiJoin(routes.api.base, 'mentorship/update/profile/'),
             updateCalLink: () => apiJoin(routes.api.base, 'mentorship/update/calendar-link/'),
             getDetails: details => apiJoin(routes.api.base, `mentorship/details/?fields=${details}`),
         },
         users: {
             signUp: () => apiJoin(routes.api.base, 'user/new/'),
             companySignUp: () => apiJoin(routes.api.base, 'user/new/company'),
-            updateProfile: () => apiJoin(routes.api.base, 'user/new-member/profile/create'),
             getProfile: () => apiJoin(routes.api.base, 'user/details/new-member'),
             getUsersDetails: () => apiJoin(routes.api.base, 'user/details/'),
             connectWithMentor: id => apiJoin(routes.api.base, `mentorship/mentor/${id}/connect/roster/add`),
