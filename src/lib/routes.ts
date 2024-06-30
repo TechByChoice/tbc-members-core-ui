@@ -63,7 +63,7 @@ export const routes = {
             socialAccounts: () => apiJoin(routes.api.base, 'user/profile/update/social-accounts'),
             workplace: () => apiJoin(routes.api.base, 'user/profile/update/work-place'),
         },
-        announcements: { list: () => apiJoin(routes.api.base, 'user/details/announcement') },
+        announcements: { list: () => apiJoin(routes.api.base, 'api/core/announcement/') },
         companies: {
             get: id => apiJoin(routes.api.base, `company-profile/info/${id}/`),
             getAll: () => apiJoin(routes.api.base, `company-profile/info/`),

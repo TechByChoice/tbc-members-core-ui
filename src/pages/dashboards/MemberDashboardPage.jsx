@@ -120,10 +120,12 @@ export default function MemberDashboard() {
                 return response.json();
             })
             .then(data => {
-                setAnnouncement({
-                    elements: data.announcement[0].blocks[0].elements[0].elements,
-                    ts: data.announcement[0].ts.replace('.', ''),
-                });
+                if (data.status === 'success') {
+                    setAnnouncement({
+                        elements: data.data.announcement[0].blocks[0].elements[0].elements,
+                        ts: data.data.announcement[0].ts.replace('.', ''),
+                    });
+                }
             })
             .catch(error => {
                 console.error('Error fetching events:', error);
