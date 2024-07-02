@@ -34,8 +34,8 @@ export default function WorkPlaceForm({ questions }) {
             job_roles: [],
         };
 
-        if (userDetails && userDetails?.user_info?.talentprofile?.role) {
-            userDetails?.user_info?.talentprofile?.role.map((role, index) => {
+        if (userDetails && userDetails?.user_info?.memberprofile?.role) {
+            userDetails?.user_info?.memberprofile?.role.map((role, index) => {
                 // Parse the role to an integer (if it's a string)
                 const roleId = parseInt(role.id);
                 //

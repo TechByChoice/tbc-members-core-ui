@@ -27,12 +27,13 @@ export const AuthProvider = ({ children }) => {
                 .then(response => response.json())
                 .then(data => {
                     if (data) {
+                        console.log(data.data);
                         if (data.detail === 'Invalid token.') {
                             logout();
                         }
                         setToken(data.token);
-                        setUser([ data ]);
-                        setAccountDetails([ data.account_info ]);
+                        setUser([ data.data ]);
+                        setAccountDetails([ data.data.account_info ]);
                         setIsAuthenticated(true);
                     } else {
                         setErrorMessage(data[0]);
@@ -54,7 +55,7 @@ export const AuthProvider = ({ children }) => {
 
     const login = useCallback(
         (username, email, password, timezone) => {
-            const url = import.meta.env.VITE_APP_API_BASE_URL + '/user/login/';
+            const url = import.meta.env.VITE_APP_API_BASE_URL + '/api/core/login/';
             fetch(url, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -67,13 +68,13 @@ export const AuthProvider = ({ children }) => {
             })
                 .then(response => response.json())
                 .then(data => {
-                    if (data.token) {
+                    if (data.status === 'success') {
                         // Call the setToken function to store the JWT
-                        localStorage.setItem('token', data.token);
-                        setToken(data.token);
+                        localStorage.setItem('token', data.data.token);
+                        setToken(data.data.token);
                         setIsAuthenticated(true);
-                        setUser([ data.user_info ]);
-                        setAccountDetails([ data.account_info ]);
+                        setUser([ data.data.user_info ]);
+                        setAccountDetails([ data.data.account_info ]);
                         // Redirect the user to the home page
                     } else {
                         setErrorMessage(data);
@@ -94,7 +95,7 @@ export const AuthProvider = ({ children }) => {
     );
 
     const logout = useCallback(() => {
-        const url = import.meta.env.VITE_APP_API_BASE_URL + '/user/logout/';
+        const url = routes.api.auth.logout();
 
         fetch(url, {
             method: 'POST',
