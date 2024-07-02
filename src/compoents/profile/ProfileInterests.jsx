@@ -28,13 +28,13 @@ export default function ProfileInterests({ handleChange, questions }) {
 
     useEffect(() => {
         if (userDetails && questions) {
-            const defaultSkills = userDetails.user_info.talentprofile.skills
+            const defaultSkills = userDetails.user_info.memberprofile.skills
                 .map(skillId => {
                     return questions.job_skills.find(skill => skill.id === parseInt(skillId.id));
                 })
                 .filter(skill => skill != null);
 
-            const defaultDepartment = userDetails.user_info.talentprofile.department
+            const defaultDepartment = userDetails.user_info.memberprofile.department
                 .map(departmentId => {
                     return questions.job_departments.find(department => department.id === parseInt(departmentId.id));
                 })

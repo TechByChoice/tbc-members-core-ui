@@ -27,12 +27,13 @@ export const AuthProvider = ({ children }) => {
                 .then(response => response.json())
                 .then(data => {
                     if (data) {
+                        console.log(data.data);
                         if (data.detail === 'Invalid token.') {
                             logout();
                         }
                         setToken(data.token);
-                        setUser([ data ]);
-                        setAccountDetails([ data.account_info ]);
+                        setUser([ data.data ]);
+                        setAccountDetails([ data.data.account_info ]);
                         setIsAuthenticated(true);
                     } else {
                         setErrorMessage(data[0]);
