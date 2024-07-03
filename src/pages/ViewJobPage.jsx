@@ -27,8 +27,8 @@ function ViewJobPage({ userDetail, isLoading }) {
     const statusMessage = useStatusMessage();
     const { user } = useAuth();
 
-    const isOwnProfile = user?.[0]?.user_info.id === jobData?.created_by_id;
-    const isStaffOrEditor = user?.[0]?.account_info?.is_staff || jobData?.created_by_id === user?.[0]?.user_info?.id;
+    const isOwnProfile = user?.[0]?.user_info.id === jobData?.created_by;
+    const isStaffOrEditor = user?.[0]?.account_info?.is_staff || jobData?.created_by === user?.[0]?.user_info?.id;
 
     async function fetchData() {
         try {
@@ -229,9 +229,7 @@ function ViewJobPage({ userDetail, isLoading }) {
         switch (jobStatus) {
             case 'closed':
                 return renderCloseCard();
-            case 'draft':
-                return renderPublishCard();
-            case 'pause':
+            case 'draft' || 'pause':
                 return renderPublishCard();
             case 'active':
                 return renderActiveCard();
@@ -282,7 +280,7 @@ function ViewJobPage({ userDetail, isLoading }) {
         <Grid container spacing={3}>
             {/*{isOwnProfile && (*/}
             <Grid item xs={12}>
-                {user.length > 0 && (user?.[0]?.account_info?.is_staff || jobData?.created_by_id === user?.[0]?.user_info?.id) && <>{renderJobPosterCard()}</>}
+                {user.length > 0 && (user?.[0]?.account_info?.is_staff || jobData?.created_by[0] === user?.[0]?.user_info?.id) && <>{renderJobPosterCard()}</>}
             </Grid>
             {/*)}*/}
             {/* 1/3 Contact Card */}
