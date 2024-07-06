@@ -20,6 +20,7 @@ export default function WorkPlaceForm({ questions }) {
         company_name: '',
         company_url: '',
         job_roles: [],
+        select_company: [],
     });
     const extractDefaultValues = () => {
         // Extract the skills and roles from userDetails and map them to the corresponding objects in questions.

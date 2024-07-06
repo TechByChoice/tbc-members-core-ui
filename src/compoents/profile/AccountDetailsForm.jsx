@@ -31,7 +31,7 @@ export default function AccountDetailsForm() {
                 first_name: userDetails?.user_info?.first_name,
                 last_name: userDetails?.user_info?.last_name,
                 email: userDetails?.user_info?.email,
-                postal_code: userDetails?.user_info?.userprofile?.location,
+                postal_code: userDetails?.user_info?.userprofile?.postal_code,
             });
         }
     }, [ userDetails ]);
@@ -90,7 +90,7 @@ export default function AccountDetailsForm() {
                     <hr />
                 </Grid>
                 <Grid item xs={12} md={4} spacing={3} mt={3}>
-                    <Typography variant="body">Update your account details here</Typography>
+                    <Typography variant="body1">Update your account details here</Typography>
                 </Grid>
                 <Grid item xs={8}>
                     <Grid container>
