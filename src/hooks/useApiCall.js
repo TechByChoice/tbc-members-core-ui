@@ -17,8 +17,17 @@ export function useApiCall() {
 
     const makeApiCall = useCallback(async (url, options = {}) => {
         try {
+            const token = localStorage.getItem('token');
+            const defaultHeaders = {
+                'Content-Type': 'application/json',
+                Authorization: `Token ${token}`,
+            };
             const response = await fetch(url, {
                 ...options,
+                headers: {
+                    ...defaultHeaders,
+                    ...options.headers,
+                },
                 signal: abortControllerRef.current.signal,
             });
             if (!response.ok) {
