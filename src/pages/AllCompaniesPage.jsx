@@ -63,7 +63,6 @@ export default function AllCompaniesPage({}) {
     };
 
     const handleChangeRowsPerPage = event => {
-        alert(event.target.value);
         setPageSize(parseInt(event.target.value, 10));
         setCurrentPage(1);
     };
