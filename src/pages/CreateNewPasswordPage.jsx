@@ -8,17 +8,23 @@ import { routes } from '@/lib/routes';
 import { useAuth } from '@/providers/AuthProvider';
 import { useStatusMessage } from '@/hooks/useStatusMessage';
 import TextField from '@mui/material/TextField';
+import { validatePassword } from '@/utils/PasswordValidation';
 
 function CreateNewPasswordPage() {
     const [ isSetPasswordActive, setIsSetPasswordActive ] = useState(true);
-    const [ password, setPassword ] = useState();
-    const [ confirmPassword, setConfirmPassword ] = useState();
+    const [ password, setPassword ] = useState('');
+    const [ confirmPassword, setConfirmPassword ] = useState('');
     const [ isLoading, setIsLoading ] = useState(true);
     const { id, token } = useParams();
     const navigate = useNavigate();
     const statusMessage = useStatusMessage();
+    const [ passwordErrors, setPasswordErrors ] = useState([]);
     const label = { inputProps: { 'aria-label': 'I agree to the service agreement.' } };
     const { setToken } = useAuth();
+
+    useEffect(() => {
+        setPasswordErrors(validatePassword(password, confirmPassword));
+    }, [ password, confirmPassword ]);
 
     const handleSubmit = () => {
         fetch(routes.api.users.confirmPasswordReset(id, token), {
@@ -61,62 +67,69 @@ function CreateNewPasswordPage() {
     // }
 
     return (
-        <Grid container center id="top">
-            <Card>
-                {!isSetPasswordActive ? (
-                    <>
-                        <CardContent>
-                            <Typography variant="h5" component="h1" align="center">
-                                This link is no longer active
-                            </Typography>
-                            <Typography variant="subtitle1" component="h2">
-                                If you need to reset your password,
-                                <Link to="/password-reset">
-                                    <Button variant="text" size="small">
-                                        please use this link
-                                    </Button>
-                                </Link>
-                            </Typography>
-                        </CardContent>
-                    </>
-                ) : (
-                    <>
-                        <CardContent>
-                            <Typography variant="h5" component="h1">
-                                Choose a new password
-                            </Typography>
-                            <Typography variant="subtitle1" component="h2"></Typography>
-                            <TextField
-                                required
-                                variant="outlined"
-                                id="password"
-                                label="Password"
-                                type="password"
-                                value={password}
-                                onChange={event => setPassword(event.target.value)}
-                                margin="normal"
-                                fullWidth
-                            />
-                            <TextField
-                                required
-                                variant="outlined"
-                                autoComplete="current-password"
-                                id="password"
-                                label="Confirm Password"
-                                type="confirm_password"
-                                value={confirmPassword}
-                                onChange={event => setConfirmPassword(event.target.value)}
-                                margin="normal"
-                                fullWidth
-                            />
-                            <Button onClick={handleSubmit} sx={{ mt: 3, ml: 1 }}>
-                                Update Password
-                            </Button>
-                        </CardContent>
-                    </>
-                )}
-            </Card>
-        </Grid>
+        <Card>
+            {!isSetPasswordActive ? (
+                <>
+                    <CardContent>
+                        <Typography variant="h5" component="h1" align="center">
+                            This link is no longer active
+                        </Typography>
+                        <Typography variant="subtitle1" component="h2">
+                            If you need to reset your password,
+                            <Link to="/password-reset">
+                                <Button variant="text" size="small">
+                                    please use this link
+                                </Button>
+                            </Link>
+                        </Typography>
+                    </CardContent>
+                </>
+            ) : (
+                <>
+                    <CardContent>
+                        <Typography variant="h5" component="h1">
+                            Choose a new password
+                        </Typography>
+                        {passwordErrors.length > 0 && (
+                            <ul>
+                                {passwordErrors.map((error, index) => (
+                                    <li key={index} style={{ color: 'red' }}>
+                                        {error}
+                                    </li>
+                                ))}
+                            </ul>
+                        )}
+                        <Typography variant="subtitle1" component="h2"></Typography>
+                        <TextField
+                            required
+                            variant="outlined"
+                            id="password"
+                            label="Password"
+                            type="password"
+                            value={password}
+                            onChange={event => setPassword(event.target.value)}
+                            margin="normal"
+                            fullWidth
+                        />
+                        <TextField
+                            required
+                            variant="outlined"
+                            autoComplete="current-password"
+                            id="password"
+                            label="Confirm Password"
+                            type="password"
+                            value={confirmPassword}
+                            onChange={event => setConfirmPassword(event.target.value)}
+                            margin="normal"
+                            fullWidth
+                        />
+                        <Button disabled={passwordErrors.length > 0} variant="contained" onClick={handleSubmit} sx={{ mt: 3, ml: 1 }}>
+                            Update Password
+                        </Button>
+                    </CardContent>
+                </>
+            )}
+        </Card>
     );
 }
 
