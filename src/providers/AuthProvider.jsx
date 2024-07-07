@@ -54,7 +54,7 @@ export const AuthProvider = ({ children }) => {
 
     const login = useCallback(
         (username, email, password, timezone) => {
-            const url = import.meta.env.VITE_APP_API_BASE_URL + '/api/core/login/';
+            const url = import.meta.env.VITE_APP_API_BASE_URL + '/user/login/';
             fetch(url, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -67,13 +67,13 @@ export const AuthProvider = ({ children }) => {
             })
                 .then(response => response.json())
                 .then(data => {
-                    if (data.status === 'success') {
+                    if (data.token) {
                         // Call the setToken function to store the JWT
-                        localStorage.setItem('token', data.data.token);
-                        setToken(data.data.token);
+                        localStorage.setItem('token', data.token);
+                        setToken(data.token);
                         setIsAuthenticated(true);
-                        setUser([ data.data.user_info ]);
-                        setAccountDetails([ data.data.account_info ]);
+                        setUser([ data.user_info ]);
+                        setAccountDetails([ data.account_info ]);
                         // Redirect the user to the home page
                     } else {
                         setErrorMessage(data);
