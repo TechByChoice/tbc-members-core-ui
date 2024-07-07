@@ -13,6 +13,8 @@ import { useAuth } from '@/providers/AuthProvider';
 import { FeatureCard } from '@/compoents/FeatuerCards';
 import CardMedia from '@mui/material/CardMedia';
 import Box from '@mui/material/Box';
+import { useApiCancellation } from '@/hooks/useCancelAPI';
+import { useApiCall } from '@/hooks/useApiCall';
 
 const StyledContainer = styled(Grid)(({ theme: { breakpoints } }) => ({
     display: 'flex',
@@ -30,10 +32,10 @@ const StyledCard = styled(Card)(({ theme: { breakpoints, spacing } }) => ({
 }));
 
 export default function MemberDashboard() {
-    const [ event, setEvent ] = useState();
+    const [ event, setEvent ] = useState(null);
     /** @type {any} job */
-    const [ job, setJob ] = useState();
-    const [ mentor, setMentor ] = useState();
+    const [ job, setJob ] = useState(null);
+    const [ mentor, setMentor ] = useState(null);
     const [ announcement, setAnnouncement ] = useState({
         elements: [],
         ts: '',
@@ -44,6 +46,8 @@ export default function MemberDashboard() {
     const reviewAccess = user[0]?.account_info?.is_company_review_access_active;
     const isMentorshipProgram = user[0]?.account_info?.is_mentee || user[0]?.account_info?.is_mentor;
     const isNeedsToSubmitMentorshipApplication = !user[0]?.account_info?.is_mentor_application_submitted && isMentorshipProgram;
+    const makeApiCall = useApiCall();
+    const { navigate } = useApiCancellation();
 
     useEffect(() => {
         fetch(routes.api.events.list(), {
@@ -80,7 +84,7 @@ export default function MemberDashboard() {
                 return response.json();
             })
             .then(data => {
-                setJob(data.matching_jobs[0]);
+                setJob(data.matching_job);
             })
             .catch(error => {
                 console.error('Error fetching events:', error);
@@ -100,7 +104,7 @@ export default function MemberDashboard() {
                 return response.json();
             })
             .then(data => {
-                setMentor(data.matching_mentors[0]);
+                setMentor(data.matching_mentor);
             })
             .catch(error => {
                 console.error('Error fetching events:', error);

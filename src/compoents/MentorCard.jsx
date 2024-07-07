@@ -21,7 +21,10 @@ const MentorCard = ({ mentor }) => {
                 avatar={
                     <Avatar
                         sx={{
-                            width: 72, height: 72, marginTop: '-36px', bgcolor: 'background.paper' 
+                            width: 72,
+                            height: 72,
+                            marginTop: '-36px',
+                            bgcolor: 'background.paper',
                         }}
                         src={mentor.user_profile.photo}
                         alt={mentor.user.first_name}

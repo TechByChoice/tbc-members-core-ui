@@ -141,7 +141,7 @@ export default function NavBar() {
             { label: 'Become a Speaker', href: 'https://www.techbychoice.org/teach' },
             { label: 'Volunteer', href: 'https://www.techbychoice.org/volunteer' },
             {
-                label: 'View Mentor',
+                label: 'View Mentors',
                 href: '/mentor/all',
                 isInternal: true,
             },
