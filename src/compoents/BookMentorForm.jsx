@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Autocomplete, Box, Button, Card, CardContent, FormControl, FormHelperText, FormLabel, TextField } from '@mui/material';
-import { useAuth } from '../providers/AuthProvider';
+import { useAuth } from '@/providers/AuthProvider';
 import { createFilterOptions } from '@mui/material/Autocomplete';
 import { routes } from '@/lib/routes';
 import { useStatusMessage } from '@/hooks/useStatusMessage';
@@ -11,9 +11,10 @@ function BookMentorForm({ talentDetails, setOpen }) {
     const [ formData, setFormData ] = useState({});
     const [ isLoading, setLoading ] = useState(false);
     const [ supportAreas, setSupportAreas ] = useState();
-    const [ showBookingScreen, setShowBookingScreen ] = useState(true);
+    const [ showBookingScreen, setShowBookingScreen ] = useState(false);
     const { token } = useAuth();
     const statusMessage = useStatusMessage();
+    const calendlyRef = useRef(null);
 
     useEffect(() => {
         // Function to handle the event when Calendly is loaded
@@ -41,7 +42,16 @@ function BookMentorForm({ talentDetails, setOpen }) {
     };
 
     useEffect(() => {
-        fetch(routes.api.mentors.getDetails('mentor_support_areas'))
+        // Redner the cal link on page load
+        loadCalendlyScript();
+
+        fetch(routes.api.mentors.getDetails('mentor_support_areas'), {
+            method: 'GET',
+            headers: {
+                Authorization: `Token ${localStorage.getItem('token')}`,
+                'Content-Type': 'application/json',
+            },
+        })
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
@@ -55,6 +65,23 @@ function BookMentorForm({ talentDetails, setOpen }) {
                 console.error('Fetch error:', error);
             });
     }, []);
+
+    useEffect(() => {
+        if (showBookingScreen && calendlyRef.current) {
+            initializeCalendly();
+        }
+    }, [ showBookingScreen ]);
+
+    const initializeCalendly = () => {
+        if (window.Calendly) {
+            window.Calendly.initInlineWidget({
+                url: `https://${talentDetails?.mentorship_program?.calendar_link}?hide_landing_page_details=1&hide_gdpr_banner=1&background_color=f8f6ea&primary_color=ff0000`,
+                parentElement: calendlyRef.current,
+                prefill: {},
+                utm: {},
+            });
+        }
+    };
 
     const handleSupportAreasChange = (event, newValue) => {
         // Call the function passed from the parent component to update the formData state
@@ -80,8 +107,10 @@ function BookMentorForm({ talentDetails, setOpen }) {
                 return response.json();
             })
             .then(data => {
-                setShowBookingScreen(true);
-                statusMessage.success('Saved your review');
+                if (data.status) {
+                    setShowBookingScreen(true);
+                    statusMessage.success('Saved your review');
+                }
             })
             .catch(error => {
                 console.error('Fetch error:', error);
@@ -100,11 +129,7 @@ function BookMentorForm({ talentDetails, setOpen }) {
                 <>
                     <CardContent>
                         {isLoading && <p>Loading...</p>} {/* Loading Indicator */}
-                        <div
-                            className="calendly-inline-widget"
-                            data-url={`https://${talentDetails.mentorship_program.calendar_link}?hide_landing_page_details=1&hide_gdpr_banner=1&background_color=f8f6ea&primary_color=ff0000`}
-                            style={{ minWidth: '320px', height: '630px' }}
-                        />
+                        <div ref={calendlyRef} style={{ minWidth: '320px', height: '630px' }} />
                     </CardContent>
                 </>
             ) : (
@@ -121,12 +146,11 @@ function BookMentorForm({ talentDetails, setOpen }) {
                                     handleHomeEndKeys
                                     id="mentor_support_areas"
                                     aria-labelledby="mentor_support_areas-label"
-                                    options={supportAreas || []} // <-- directly provide a default value here
+                                    options={supportAreas || []}
                                     isOptionEqualToValue={(option, value) =>
                                         (option.inputValue && value.inputValue && option.inputValue === value.inputValue) || option === value
                                     }
                                     getOptionLabel={option => {
-                                        // Check for the special case where the option has an inputValue property
                                         if (option.inputValue) return option.inputValue;
 
                                         // Existing logic
@@ -155,9 +179,7 @@ function BookMentorForm({ talentDetails, setOpen }) {
                         </>
                         <>
                             <FormControl fullWidth>
-                                <FormLabel id="mentor_booking_note">
-                                    Please share any additional details that will help your mentor prep for your next session.
-                                </FormLabel>
+                                <FormLabel id="mentor_booking_note">Please share any additional details that will help your mentor prep for your next session.</FormLabel>
                                 <TextField
                                     multiline
                                     name="mentor_booking_note"
