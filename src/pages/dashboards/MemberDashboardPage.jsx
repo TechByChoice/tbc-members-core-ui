@@ -32,10 +32,10 @@ const StyledCard = styled(Card)(({ theme: { breakpoints, spacing } }) => ({
 }));
 
 export default function MemberDashboard() {
-    const [ event, setEvent ] = useState();
+    const [ event, setEvent ] = useState(null);
     /** @type {any} job */
-    const [ job, setJob ] = useState();
-    const [ mentor, setMentor ] = useState();
+    const [ job, setJob ] = useState(null);
+    const [ mentor, setMentor ] = useState(null);
     const [ announcement, setAnnouncement ] = useState({
         elements: [],
         ts: '',
@@ -50,57 +50,88 @@ export default function MemberDashboard() {
     const { navigate } = useApiCancellation();
 
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const [
-                    eventData,
-                    jobData,
-                    mentorData,
-                    announcementData
-                ] = await Promise.all([
-                    makeApiCall(routes.api.events.list(), {
-                        method: 'GET',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            Authorization: `Token ${localStorage.getItem('token')}`,
-                        },
-                    }),
-                    makeApiCall(routes.api.jobs.match(), {
-                        method: 'GET',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            Authorization: `Token ${localStorage.getItem('token')}`,
-                        },
-                    }),
-                    makeApiCall(routes.api.mentors.match(), {
-                        method: 'GET',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            Authorization: `Token ${localStorage.getItem('token')}`,
-                        },
-                    }),
-                    makeApiCall(routes.api.announcements.list(), {
-                        method: 'GET',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            Authorization: `Token ${localStorage.getItem('token')}`,
-                        },
-                    }),
-                ]);
+        fetch(routes.api.events.list(), {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Token ${localStorage.getItem('token')}`,
+            },
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                setEvent(data.events[0]);
+            })
+            .catch(error => {
+                console.error('Error fetching events:', error);
+            });
 
-                setEvent(eventData.events[0]);
-                setJob(jobData.matching_jobs[0]);
-                setMentor(mentorData.matching_mentors[0]);
+        fetch(routes.api.jobs.match(), {
+            method: 'get',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Token ${localStorage.getItem('token')}`,
+            },
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                setJob(data.matching_job);
+            })
+            .catch(error => {
+                console.error('Error fetching events:', error);
+            });
+
+        fetch(routes.api.mentors.match(), {
+            method: 'get',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Token ${localStorage.getItem('token')}`,
+            },
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                setMentor(data.matching_mentor);
+            })
+            .catch(error => {
+                console.error('Error fetching events:', error);
+            });
+
+        fetch(routes.api.announcements.list(), {
+            method: 'get',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Token ${localStorage.getItem('token')}`,
+            },
+        })
+            .then(response => {
+                if (!response) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
                 setAnnouncement({
-                    elements: announcementData.announcement[0].blocks[0].elements[0].elements,
-                    ts: announcementData.announcement[0].ts.replace('.', ''),
+                    elements: data.announcement[0].blocks[0].elements[0].elements,
+                    ts: data.announcement[0].ts.replace('.', ''),
                 });
-            } catch (error) {
-                console.error('Error fetching data:', error);
-            }
-        };
-
-        fetchData();
+            })
+            .catch(error => {
+                console.error('Error fetching events:', error);
+            });
     }, []);
     return (
         <>

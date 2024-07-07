@@ -459,7 +459,13 @@ function ViewMemberProfile() {
             )}
             {memberData?.data?.user_profile?.instagram && (
                 <Grid item>
-                    <IconButton href={`https://instagram.com/${memberData?.data?.user_profile?.instagram}`} target="_blank">
+                    <IconButton
+                        href={
+                            memberData?.data?.user_profile?.instagram.includes('https://')
+                                ? `${memberData?.data?.user_profile?.instagram}`
+                                : `https://instagram.com/${memberData?.data?.user_profile?.instagram}`
+                        }
+                        target="_blank">
                         <Instagram />
                     </IconButton>
                 </Grid>
@@ -473,7 +479,13 @@ function ViewMemberProfile() {
             )}
             {memberData?.data?.user_profile?.twitter && (
                 <Grid item>
-                    <IconButton href={`https://twitter.com/${memberData?.data?.user_profile?.twitter}`} target="_blank">
+                    <IconButton
+                        href={
+                            memberData?.data?.user_profile?.twitter.includes('https://')
+                                ? `${memberData?.data?.user_profile?.twitter}`
+                                : `https://twitter.com/${memberData?.data?.user_profile?.twitter}`
+                        }
+                        target="_blank">
                         <Twitter />
                     </IconButton>
                 </Grid>
@@ -559,7 +571,7 @@ function ViewMemberProfile() {
     );
     const renderUserSpecificCard = () => {
         // Admin view on handeling a mentors profile
-        // alert(loggedInUser?.account_info?.is_staff)
+
         if (loggedInUser?.account_info?.is_staff) {
             if (memberData?.data?.user?.is_mentor_profile_removed) {
                 // user was a mentor but they were removed from our community
@@ -595,7 +607,7 @@ function ViewMemberProfile() {
                 is_mentor_profile_approved, is_mentor_profile_active, is_mentor_profile_removed, is_mentor_application_submitted, is_mentor_interviewing 
             } =
                 user || {};
-            alert(calendar_link);
+
             if (is_mentor_profile_removed) {
                 // user was a mentor but they were removed from our community
                 return renderMentorRemovedCard();
@@ -606,7 +618,6 @@ function ViewMemberProfile() {
             }
 
             if (is_mentor_profile_approved && !calendar_link && !is_mentor_profile_active) {
-                alert('not iit');
                 // if account is approved but not active because they don't have a calendar link
                 return renderSetBookingLinkCard();
             }

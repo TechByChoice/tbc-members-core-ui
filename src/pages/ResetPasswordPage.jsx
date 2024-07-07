@@ -10,6 +10,7 @@ import styled from '@emotion/styled';
 import Alert from '@mui/material/Alert';
 import { useStatusMessage } from '@/hooks/useStatusMessage';
 import { Link } from 'react-router-dom';
+import { routes } from '@/lib/routes';
 
 const CenteredContent = styled.div`
     display: flex;
@@ -34,7 +35,8 @@ function ResetPasswordPage() {
 
     const handleSubmit = async event => {
         event.preventDefault();
-        const url = import.meta.env.VITE_APP_API_BASE_URL + `/auth/password-reset/`;
+        // const url = import.meta.env.VITE_APP_API_BASE_URL + `/api/core/password-reset/`;
+        const url = routes.api.auth.passwordReset();
         fetch(url, {
             method: 'POST',
             headers: {
