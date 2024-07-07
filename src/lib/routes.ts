@@ -7,7 +7,7 @@ export const routes = {
         base: import.meta.env.VITE_APP_API_BASE_URL,
         talent: import.meta.env.VITE_APP_API_TALENT_CHOICE_URL,
         auth: {
-            passwordReset: () => apiJoin(routes.api.base, 'api/core/password-reset/'),
+            passwordReset: () => apiJoin(routes.api.base, 'auth/password-reset/'),
             checkToken: localToken => apiJoin(routes.api.base, `reviews/check/${localToken}`),
             verifyToken: token => apiJoin(routes.api.base, `reviews/verify-token/${token}`),
             newMembers: {
