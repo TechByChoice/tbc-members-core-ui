@@ -54,7 +54,7 @@
         "vite": "^5.3.3"
     },
     "dependencies": {
-        "@biomejs/biome": "^1.7.1",
+        "@biomejs/biome": "^1.8.3",
         "@mapbox/mapbox-sdk": "^0.15.6",
         "@techbychoice/tbc-component-library": "^0.0.7",
         "@tiptap/extension-heading": "^2.4.0",
