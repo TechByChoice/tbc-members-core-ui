@@ -1,4 +1,4 @@
-import React, { Component, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { Button, Grid, Typography } from '@mui/material';
 import JobCard from '../compoents/JobCard';
@@ -26,6 +26,7 @@ export default function AllJobsPage({}) {
     const [ totalItems, setTotalItems ] = useState(0);
     const [ nextUrl, setNextUrl ] = useState();
     const { isAuthenticated, user } = useAuth();
+    const [ isMissingProfile, setIsMissingProfile ] = useState(false);
     const isReviewer = user && user[0]?.account_info?.is_open_doors;
     const itemsPerPage = 100;
     let totalPages = Math.ceil(totalItems / itemsPerPage);
@@ -46,18 +47,22 @@ export default function AllJobsPage({}) {
         })
             .then(response => {
                 if (!response.ok) {
-                    throw new Error('Network response was not ok');
+                    return response.json().then(err => Promise.reject(err));
                 }
                 return response.json();
             })
             .then(data => {
-                setJobs(data.all_jobs);
-                setTotalItems(data.all_jobs.count);
-                setNextUrl(data.all_jobs.next);
-                setUserPostedJobs(data.posted_jobs);
+                if (data.status === false && data.error === true) {
+                    setIsMissingProfile(true);
+                } else {
+                    setJobs(data.all_jobs);
+                    setTotalItems(data.all_jobs.count);
+                    setNextUrl(data.all_jobs.next);
+                    setUserPostedJobs(data.posted_jobs);
+                }
             })
             .catch(error => {
-                console.error('Error fetching events:', error);
+                console.error('Error fetching jobs:', error);
             });
     }, [ currentPage, itemsPerPage ]);
 
@@ -81,7 +86,7 @@ export default function AllJobsPage({}) {
                         Jobs You Posted
                     </Typography>
                     <Grid container spacing={4}>
-                        {userPostedJobs?.results ? (
+                        {userPostedJobs?.results &&
                             userPostedJobs?.results.map((job, index) => (
                                 <Grid item xs={12} sm={6} md={4} key={index}>
                                     <JobCard
@@ -97,10 +102,7 @@ export default function AllJobsPage({}) {
                                         description={null}
                                     />
                                 </Grid>
-                            ))
-                        ) : (
-                            <p>Loading events...</p> // Or any other loading indicator
-                        )}
+                            ))}
                     </Grid>
                 </CalloutCard>
             ) : (
@@ -119,7 +121,7 @@ export default function AllJobsPage({}) {
             )}
 
             <Grid container spacing={4}>
-                {jobs?.length > 0 ? (
+                {jobs?.length > 0 &&
                     jobs.map((job, index) => (
                         <Grid item xs={12} sm={6} md={4} key={index}>
                             <JobCard
@@ -135,10 +137,7 @@ export default function AllJobsPage({}) {
                                 match={false}
                             />
                         </Grid>
-                    ))
-                ) : (
-                    <p>Loading events...</p>
-                )}
+                    ))}
             </Grid>
             {jobs?.length > 0 ? (
                 <>
@@ -155,7 +154,11 @@ export default function AllJobsPage({}) {
                         <Box display="flex" flexDirection="column" mt={4} gap={3} borderRadius={2} border="1px solid" borderColor="grey.300" maxWidth={500}>
                             <Box>
                                 <Typography variant="h6" px={2} pt={2} textAlign="center">
-                                    <b>Our job board is percolating. Please come back later.</b>
+                                    {isMissingProfile ? (
+                                        <b>You have not added your skills to your profile so we can&apos;t you to any jobs</b>
+                                    ) : (
+                                        <b>Our job board is percolating. Please come back later.</b>
+                                    )}
                                 </Typography>
                             </Box>
                         </Box>
