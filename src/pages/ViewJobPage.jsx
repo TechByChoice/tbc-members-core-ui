@@ -300,7 +300,7 @@ function ViewJobPage({ userDetail, isLoading }) {
                                         <CardMedia
                                             component="img"
                                             height="140"
-                                            src={jobData?.parent_company?.logo}
+                                            src={jobData?.parent_company?.logo_url}
                                             alt={`${jobData?.parent_company?.company_name} Logo`}
                                         />
                                     </Link>
