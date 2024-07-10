@@ -5,7 +5,7 @@ function CompanyCard({ company }) {
     return (
         <Card style={{ maxWidth: 345 }}>
             {/* Company Logo */}
-            <CardMedia component="img" height="140" image={company?.logo} alt={`${company.company_name} logo`} />
+            <CardMedia component="img" height="140" image={company?.logo_url} alt={`${company.company_name} logo`} />
 
             <CardContent>
                 <Typography variant="h5" component="div">
