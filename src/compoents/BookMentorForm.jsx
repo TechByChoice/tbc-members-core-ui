@@ -75,7 +75,7 @@ function BookMentorForm({ talentDetails, setOpen }) {
     const initializeCalendly = () => {
         if (window.Calendly) {
             window.Calendly.initInlineWidget({
-                url: `https://${talentDetails?.mentorship_program?.calendar_link}?hide_landing_page_details=1&hide_gdpr_banner=1&background_color=f8f6ea&primary_color=ff0000`,
+                url: `${talentDetails?.mentorship_program?.calendar_link}?hide_landing_page_details=1&hide_gdpr_banner=1&background_color=f8f6ea&primary_color=ff0000`,
                 parentElement: calendlyRef.current,
                 prefill: {},
                 utm: {},
