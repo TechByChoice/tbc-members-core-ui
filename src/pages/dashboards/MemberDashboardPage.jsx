@@ -244,7 +244,7 @@ export default function MemberDashboard() {
                                         <JobCard
                                             match={false}
                                             companyId={job?.parent_company?.id}
-                                            companyLogo={job?.parent_company?.logo}
+                                            companyLogo={job?.parent_company?.logo_url}
                                             companyName={job?.parent_company?.name}
                                             jobType={job?.role?.name}
                                             jobTitle={job?.job_title}
