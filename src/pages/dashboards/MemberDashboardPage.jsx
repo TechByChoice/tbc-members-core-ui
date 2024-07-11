@@ -4,7 +4,6 @@ import Typography from '@mui/material/Typography';
 import { Link } from 'react-router-dom';
 import MuiLink from '@mui/material/Link';
 import EventCard from '../../compoents/EventCard';
-import JobCard from '../../compoents/JobCard';
 import MentorCard from '../../compoents/MentorCard';
 import SlackMessage from '../../compoents/SlackMessage';
 import { routes } from '@/lib/routes';
@@ -232,41 +231,26 @@ export default function MemberDashboard() {
                 {/* Bottom items */}
                 <Grid container spacing={2}>
                     <Grid item xs={12} sm={12} md={4}>
-                        <Grid container display="flex" direction="row" justifyContent="space-between">
-                            <Typography variant="h6">Top Job</Typography>
-                            <Link to="/job/all">
-                                <Button variant="text">View More</Button>
-                            </Link>
-                        </Grid>
                         <Grid container display="flex" direction="row" justifyContent="center">
                             <StyledCard>
                                 <CardContent>
+                                    <Grid container display="flex" direction="row" justifyContent="space-between">
+                                        <Typography variant="h6">Top Job</Typography>
+                                        <Link to="/job/all">
+                                            <Button variant="text">View More</Button>
+                                        </Link>
+                                    </Grid>
                                     {job ? (
-                                        <JobCard
-                                            match={false}
-                                            companyId={job?.parent_company?.id}
-                                            companyLogo={job?.parent_company?.logo_url}
-                                            companyName={job?.parent_company?.name}
-                                            jobType={job?.role?.name}
-                                            jobTitle={job?.job_title}
-                                            jobId={job?.id}
-                                            location={job?.location}
-                                            salary={`${job?.max_compensation?.range} - ${job?.max_compensation?.range}`}
-                                            description={null}
+                                        <BasicCardComponent
+                                            imageUrl={job?.parent_company?.logo_url}
+                                            headerText="Software Developer"
+                                            bodyText={job?.role?.name}
+                                            // icon={job?.role?.name}
+                                            hourlyRate={20}
+                                            buttonText="View Job"
+                                            job={job}
                                         />
                                     ) : (
-                                    // <JobCard
-                                    //     match={false}
-                                    //     companyId={job?.parent_company?.id}
-                                    //     companyLogo={job?.parent_company?.logo}
-                                    //     companyName={job?.parent_company?.name}
-                                    //     jobType={job?.role?.name}
-                                    //     jobTitle={job?.job_title}
-                                    //     jobId={job?.id}
-                                    //     location={job?.location}
-                                    //     salary={`${job?.max_compensation?.range} - ${job?.max_compensation?.range}`}
-                                    //     description={null}
-
                                         <Typography variant="body1">We currently don&apos;t have a match at this time. Please check back later.</Typography>
                                     )}
                                 </CardContent>
@@ -275,29 +259,31 @@ export default function MemberDashboard() {
                     </Grid>
 
                     <Grid item xs={12} sm={12} md={4}>
-                        <Grid container display="flex" direction="row" justifyContent="space-between">
-                            <Typography variant="h6">Next Event</Typography>
-                            <Link to="/event/all">
-                                <Button variant="text">View More</Button>
-                            </Link>
-                        </Grid>
                         <Grid container display="flex" direction="row" justifyContent="center">
                             <StyledCard>
-                                <CardContent>{event ? <EventCard event={event} /> : <p>Loading events...</p>}</CardContent>
+                                <CardContent>
+                                    <Grid container display="flex" direction="row" justifyContent="space-between">
+                                        <Typography variant="h6">Next Event</Typography>
+                                        <Link to="/event/all">
+                                            <Button variant="text">View More</Button>
+                                        </Link>
+                                    </Grid>
+                                    {event ? <EventCard event={event} /> : <p>Loading events...</p>}
+                                </CardContent>
                             </StyledCard>
                         </Grid>
                     </Grid>
 
-                    <Grid item xs={12} sm={12} md={4}>
-                        <Grid container display="flex" direction="row" justifyContent="space-between">
-                            <Typography variant="h6">Top Mentor</Typography>
-                            <Link to="/mentor/all">
-                                <Button variant="text">View More</Button>
-                            </Link>
-                        </Grid>
+                    <Grid item xs={12} sm={4}>
                         <Grid container display="flex" direction="row" justifyContent="center">
                             <StyledCard>
                                 <CardContent>
+                                    <Grid container display="flex" direction="row" justifyContent="space-between">
+                                        <Typography variant="h6">Top Mentor</Typography>
+                                        <Link to="/mentor/all">
+                                            <Button variant="text">View More</Button>
+                                        </Link>
+                                    </Grid>
                                     {mentor ? (
                                         <MentorCard mentor={mentor} />
                                     ) : (
@@ -308,19 +294,6 @@ export default function MemberDashboard() {
                         </Grid>
                     </Grid>
                 </Grid>
-                {/* <Grid item xs={12} sm={4}>
-                    <div>
-                        <BasicCardComonent
-                            imageUrl={event}
-                            headerText="Software Developer"
-                            bodyText={job?.role?.name}
-                            icon={job?.role?.name}
-                            hourlyRate={20} // Example hourly rate
-                            buttonText="Click Me"
-                            // companyName={job?.parent_company?.name}
-                        />
-                    </div>
-                </Grid> */}
             </Grid>
         </>
     );
