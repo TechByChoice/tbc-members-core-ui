@@ -10,10 +10,10 @@ const BasicCardComonent = ({
             <img src={imageUrl} alt="Card" className="card-image" />
             <div className="card-header">
                 <div className="card-icon">{icon}</div>
-                <h2>{headerText}</h2>
+                <h2 className="header-text">{headerText}</h2>
             </div>
             <div>
-                <p className="body-text">${bodyText}</p>
+                <p className="body-text">{bodyText}</p>
             </div>
             <div className="card-details">
                 <p className="hourly-rate">
