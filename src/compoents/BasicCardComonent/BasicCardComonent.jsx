@@ -12,10 +12,13 @@ const BasicCardComonent = ({
                 <div className="card-icon">{icon}</div>
                 <h2>{headerText}</h2>
             </div>
-            <div className="card-content">
-                <p>Hourly Rate: ${hourlyRate}</p>
+            <div className="card-details">
+                <p className="hourly-rate">
+                    Hourly Rate:
+                    <div className="card-rate">${hourlyRate}</div>
+                </p>
+                <button className="card-button">{buttonText}</button>
             </div>
-            <button className="card-button">{buttonText}</button>
         </div>
     );
 };

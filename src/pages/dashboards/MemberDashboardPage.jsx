@@ -296,6 +296,18 @@ export default function MemberDashboard() {
                         </Grid>
                     </Grid>
                 </Grid>
+                <Grid item xs={12} sm={4}>
+                    <div>
+                        <BasicCardComonent
+                            imageUrl="path_to_your_image.jpg"
+                            headerText="Software Developer"
+                            // icon={<YourIconComponent />}
+                            hourlyRate={20} // Example hourly rate
+                            buttonText="Click Me"
+                            // companyName={job?.parent_company?.name}
+                        />
+                    </div>
+                </Grid>
             </Grid>
         </>
     );
