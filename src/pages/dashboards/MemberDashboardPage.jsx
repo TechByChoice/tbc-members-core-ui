@@ -15,7 +15,7 @@ import CardMedia from '@mui/material/CardMedia';
 import Box from '@mui/material/Box';
 import { useApiCancellation } from '@/hooks/useCancelAPI';
 import { useApiCall } from '@/hooks/useApiCall';
-import BasicCardComonent from '../../compoents/BasicCardComonent/BasicCardComonent';
+import BasicCardComponent from '@/compoents/BasicCardComonent/BasicCardComponent';
 
 const StyledContainer = styled(Grid)(({ theme: { breakpoints } }) => ({
     display: 'flex',
@@ -255,6 +255,18 @@ export default function MemberDashboard() {
                                             description={null}
                                         />
                                     ) : (
+                                    // <JobCard
+                                    //     match={false}
+                                    //     companyId={job?.parent_company?.id}
+                                    //     companyLogo={job?.parent_company?.logo}
+                                    //     companyName={job?.parent_company?.name}
+                                    //     jobType={job?.role?.name}
+                                    //     jobTitle={job?.job_title}
+                                    //     jobId={job?.id}
+                                    //     location={job?.location}
+                                    //     salary={`${job?.max_compensation?.range} - ${job?.max_compensation?.range}`}
+                                    //     description={null}
+
                                         <Typography variant="body1">We currently don&apos;t have a match at this time. Please check back later.</Typography>
                                     )}
                                 </CardContent>
