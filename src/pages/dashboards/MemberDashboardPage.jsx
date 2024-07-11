@@ -299,7 +299,7 @@ export default function MemberDashboard() {
                 <Grid item xs={12} sm={4}>
                     <div>
                         <BasicCardComonent
-                            imageUrl="path_to_your_image.jpg"
+                            imageUrl={event}
                             headerText="Software Developer"
                             bodyText={job?.role?.name}
                             icon={job?.role?.name}
