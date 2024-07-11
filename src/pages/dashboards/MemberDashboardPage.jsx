@@ -15,6 +15,7 @@ import CardMedia from '@mui/material/CardMedia';
 import Box from '@mui/material/Box';
 import { useApiCancellation } from '@/hooks/useCancelAPI';
 import { useApiCall } from '@/hooks/useApiCall';
+import BasicCardComonent from '../../compoents/BasicCardComonent/BasicCardComonent';
 
 const StyledContainer = styled(Grid)(({ theme: { breakpoints } }) => ({
     display: 'flex',
