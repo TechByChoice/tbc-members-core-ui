@@ -251,18 +251,6 @@ export default function MemberDashboard() {
                                             job={job}
                                         />
                                     ) : (
-                                    // <JobCard
-                                    //     match={false}
-                                    //     companyId={job?.parent_company?.id}
-                                    //     companyLogo={job?.parent_company?.logo}
-                                    //     companyName={job?.parent_company?.name}
-                                    //     jobType={job?.role?.name}
-                                    //     jobTitle={job?.job_title}
-                                    //     jobId={job?.id}
-                                    //     location={job?.location}
-                                    //     salary={`${job?.max_compensation?.range} - ${job?.max_compensation?.range}`}
-                                    //     description={null}
-
                                         <Typography variant="body1">We currently don&apos;t have a match at this time. Please check back later.</Typography>
                                     )}
                                 </CardContent>
