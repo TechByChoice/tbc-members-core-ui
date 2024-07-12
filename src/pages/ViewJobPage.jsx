@@ -348,7 +348,7 @@ function ViewJobPage({ userDetail, isLoading }) {
                                     <Hidden smDown>
                                         <Grid item>
                                             <Typography variant="body1" align="right">
-                                                Created: {formatDateUtil(jobData?.created_at)}
+                                                Created: {jobData?.created_at ? formatDateUtil(jobData?.created_at) : ' '}
                                             </Typography>
                                         </Grid>
                                     </Hidden>
