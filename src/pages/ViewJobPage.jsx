@@ -250,7 +250,7 @@ function ViewJobPage({ userDetail, isLoading }) {
             <CardContent>
                 <Typography variant="h6">Ready to apply?</Typography>
                 <Typography variant="body1">Apply to the job today and don&apos;t for get to mention the Tech by Choice community!</Typography>
-                <Button target="_blank" variant="contained" href={`https://${jobData?.url}`} color="primary">
+                <Button target="_blank" variant="contained" href={`${jobData?.url}`} color="primary">
                     Apply Now
                 </Button>
             </CardContent>
@@ -352,7 +352,7 @@ function ViewJobPage({ userDetail, isLoading }) {
                                         </Grid>
                                     </Hidden>
                                     <Grid item>
-                                        <Button variant="contained" target="_blank" href={`https://${jobData?.url}`}>
+                                        <Button variant="contained" target="_blank" href={`${jobData?.url}`}>
                                             Apply Now
                                         </Button>
                                     </Grid>
