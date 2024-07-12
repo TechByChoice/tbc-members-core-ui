@@ -127,7 +127,7 @@ export default function AllJobsPage({}) {
                         <Grid item xs={12} sm={6} md={4} key={index}>
                             <BasicCardComponent
                                 imageUrl={job?.parent_company?.logo_url}
-                                headerText="Software Developer"
+                                headerText={job?.role?.name}
                                 bodyText={job?.role?.name}
                                 hourlyRate={20}
                                 buttonText="View Job"

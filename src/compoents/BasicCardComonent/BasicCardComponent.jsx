@@ -93,7 +93,7 @@ const BasicCardComponent = ({
                     <Typography variant="body1">
                         <Link to={`/company/${job?.parent_company?.id}`}>{job?.parent_company?.company_name}</Link>
                     </Typography>{' '}
-                    | <Typography variant="body1">{formatDateUtil(job?.created_at)}</Typography>
+                    | <Typography variant="body1">{job?.created_at ? formatDateUtil(job?.created_at) : ''}</Typography>
                 </CardHeader>
                 <CardTitle>
                     <Link to={`/job/${job.id}`}>
@@ -103,7 +103,7 @@ const BasicCardComponent = ({
                     </Link>
                 </CardTitle>
                 <Typography variant="body2" color="textSecondary" component="p">
-                    <HtmlContentRenderer maxLines={2} htmlContent={job?.external_description} />
+                    <HtmlContentRenderer maxLines={2} htmlContent={job?.external_description || job?.description} />
                 </Typography>
                 <Stack direction="row" spacing={1} mt={2}>
                     {job?.skills?.slice(0, 3).map((skill, index) => (
