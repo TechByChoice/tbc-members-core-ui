@@ -135,7 +135,7 @@ const CompanyHeader = ({ companyProfile, companyScore, companyJobs }) => {
                             <Grid item key={index}>
                                 <BasicCardComponent
                                     imageUrl={companyProfile?.logo_url}
-                                    headerText="Software Developer"
+                                    headerText={job?.role?.name}
                                     bodyText={job?.role?.name}
                                     // icon={job?.role?.name}
                                     hourlyRate={20}

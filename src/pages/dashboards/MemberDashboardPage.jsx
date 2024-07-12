@@ -243,7 +243,7 @@ export default function MemberDashboard() {
                                     {job ? (
                                         <BasicCardComponent
                                             imageUrl={job?.parent_company?.logo_url}
-                                            headerText="Software Developer"
+                                            headerText={job?.role?.name}
                                             bodyText={job?.role?.name}
                                             // icon={job?.role?.name}
                                             hourlyRate={20}
