@@ -4,6 +4,7 @@ import { GitHub, Instagram, Language, LinkedIn, Twitter, YouTube } from '@mui/ic
 import JobCard from '@/compoents/JobCard';
 import HtmlContentRenderer from './utils/HtmlContentRenderer';
 import ErrorBoundary from '@/compoents/ErrorBoundary';
+import BasicCardComponent from '@/compoents/BasicCardComonent/BasicCardComponent';
 
 const ButtonAddReview = React.lazy(() => import('open_doors/ButtonAddReview'));
 
@@ -132,17 +133,15 @@ const CompanyHeader = ({ companyProfile, companyScore, companyJobs }) => {
                     <Grid container justifyContent="flex-start">
                         {companyJobs.map((job, index) => (
                             <Grid item key={index}>
-                                <JobCard
-                                    match={false}
-                                    companyId={companyProfile?.id}
-                                    companyLogo={companyProfile?.logo_url}
-                                    companyName={companyProfile?.company_name}
-                                    jobType={job?.role?.name}
-                                    jobTitle={job?.job_title}
-                                    jobId={job?.id}
-                                    location={job?.location}
-                                    salary={`${job?.max_compensation?.range} - ${job?.max_compensation?.range}`}
-                                    description={null}></JobCard>
+                                <BasicCardComponent
+                                    imageUrl={companyProfile?.logo_url}
+                                    headerText="Software Developer"
+                                    bodyText={job?.role?.name}
+                                    // icon={job?.role?.name}
+                                    hourlyRate={20}
+                                    buttonText="View Job"
+                                    job={job}
+                                />
                             </Grid>
                         ))}
                     </Grid>

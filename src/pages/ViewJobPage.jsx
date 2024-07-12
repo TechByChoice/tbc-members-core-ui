@@ -9,6 +9,7 @@ import { useStatus } from '../providers/MsgStatusProvider';
 import { useStatusMessage } from '../hooks/useStatusMessage';
 import { routes } from '@/lib/routes';
 import { useAuth } from '@/providers/AuthProvider';
+import { formatDateUtil } from '@/utils/helpers';
 
 const HtmlContentRenderer = ({ htmlContent }) => {
     return <div dangerouslySetInnerHTML={{ __html: htmlContent }} />;
@@ -347,7 +348,7 @@ function ViewJobPage({ userDetail, isLoading }) {
                                     <Hidden smDown>
                                         <Grid item>
                                             <Typography variant="body1" align="right">
-                                                Created: {formatDate(jobData?.created_at)}
+                                                Created: {formatDateUtil(jobData?.created_at)}
                                             </Typography>
                                         </Grid>
                                     </Hidden>

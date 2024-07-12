@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom';
 import { routes } from '@/lib/routes';
 import { useAuth } from '@/providers/AuthProvider';
 import Box from '@mui/material/Box';
+import BasicCardComponent from '@/compoents/BasicCardComonent/BasicCardComponent';
 
 const CalloutCard = styled.section`
     border: 1px solid darkgray;
@@ -124,17 +125,13 @@ export default function AllJobsPage({}) {
                 {jobs?.length > 0 &&
                     jobs.map((job, index) => (
                         <Grid item xs={12} sm={6} md={4} key={index}>
-                            <JobCard
-                                companyId={job?.parent_company?.id}
-                                companyLogo={job?.parent_company?.logo}
-                                companyName={job?.parent_company?.name}
-                                jobType={job?.role?.name}
-                                jobTitle={job?.job_title}
-                                jobId={job?.id}
-                                location={job?.location}
-                                salary={`${job?.max_compensation?.range} - ${job?.max_compensation?.range}`}
-                                description={null}
-                                match={false}
+                            <BasicCardComponent
+                                imageUrl={job?.parent_company?.logo_url}
+                                headerText="Software Developer"
+                                bodyText={job?.role?.name}
+                                hourlyRate={20}
+                                buttonText="View Job"
+                                job={job}
                             />
                         </Grid>
                     ))}
