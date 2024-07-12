@@ -1,15 +1,5 @@
 import React from 'react';
-import {Container,
-    TextField,
-    Button,
-    Select,
-    MenuItem,
-    InputLabel,
-    FormControl,
-    FormLabel,
-    InputAdornment,
-    OutlinedInput,
-    ButtonGroup,} from '@mui/material';
+import { Container, TextField, Button, Select, MenuItem, InputLabel, FormControl, FormLabel, InputAdornment, OutlinedInput, ButtonGroup } from '@mui/material';
 import DropdownSkills from './DropdownSkills';
 import DropdownSalary from './DropdownSalary';
 import DropdownRoles from './DropdownRoles';
@@ -19,6 +9,8 @@ import { EditorContent, useEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Heading from '@tiptap/extension-heading';
 import styled from '@emotion/styled';
+import DropdownNiceToHaveSkills from '@/compoents/DropdownNiceToHaveSkills';
+import DropdownCerts from '@/compoents/DropdownCerts';
 
 const EditorContentStyled = styled(EditorContent)`
     padding-left: 16px;
@@ -146,34 +138,7 @@ export default function JobForm({ formErrors, answers, setAnswers }) {
 
     return (
         <Container maxWidth="md">
-            <TextField
-                fullWidth
-                required
-                label="Job Title"
-                error={!!formErrors.job_title}
-                name="job_title"
-                variant="outlined"
-                margin="normal"
-                onChange={handleChange}
-            />
-            <FormControl fullWidth margin="normal">
-                <InputLabel>* What type of job is this?</InputLabel>
-                <Select
-                    required
-                    label="What type of job is this?"
-                    error={!!formErrors.job_type}
-                    name="job_type"
-                    defaultValue=""
-                    variant="outlined"
-                    onChange={handleChange}>
-                    <MenuItem value="full_time">Full Time</MenuItem>
-                    <MenuItem value="contract">Contract</MenuItem>
-                    <MenuItem value="volunteer">Volunteer</MenuItem>
-                    <MenuItem value="temporary">Temporary</MenuItem>
-                    <MenuItem value="internship">Internship</MenuItem>
-                    <MenuItem value="apprenticeship">Apprenticeship</MenuItem>
-                </Select>
-            </FormControl>
+            <TextField fullWidth required label="Job Title" error={!!formErrors.job_title} name="job_title" variant="outlined" margin="normal" onChange={handleChange} />
             <FormControl fullWidth margin="normal">
                 <InputLabel>* On-site/Remote</InputLabel>
                 <Select
@@ -191,13 +156,7 @@ export default function JobForm({ formErrors, answers, setAnswers }) {
             </FormControl>
             <FormControl fullWidth margin="normal">
                 <InputLabel>* What type of job is this?</InputLabel>
-                <Select
-                    label="What type of job is this?"
-                    error={!!formErrors.job_type}
-                    name="job_type"
-                    defaultValue=""
-                    variant="outlined"
-                    onChange={handleChange}>
+                <Select label="What type of job is this?" error={!!formErrors.job_type} name="job_type" defaultValue="" variant="outlined" onChange={handleChange}>
                     <MenuItem value="full time">Full Time</MenuItem>
                     <MenuItem value="part time">Part Time</MenuItem>
                     <MenuItem value="contract">Contract</MenuItem>
@@ -216,15 +175,7 @@ export default function JobForm({ formErrors, answers, setAnswers }) {
             <FormControl fullWidth margin="normal">
                 <DropdownDepartments isRequired={true} error={formErrors} setAnswers={setAnswers} onDepartmentSelect={handleChange} />
             </FormControl>
-            <TextField
-                fullWidth
-                label="Job Location"
-                error={!!formErrors.location}
-                name="location"
-                variant="outlined"
-                margin="normal"
-                onChange={handleChange}
-            />
+            <TextField fullWidth label="Job Location" error={!!formErrors.location} name="location" variant="outlined" margin="normal" onChange={handleChange} />
             <FormControl fullWidth>
                 <FormLabel id="job-description">* Job Description</FormLabel>
                 <MyEditor error={formErrors} id="external_description" onFormDataChange={handleEditorUpdate} />
@@ -236,6 +187,12 @@ export default function JobForm({ formErrors, answers, setAnswers }) {
             </FormControl>
             <FormControl fullWidth>
                 <DropdownSkills isRequired={true} error={formErrors} setAnswers={setAnswers} onSkillSelect={handleChange} />
+            </FormControl>
+            <FormControl fullWidth>
+                <DropdownNiceToHaveSkills isRequired={false} error={formErrors} setAnswers={setAnswers} onSkillSelect={handleChange} />
+            </FormControl>
+            <FormControl fullWidth>
+                <DropdownCerts isRequired={false} error={formErrors} setAnswers={setAnswers} onSkillSelect={handleChange} />
             </FormControl>
             <FormControl fullWidth>
                 <FormLabel htmlFor="company_url">* Link to Job Application</FormLabel>
@@ -253,15 +210,7 @@ export default function JobForm({ formErrors, answers, setAnswers }) {
             <DropdownSalary error={formErrors} setAnswers={setAnswers} onSalarySelect={handleChange} labelName="Min Salary" />
             <DropdownSalary error={formErrors} setAnswers={setAnswers} onSalarySelect={handleChange} labelName="Max Salary" />
 
-            <TextField
-                fullWidth
-                label="Team Size"
-                error={!!formErrors.team_size}
-                name="team_size"
-                variant="outlined"
-                margin="normal"
-                onChange={handleChange}
-            />
+            <TextField fullWidth label="Team Size" error={!!formErrors.team_size} name="team_size" variant="outlined" margin="normal" onChange={handleChange} />
             <TextField
                 fullWidth
                 label="Department Size"

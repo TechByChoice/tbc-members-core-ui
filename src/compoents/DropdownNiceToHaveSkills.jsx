@@ -5,8 +5,13 @@ import { createFilterOptions } from '@mui/material/Autocomplete';
 import { useAuth } from '@/providers/AuthProvider';
 
 const filter = createFilterOptions();
-export default function DropdownSkills({
-    isRequired, error, setAnswers, handleInputChange, inputLabel = 'Required Skills', inputName = 'skills' 
+export default function DropdownNiceToHaveSkills({
+    isRequired,
+    error,
+    setAnswers,
+    handleInputChange,
+    inputLabel = 'Nice to have Skills',
+    inputName = 'nice_to_have_skills',
 }) {
     const [ skills, setSkills ] = useState([]);
     const [ selectedSkill, setSelectedSkill ] = useState('');

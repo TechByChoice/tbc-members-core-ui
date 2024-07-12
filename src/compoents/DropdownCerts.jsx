@@ -5,26 +5,26 @@ import { createFilterOptions } from '@mui/material/Autocomplete';
 import { useAuth } from '@/providers/AuthProvider';
 
 const filter = createFilterOptions();
-export default function DropdownSkills({
-    isRequired, error, setAnswers, handleInputChange, inputLabel = 'Required Skills', inputName = 'skills' 
+export default function DropdownCerts({
+    isRequired, error, setAnswers, handleInputChange, inputLabel = 'Certs', inputName = 'certs' 
 }) {
-    const [ skills, setSkills ] = useState([]);
-    const [ selectedSkill, setSelectedSkill ] = useState('');
+    const [ certs, setCerts ] = useState([]);
+    const [ selectedCerts, setSelectedCerts ] = useState('');
 
     const { token } = useAuth();
 
     useEffect(() => {
         // Fetch the list of companies when the component mounts
-        async function fetchSkills() {
+        async function fetchCerts() {
             try {
-                const response = await getDropDrownItems('job_skills');
-                setSkills(response.job_skills);
+                const response = await getDropDrownItems('certs');
+                setCerts(response.certs);
             } catch (error) {
                 console.error('Error fetching skills:', error);
             }
         }
 
-        fetchSkills();
+        fetchCerts();
     }, [ token ]);
 
     return (
@@ -40,7 +40,7 @@ export default function DropdownSkills({
                 selectOnFocus
                 includeInputInList
                 handleHomeEndKeys
-                options={skills || []}
+                options={certs || []}
                 isOptionEqualToValue={(option, value) => (option.inputValue && value.inputValue && option.inputValue === value.inputValue) || option === value}
                 renderOption={(props, option) => (
                     <li {...props} key={option.id}>
@@ -74,7 +74,7 @@ export default function DropdownSkills({
                 }}
                 // value={selectedSkill}
                 onChange={(e, newValue) => {
-                    setSelectedSkill(newValue);
+                    setSelectedCerts(newValue);
                     if (handleInputChange) {
                         const valueArray = [];
                         newValue.map((item, index) => {
