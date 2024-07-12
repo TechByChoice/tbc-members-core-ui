@@ -369,10 +369,12 @@ function ViewJobPage({ userDetail, isLoading }) {
                                     <Typography variant="h5">Job Description:</Typography>
                                     <HtmlContentRenderer htmlContent={jobData?.external_description} />
                                 </div>
-                                <div>
-                                    <Typography variant="h5">Interview Process:</Typography>
-                                    <HtmlContentRenderer htmlContent={jobData?.external_interview_process} />
-                                </div>
+                                {jobData?.external_interview_process && (
+                                    <div>
+                                        <Typography variant="h5">Interview Process:</Typography>
+                                        <HtmlContentRenderer htmlContent={jobData?.external_interview_process} />
+                                    </div>
+                                )}
                                 <div>
                                     <Typography variant="h5">Skills:</Typography>
                                     {jobData?.skills && (
