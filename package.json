@@ -57,7 +57,7 @@
         "@biomejs/biome": "^1.8.3",
         "@mapbox/mapbox-sdk": "^0.16.0",
         "@techbychoice/tbc-component-library": "^0.0.7",
-        "@tiptap/extension-heading": "^2.4.0",
+        "@tiptap/extension-heading": "^2.5.1",
         "@tiptap/extension-paragraph": "^2.2.3",
         "@tiptap/extension-text": "^2.4.0",
         "@tiptap/pm": "^2.4.0",
