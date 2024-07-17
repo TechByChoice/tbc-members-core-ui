@@ -52,7 +52,9 @@ function ResetPasswordPage() {
                 return response.json();
             })
             .then(data => {
-                console.log('saved');
+                if(data.status){
+                    statusMessage.success("We've received your request. If we have an account matching your email address, you will receive an email with a link to reset your password.");
+                }
             })
             .catch(error => {
                 console.error('Fetch error:', error);
