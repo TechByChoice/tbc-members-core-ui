@@ -59,7 +59,7 @@
         "@techbychoice/tbc-component-library": "^0.0.7",
         "@tiptap/extension-heading": "^2.5.1",
         "@tiptap/extension-paragraph": "^2.2.3",
-        "@tiptap/extension-text": "^2.4.0",
+        "@tiptap/extension-text": "^2.5.5",
         "@tiptap/pm": "^2.4.0",
         "@tiptap/react": "^2.5.5",
         "@tiptap/starter-kit": "^2.5.1",
