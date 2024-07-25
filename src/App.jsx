@@ -41,6 +41,7 @@ import TermsAndConditions from '@/pages/TermsAndConditionsPage';
 import CookiePolicyPage from '@/pages/CookiePolicyPage';
 import PrivacyPolicyPage from '@/pages/PrivacyPolicyPage';
 import EULAPage from '@/pages/EULAPage';
+import OnboardingProfilePage from '@/pages/OnboardingProfilePage';
 
 const SurveyQuestions = React.lazy(() => import('open_doors/SurveyQuestions'));
 
@@ -103,6 +104,14 @@ const App = () => {
                                         element={
                                             <PrivateRoutes userDetail={user?.[0]}>
                                                 <NewMemberPage />
+                                            </PrivateRoutes>
+                                        }
+                                    />
+                                    <Route
+                                        path="/new/2"
+                                        element={
+                                            <PrivateRoutes userDetail={user?.[0]}>
+                                                <OnboardingProfilePage />
                                             </PrivateRoutes>
                                         }
                                     />

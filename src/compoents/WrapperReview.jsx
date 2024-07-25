@@ -1,17 +1,33 @@
-import React, { Suspense } from 'react';
+import React, { Suspense, useEffect, useState } from 'react';
 import { useAuth } from '@/providers/AuthProvider';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import { Link } from 'react-router-dom';
+import ProfileCompletionModal from '@/compoents/ProfileCompletionModal';
 
 const Review = React.lazy(() => import('open_doors/Review'));
 export default function WrapperReview() {
     const { user } = useAuth();
-    const reviewAccess = user?.[0]?.account_info?.is_company_review_access_active;
+    const user_account = user?.[0].account_info;
+    const reviewAccess = user_account.is_company_review_access_active;
+    const od_profile_status = user_account?.is_open_doors_profile_complete;
+    const [ isModalOpen, setIsModalOpen ] = useState(false);
+
+    useEffect(() => {
+        if (!od_profile_status) {
+            setIsModalOpen(true);
+        }
+    }, [ od_profile_status ]);
+
+    const handleCloseModal = () => {
+        setIsModalOpen(false);
+    };
 
     return (
         <>
+            <ProfileCompletionModal open={isModalOpen} onClose={handleCloseModal} />
+
             {reviewAccess ? (
                 <>
                     <Suspense fallback={<div>Loading...</div>}>

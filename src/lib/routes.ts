@@ -49,6 +49,7 @@ export const routes = {
             signUp: () => apiJoin(routes.api.base, 'user/new/'),
             companySignUp: () => apiJoin(routes.api.base, 'user/new/company'),
             updateProfile: () => apiJoin(routes.api.base, 'user/new-member/profile/create'),
+            updateODProfile: () => apiJoin(routes.api.base, 'user/od/profile/create'),
             getProfile: () => apiJoin(routes.api.base, 'user/details/new-member'),
             getUsersDetails: () => apiJoin(routes.api.base, 'user/details/'),
             connectWithMentor: id => apiJoin(routes.api.base, `mentorship/mentor/${id}/connect/roster/add`),
