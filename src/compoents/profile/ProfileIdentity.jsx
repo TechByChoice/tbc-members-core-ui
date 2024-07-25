@@ -14,6 +14,7 @@ export default function ProfileIdentity({ questions }) {
     const userDetails = user[0];
     const [ formErrors, setFormErrors ] = useState({});
     const { setStatusMessage, setIsAlertOpen, setStatusType } = useStatus();
+    const isUserOD = userDetails?.is_open_doors;
 
     const [ identityFormData, setIdentityFormData ] = useState({
         identity_sexuality: [],
@@ -239,21 +240,22 @@ export default function ProfileIdentity({ questions }) {
                                     renderInput={params => <TextField name="identity_sexuality" {...params} />}
                                 />
                                 <FormLabel>
-                                    If you see any terms you&apos;re not sure about we encourage you to check out this site to learn more about
-                                    people&apos;s experiences
+                                    If you see any terms you&apos;re not sure about we encourage you to check out this site to learn more about people&apos;s experiences
                                 </FormLabel>
-                                <FormControlLabel
-                                    control={
-                                        <Checkbox
-                                            checked={identityFormData.is_identity_sexuality_displayed}
-                                            onChange={handleInputChange}
-                                            name="is_identity_sexuality_displayed"
-                                            color="primary"
-                                            size="small"
-                                        />
-                                    }
-                                    label="Would you like to display your sexuality on your profile?"
-                                />
+                                {isUserOD && (
+                                    <FormControlLabel
+                                        control={
+                                            <Checkbox
+                                                checked={identityFormData.is_identity_sexuality_displayed}
+                                                onChange={handleInputChange}
+                                                name="is_identity_sexuality_displayed"
+                                                color="primary"
+                                                size="small"
+                                            />
+                                        }
+                                        label="Would you like to display your sexuality on your profile?"
+                                    />
+                                )}
                             </FormControl>
                         </Grid>
 
@@ -297,18 +299,20 @@ export default function ProfileIdentity({ questions }) {
                                     onChange={(event, value) => handleAutocompleteChange('gender_identities', value)}
                                     renderInput={params => <TextField name="gender_identities" {...params} />}
                                 />
-                                <FormControlLabel
-                                    control={
-                                        <Checkbox
-                                            checked={identityFormData.is_identity_gender_displayed}
-                                            onChange={handleInputChange}
-                                            name="is_identity_gender_displayed"
-                                            color="primary"
-                                            size="small"
-                                        />
-                                    }
-                                    label="Would you like to display your gender your profile?"
-                                />
+                                {isUserOD && (
+                                    <FormControlLabel
+                                        control={
+                                            <Checkbox
+                                                checked={identityFormData.is_identity_gender_displayed}
+                                                onChange={handleInputChange}
+                                                name="is_identity_gender_displayed"
+                                                color="primary"
+                                                size="small"
+                                            />
+                                        }
+                                        label="Would you like to display your gender your profile?"
+                                    />
+                                )}
                             </FormControl>
                         </Grid>
 
@@ -352,18 +356,20 @@ export default function ProfileIdentity({ questions }) {
                                     onChange={(event, value) => handleAutocompleteChange('ethic_identities', value)}
                                     renderInput={params => <TextField name="ethic_identities" {...params} />}
                                 />
-                                <FormControlLabel
-                                    control={
-                                        <Checkbox
-                                            checked={identityFormData.is_identity_ethic_displayed}
-                                            onChange={handleInputChange}
-                                            name="is_identity_ethic_displayed"
-                                            color="primary"
-                                            size="small"
-                                        />
-                                    }
-                                    label="Would you like to display your ethnicity your profile?"
-                                />
+                                {isUserOD && (
+                                    <FormControlLabel
+                                        control={
+                                            <Checkbox
+                                                checked={identityFormData.is_identity_ethic_displayed}
+                                                onChange={handleInputChange}
+                                                name="is_identity_ethic_displayed"
+                                                color="primary"
+                                                size="small"
+                                            />
+                                        }
+                                        label="Would you like to display your ethnicity your profile?"
+                                    />
+                                )}
                             </FormControl>
                         </Grid>
 
@@ -378,18 +384,20 @@ export default function ProfileIdentity({ questions }) {
                                     <MenuItem value="false">No</MenuItem>
                                     <MenuItem value="Prefer not to answer">Prefer not to answer</MenuItem>
                                 </Select>
-                                <FormControlLabel
-                                    control={
-                                        <Checkbox
-                                            checked={identityFormData.is_disability_displayed}
-                                            onChange={handleInputChange}
-                                            name="is_disability_displayed"
-                                            color="primary"
-                                            size="small"
-                                        />
-                                    }
-                                    label="Would you like to display your disability status your profile?"
-                                />
+                                {isUserOD && (
+                                    <FormControlLabel
+                                        control={
+                                            <Checkbox
+                                                checked={identityFormData.is_disability_displayed}
+                                                onChange={handleInputChange}
+                                                name="is_disability_displayed"
+                                                color="primary"
+                                                size="small"
+                                            />
+                                        }
+                                        label="Would you like to display your disability status your profile?"
+                                    />
+                                )}
                             </FormControl>
                         </Grid>
 
@@ -403,18 +411,20 @@ export default function ProfileIdentity({ questions }) {
                                     <MenuItem value="Prefer not to answer">Prefer not to answer</MenuItem>
                                 </Select>
                             </FormControl>
-                            <FormControlLabel
-                                control={
-                                    <Checkbox
-                                        checked={identityFormData.is_care_giver_displayed}
-                                        onChange={handleInputChange}
-                                        name="is_care_giver_displayed"
-                                        color="primary"
-                                        size="small"
-                                    />
-                                }
-                                label="Would you like to display your care giver status your profile?"
-                            />
+                            {isUserOD && (
+                                <FormControlLabel
+                                    control={
+                                        <Checkbox
+                                            checked={identityFormData.is_care_giver_displayed}
+                                            onChange={handleInputChange}
+                                            name="is_care_giver_displayed"
+                                            color="primary"
+                                            size="small"
+                                        />
+                                    }
+                                    label="Would you like to display your care giver status your profile?"
+                                />
+                            )}
                         </Grid>
 
                         {/* Question 6 */}
@@ -426,18 +436,20 @@ export default function ProfileIdentity({ questions }) {
                                     <MenuItem value="2">I identify as one or more of the classifications of a protected veteran</MenuItem>
                                     <MenuItem value="3">Prefer not to answer</MenuItem>
                                 </Select>
-                                <FormControlLabel
-                                    control={
-                                        <Checkbox
-                                            checked={identityFormData.is_veteran_status_displayed}
-                                            onChange={handleInputChange}
-                                            name="is_veteran_status_displayed"
-                                            color="primary"
-                                            size="small"
-                                        />
-                                    }
-                                    label="Would you like to display your veteran status your profile?"
-                                />
+                                {isUserOD && (
+                                    <FormControlLabel
+                                        control={
+                                            <Checkbox
+                                                checked={identityFormData.is_veteran_status_displayed}
+                                                onChange={handleInputChange}
+                                                name="is_veteran_status_displayed"
+                                                color="primary"
+                                                size="small"
+                                            />
+                                        }
+                                        label="Would you like to display your veteran status your profile?"
+                                    />
+                                )}
                             </FormControl>
                         </Grid>
                         <Grid item xs={12} sm={8}>

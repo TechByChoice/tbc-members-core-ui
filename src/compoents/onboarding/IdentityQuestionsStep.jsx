@@ -6,12 +6,16 @@ import Checkbox from '@mui/material/Checkbox';
 import GenderDropdown from '@/compoents/DropdownGender';
 import EthicDropdown from '@/compoents/DropdownEthic';
 import SexualityDropdown from '@/compoents/DropdownSexuality';
+import { useAuth } from '@/providers/AuthProvider';
 
 const filter = createFilterOptions();
 
 function IdentityQuestionsStep({
-    answers, questions, handleAutocompleteChange, handleInputChange
+    answers, questions, handleAutocompleteChange, handleInputChange 
 }) {
+    const { user } = useAuth();
+    const isUserOD = user[0]?.account_info?.is_open_doors;
+
     const filterOptions = (options, { inputValue }) => {
         const matcher = new RegExp(inputValue, 'i');
         return options.filter(option => matcher.test(option));
@@ -22,9 +26,9 @@ function IdentityQuestionsStep({
                 {/* Title */}
                 <Typography variant="h5">Identity Related Questions</Typography>
                 <Typography variant="subtitle1">
-                    Thanks for all of that info! The next few questions will be about how you self identify. Please feel free to use the &apos;Other&apos;
-                    option to type in any part of your identity that&apos;s not listed. This information will be used to help send you resources and events
-                    you may be interested in. We will not share the following information with anyone.
+                    Thanks for all of that info! The next few questions will be about how you self identify. Please feel free to use the &apos;Other&apos; option to type
+                    in any part of your identity that&apos;s not listed. This information will be used to help send you resources and events you may be interested in. We
+                    will not share the following information with anyone.
                 </Typography>
             </Grid>
 
@@ -34,13 +38,14 @@ function IdentityQuestionsStep({
                     <FormLabel htmlFor="identity_sexuality">Please select the sexual identities that best describe you today.</FormLabel>
                     <SexualityDropdown isRequired={false} handleChange={handleAutocompleteChange} setAnswers={handleAutocompleteChange} />
                     <FormLabel>
-                        If you see any terms you&apos;re not sure about we encourage you to check out this site to learn more about people&apos;s
-                        experiences
+                        If you see any terms you&apos;re not sure about we encourage you to check out this site to learn more about people&apos;s experiences
                     </FormLabel>
-                    <FormControlLabel
-                        control={<Checkbox onChange={handleInputChange} name="is_identity_sexuality_displayed" color="primary" size="small" />}
-                        label="Would you like to display your sexuality your profile?"
-                    />
+                    {isUserOD && (
+                        <FormControlLabel
+                            control={<Checkbox onChange={handleInputChange} name="is_identity_sexuality_displayed" color="primary" size="small" />}
+                            label="Would you like to display your sexuality your profile?"
+                        />
+                    )}
                 </FormControl>
             </Grid>
 
@@ -49,10 +54,12 @@ function IdentityQuestionsStep({
                 <FormControl variant="outlined" fullWidth>
                     <FormLabel htmlFor="gender_identities">Please select the gender identities that best describe you today.</FormLabel>
                     <GenderDropdown isRequired={false} setAnswers={handleAutocompleteChange} handleChange={handleAutocompleteChange} />
-                    <FormControlLabel
-                        control={<Checkbox onChange={handleInputChange} name="is_identity_gender_displayed" color="primary" size="small" />}
-                        label="Would you like to display your gender your profile?"
-                    />
+                    {isUserOD && (
+                        <FormControlLabel
+                            control={<Checkbox onChange={handleInputChange} name="is_identity_gender_displayed" color="primary" size="small" />}
+                            label="Would you like to display your gender your profile?"
+                        />
+                    )}
                 </FormControl>
             </Grid>
 
@@ -61,10 +68,12 @@ function IdentityQuestionsStep({
                 <FormControl variant="outlined" fullWidth>
                     <FormLabel htmlFor="identity_ethic">Please select all the identities that best describe your ethic background</FormLabel>
                     <EthicDropdown isRequired={false} setAnswers={handleAutocompleteChange} handleChange={handleAutocompleteChange} />
-                    <FormControlLabel
-                        control={<Checkbox onChange={handleInputChange} name="is_identity_ethic_displayed" color="primary" size="small" />}
-                        label="Would you like to display your ethnicity your profile?"
-                    />
+                    {isUserOD && (
+                        <FormControlLabel
+                            control={<Checkbox onChange={handleInputChange} name="is_identity_ethic_displayed" color="primary" size="small" />}
+                            label="Would you like to display your ethnicity your profile?"
+                        />
+                    )}
                 </FormControl>
             </Grid>
 
@@ -79,10 +88,12 @@ function IdentityQuestionsStep({
                         <MenuItem value={false}>No</MenuItem>
                         <MenuItem value="Prefer not to answer">Prefer not to answer</MenuItem>
                     </Select>
-                    <FormControlLabel
-                        control={<Checkbox onChange={handleInputChange} name="is_disability_displayed" color="primary" size="small" />}
-                        label="Would you like to display your disability status your profile?"
-                    />
+                    {isUserOD && (
+                        <FormControlLabel
+                            control={<Checkbox onChange={handleInputChange} name="is_disability_displayed" color="primary" size="small" />}
+                            label="Would you like to display your disability status your profile?"
+                        />
+                    )}
                 </FormControl>
             </Grid>
 
@@ -95,10 +106,12 @@ function IdentityQuestionsStep({
                         <MenuItem value={false}>No</MenuItem>
                         <MenuItem value="Prefer not to answer">Prefer not to answer</MenuItem>
                     </Select>
-                    <FormControlLabel
-                        control={<Checkbox onChange={handleInputChange} name="is_care_giver_displayed" color="primary" size="small" />}
-                        label="Would you like to display your care giver status your profile?"
-                    />
+                    {isUserOD && (
+                        <FormControlLabel
+                            control={<Checkbox onChange={handleInputChange} name="is_care_giver_displayed" color="primary" size="small" />}
+                            label="Would you like to display your care giver status your profile?"
+                        />
+                    )}
                 </FormControl>
             </Grid>
 
@@ -111,10 +124,12 @@ function IdentityQuestionsStep({
                         <MenuItem value="2">No</MenuItem>
                         <MenuItem value="3">Prefer not to answer</MenuItem>
                     </Select>
-                    <FormControlLabel
-                        control={<Checkbox onChange={handleInputChange} name="is_veteran_status_displayed" color="primary" size="small" />}
-                        label="Would you like to display your veteran status your profile?"
-                    />
+                    {isUserOD && (
+                        <FormControlLabel
+                            control={<Checkbox onChange={handleInputChange} name="is_veteran_status_displayed" color="primary" size="small" />}
+                            label="Would you like to display your veteran status your profile?"
+                        />
+                    )}
                 </FormControl>
             </Grid>
         </Grid>
