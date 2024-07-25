@@ -77,8 +77,7 @@ export default function AllCompaniesPage({}) {
 
     return (
         <div>
-            <Typography variant="h1">View Companies</Typography>
-            <Typography variant="h4">Search</Typography>
+            <Typography variant="h4">Search Companies</Typography>
             <FormControl fullWidth>
                 <InputLabel htmlFor="search">Search</InputLabel>
                 <OutlinedInput
