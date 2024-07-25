@@ -1,15 +1,14 @@
 import React, { useState } from 'react';
-import { AppBar, Toolbar, ListItemIcon, IconButton, Menu, MenuItem, Grid, Button, Avatar, Divider, Tooltip } from '@mui/material';
+import { AppBar, Avatar, Button, Divider, Grid, IconButton, ListItemIcon, Menu, MenuItem, Toolbar, Tooltip, useTheme } from '@mui/material';
 import { useAuth } from '@/providers/AuthProvider';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Logout, Settings } from '@mui/icons-material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { Link } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
 import MuiLink from '@mui/material/Link';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import MenuIcon from '@mui/icons-material/Menu';
-import { useTheme } from '@mui/material';
+import useEventTracker from '@/hooks/useEventTracking';
 
 const SkipLink = styled(MuiLink)(({ theme }) => ({
     position: 'absolute',
@@ -107,6 +106,7 @@ const StyledMenuItem = styled(MenuItem)(({ theme }) => ({
 
 export default function NavBar() {
     const auth = useAuth();
+    const trackEvent = useEventTracker();
     const { user } = useAuth();
     const navigate = useNavigate();
     const [ mobileSubmenuOpen, setMobileSubmenuOpen ] = useState(null);
@@ -199,8 +199,13 @@ export default function NavBar() {
 
     const handleOpenMenu = menu => event => {
         setMenuStates({ ...menuStates, [menu]: event.currentTarget });
+        trackEvent(`navbar__open_${menu}_menu`);
     };
 
+    const handleMenuItemClick = (menu, item) => {
+        handleCloseMenu(menu)();
+        trackEvent(`navbar__click_${item.label}_menu_item`);
+    };
     const handleCloseMenu = menu => () => {
         setMenuStates({ ...menuStates, [menu]: null });
     };
@@ -209,6 +214,7 @@ export default function NavBar() {
         event.preventDefault();
         navigate('/dashboard', { replace: true });
         auth.logout();
+        trackEvent('navbar__logout');
     };
 
     const handleClose = () => {
@@ -220,14 +226,17 @@ export default function NavBar() {
             <StyledButtonDropdown
                 aria-haspopup="true"
                 aria-label={menuStates[label.toLowerCase()] ? 'Collapse submenu' : 'Expand submenu'}
-                onClick={handleOpenMenu(label.toLowerCase())}>
+                onClick={event => {
+                    handleOpenMenu(label.toLowerCase())(event);
+                    trackEvent(`navbar__click_${label.toLowerCase()}_menu`);
+                }}>
                 {label} <ExpandMoreIcon style={{ transform: menuStates[label.toLowerCase()] ? 'rotate(180deg)' : 'rotate(0deg)' }} />
             </StyledButtonDropdown>
             <Menu anchorEl={menuStates[label.toLowerCase()]} open={Boolean(menuStates[label.toLowerCase()])} onClose={handleCloseMenu(label.toLowerCase())}>
                 {items.map((item, index) => (
                     <div key={index}>
                         {((item.isAuth && auth?.isAuthenticated) || item.isAuth === false || item.isAuth === undefined) && (
-                            <StyledMenuItem onClick={handleCloseMenu(label.toLowerCase())}>
+                            <StyledMenuItem onClick={() => handleMenuItemClick(label.toLowerCase(), item)}>
                                 {item.isInternal ? (
                                     <StyledLink to={item.href}>{item.label}</StyledLink>
                                 ) : (
@@ -284,7 +293,13 @@ export default function NavBar() {
 
     // Function to render the Donate button
     const renderDonateButton = () => (
-        <Button variant="contained" target="_blank" href="https://www.techbychoice.org/donate" color="primary" sx={{ margin: theme.spacing(1) }}>
+        <Button
+            variant="contained"
+            onClick={() => trackEvent('button__navbar__donate_button')}
+            target="_blank"
+            href="https://www.techbychoice.org/donate"
+            color="primary"
+            sx={{ margin: theme.spacing(1) }}>
             Donate
         </Button>
     );
@@ -293,13 +308,23 @@ export default function NavBar() {
         const isOpen = mobileSubmenuOpen === label;
         return (
             <>
-                <MenuItem aria-label={isOpen ? 'Collapse submenu' : 'Expand submenu'} onClick={() => toggleMobileSubmenu(label)}>
+                <MenuItem
+                    aria-label={isOpen ? 'Collapse submenu' : 'Expand submenu'}
+                    onClick={() => {
+                        toggleMobileSubmenu(label);
+                        trackEvent(`toggle_mobile_${label.toLowerCase()}_submenu`);
+                    }}>
                     {label}
                     <ExpandMoreIcon style={{ transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)' }} />
                 </MenuItem>
                 {isOpen &&
                     items.map((item, index) => (
-                        <MenuItem key={index} onClick={handleClose}>
+                        <MenuItem
+                            key={index}
+                            onClick={() => {
+                                handleClose();
+                                trackEvent(`navbar__click_mobile_${label.toLowerCase()}_${item.label.toLowerCase()}`);
+                            }}>
                             {item.isInternal ? (
                                 <StyledLink to={item.href}>{item.label}</StyledLink>
                             ) : (
