@@ -6,6 +6,7 @@ import CardMedia from '@mui/material/CardMedia';
 import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import { Link } from 'react-router-dom';
+import useEventTracker from '@/hooks/useEventTracking';
 
 const StyledCard = styled(Card)(({ theme: { breakpoints, spacing } }) => ({
     // width: 360,
@@ -60,8 +61,10 @@ const TypographyHeading = styled(Typography)(({}) => ({
 }));
 
 export function FeatureCard({
-    title, subTitle, btnText, linkEndpoint, image 
+    title, subTitle, btnText, linkEndpoint, image, eventId 
 }) {
+    const trackEvent = useEventTracker();
+
     return (
         <StyledCard>
             {/*import WorkIcon from '@mui/icons-material/Work';*/}
@@ -72,7 +75,13 @@ export function FeatureCard({
                     {title}
                 </TypographyHeading>
                 <Link to={linkEndpoint}>
-                    <Button variant="outlined">{btnText}</Button>
+                    <Button
+                        onClick={() => {
+                            trackEvent(eventId);
+                        }}
+                        variant="outlined">
+                        {btnText}
+                    </Button>
                 </Link>
             </CardContent>
         </StyledCard>

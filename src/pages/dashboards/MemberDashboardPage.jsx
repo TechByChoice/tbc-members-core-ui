@@ -15,6 +15,7 @@ import Box from '@mui/material/Box';
 import { useApiCancellation } from '@/hooks/useCancelAPI';
 import { useApiCall } from '@/hooks/useApiCall';
 import BasicCardComponent from '@/compoents/BasicCardComonent/BasicCardComponent';
+import useEventTracker from '@/hooks/useEventTracking';
 
 const StyledContainer = styled(Grid)(({ theme: { breakpoints } }) => ({
     display: 'flex',
@@ -48,6 +49,7 @@ export default function MemberDashboard() {
     const isNeedsToSubmitMentorshipApplication = !user[0]?.account_info?.is_mentor_application_submitted && isMentorshipProgram;
     const makeApiCall = useApiCall();
     const { navigate } = useApiCancellation();
+    const trackEvent = useEventTracker();
 
     useEffect(() => {
         fetch(routes.api.events.list(), {
@@ -145,6 +147,7 @@ export default function MemberDashboard() {
                             linkEndpoint="/mentor/create"
                             btnText="Apply"
                             title="Apply to Today"
+                            eventId="button_feature_card_mentorship_program"
                         />
                     </Grid>
                 )}
@@ -155,6 +158,7 @@ export default function MemberDashboard() {
                         linkEndpoint="/event/all"
                         btnText="View Events"
                         title="RSVP to Today"
+                        eventId="button_feature_card_event"
                     />
                 </Grid>
 
@@ -165,6 +169,7 @@ export default function MemberDashboard() {
                         linkEndpoint="/job/new/referral"
                         btnText="Add Job"
                         title="Add Job Referral"
+                        eventId="button_feature_card_community_job_board"
                     />
                 </Grid>
 
@@ -178,6 +183,7 @@ export default function MemberDashboard() {
                                     linkEndpoint="/reviews"
                                     btnText="Add a Review"
                                     title="Company Reviews"
+                                    eventId="button_feature_card_open_doors"
                                 />
                             </Grid>
                         </Suspense>
@@ -219,7 +225,12 @@ export default function MemberDashboard() {
                                     <SlackMessage elements={announcement.elements} />
                                 </Typography>
                                 <Box sx={{ pl: 0, pt: 1 }}>
-                                    <MuiLink target="_blank" variant="h6" underline="none" href={`https://techbychoice.slack.com/archives/CELK4L5FW/p${announcement.ts}`}>
+                                    <MuiLink
+                                        target="_blank"
+                                        onClick={() => trackEvent('link__member_dashboard__slack_notification')}
+                                        variant="h6"
+                                        underline="none"
+                                        href={`https://techbychoice.slack.com/archives/CELK4L5FW/p${announcement.ts}`}>
                                         View In Slack
                                     </MuiLink>
                                 </Box>
@@ -236,7 +247,7 @@ export default function MemberDashboard() {
                                 <CardContent>
                                     <Grid container display="flex" direction="row" justifyContent="space-between">
                                         <Typography variant="h6">Top Job</Typography>
-                                        <Link to="/job/all">
+                                        <Link onClick={() => trackEvent('link__member_dashboard__all_jobs')} to="/job/all">
                                             <Button variant="text">View More</Button>
                                         </Link>
                                     </Grid>
@@ -264,7 +275,7 @@ export default function MemberDashboard() {
                                 <CardContent>
                                     <Grid container display="flex" direction="row" justifyContent="space-between">
                                         <Typography variant="h6">Next Event</Typography>
-                                        <Link to="/event/all">
+                                        <Link onClick={() => trackEvent('link__member_dashboard__all_events')} to="/event/all">
                                             <Button variant="text">View More</Button>
                                         </Link>
                                     </Grid>
@@ -280,7 +291,7 @@ export default function MemberDashboard() {
                                 <CardContent>
                                     <Grid container display="flex" direction="row" justifyContent="space-between">
                                         <Typography variant="h6">Top Mentor</Typography>
-                                        <Link to="/mentor/all">
+                                        <Link onClick={() => trackEvent('link__member_dashboard__all_mentors')} to="/mentor/all">
                                             <Button variant="text">View More</Button>
                                         </Link>
                                     </Grid>
