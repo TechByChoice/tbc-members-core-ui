@@ -37,6 +37,10 @@ import WrapperQuestions from '@/compoents/WrapperQuestions';
 import WrapperSettingsPage from '@/pages/WrapperSettingsPage';
 import ResetPasswordPage from '@/pages/ResetPasswordPage';
 import CreateNewPasswordPage from '@/pages/CreateNewPasswordPage';
+import TermsAndConditions from '@/pages/TermsAndConditionsPage';
+import CookiePolicyPage from '@/pages/CookiePolicyPage';
+import PrivacyPolicyPage from '@/pages/PrivacyPolicyPage';
+import EULAPage from '@/pages/EULAPage';
 
 const SurveyQuestions = React.lazy(() => import('open_doors/SurveyQuestions'));
 
@@ -155,6 +159,9 @@ const App = () => {
                                         }
                                     />
                                     <Route path="/mentor/all" element={<AllMentorsPage />} />
+                                    <Route path="/policy/terms-and-conditions" element={<TermsAndConditions />} />
+                                    <Route path="/policy/cookie-policy" element={<CookiePolicyPage />} />
+                                    <Route path="/policy/eula" element={<EULAPage />} />
                                 </Routes>
                             </Container>
                         </BrowserRouter>

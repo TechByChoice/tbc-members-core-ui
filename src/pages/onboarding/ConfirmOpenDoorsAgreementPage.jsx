@@ -6,6 +6,7 @@ import { Card, CardContent, FormControlLabel, Checkbox, Button, CardActions } fr
 import { routes } from '@/lib/routes';
 import { useAuth } from '@/providers/AuthProvider';
 import { useStatusMessage } from '@/hooks/useStatusMessage';
+import { Link } from 'react-router-dom';
 
 function ConfirmOpenDoorsAccountPage() {
     const [ formData, setFormData ] = useState({ confirm_service_agreement: false });
@@ -58,7 +59,7 @@ function ConfirmOpenDoorsAccountPage() {
             <Card>
                 <CardContent>
                     <Typography variant="h5" component="h1">
-                        Creating an account means you agree to our service agreement hey
+                        Creating an account means you agree to our <Link to={'/policy/terms-and-conditions'}>terms and conditions</Link>
                     </Typography>
                     <Typography variant="subtitle1" component="h2"></Typography>
                     <FormControlLabel
