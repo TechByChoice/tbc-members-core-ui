@@ -11,6 +11,7 @@ import ProfileNotifications from '../compoents/profile/ProfileNotifications';
 import ProfileIdentity from '../compoents/profile/ProfileIdentity';
 import { routes } from '@/lib/routes';
 import { getDropDrownItems } from '@/api-calls';
+import useEventTracker from '@/hooks/useEventTracking';
 
 const Root = styled(Box)`
     height: 100%;
@@ -70,6 +71,7 @@ function ProfileSettingPage() {
     const [ questions, setQuestions ] = useState({});
     /** @type {any} fromData */
     const [ fromData, setFormData ] = useState();
+    const trackEvent = useEventTracker();
 
     useEffect(() => {
         async function fetchData() {
@@ -119,11 +121,11 @@ function ProfileSettingPage() {
                 onChange={handleTabChange}
                 aria-label="Vertical tabs example"
                 sx={{ borderRight: 1, minWidth: '15vw', borderColor: 'divider' }}>
-                <Tab label="Account Details" {...a11yProps(0)} />
-                <Tab label="Identity" {...a11yProps(1)} />
-                <Tab label="Interests" {...a11yProps(2)} />
-                <Tab label="Notifications" {...a11yProps(3)} />
-                <Tab label="Mentorship" {...a11yProps(4)} />
+                <Tab onClick={() => trackEvent('tab__member_profile__account_details')} label="Account Details" {...a11yProps(0)} />
+                <Tab onClick={() => trackEvent('tab__member_profile__identity')} label="Identity" {...a11yProps(1)} />
+                <Tab onClick={() => trackEvent('tab__member_profile__interests')} label="Interests" {...a11yProps(2)} />
+                <Tab onClick={() => trackEvent('tab__member_profile__notifications')} label="Notifications" {...a11yProps(3)} />
+                <Tab onClick={() => trackEvent('tab__member_profile__mentorship')} label="Mentorship" {...a11yProps(4)} />
             </Tabs>
             <TabPanel value={value} index={0}>
                 <ProfileBasicInfo questions={questions} formErrors={formError} handleChange={handleChange} />
