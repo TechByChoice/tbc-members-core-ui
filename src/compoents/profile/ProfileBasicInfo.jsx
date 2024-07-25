@@ -18,7 +18,7 @@ export default function ProfileBasicInfo({ handleChange, questions, formErrors }
             <>
                 <AccountDetailsForm />
             </>
-            {!userDetails?.account_info?.is_company_account && (
+            {!userDetails?.account_info?.is_company_account && !userDetails?.account_info?.is_open_doors && (
                 <>
                     <>
                         <WorkPlaceForm questions={questions} />

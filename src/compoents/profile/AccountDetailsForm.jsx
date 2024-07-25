@@ -133,20 +133,23 @@ export default function AccountDetailsForm() {
                                 {!!formErrors.email && <FormHelperText>{formErrors.email}</FormHelperText>}
                             </FormControl>
                         </Grid>
-                        <Grid item xs={12}>
-                            <FormControl fullWidth error={!!formErrors.postal_code}>
-                                <FormLabel required htmlFor="postal_code">
-                                    What&apos;s your postal code?
-                                </FormLabel>
-                                <InputLocation
-                                    formErrors={formErrors.postal_code}
-                                    fieldName="postal_code"
-                                    defaultValue={formAccountData.postal_code}
-                                    handleAutocompleteChange={handleAutocompleteChange}
-                                />
-                                {!!formErrors.postal_code && <FormHelperText>{formErrors.postal_code}</FormHelperText>}
-                            </FormControl>
-                        </Grid>
+                        {!userDetails?.account_info?.is_open_doors && (
+                            <Grid item xs={12}>
+                                <FormControl fullWidth error={!!formErrors.postal_code}>
+                                    <FormLabel required htmlFor="postal_code">
+                                        What&apos;s your postal code?
+                                    </FormLabel>
+                                    <InputLocation
+                                        formErrors={formErrors.postal_code}
+                                        fieldName="postal_code"
+                                        defaultValue={formAccountData.postal_code}
+                                        handleAutocompleteChange={handleAutocompleteChange}
+                                    />
+                                    {!!formErrors.postal_code && <FormHelperText>{formErrors.postal_code}</FormHelperText>}
+                                </FormControl>
+                            </Grid>
+                        )}
+
                         <Grid item mt={3} xs={12} sm={8}>
                             <Button variant="contained" type="submit" color="primary">
                                 Save
