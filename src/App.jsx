@@ -171,6 +171,7 @@ const App = () => {
                                     <Route path="/policy/terms-and-conditions" element={<TermsAndConditions />} />
                                     <Route path="/policy/cookie-policy" element={<CookiePolicyPage />} />
                                     <Route path="/policy/eula" element={<EULAPage />} />
+                                    <Route path="/policy/privacy-policy" element={<PrivacyPolicyPage />} />
                                 </Routes>
                             </Container>
                         </BrowserRouter>
