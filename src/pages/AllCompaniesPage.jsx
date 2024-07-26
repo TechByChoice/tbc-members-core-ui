@@ -32,7 +32,7 @@ export default function AllCompaniesPage({}) {
 
     const fetchCompanies = (page, pageSize, searchTerm) => {
         const params = new URLSearchParams({ page, page_size: pageSize, company_name: searchTerm.trim() });
-        fetch(`http://localhost:8000/company-profile/info/?${params.toString()}`, {
+        fetch(routes.api.companies.search(params.toString()), {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
