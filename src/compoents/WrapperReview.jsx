@@ -9,13 +9,13 @@ import ProfileCompletionModal from '@/compoents/ProfileCompletionModal';
 const Review = React.lazy(() => import('open_doors/Review'));
 export default function WrapperReview() {
     const { user } = useAuth();
-    const user_account = user?.[0].account_info;
-    const reviewAccess = user_account.is_company_review_access_active;
-    const od_profile_status = user_account?.is_open_doors_profile_complete;
+    const user_account = user?.[0]?.account_info;
+    const reviewAccess = user_account?.is_company_review_access_active;
+    const od_profile_status = user_account && user_account?.is_open_doors_profile_complete;
     const [ isModalOpen, setIsModalOpen ] = useState(false);
 
     useEffect(() => {
-        if (!od_profile_status) {
+        if (!od_profile_status && user.length > 0) {
             setIsModalOpen(true);
         }
     }, [ od_profile_status ]);
