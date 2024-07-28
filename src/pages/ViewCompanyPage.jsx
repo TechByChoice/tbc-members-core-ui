@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Button, ButtonGroup, Card, CardContent, CardMedia, Chip, CircularProgress, Divider, Grid, Hidden, Typography } from '@mui/material';
+import { CircularProgress, Grid } from '@mui/material';
 import { useParams } from 'react-router';
-import { getCompanyDetails, getJobDetails } from '../api-calls';
+import { getCompanyDetails } from '@/api-calls';
 import CompanyHeader from '@/compoents/CompanyHeader';
 import Box from '@mui/material/Box';
 
@@ -27,7 +27,7 @@ function ViewJobPage({ userDetail, isLoading }) {
             const latestReview = jobResponse.companyReview.length - 1;
 
             setCompanyData(jobResponse.company);
-            setCompanyScore(jobResponse.companyReview[latestReview]);
+            setCompanyScore(jobResponse.companyReview[0]);
             setCompanyJobs(jobResponse.companyJobs);
         } catch (error) {
             console.error('Error fetching data:', error);
@@ -49,8 +49,6 @@ function ViewJobPage({ userDetail, isLoading }) {
     return (
         <Box sx={{ p: 4 }}>
             <CompanyHeader companyProfile={companyData} companyScore={companyScore} companyJobs={companyJobs} />
-            {/*<CompanyMission missionHtml={companyData?.mission.html}/>*/}
-            {/* Add additional components here */}
         </Box>
     );
 }
