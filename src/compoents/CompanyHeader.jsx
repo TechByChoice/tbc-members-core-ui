@@ -1,143 +1,159 @@
-import React, { Suspense } from 'react';
-import { Box, Grid, IconButton, Link, Paper, Typography } from '@mui/material';
+import React from 'react';
+import { Box, Card, CardContent, Divider, Grid, IconButton, Link, Paper, Skeleton, Typography, useMediaQuery, useTheme } from '@mui/material';
 import { GitHub, Instagram, Language, LinkedIn, Twitter, YouTube } from '@mui/icons-material';
-import JobCard from '@/compoents/JobCard';
 import HtmlContentRenderer from './utils/HtmlContentRenderer';
-import ErrorBoundary from '@/compoents/ErrorBoundary';
 import BasicCardComponent from '@/compoents/BasicCardComonent/BasicCardComponent';
+import ErrorBoundary from './ErrorBoundary'; // Assume you have this component
 
-const ButtonAddReview = React.lazy(() => import('open_doors/ButtonAddReview'));
+const CompanyHeader = ({
+    companyProfile, companyScore, companyJobs, isLoading, error 
+}) => {
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
-const CompanyHeader = ({ companyProfile, companyScore, companyJobs }) => {
-    console.log(companyProfile);
+    if (error) {
+        return <Typography color="error">Error loading company data: {error.message}</Typography>;
+    }
+
     return (
-        <>
+        <ErrorBoundary fallback={<Typography color="error">Something went wrong.</Typography>}>
             <Paper sx={{ padding: 2 }} elevation={4}>
-                <Grid container alignItems="end" justifyContent="space-between">
-                    <Grid item>
-                        <img alt={companyProfile?.company_name} src={companyProfile?.logo_url} style={{ maxWidth: 100, maxHeight: 100, padding: 20 }} />
+                <Grid container alignItems="center" justifyContent="space-between" spacing={2}>
+                    <Grid item xs={12} sm="auto">
+                        {isLoading ? (
+                            <Skeleton variant="rectangular" width={100} height={100} />
+                        ) : (
+                            <img alt={companyProfile?.company_name || 'Company logo'} src={companyProfile?.logo_url} style={{ maxWidth: 100, maxHeight: 100 }} />
+                        )}
                     </Grid>
-                    {companyScore?.average_rating ? (
-                        <Grid item>
+                    <Grid item xs={12} sm="auto">
+                        {isLoading ? (
+                            <Skeleton width={200} height={40} />
+                        ) : companyScore?.average_rating > 0 ? (
                             <Typography variant="h5" sx={{ fontWeight: 'bold', color: 'inherit' }}>
-                                TBC Approval Score: {companyScore?.average_rating} / 5
+                                TBC Approval Score: {companyScore.average_rating.toFixed(1)} / 5
                             </Typography>
-                        </Grid>
-                    ) : (
-                        <ErrorBoundary>
-                            <Suspense fallback={<div>Loading...</div>}>
-                                <Grid item sx={{ textAlign: 'right' }}>
-                                    <Typography variant="body1">Be the first to review {companyProfile?.company_name}</Typography>
-                                    <ButtonAddReview />
-                                </Grid>
-                            </Suspense>
-                        </ErrorBoundary>
-                    )}
+                        ) : (
+                            <Box>
+                                <Typography variant="body1">We don&apos;t have enough reviews to populate a rating</Typography>
+                                <Link href="/review" aria-label={`Leave a review for ${companyProfile?.company_name}`}>
+                                    Leave a review for {companyProfile?.company_name}
+                                </Link>
+                            </Box>
+                        )}
+                    </Grid>
                 </Grid>
             </Paper>
-            <Grid container justifyContent="flex-start">
-                <Grid item xs sx={{ padding: 2 }}>
-                    <Box>
-                        <Typography variant="h2" sx={{ fontWeight: 'bold', color: 'inherit' }}>
-                            {companyProfile?.company_name}
-                        </Typography>
-                    </Box>
-                    <Box>
+
+            <Grid container justifyContent="flex-start" spacing={2}>
+                <Grid item xs={12} sx={{ padding: 2 }}>
+                    <Typography variant="h2" sx={{ fontWeight: 'bold', color: 'inherit', fontSize: isMobile ? '2rem' : '3rem' }}>
+                        {isLoading ? <Skeleton width="60%" /> : companyProfile?.company_name}
+                    </Typography>
+
+                    <Box my={2}>
                         <Typography variant="h5" sx={{ fontWeight: 'bold', color: 'inherit' }}>
                             About the company
                         </Typography>
-                        {companyProfile?.mission}
+                        {isLoading ? <Skeleton variant="text" height={100} /> : <Typography>{companyProfile?.mission}</Typography>}
                     </Box>
-                    {companyScore?.average_rating && (
+
+                    <Divider sx={{ my: 2 }} />
+
+                    {companyScore?.average_rating >= 0 && (
                         <>
-                            <Box>
-                                <Typography variant="h5" sx={{ fontWeight: 'bold', color: 'inherit' }}>
-                                    Who&apos;s leaving reviews
-                                </Typography>
-                                {companyScore?.demographics_summary}
-                            </Box>
-                            <Box>
-                                <Typography variant="h6" sx={{ fontWeight: 'bold', color: 'inherit' }}>
-                                    TL;DR
-                                </Typography>
-                                {/*<Typography variant="body2">*/}
-                                <HtmlContentRenderer htmlContent={companyScore?.short_summary_text} />
-                                {/*</Typography>*/}
-                            </Box>
-                            <Box>
-                                <Typography variant="h6" sx={{ fontWeight: 'bold', color: 'inherit' }}>
+                            <Typography
+                                variant="h3"
+                                sx={{
+                                    fontWeight: 'bold',
+                                    color: 'inherit',
+                                    fontSize: isMobile ? '1.5rem' : '2.5rem',
+                                }}>
+                                Review
+                            </Typography>
+                            <Grid container spacing={2}>
+                                <Grid item xs={12} md={6}>
+                                    <Card sx={{ height: '100%' }}>
+                                        <CardContent>
+                                            <Typography variant="h4" color="text.secondary" gutterBottom>
+                                                TL;DR
+                                            </Typography>
+                                            {isLoading ? <Skeleton variant="text" height={80} /> : <HtmlContentRenderer htmlContent={companyScore?.short_summary_text} />}
+                                        </CardContent>
+                                    </Card>
+                                </Grid>
+                                <Grid item xs={12} md={6}>
+                                    <Card sx={{ height: '100%' }}>
+                                        <CardContent>
+                                            <Typography variant="h4" color="text.secondary" gutterBottom>
+                                                Who&apos;s leaving reviews
+                                            </Typography>
+                                            {isLoading ? <Skeleton variant="text" height={80} /> : <Typography>{companyScore?.demographics_summary}</Typography>}
+                                        </CardContent>
+                                    </Card>
+                                </Grid>
+                            </Grid>
+
+                            <Box mt={3}>
+                                <Typography
+                                    variant="h3"
+                                    sx={{
+                                        fontWeight: 'bold',
+                                        color: 'inherit',
+                                        fontSize: isMobile ? '1.5rem' : '2.5rem',
+                                    }}>
                                     Full Summary
                                 </Typography>
-                                {/*<Typography variant="body2">*/}
-                                <HtmlContentRenderer htmlContent={companyScore?.full_summary_text} />
-                                {/*</Typography>*/}
+                                {isLoading ? <Skeleton variant="text" height={200} /> : <HtmlContentRenderer htmlContent={companyScore?.full_summary_text} />}
                             </Box>
                         </>
                     )}
-                    <Box>
-                        <Grid container justifyContent="flex-start" sx={{ gap: '2%' }}>
-                            {companyProfile?.linkedin && (
-                                <Link href={companyProfile?.linkedin} underline="hover">
-                                    <IconButton href={companyProfile?.linkedin} target="_blank">
-                                        <LinkedIn />
-                                    </IconButton>
-                                </Link>
-                            )}
 
-                            {companyProfile?.instagram && (
-                                <Link href={companyProfile?.instagram} underline="hover">
-                                    <IconButton href={companyProfile?.instagram} target="_blank">
-                                        <Instagram />
-                                    </IconButton>
-                                </Link>
-                            )}
-
-                            {companyProfile?.github && (
-                                <Link href={companyProfile?.github} underline="hover">
-                                    <IconButton href={companyProfile?.github} target="_blank">
-                                        <GitHub />
-                                    </IconButton>
-                                </Link>
-                            )}
-
-                            {companyProfile?.twitter && (
-                                <Link href={companyProfile?.twitter} underline="hover">
-                                    <IconButton href={companyProfile?.twitter} target="_blank">
-                                        <Twitter />
-                                    </IconButton>
-                                </Link>
-                            )}
-
-                            {companyProfile?.youtube && (
-                                <Link href={companyProfile?.youtube} underline="hover">
-                                    <IconButton href={companyProfile?.youtube} target="_blank">
-                                        <YouTube />
-                                    </IconButton>
-                                </Link>
-                            )}
-
-                            {companyProfile?.personal && (
-                                <Link href={companyProfile?.personal} underline="hover">
-                                    <IconButton href={companyProfile?.personal} target="_blank">
-                                        <Language />
-                                    </IconButton>
-                                </Link>
+                    <Box mt={3}>
+                        <Grid container spacing={1}>
+                            {[
+                                'linkedin',
+                                'instagram',
+                                'github',
+                                'twitter',
+                                'youtube',
+                                'personal'
+                            ].map(
+                                platform =>
+                                    companyProfile?.[platform] && (
+                                        <Grid item key={platform}>
+                                            <IconButton
+                                                href={companyProfile[platform]}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                aria-label={`Visit ${companyProfile.company_name} on ${platform}`}>
+                                                {platform === 'linkedin' && <LinkedIn />}
+                                                {platform === 'instagram' && <Instagram />}
+                                                {platform === 'github' && <GitHub />}
+                                                {platform === 'twitter' && <Twitter />}
+                                                {platform === 'youtube' && <YouTube />}
+                                                {platform === 'personal' && <Language />}
+                                            </IconButton>
+                                        </Grid>
+                                    ),
                             )}
                         </Grid>
                     </Box>
                 </Grid>
             </Grid>
+
             {companyJobs?.length > 0 && (
-                <Grid container justifyContent="flex-start">
-                    <Typography variant="h3">Open Jobs</Typography>
-                    <Grid container justifyContent="flex-start">
+                <Box mt={4}>
+                    <Typography variant="h3" sx={{ fontSize: isMobile ? '1.5rem' : '2.5rem' }}>
+                        Open Jobs
+                    </Typography>
+                    <Grid container spacing={2}>
                         {companyJobs.map((job, index) => (
-                            <Grid item key={index}>
+                            <Grid item key={index} xs={12} sm={6} md={4}>
                                 <BasicCardComponent
                                     imageUrl={companyProfile?.logo_url}
                                     headerText={job?.role?.name}
                                     bodyText={job?.role?.name}
-                                    // icon={job?.role?.name}
                                     hourlyRate={20}
                                     buttonText="View Job"
                                     job={job}
@@ -145,9 +161,9 @@ const CompanyHeader = ({ companyProfile, companyScore, companyJobs }) => {
                             </Grid>
                         ))}
                     </Grid>
-                </Grid>
+                </Box>
             )}
-        </>
+        </ErrorBoundary>
     );
 };
 
