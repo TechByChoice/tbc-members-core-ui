@@ -3,7 +3,7 @@ import { Box, Card, CardContent, Divider, Grid, IconButton, Link, Paper, Skeleto
 import { GitHub, Instagram, Language, LinkedIn, Twitter, YouTube } from '@mui/icons-material';
 import HtmlContentRenderer from './utils/HtmlContentRenderer';
 import BasicCardComponent from '@/compoents/BasicCardComonent/BasicCardComponent';
-import ErrorBoundary from './ErrorBoundary'; // Assume you have this component
+import ErrorBoundary from './ErrorBoundary';
 
 const CompanyHeader = ({
     companyProfile, companyScore, companyJobs, isLoading, error 
@@ -36,7 +36,7 @@ const CompanyHeader = ({
                         ) : (
                             <Box>
                                 <Typography variant="body1">We don&apos;t have enough reviews to populate a rating</Typography>
-                                <Link href="/review" aria-label={`Leave a review for ${companyProfile?.company_name}`}>
+                                <Link href="/reviews" aria-label={`Leave a review for ${companyProfile?.company_name}`}>
                                     Leave a review for {companyProfile?.company_name}
                                 </Link>
                             </Box>
