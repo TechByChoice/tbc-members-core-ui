@@ -242,7 +242,7 @@ export default function ProfileIdentity({ questions }) {
                                 <FormLabel>
                                     If you see any terms you&apos;re not sure about we encourage you to check out this site to learn more about people&apos;s experiences
                                 </FormLabel>
-                                {isUserOD && (
+                                {!isUserOD && (
                                     <FormControlLabel
                                         control={
                                             <Checkbox
@@ -299,7 +299,7 @@ export default function ProfileIdentity({ questions }) {
                                     onChange={(event, value) => handleAutocompleteChange('gender_identities', value)}
                                     renderInput={params => <TextField name="gender_identities" {...params} />}
                                 />
-                                {isUserOD && (
+                                {!isUserOD && (
                                     <FormControlLabel
                                         control={
                                             <Checkbox
@@ -356,7 +356,7 @@ export default function ProfileIdentity({ questions }) {
                                     onChange={(event, value) => handleAutocompleteChange('ethic_identities', value)}
                                     renderInput={params => <TextField name="ethic_identities" {...params} />}
                                 />
-                                {isUserOD && (
+                                {!isUserOD && (
                                     <FormControlLabel
                                         control={
                                             <Checkbox
@@ -384,7 +384,7 @@ export default function ProfileIdentity({ questions }) {
                                     <MenuItem value="false">No</MenuItem>
                                     <MenuItem value="Prefer not to answer">Prefer not to answer</MenuItem>
                                 </Select>
-                                {isUserOD && (
+                                {!isUserOD && (
                                     <FormControlLabel
                                         control={
                                             <Checkbox
@@ -411,7 +411,7 @@ export default function ProfileIdentity({ questions }) {
                                     <MenuItem value="Prefer not to answer">Prefer not to answer</MenuItem>
                                 </Select>
                             </FormControl>
-                            {isUserOD && (
+                            {!isUserOD && (
                                 <FormControlLabel
                                     control={
                                         <Checkbox
@@ -436,7 +436,7 @@ export default function ProfileIdentity({ questions }) {
                                     <MenuItem value="2">I identify as one or more of the classifications of a protected veteran</MenuItem>
                                     <MenuItem value="3">Prefer not to answer</MenuItem>
                                 </Select>
-                                {isUserOD && (
+                                {!isUserOD && (
                                     <FormControlLabel
                                         control={
                                             <Checkbox
