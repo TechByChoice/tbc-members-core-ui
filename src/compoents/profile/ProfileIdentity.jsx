@@ -12,9 +12,13 @@ const filter = createFilterOptions();
 export default function ProfileIdentity({ questions }) {
     const { user } = useAuth();
     const userDetails = user[0];
+    const [ isUserOD, setIsUserOD ] = useState(false);
     const [ formErrors, setFormErrors ] = useState({});
     const { setStatusMessage, setIsAlertOpen, setStatusType } = useStatus();
-    const isUserOD = userDetails?.is_open_doors;
+
+    useEffect(() => {
+        setIsUserOD(userDetails?.account_info?.is_open_doors && !userDetails?.account_info?.is_member);
+    }, [ userDetails ]);
 
     const [ identityFormData, setIdentityFormData ] = useState({
         identity_sexuality: [],
