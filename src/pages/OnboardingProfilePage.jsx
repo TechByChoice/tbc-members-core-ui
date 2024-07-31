@@ -9,14 +9,10 @@ import Stepper from '@mui/material/Stepper';
 import Typography from '@mui/material/Typography';
 import * as React from 'react';
 import { useCallback, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import BasicInfo from '../compoents/onboarding/BasicInfo';
-import CommunityQuestionsStep from '../compoents/onboarding/CommunityQuestionsStep';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import IdentityQuestionsStep from '../compoents/onboarding/IdentityQuestionsStep';
 import MarketingQuestionsStep from '../compoents/onboarding/MarketingQuestionsSteps';
-import SkillsQuestionStep from '../compoents/onboarding/SkillsQuestionStep';
 import { useStatusMessage } from '../hooks/useStatusMessage';
-import { AnswerValidator } from '../lib/AnswerValidator';
 import { useAuth } from '../providers/AuthProvider';
 import { routes } from '@/lib/routes';
 

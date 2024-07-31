@@ -6,6 +6,7 @@ export const routes = {
     api: {
         base: import.meta.env.VITE_APP_API_BASE_URL,
         talent: import.meta.env.VITE_APP_API_TALENT_CHOICE_URL,
+        admin: {stats: () => apiJoin(routes.api.base, 'staff/stats/'),},
         auth: {
             passwordReset: () => apiJoin(routes.api.base, 'auth/password-reset/'),
             checkToken: localToken => apiJoin(routes.api.base, `reviews/check/${localToken}`),

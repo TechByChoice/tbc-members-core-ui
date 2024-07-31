@@ -9,6 +9,7 @@ import MemberDashboard from './dashboards/MemberDashboardPage';
 import VolunteerDashboard from './dashboards/VolunteerDashboardPage';
 import Typography from '@mui/material/Typography';
 import ReviewsDashboard from '@/pages/dashboards/ReviewsDashboardPage';
+import AdminDashboard from '@/pages/dashboards/AdminDashboardPage';
 
 function MentorDashboard() {
     return null;
@@ -34,6 +35,7 @@ function Dashboard() {
             </Grid>
             <Grid item xs={12}>
                 {accountInfo?.is_member && <MemberDashboard />}
+                {accountInfo?.is_staff && <AdminDashboard />}
                 {accountInfo?.is_open_doors && <ReviewsDashboard />}
                 {accountInfo?.is_mentor && <MentorDashboard />}
                 {accountInfo?.is_volunteer && <VolunteerDashboard />}
