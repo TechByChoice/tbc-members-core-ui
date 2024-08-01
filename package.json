@@ -62,7 +62,7 @@
         "@tiptap/extension-paragraph": "^2.2.3",
         "@tiptap/extension-text": "^2.5.5",
         "@tiptap/pm": "^2.5.8",
-        "@tiptap/react": "^2.5.5",
+        "@tiptap/react": "^2.5.8",
         "@tiptap/starter-kit": "^2.5.1",
         "date-fns": "^3.6.0",
         "mapbox-gl": "^3.5.2",
