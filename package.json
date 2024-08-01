@@ -59,7 +59,7 @@
         "@mui/x-charts": "^7.11.1",
         "@techbychoice/tbc-component-library": "^0.0.7",
         "@tiptap/extension-heading": "^2.5.1",
-        "@tiptap/extension-paragraph": "^2.2.3",
+        "@tiptap/extension-paragraph": "^2.5.8",
         "@tiptap/extension-text": "^2.5.5",
         "@tiptap/pm": "^2.5.8",
         "@tiptap/react": "^2.5.5",
