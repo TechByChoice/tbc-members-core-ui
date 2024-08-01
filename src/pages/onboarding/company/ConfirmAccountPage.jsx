@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
-import { Card, CardContent, FormControlLabel, Checkbox, Button } from '@mui/material';
+import { Card, CardContent } from '@mui/material';
 import { routes } from '@/lib/routes';
 import { useAuth } from '@/providers/AuthProvider';
 import { useStatusMessage } from '@/hooks/useStatusMessage';
@@ -27,7 +27,7 @@ function ConfirmAccountPage() {
     useEffect(() => {
         fetch(routes.api.companies.activateAccount(id, token), {
             method: 'GET',
-            headers: {'Content-Type': 'application/json',},
+            headers: { 'Content-Type': 'application/json' },
         })
             .then(response => response.json())
             .then(data => {
@@ -53,7 +53,7 @@ function ConfirmAccountPage() {
     }, []);
 
     return (
-        <Grid container center id="top">
+        <Grid container id="top" justifyContent="center" alignItems="center" style={{ minHeight: '20vh' }}>
             <Card>
                 <>
                     <CardContent>

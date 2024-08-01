@@ -20,7 +20,7 @@ function CheckEmailPage() {
     }, [ user ]);
 
     return (
-        <Grid container id="top">
+        <Grid container id="top" justifyContent="center" alignItems="center" style={{ minHeight: '20vh' }}>
             <Card>
                 <CardContent>
                     <Typography variant="h5" component="h1">

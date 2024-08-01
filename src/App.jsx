@@ -17,10 +17,10 @@ import { PrivateRoutes } from '@/providers/PrivateRouteProvider';
 import { Container } from '@mui/material';
 import { TbcThemeProvider } from '@techbychoice/tbc-component-library';
 import * as React from 'react';
+import { useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { Route, Routes } from 'react-router';
 import { BrowserRouter } from 'react-router-dom';
-import { useState } from 'react';
 import ViewCompanyPage from '@/pages/ViewCompanyPage';
 import AllMembersPage from '@/pages/AllMembersPage';
 import AllCompaniesPage from '@/pages/AllCompaniesPage';
@@ -51,7 +51,18 @@ const App = () => {
     const { user, isLoading } = useAuth();
 
     if (isLoading) {
-        return <div>Loading...</div>;
+        return (
+            <div
+                style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    height: '100vh',
+                    textAlign: 'center',
+                }}>
+                Loading...
+            </div>
+        );
     }
 
     return (

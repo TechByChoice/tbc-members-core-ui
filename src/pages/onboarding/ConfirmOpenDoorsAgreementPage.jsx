@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
-import { Card, CardContent, FormControlLabel, Checkbox, Button, CardActions } from '@mui/material';
+import { Button, Card, CardActions, CardContent, Checkbox, FormControlLabel } from '@mui/material';
 import { routes } from '@/lib/routes';
 import { useAuth } from '@/providers/AuthProvider';
 import { useStatusMessage } from '@/hooks/useStatusMessage';
@@ -55,17 +55,21 @@ function ConfirmOpenDoorsAccountPage() {
     };
 
     return (
-        <Grid container id="top">
+        <Grid container id="top" justifyContent="center" alignItems="center" style={{ minHeight: '20vh' }}>
             <Card>
                 <CardContent>
                     <Typography variant="h5" component="h1">
-                        Creating an account means you agree to our <Link to={'/policy/terms-and-conditions'}>terms and conditions</Link>
+                        Creating an account means you agree to our terms and conditions
                     </Typography>
                     <Typography variant="subtitle1" component="h2"></Typography>
                     <FormControlLabel
                         required
                         control={<Checkbox onChange={handleCheckboxChange} checked={formData.confirm_service_agreement} />}
-                        label="I agree to the service agreement"
+                        label={
+                            <span>
+                                I agree to the service agreement <Link to="/policy/terms-and-conditions">terms and conditions</Link>
+                            </span>
+                        }
                     />
                 </CardContent>
                 <CardActions disableSpacing>
