@@ -1,20 +1,41 @@
 import React from 'react';
-import { Box, Card, CardContent, Divider, Grid, IconButton, Link, Paper, Skeleton, Typography, useMediaQuery, useTheme } from '@mui/material';
+import { Box, Button, Card, CardContent, Divider, Grid, IconButton, Link, Paper, Skeleton, Typography, useMediaQuery, useTheme } from '@mui/material';
 import { GitHub, Instagram, Language, LinkedIn, Twitter, YouTube } from '@mui/icons-material';
 import HtmlContentRenderer from './utils/HtmlContentRenderer';
 import BasicCardComponent from '@/compoents/BasicCardComonent/BasicCardComponent';
 import ErrorBoundary from './ErrorBoundary';
+import { useAuth } from '@/providers/AuthProvider';
+import { deleteCompanyProfile, getCompanyDetails } from '@/api-calls';
+import { useNavigate } from 'react-router';
 
 const CompanyHeader = ({
-    companyProfile, companyScore, companyJobs, isLoading, error 
+    companyProfile, companyScore, companyJobs, isLoading, error, companyId = null 
 }) => {
     const theme = useTheme();
+    const navigate = useNavigate();
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+    const { user } = useAuth();
+    const isAdmin = user[0]?.account_info?.is_staff;
 
     if (error) {
         return <Typography color="error">Error loading company data: {error.message}</Typography>;
     }
+    async function handleSoftDelete() {
+        console.log(companyId);
 
+        try {
+            const jobResponse = await deleteCompanyProfile(companyId);
+
+            console.log(jobResponse);
+            if (jobResponse.status) {
+                navigate('/company/all');
+            } else {
+                alert(jobResponse.message);
+            }
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    }
     return (
         <ErrorBoundary fallback={<Typography color="error">Something went wrong.</Typography>}>
             <Paper sx={{ padding: 2 }} elevation={4}>
@@ -40,6 +61,11 @@ const CompanyHeader = ({
                                     Leave a review for {companyProfile?.company_name}
                                 </Link>
                             </Box>
+                        )}
+                        {isAdmin && (
+                            <Button style={{ marginTop: '20px' }} onClick={handleSoftDelete} variant="contained" color="error">
+                                Delete
+                            </Button>
                         )}
                     </Grid>
                 </Grid>

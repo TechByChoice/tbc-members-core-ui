@@ -48,3 +48,15 @@ export const getCompanyDetails = async companyId => {
     });
     return response.json();
 };
+export const deleteCompanyProfile = async companyId => {
+    const defaultHeaders = {
+        'Content-Type': 'application/json',
+        Authorization: `Token ${localStorage.getItem('token')}`,
+    };
+
+    const response = await fetch(routes.api.admin.deleteCompany(companyId), {
+        method: 'POST',
+        headers: defaultHeaders,
+    });
+    return response.json();
+};

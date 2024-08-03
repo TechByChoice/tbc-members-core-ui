@@ -48,7 +48,7 @@ function ViewJobPage({ userDetail, isLoading }) {
 
     return (
         <Box sx={{ p: 4 }}>
-            <CompanyHeader companyProfile={companyData} companyScore={companyScore} companyJobs={companyJobs} />
+            <CompanyHeader companyId={id} companyProfile={companyData} companyScore={companyScore} companyJobs={companyJobs} isLoading={undefined} error={undefined} />
         </Box>
     );
 }
