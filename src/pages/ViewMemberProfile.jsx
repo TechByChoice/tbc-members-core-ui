@@ -1,5 +1,5 @@
 import BookMentorForm from '../compoents/BookMentorForm';
-import { getDropDrownItems, getMemberData } from '@/api-calls';
+import { deleteUser, getDropDrownItems, getMemberData } from '@/api-calls';
 import AddMemberNoteCard from '@/compoents/AddMemberNoteCard';
 import CompanyCard from '@/compoents/CompanyCard';
 import ReviewCard from '@/compoents/ReviewCard';
@@ -15,18 +15,18 @@ import {Box,
     CircularProgress,
     Divider,
     FormControl,
+    FormControlLabel,
     FormLabel,
     Grid,
     Hidden,
     IconButton,
     Modal,
-    Typography,
-    FormControlLabel,
+    Radio,
     RadioGroup,
-    Radio,} from '@mui/material';
+    Typography,} from '@mui/material';
 import Container from '@mui/material/Container';
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import { routes } from '@/lib/routes';
 import { Link } from 'react-router-dom';
 
@@ -39,10 +39,15 @@ function ViewMemberProfile() {
     const [ open, setOpen ] = useState(false);
     const [ openBookMentorModal, setOpenBookMentorModal ] = useState(false);
     const [ openRejectModal, setOpenRejectModal ] = useState(false);
+    const [ openDeleteUserModal, setOpenDeleteUserModal ] = useState(false);
     const [ isUserConnectedWithMentor, setIsUserConnectedWithMentor ] = useState(false);
     const [ rejectionForm, setRejectionForm ] = useState({});
+    const [ deleteUserForm, setDeleteUserForm ] = useState();
     const { user, isLoading, token } = useAuth();
+    const navigation = useNavigate();
     const loggedInUser = user[0];
+    const isAdmin = loggedInUser?.account_info?.is_staff;
+
     const mentor_roster = loggedInUser?.mentor_roster_data;
 
     useEffect(() => {
@@ -399,6 +404,22 @@ function ViewMemberProfile() {
                 console.error('Fetch error:', error);
             });
     };
+
+    async function handelDeleteUser() {
+        try {
+            const jobResponse = await deleteUser(id, deleteUserForm);
+            console.log(jobResponse);
+            if (jobResponse.status) {
+                alert('removed user');
+                navigation('/member/all');
+            } else {
+                alert(jobResponse.error);
+            }
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    }
+
     const handelSendReminderMentor = () => {
         const url = import.meta.env.VITE_APP_API_BASE_URL + `/mentorship/mentor/${id}/update-status/`;
         fetch(url, {
@@ -789,6 +810,16 @@ function ViewMemberProfile() {
                             <Grid item xs={12} sm={8}>
                                 <Grid container>
                                     <Grid item xs={4}>
+                                        {isAdmin && (
+                                            <Button
+                                                onClick={() => {
+                                                    setOpenDeleteUserModal(true);
+                                                }}
+                                                variant="contained"
+                                                color="error">
+                                                Delete
+                                            </Button>
+                                        )}
                                         <Typography variant="h4">
                                             <span style={{ textTransform: 'capitalize' }}>
                                                 {memberData?.data?.user?.first_name} {memberData?.data?.user?.last_name.slice(0, 1)}.{' '}
@@ -967,6 +998,52 @@ function ViewMemberProfile() {
                     </Box>
                     <Box>
                         <Button type="button" onClick={handelMentorAppRejection} variant="solid">
+                            Submit
+                        </Button>
+                    </Box>
+                </Box>
+            </Modal>
+
+            <Modal
+                open={openDeleteUserModal}
+                onClose={() => {
+                    setOpenDeleteUserModal(false);
+                }}
+                style={{ padding: '20px' }}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description">
+                <Box
+                    style={{
+                        position: 'absolute',
+                        top: '50%',
+                        left: '50%',
+                        transform: 'translate(-50%, -50%)',
+                        width: 400,
+                        backgroundColor: '#fff',
+                        boxShadow: 24,
+                        padding: 15,
+                    }}>
+                    <Typography id="modal-modal-title" variant="h6" component="h2">
+                        Why are you deleting {memberData?.data?.user?.first_name}?
+                    </Typography>
+                    <Box>
+                        <FormControl>
+                            <FormLabel id="mentor-rejection-reason-label">Why are their account</FormLabel>
+                            <RadioGroup
+                                aria-labelledby="demo-mentor-rejection-reason-label"
+                                name="mentor-rejection-reason"
+                                onChange={e => {
+                                    setDeleteUserForm(e.target.value);
+                                }}>
+                                <FormControlLabel value="test_account" control={<Radio />} label="Test account" />
+                                <FormControlLabel value="user_requested" control={<Radio />} label="User Requested" />
+                                <FormControlLabel value="broke_coc" control={<Radio />} label="Broke Code of Conduct" />
+                                <FormControlLabel value="spam" control={<Radio />} label="Spam account" />
+                            </RadioGroup>
+                        </FormControl>
+                    </Box>
+                    <Box>
+                        <Button type="button" onClick={handelDeleteUser} variant="contained">
                             Submit
                         </Button>
                     </Box>

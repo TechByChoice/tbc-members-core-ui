@@ -60,3 +60,16 @@ export const deleteCompanyProfile = async companyId => {
     });
     return response.json();
 };
+export const deleteUser = async (userId, reason) => {
+    const defaultHeaders = {
+        'Content-Type': 'application/json',
+        Authorization: `Token ${localStorage.getItem('token')}`,
+    };
+
+    const response = await fetch(routes.api.admin.deleteUser(userId), {
+        method: 'POST',
+        headers: defaultHeaders,
+        body: JSON.stringify({ reason }),
+    });
+    return response.json();
+};

@@ -9,6 +9,7 @@ export const routes = {
         admin: {
             stats: () => apiJoin(routes.api.base, 'staff/stats/'),
             deleteCompany: id => apiJoin(routes.api.base, `company-profile/${id}/soft-delete/`),
+            deleteUser: id => apiJoin(routes.api.base, `user/${id}/soft-delete/`),
         },
         auth: {
             passwordReset: () => apiJoin(routes.api.base, 'auth/password-reset/'),
