@@ -1,5 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { Grid, Typography, Checkbox, FormControl, FormControlLabel, Select, MenuItem, TextField, Autocomplete } from '@mui/material';
+import {
+    Grid,
+    Typography,
+    Checkbox,
+    FormControl,
+    FormControlLabel,
+    Select,
+    MenuItem,
+    TextField,
+    Autocomplete,
+    FormHelperText
+} from '@mui/material';
 import FormLabel from '@mui/material/FormLabel';
 import { createFilterOptions } from '@mui/material/Autocomplete';
 import { getDropDrownItems } from '@/api-calls';
@@ -7,7 +18,7 @@ import { getDropDrownItems } from '@/api-calls';
 const filter = createFilterOptions();
 
 function CommunityQuestionsStep({
-    questions, handleAutocompleteChange, handleInputChange, handleInputCheckboxChange 
+    formErrors, questions, handleAutocompleteChange, handleInputChange, handleInputCheckboxChange
 }) {
     const [ communityNeeds, setSetCommunityNeeds ] = useState([]);
     const [ connectionMade, setConnectionMade ] = useState([]);
@@ -58,20 +69,21 @@ function CommunityQuestionsStep({
 
             <Grid item xs={12}>
                 <FormControl fullWidth>
-                    <FormLabel id="how-connection-made-label">How did you find the Tech by Choice community?</FormLabel>
-                    <Select labelId="how-connection-made-label" id="how-connection-made" name="how_connection_made" onChange={handleInputChange}>
+                    <FormLabel error={!!formErrors.how_connection_made} required id="how-connection-made-label">How did you find the Tech by Choice community?</FormLabel>
+                    <Select required labelId="how-connection-made-label" id="how-connection-made" name="how_connection_made" onChange={handleInputChange}>
                         {connectionMade?.map(option => (
                             <MenuItem key={option.id} value={option.name}>
                                 {option.name}
                             </MenuItem>
                         ))}
                     </Select>
+                    {!!formErrors.how_connection_made && <FormHelperText>{formErrors.how_connection_made}</FormHelperText>}
                 </FormControl>
             </Grid>
 
             <Grid item xs={12}>
                 <FormControl fullWidth>
-                    <FormLabel id="tbc-program-interest-label">What Tech by Choice Services interest you most?</FormLabel>
+                    <FormLabel required error={!!formErrors.tbc_program_interest} id="tbc-program-interest-label">What Tech by Choice Services interest you most?</FormLabel>
                     <Autocomplete
                         multiple
                         selectOnFocus
@@ -108,8 +120,9 @@ function CommunityQuestionsStep({
                         }}
                         renderOption={(props, option) => <li {...props}>{option.name}</li>}
                         onChange={(event, value) => handleAutocompleteChange('tbc_program_interest', value)}
-                        renderInput={params => <TextField name="tbc_program_interest" {...params} />}
+                        renderInput={params => <TextField required name="tbc_program_interest" {...params} />}
                     />
+                    {!!formErrors.tbc_program_interest && <FormHelperText>{formErrors.tbc_program_interest}</FormHelperText>}
                 </FormControl>
             </Grid>
         </Grid>

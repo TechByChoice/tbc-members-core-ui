@@ -19,6 +19,7 @@ import { useStatusMessage } from '../hooks/useStatusMessage';
 import { AnswerValidator } from '../lib/AnswerValidator';
 import { useAuth } from '../providers/AuthProvider';
 import { routes } from '@/lib/routes';
+import LoadingScreen from "@/compoents/LoadingScreen";
 
 /** @typedef {{index: number, name: string}} IStepDefinition */
 
@@ -87,10 +88,28 @@ function validateSkillsQuestionStep(answers, setFormErrors) {
 
     return isValid && Object.keys(errors).length === 0;
 }
+function validateSupportNeedsStep(answers, setFormErrors) {
+    let errors = {};
+
+    let isValid = AnswerValidator.validateMany(answers, errors, {
+        tbc_program_interest: 'Your current interest is required.',
+        how_connection_made: 'How you found us is required.',
+        job_department: 'Job department is required.',
+    });
+    // Additional check for job_skills length
+    if (answers.job_skills && answers.job_skills.length > 5) {
+        errors.job_skills = 'You can only add up to 5 skills.';
+    }
+
+    setFormErrors(errors);
+
+    return isValid && Object.keys(errors).length === 0;
+}
 
 const validationFunctionMap = {
     [StepDefinitions.BasicInfo.index]: validateBasicInfo,
     [StepDefinitions.Skills.index]: validateSkillsQuestionStep,
+    [StepDefinitions.Community.index]: validateSupportNeedsStep,
     default: (...args) => true,
 };
 
@@ -101,6 +120,7 @@ export default function NewMemberPage() {
     const [ questions, setQuestions ] = useState(0);
     const [ isComplete, setIsComplete ] = useState(false);
     const [ completedSteps, setCompletedSteps ] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
 
     const { user, fetchUserDetails } = useAuth();
     const history = useNavigate();
@@ -246,6 +266,7 @@ export default function NewMemberPage() {
 
     const handleFormSubmit = e => {
         e.preventDefault();
+        setIsLoading(true)
 
         const formData = new FormData();
 
@@ -272,11 +293,11 @@ export default function NewMemberPage() {
                         history('/dashboard');
                     });
                 }
-            })
-            .catch(error => {
-                console.error('Fetch error:', error);
+                setIsLoading(false)
+                setIsLoading(false)
+                console.error('Fetch error:', data);
                 statusMessage.error('We ran into an error saving your profile');
-            });
+            })
         fetchUserDetails();
     };
 
@@ -296,6 +317,7 @@ export default function NewMemberPage() {
 
     return (
         <React.Fragment>
+            {isLoading && <LoadingScreen/>}
             <AppBar
                 position="absolute"
                 color="default"
@@ -318,7 +340,7 @@ export default function NewMemberPage() {
                             </Step>
                         ))}
                     </Stepper>
-                    <form onSubmit={handleFormSubmit}>
+                    <form>
                         {isComplete && (
                             <React.Fragment>
                                 <Typography variant="h5" gutterBottom>
@@ -342,6 +364,7 @@ export default function NewMemberPage() {
                                         variant="contained"
                                         onClick={activeStep === steps.length - 1 ? handleFormSubmit : handleNext}
                                         type="button"
+                                        disabled={isLoading}
                                         sx={{ mt: 3, ml: 1 }}>
                                         {activeStep === steps.length - 1 ? 'Submit Details' : 'Next'}
                                     </Button>
