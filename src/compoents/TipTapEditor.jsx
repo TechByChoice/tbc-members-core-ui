@@ -7,6 +7,7 @@ import { ButtonGroup } from '@mui/material';
 import styled from '@emotion/styled';
 
 const EditorContentStyled = styled(EditorContent)`
+    white-space: pre-wrap;
     padding-left: 16px;
     padding-right: 16px;
 `;
@@ -18,7 +19,7 @@ const EditorButton = styled(Button)`
     font-size: 12px;
 `;
 export default function TipTapEditor({
-    id, onFormDataChange, error, value 
+    id, onFormDataChange, error, value
 }) {
     const editor = useEditor({
         extensions: [
@@ -27,7 +28,7 @@ export default function TipTapEditor({
                 levels: [
                     1,
                     2,
-                    3 
+                    3
                 ],
             }),
         ],
@@ -93,24 +94,24 @@ export default function TipTapEditor({
                     borderBottom: '#9797a5 solid 2px',
                 }}>
                 <ButtonGroup variant="text" aria-label="text formatting">
-                    <EditorButton size="small" variant="outline" onClick={() => applyFormat('h1')}>
+                    <EditorButton size="small" variant="text" onClick={() => applyFormat('h1')}>
                         H1
                     </EditorButton>
-                    <EditorButton size="small" variant="outline" onClick={() => applyFormat('h2')}>
+                    <EditorButton size="small" variant="text" onClick={() => applyFormat('h2')}>
                         H2
                     </EditorButton>
-                    <EditorButton size="small" variant="outline" onClick={() => applyFormat('h3')}>
+                    <EditorButton size="small" variant="text" onClick={() => applyFormat('h3')}>
                         H3
                     </EditorButton>
-                    <EditorButton size="small" variant="outline" onClick={() => applyFormat('body')}>
+                    <EditorButton size="small" variant="text" onClick={() => applyFormat('body')}>
                         Body
                     </EditorButton>
                 </ButtonGroup>
                 <ButtonGroup variant="text" aria-label="text formatting">
-                    <EditorButton size="small" variant="outline" onClick={() => applyFormat('bold')}>
+                    <EditorButton size="small" variant="text" onClick={() => applyFormat('bold')}>
                         Bold
                     </EditorButton>
-                    <EditorButton size="small" variant="outline" onClick={() => applyFormat('italic')}>
+                    <EditorButton size="small" variant="text" onClick={() => applyFormat('italic')}>
                         Italic
                     </EditorButton>
                 </ButtonGroup>

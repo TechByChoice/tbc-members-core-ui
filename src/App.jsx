@@ -11,16 +11,16 @@ import NewMemberPage from '@/pages/NewMemeberPage';
 import NewMentorPage from '@/pages/NewMentorPage';
 import ViewJobPage from '@/pages/ViewJobPage';
 import ViewMemberProfile from '@/pages/ViewMemberProfile';
-import { AuthProvider, useAuth } from '@/providers/AuthProvider';
-import { StatusProvider } from '@/providers/MsgStatusProvider';
-import { PrivateRoutes } from '@/providers/PrivateRouteProvider';
-import { Container } from '@mui/material';
-import { TbcThemeProvider } from '@techbychoice/tbc-component-library';
+import {AuthProvider, useAuth} from '@/providers/AuthProvider';
+import {StatusProvider} from '@/providers/MsgStatusProvider';
+import {PrivateRoutes} from '@/providers/PrivateRouteProvider';
+import {Container} from '@mui/material';
+import {TbcThemeProvider} from '@techbychoice/tbc-component-library';
 import * as React from 'react';
-import { useState } from 'react';
-import { createRoot } from 'react-dom/client';
-import { Route, Routes } from 'react-router';
-import { BrowserRouter } from 'react-router-dom';
+import {useState} from 'react';
+import {createRoot} from 'react-dom/client';
+import {Route, Routes} from 'react-router';
+import {BrowserRouter} from 'react-router-dom';
 import ViewCompanyPage from '@/pages/ViewCompanyPage';
 import AllMembersPage from '@/pages/AllMembersPage';
 import AllCompaniesPage from '@/pages/AllCompaniesPage';
@@ -29,7 +29,7 @@ import CheckEmailPage from '@/pages/CheckEmailPage';
 import ConfirmAccountPage from '@/pages/onboarding/company/ConfirmAccountPage';
 import NewCompanyPage from '@/pages/NewCompanyPage';
 import WrapperReview from '@/compoents/WrapperReview';
-import { ThemeProvider } from '@mui/material/styles';
+import {ThemeProvider} from '@mui/material/styles';
 import CreateReviewAccountPage from '@/pages/CreateReviewAccountPage';
 import TermsAndAgreementsWrapperPage from '@/pages/TermsAndAgreementsWrapperPage';
 import NavBarWrapper from '@/compoents/layout/NavBarWrapper';
@@ -42,13 +42,14 @@ import CookiePolicyPage from '@/pages/CookiePolicyPage';
 import PrivacyPolicyPage from '@/pages/PrivacyPolicyPage';
 import EULAPage from '@/pages/EULAPage';
 import OnboardingProfilePage from '@/pages/OnboardingProfilePage';
+import SlackQuestionsPage from "@/pages/SlackQuestionsPage";
 
 const SurveyQuestions = React.lazy(() => import('open_doors/SurveyQuestions'));
 
 const App = () => {
-    const [ moduleLoaded, setModuleLoaded ] = useState(false);
+    const [moduleLoaded, setModuleLoaded] = useState(false);
 
-    const { user, isLoading } = useAuth();
+    const {user, isLoading} = useAuth();
 
     if (isLoading) {
         return (
@@ -71,18 +72,24 @@ const App = () => {
                 <AuthProvider>
                     <StatusProvider>
                         <BrowserRouter>
-                            <StatusAlert />
-                            <NavBarWrapper />
+                            <StatusAlert/>
+                            <NavBarWrapper/>
                             <Container id="mainContent">
                                 <Routes>
-                                    <Route path="/" element={<LoginPage />} />
-                                    <Route path="/password-reset" element={<ResetPasswordPage />} />
-                                    <Route path="/password-reset/confirm-password/:id/:token" element={<CreateNewPasswordPage />} />
+                                    <Route path="/" element={<LoginPage/>}/>
+                                    <Route path="/admin/slack/learn" element={
+                                        <PrivateRoutes isStaff={true} userDetail={user?.[0]}>
+                                            <SlackQuestionsPage/>
+                                        </PrivateRoutes>
+                                    }/>
+                                    <Route path="/password-reset" element={<ResetPasswordPage/>}/>
+                                    <Route path="/password-reset/confirm-password/:id/:token"
+                                           element={<CreateNewPasswordPage/>}/>
                                     <Route
                                         path="/reviews"
                                         element={
                                             <PrivateRoutes userDetail={user?.[0]}>
-                                                <WrapperReview />
+                                                <WrapperReview/>
                                             </PrivateRoutes>
                                         }
                                     />
@@ -91,7 +98,7 @@ const App = () => {
                                         path="/questions/:id"
                                         element={
                                             <PrivateRoutes userDetail={user?.[0]}>
-                                                <WrapperQuestions />
+                                                <WrapperQuestions/>
                                             </PrivateRoutes>
                                         }
                                     />
@@ -100,21 +107,21 @@ const App = () => {
                                         path="/profile"
                                         element={
                                             <PrivateRoutes userDetail={user?.[0]}>
-                                                <WrapperSettingsPage />
+                                                <WrapperSettingsPage/>
                                             </PrivateRoutes>
                                         }
                                     />
-                                    <Route path="/open-doors/new" element={<CreateReviewAccountPage />} />
-                                    <Route path="/new" element={<CreateAccountPage />} />
-                                    <Route path="/new/check-email" element={<CheckEmailPage />} />
-                                    <Route path="/new/confirm-account/:id/:token" element={<ConfirmAccountPage />} />
-                                    <Route path="/new/confirm-agreement" element={<TermsAndAgreementsWrapperPage />} />
-                                    <Route path="/new/company/create-profile" element={<NewCompanyPage />} />
+                                    <Route path="/open-doors/new" element={<CreateReviewAccountPage/>}/>
+                                    <Route path="/new" element={<CreateAccountPage/>}/>
+                                    <Route path="/new/check-email" element={<CheckEmailPage/>}/>
+                                    <Route path="/new/confirm-account/:id/:token" element={<ConfirmAccountPage/>}/>
+                                    <Route path="/new/confirm-agreement" element={<TermsAndAgreementsWrapperPage/>}/>
+                                    <Route path="/new/company/create-profile" element={<NewCompanyPage/>}/>
                                     <Route
                                         path="/new/member/2"
                                         element={
                                             <PrivateRoutes userDetail={user?.[0]}>
-                                                <NewMemberPage />
+                                                <NewMemberPage/>
                                             </PrivateRoutes>
                                         }
                                     />
@@ -122,7 +129,7 @@ const App = () => {
                                         path="/new/2"
                                         element={
                                             <PrivateRoutes userDetail={user?.[0]}>
-                                                <OnboardingProfilePage />
+                                                <OnboardingProfilePage/>
                                             </PrivateRoutes>
                                         }
                                     />
@@ -130,7 +137,7 @@ const App = () => {
                                         path="/member/all"
                                         element={
                                             <PrivateRoutes userDetail={user?.[0]}>
-                                                <AllMembersPage />
+                                                <AllMembersPage/>
                                             </PrivateRoutes>
                                         }
                                     />
@@ -138,16 +145,16 @@ const App = () => {
                                         path="/company/all"
                                         element={
                                             <PrivateRoutes userDetail={user?.[0]}>
-                                                <AllCompaniesPage />
+                                                <AllCompaniesPage/>
                                             </PrivateRoutes>
                                         }
                                     />
-                                    <Route path="/event/all" element={<AllEventsPage />} />
+                                    <Route path="/event/all" element={<AllEventsPage/>}/>
                                     <Route
                                         path="/dashboard"
                                         element={
                                             <PrivateRoutes userDetail={user?.[0]}>
-                                                <Dashboard />
+                                                <Dashboard/>
                                             </PrivateRoutes>
                                         }
                                     />
@@ -155,18 +162,20 @@ const App = () => {
                                         path="/job/new/referral"
                                         element={
                                             <PrivateRoutes userDetail={user?.[0]}>
-                                                <JobReferralPage />
+                                                <JobReferralPage/>
                                             </PrivateRoutes>
                                         }
                                     />
-                                    <Route path="/job/:id" element={<ViewJobPage isLoading={isLoading} userDetail={user?.[0]} />} />
-                                    <Route path="/company/:id" element={<ViewCompanyPage isLoading={isLoading} userDetail={user?.[0]} />} />
-                                    <Route path="/job/all" element={<AllJobsPage />} />
+                                    <Route path="/job/:id"
+                                           element={<ViewJobPage isLoading={isLoading} userDetail={user?.[0]}/>}/>
+                                    <Route path="/company/:id"
+                                           element={<ViewCompanyPage isLoading={isLoading} userDetail={user?.[0]}/>}/>
+                                    <Route path="/job/all" element={<AllJobsPage/>}/>
                                     <Route
                                         path="/member/:id"
                                         element={
                                             <PrivateRoutes userDetail={user?.[0]}>
-                                                <ViewMemberProfile />
+                                                <ViewMemberProfile/>
                                             </PrivateRoutes>
                                         }
                                     />
@@ -174,15 +183,15 @@ const App = () => {
                                         path="/mentor/create"
                                         element={
                                             <PrivateRoutes userDetail={user?.[0]}>
-                                                <NewMentorPage />
+                                                <NewMentorPage/>
                                             </PrivateRoutes>
                                         }
                                     />
-                                    <Route path="/mentor/all" element={<AllMentorsPage />} />
-                                    <Route path="/policy/terms-and-conditions" element={<TermsAndConditions />} />
-                                    <Route path="/policy/cookie-policy" element={<CookiePolicyPage />} />
-                                    <Route path="/policy/eula" element={<EULAPage />} />
-                                    <Route path="/policy/privacy-policy" element={<PrivacyPolicyPage />} />
+                                    <Route path="/mentor/all" element={<AllMentorsPage/>}/>
+                                    <Route path="/policy/terms-and-conditions" element={<TermsAndConditions/>}/>
+                                    <Route path="/policy/cookie-policy" element={<CookiePolicyPage/>}/>
+                                    <Route path="/policy/eula" element={<EULAPage/>}/>
+                                    <Route path="/policy/privacy-policy" element={<PrivacyPolicyPage/>}/>
                                 </Routes>
                             </Container>
                         </BrowserRouter>
@@ -195,4 +204,4 @@ const App = () => {
 
 const container = document.getElementById('app');
 
-createRoot(container).render(<App />);
+createRoot(container).render(<App/>);

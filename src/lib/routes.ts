@@ -6,10 +6,15 @@ export const routes = {
     api: {
         base: import.meta.env.VITE_APP_API_BASE_URL,
         talent: import.meta.env.VITE_APP_API_TALENT_CHOICE_URL,
+        internal: import.meta.env.VITE_APP_API_INTERNAL_URL,
         admin: {
             stats: () => apiJoin(routes.api.base, 'staff/stats/'),
             deleteCompany: id => apiJoin(routes.api.base, `company-profile/${id}/soft-delete/`),
             deleteUser: id => apiJoin(routes.api.base, `user/${id}/soft-delete/`),
+            slack: {
+                getChannels : () => apiJoin(routes.api.internal, `api/slack-engagement/channels/get_interest_channel/`),
+                postBulkChannelQuestions : () => apiJoin(routes.api.internal, `api/slack-engagement/questions/bulk_create_questions/`)
+            }
         },
         auth: {
             passwordReset: () => apiJoin(routes.api.base, 'auth/password-reset/'),

@@ -73,3 +73,28 @@ export const deleteUser = async (userId, reason) => {
     });
     return response.json();
 };
+export const getChannels = async () => {
+    const defaultHeaders = {
+        'Content-Type': 'application/json',
+        Authorization: `Token ${localStorage.getItem('token')}`,
+    };
+
+    const response = await fetch(routes.api.admin.slack.getChannels(), {
+        method: 'GET',
+        headers: defaultHeaders,
+    });
+    return response.json();
+};
+export const postSlackQuestions = async (formData) => {
+    const defaultHeaders = {
+        'Content-Type': 'application/json',
+        Authorization: `Token ${localStorage.getItem('token')}`,
+    };
+
+    const response = await fetch(routes.api.admin.slack.postBulkChannelQuestions(), {
+        method: 'POST',
+        headers: defaultHeaders,
+        body: JSON.stringify(formData)
+    });
+    return response.json();
+};
