@@ -20,12 +20,17 @@ export const PrivateRoutes = ({children, userDetail, isStaff = false}) => {
     const statusMessage = useStatusMessage();
 
     const redirectUser = useCallback((path, message) => {
-        navigate(path, {replace: true});
-        if (message) statusMessage.info(message);
-    }, [navigate, statusMessage]);
+        if (location.pathname !== path) {
+            navigate(path, {replace: true});
+            if (message) statusMessage.info(message);
+        }
+    }, [navigate, statusMessage, location.pathname]);
 
     const checkUserStatus = useCallback(() => {
-        if (!isAuthenticated || !user?.[0]) return;
+        if (!isAuthenticated || !user?.[0]) {
+            setIsLoading(false);
+            return;
+        }
 
         const {account_info: userAccountInfo, company_account_data} = user[0];
 
@@ -60,7 +65,7 @@ export const PrivateRoutes = ({children, userDetail, isStaff = false}) => {
 
     useEffect(() => {
         checkUserStatus();
-    }, [checkUserStatus, location.pathname]);
+    }, [checkUserStatus]);
 
     if (!isAuthenticated) {
         return <Navigate to="/" replace/>;
