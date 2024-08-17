@@ -338,7 +338,7 @@ export default function NewMemberPage() {
                             steps={steps.length}
                             position="static"
                             activeStep={activeStep}
-                            sx={{maxWidth: 400, flexGrow: 1}}
+                            sx={{maxWidth: 400, flexGrow: 1, pt: 3, pb: 5}}
                             backButton={false}
                             nextButton={false}
                         />
