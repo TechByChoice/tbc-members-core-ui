@@ -1,20 +1,33 @@
-import { Autocomplete, Button, FormControl, FormHelperText, FormLabel, Grid, InputAdornment, OutlinedInput, TextField, Typography } from '@mui/material';
-import React, { useEffect, useState } from 'react';
-import { useAuth } from '../../providers/AuthProvider';
-import { createFilterOptions } from '@mui/material/Autocomplete';
-import { useStatus } from '../../providers/MsgStatusProvider';
+import {
+    Autocomplete,
+    Button,
+    FormControl,
+    FormHelperText,
+    FormLabel,
+    Grid,
+    InputAdornment,
+    OutlinedInput,
+    TextField,
+    Typography
+} from '@mui/material';
+import React, {useEffect, useState} from 'react';
+import {useAuth} from '../../providers/AuthProvider';
+import {createFilterOptions} from '@mui/material/Autocomplete';
+import {useStatus} from '../../providers/MsgStatusProvider';
 import CompanyDropdown from '../DropdownCompany';
-import { routes } from '../../lib/routes';
+import {routes} from '../../lib/routes';
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Checkbox from "@mui/material/Checkbox";
 
 const filter = createFilterOptions();
-export default function WorkPlaceForm({ questions }) {
-    const { user } = useAuth();
-    const { viewNewCompany, setViewNewCompany } = useState();
+export default function WorkPlaceForm({questions}) {
+    const {user} = useAuth();
     const userDetails = user[0];
-    const [ formErrors, setFormErrors ] = useState({});
-    const { setStatusMessage, setIsAlertOpen, setStatusType } = useStatus();
+    const [viewNewCompany, setViewNewCompany] = useState(false);
+    const [formErrors, setFormErrors] = useState({});
+    const {setStatusMessage, setIsAlertOpen, setStatusType} = useStatus();
 
-    const [ formData, setFormData ] = useState({
+    const [formData, setFormData] = useState({
         company: [],
         company_id: '',
         company_name: '',
@@ -75,7 +88,7 @@ export default function WorkPlaceForm({ questions }) {
                 select_company: defaultValues?.company[0] || null,
             });
         }
-    }, [ userDetails ]);
+    }, [userDetails]);
 
     const handelAccountDetails = e => {
         e.preventDefault();
@@ -111,7 +124,7 @@ export default function WorkPlaceForm({ questions }) {
     };
 
     const handleChange = e => {
-        const { name, value } = e.target;
+        const {name, value} = e.target;
 
         let updatedValue = value;
         if (name === 'company_url' && !value.startsWith('https://')) {
@@ -129,17 +142,17 @@ export default function WorkPlaceForm({ questions }) {
         if (Array.isArray(value)) {
             value = value.map(item => item.name || item);
         }
-        setFormData(prev => ({ ...prev, [name]: value }));
+        setFormData(prev => ({...prev, [name]: value}));
 
         if (value.length === 0) {
-            setFormErrors({ job_roles: 'Please select a role that best represents   what you do.' });
+            setFormErrors({job_roles: 'Please select a role that best represents   what you do.'});
         } else {
             setFormErrors({});
         }
     };
 
     const handleCompanyChange = e => {
-        let { name, value } = e.target;
+        let {name, value} = e.target;
         // Check if the value is an array (since Autocomplete can be multiple)
         if (Array.isArray(value)) {
             value = value.map(item => item.name || item);
@@ -155,10 +168,10 @@ export default function WorkPlaceForm({ questions }) {
             <Grid container>
                 <Grid item xs={12}>
                     <Typography variant="h6">Work Place Details</Typography>
-                    <hr />
+                    <hr/>
                 </Grid>
                 <Grid item xs={12} md={4} spacing={3} mt={3}>
-                    <Typography variant="body">Update details about your job & title</Typography>
+                    <Typography variant="body1">Update details about your job & title</Typography>
                 </Grid>
                 <Grid item xs={8}>
                     <Grid container>
@@ -167,7 +180,7 @@ export default function WorkPlaceForm({ questions }) {
                                 <Grid item xs={12}>
                                     <FormControl fullWidth>
                                         <FormLabel htmlFor="company_name">Company Name</FormLabel>
-                                        <OutlinedInput onChange={handleChange} name="company_name" type="text" />
+                                        <OutlinedInput onChange={handleChange} name="company_name" type="text"/>
                                     </FormControl>
                                 </Grid>
                                 <Grid item xs={12}>
@@ -180,6 +193,16 @@ export default function WorkPlaceForm({ questions }) {
                                             type="text"
                                         />
                                     </FormControl>
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <FormControlLabel
+                                        control={
+                                            <Checkbox aria-label="Select company from dropdown"
+                                                      onChange={() => setViewNewCompany(!viewNewCompany)}
+                                                      inputProps={{'aria-label': 'controlled'}}/>
+                                        }
+                                        label="Select company from dropdown"
+                                    />
                                 </Grid>
                             </>
                         ) : (
@@ -194,12 +217,23 @@ export default function WorkPlaceForm({ questions }) {
                                         onCompanySelect={handleCompanyChange}
                                     />
                                 </FormControl>
+                                <Grid item xs={12}>
+                                    <FormControlLabel
+                                        control={
+                                            <Checkbox aria-label="Add a new company"
+                                                      onChange={() => setViewNewCompany(!viewNewCompany)}
+                                                      inputProps={{'aria-label': 'controlled'}}/>
+                                        }
+                                        label="Add a new company"
+                                    />
+                                </Grid>
                             </Grid>
                         )}
                         {/* Job Title Dropdown */}
                         <Grid item xs={12}>
                             <FormControl fullWidth error={!!formErrors.job_roles}>
-                                <FormLabel id="job-title-label">What is the job title that best fits your desired or current position?</FormLabel>
+                                <FormLabel id="job-title-label">What is the job title that best fits your desired or
+                                    current position?</FormLabel>
                                 <Autocomplete
                                     multiple
                                     value={formData.job_roles}
@@ -226,7 +260,7 @@ export default function WorkPlaceForm({ questions }) {
                                     filterOptions={(options, params) => {
                                         const filtered = filter(options, params);
 
-                                        const { inputValue } = params;
+                                        const {inputValue} = params;
                                         // Suggest the creation of a new value
                                         const isExisting = options.some(option => inputValue === option.name);
                                         if (inputValue !== '' && !isExisting) {
@@ -238,7 +272,8 @@ export default function WorkPlaceForm({ questions }) {
 
                                         return filtered;
                                     }}
-                                    renderOption={(props, option) => <li {...props}>{option.pronouns || option.name}</li>}
+                                    renderOption={(props, option) =>
+                                        <li {...props}>{option.pronouns || option.name}</li>}
                                     onChange={(event, value) => handleAutocompleteChange('job_roles', value)}
                                     renderInput={params => <TextField name="job-roles" {...params} />}
                                 />
