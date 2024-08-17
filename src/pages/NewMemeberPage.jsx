@@ -8,18 +8,19 @@ import StepLabel from '@mui/material/StepLabel';
 import Stepper from '@mui/material/Stepper';
 import Typography from '@mui/material/Typography';
 import * as React from 'react';
-import { useCallback, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import {useCallback, useEffect, useState} from 'react';
+import {useNavigate} from 'react-router-dom';
 import BasicInfo from '../compoents/onboarding/BasicInfo';
 import CommunityQuestionsStep from '../compoents/onboarding/CommunityQuestionsStep';
 import IdentityQuestionsStep from '../compoents/onboarding/IdentityQuestionsStep';
 import MarketingQuestionsStep from '../compoents/onboarding/MarketingQuestionsSteps';
 import SkillsQuestionStep from '../compoents/onboarding/SkillsQuestionStep';
-import { useStatusMessage } from '../hooks/useStatusMessage';
-import { AnswerValidator } from '../lib/AnswerValidator';
-import { useAuth } from '../providers/AuthProvider';
-import { routes } from '@/lib/routes';
+import {useStatusMessage} from '../hooks/useStatusMessage';
+import {AnswerValidator} from '../lib/AnswerValidator';
+import {useAuth} from '../providers/AuthProvider';
+import {routes} from '@/lib/routes';
 import LoadingScreen from "@/compoents/LoadingScreen";
+import {MobileStepper, useMediaQuery, useTheme} from "@mui/material";
 
 /** @typedef {{index: number, name: string}} IStepDefinition */
 
@@ -88,6 +89,7 @@ function validateSkillsQuestionStep(answers, setFormErrors) {
 
     return isValid && Object.keys(errors).length === 0;
 }
+
 function validateSupportNeedsStep(answers, setFormErrors) {
     let errors = {};
 
@@ -114,30 +116,32 @@ const validationFunctionMap = {
 };
 
 export default function NewMemberPage() {
-    const [ activeStep, setActiveStep ] = useState(0);
-    const [ answers, setAnswers ] = useState({});
-    const [ formErrors, setFormErrors ] = useState({});
-    const [ questions, setQuestions ] = useState(0);
-    const [ isComplete, setIsComplete ] = useState(false);
-    const [ completedSteps, setCompletedSteps ] = useState([]);
+    const [activeStep, setActiveStep] = useState(0);
+    const [answers, setAnswers] = useState({});
+    const [formErrors, setFormErrors] = useState({});
+    const [questions, setQuestions] = useState(0);
+    const [isComplete, setIsComplete] = useState(false);
+    const [completedSteps, setCompletedSteps] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
 
-    const { user, fetchUserDetails } = useAuth();
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+    const {user, fetchUserDetails} = useAuth();
     const history = useNavigate();
     const statusMessage = useStatusMessage();
 
     const handleInputChange = e => {
-        const { name, value } = e.target;
-        setAnswers(prev => ({ ...prev, [name]: value }));
+        const {name, value} = e.target;
+        setAnswers(prev => ({...prev, [name]: value}));
     };
 
     const handleInputCheckboxChange = e => {
-        const { name, value } = e.target;
+        const {name, value} = e.target;
         let isSet = false;
         if (value === 'on') {
             isSet = true;
         }
-        setAnswers(prev => ({ ...prev, [name]: isSet }));
+        setAnswers(prev => ({...prev, [name]: isSet}));
     };
 
     const handleFileChange = e => {
@@ -145,10 +149,10 @@ export default function NewMemberPage() {
             return;
         }
 
-        const { name } = e.target;
+        const {name} = e.target;
         const file = e.target.files[0];
 
-        setAnswers(prev => ({ ...prev, [name]: file }));
+        setAnswers(prev => ({...prev, [name]: file}));
     };
 
     const handleAutocompleteChange = (name, value) => {
@@ -158,7 +162,7 @@ export default function NewMemberPage() {
                 item => item.pronouns || item.name || item.company_name || item.value || item.range || item.gender || item.identity || item.ethnicity || item, // the 'item' fallback is in case you have other Autocomplete instances with string values
             );
         }
-        setAnswers(prev => ({ ...prev, [name]: value }));
+        setAnswers(prev => ({...prev, [name]: value}));
     };
 
     const getStepContent = useCallback(() => {
@@ -249,7 +253,7 @@ export default function NewMemberPage() {
         }
 
         if (!completedSteps.includes(activeStep)) {
-            setCompletedSteps(prev => [ ...prev, activeStep ]);
+            setCompletedSteps(prev => [...prev, activeStep]);
         }
 
         setActiveStep(activeStep + 1);
@@ -278,7 +282,7 @@ export default function NewMemberPage() {
             method: 'POST',
             credentials: 'include',
             body: formData,
-            headers: { Authorization: `Token ${localStorage.getItem('token')}` },
+            headers: {Authorization: `Token ${localStorage.getItem('token')}`},
         })
             .then(response => {
                 if (!response.ok) {
@@ -303,7 +307,7 @@ export default function NewMemberPage() {
 
     useEffect(() => {
         setIsComplete(activeStep === steps.length);
-    }, [ activeStep ]);
+    }, [activeStep]);
 
     const navigate = useNavigate();
 
@@ -313,7 +317,7 @@ export default function NewMemberPage() {
             statusMessage.info("You've completed onboarding and no longer have access to this screen.");
             navigate('/dashboard', { replace: false });
         }
-    }, [ user ]);
+    }, [user]);
 
     return (
         <React.Fragment>
@@ -327,19 +331,32 @@ export default function NewMemberPage() {
                     borderBottom: t => `1px solid ${t.palette.divider}`,
                 }}></AppBar>
             <Container component="main">
-                <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
-                    <Stepper activeStep={activeStep} sx={{ pt: 3, pb: 5 }}>
-                        {steps.map(step => (
-                            <Step
-                                key={step.name}
-                                onClick={() => {
-                                    if (completedSteps.includes(step.index) || completedSteps.includes(step.index - 1)) setActiveStep(step.index);
-                                }}
-                                style={{ cursor: 'pointer' }}>
-                                <StepLabel>{step.name}</StepLabel>
-                            </Step>
-                        ))}
-                    </Stepper>
+                <Paper variant="outlined" sx={{my: {xs: 3, md: 6}, p: {xs: 2, md: 3}}}>
+                    {isMobile ? (
+                        <MobileStepper
+                            variant="progress"
+                            steps={steps.length}
+                            position="static"
+                            activeStep={activeStep}
+                            sx={{maxWidth: 400, flexGrow: 1}}
+                            backButton={false}
+                            nextButton={false}
+                        />
+                    ) : (
+                        <Stepper activeStep={activeStep} sx={{pt: 3, pb: 5}}>
+                            {steps.map(step => (
+                                <Step
+                                    key={step.name}
+                                    onClick={() => {
+                                        if (completedSteps.includes(step.index) || completedSteps.includes(step.index - 1)) setActiveStep(step.index);
+                                    }}
+                                    style={{cursor: 'pointer'}}
+                                >
+                                    <StepLabel>{step.name}</StepLabel>
+                                </Step>
+                            ))}
+                        </Stepper>
+                    )}
                     <form>
                         {isComplete && (
                             <React.Fragment>
@@ -347,16 +364,17 @@ export default function NewMemberPage() {
                                     Thanks for letting us get to know you!
                                 </Typography>
                                 <Typography variant="subtitle1">
-                                    Now that you&apos;re in our community, make sure you check your email to get access to our Slack group!
+                                    Now that you&apos;re in our community, make sure you check your email to get access
+                                    to our Slack group!
                                 </Typography>
                             </React.Fragment>
                         )}
                         {!isComplete && (
                             <React.Fragment>
                                 {getStepContent()}
-                                <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                                <Box sx={{display: 'flex', justifyContent: 'flex-end'}}>
                                     {activeStep !== 0 && (
-                                        <Button onClick={handleBack} sx={{ mt: 3, ml: 1 }}>
+                                        <Button onClick={handleBack} sx={{mt: 3, ml: 1}}>
                                             Back
                                         </Button>
                                     )}
@@ -365,7 +383,7 @@ export default function NewMemberPage() {
                                         onClick={activeStep === steps.length - 1 ? handleFormSubmit : handleNext}
                                         type="button"
                                         disabled={isLoading}
-                                        sx={{ mt: 3, ml: 1 }}>
+                                        sx={{mt: 3, ml: 1}}>
                                         {activeStep === steps.length - 1 ? 'Submit Details' : 'Next'}
                                     </Button>
                                 </Box>
