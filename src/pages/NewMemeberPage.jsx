@@ -333,15 +333,17 @@ export default function NewMemberPage() {
             <Container component="main">
                 <Paper variant="outlined" sx={{my: {xs: 3, md: 6}, p: {xs: 2, md: 3}}}>
                     {isMobile ? (
-                        <MobileStepper
-                            variant="progress"
-                            steps={steps.length}
-                            position="static"
-                            activeStep={activeStep}
-                            sx={{maxWidth: 400, flexGrow: 1, pt: 3, pb: 5}}
-                            backButton={false}
-                            nextButton={false}
-                        />
+                        <Box sx={{pt: 3, pb: 5}}>
+                            <MobileStepper
+                                variant="progress"
+                                steps={steps.length}
+                                position="static"
+                                activeStep={activeStep}
+                                sx={{maxWidth: 400, flexGrow: 1}}
+                                backButton={false}
+                                nextButton={false}
+                            />
+                        </Box>
                     ) : (
                         <Stepper activeStep={activeStep} sx={{pt: 3, pb: 5}}>
                             {steps.map(step => (
