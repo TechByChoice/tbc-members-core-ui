@@ -1,27 +1,49 @@
-import React, { useEffect, useState } from 'react';
-import { OutlinedInput, FormControl, FormLabel, FormHelperText, Grid, List, ListItem, Paper } from '@mui/material';
+import React, {useEffect, useState} from 'react';
+import {List, ListItem, OutlinedInput, Paper} from '@mui/material';
 import mbxGeocoding from '@mapbox/mapbox-sdk/services/geocoding';
 import _ from 'lodash';
 
-const mapboxClient = mbxGeocoding({ accessToken: import.meta.env.VITE_APP_MAPBOX_ACCESS_TOKEN });
+const mapboxClient = mbxGeocoding({accessToken: import.meta.env.VITE_APP_MAPBOX_ACCESS_TOKEN});
 
-function InputLocation({
-    formErrors, handleAutocompleteChange, fieldName = 'location', defaultValue = null 
-}) {
-    const [ inputValue, setInputValue ] = useState(defaultValue); // Store input value
-    const [ suggestions, setSuggestions ] = useState([]);
+function InputLocation({formErrors, handleAutocompleteChange, fieldName = 'location', defaultValue = null}) {
+    const [inputValue, setInputValue] = useState(defaultValue); // Store input value
+    const [suggestions, setSuggestions] = useState([]);
 
     useEffect(() => {
         setInputValue(defaultValue);
-    }, [ defaultValue ]);
+    }, [defaultValue]);
+
+    // Function to get country code from timezone
+    const getCountryFromTimezone = () => {
+        try {
+            const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+            const country = timeZone.split('/')[0];
+
+            // Map common timezone countries to their ISO 3166-1 alpha-2 country codes
+            const countryCodeMap = {
+                'America': 'us',
+                'Europe': 'gb',
+                'Asia': 'in',
+                'Australia': 'au',
+                'Africa': 'za',
+            };
+
+            return countryCodeMap[country] || 'us'; // Default to 'us' if not found
+        } catch (error) {
+            console.error('Error getting country from timezone:', error);
+            return 'us'; // Default to 'us' if there's an error
+        }
+    };
 
     // Debounced function to fetch location suggestions
-    const fetchSuggestions = _.debounce(value => {
+    const fetchSuggestions = _.debounce(async (value) => {
+        const userCountry = getCountryFromTimezone();
+
         if (value.length >= 3) {
             mapboxClient
                 .forwardGeocode({
                     query: value,
-                    countries: [ 'us' ],
+                    countries: [userCountry],
                     autocomplete: true,
                     limit: 5,
                 })
@@ -71,7 +93,7 @@ function InputLocation({
 
     return (
         <>
-            <OutlinedInput onChange={handleInputChange} name={fieldName} value={inputValue} autoComplete="off" />
+            <OutlinedInput onChange={handleInputChange} name={fieldName} value={inputValue} autoComplete="off"/>
             {suggestions.length > 0 && (
                 <Paper square>
                     <List>
