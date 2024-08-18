@@ -17,8 +17,12 @@ function MentorDashboard() {
 
 function Dashboard() {
     const auth = useAuth();
-    const { user } = useAuth();
+    const { user, fetchUserDetails } = useAuth();
     const accountInfo = auth.accountDetails[0];
+
+    useEffect(() => {
+        fetchUserDetails()
+    }, []);
 
     // if (!auth?.isLoading) {
     //     return (
