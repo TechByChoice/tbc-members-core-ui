@@ -19,7 +19,7 @@ const EditorButton = styled(Button)`
     font-size: 12px;
 `;
 export default function TipTapEditor({
-    id, onFormDataChange, error, value
+    id, onFormDataChange, error, value, onFormDataChangeUpdate
 }) {
     const editor = useEditor({
         extensions: [
@@ -32,18 +32,24 @@ export default function TipTapEditor({
                 ],
             }),
         ],
+        content: value,
         onUpdate: ({ editor }) => {
-            onFormDataChange(id, editor.getHTML());
-            console.log('TEST: ', id, editor.getHTML());
+            if(onFormDataChangeUpdate){
+                onFormDataChangeUpdate(editor.getHTML());
+            } else {
+                onFormDataChange(id, editor.getHTML());
+            }
         },
     });
     // Set editor content when `value` prop changes
     useEffect(() => {
-        if (editor && value) {
+        if (editor && value !== undefined && value !== editor.getHTML()) {
             editor.commands.setContent(value);
         }
     }, [ editor, value ]);
     const applyFormat = format => {
+        if (!editor) return;
+
         switch (format) {
             case 'h1':
                 editor.chain().focus()

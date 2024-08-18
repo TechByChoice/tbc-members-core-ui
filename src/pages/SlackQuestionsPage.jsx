@@ -10,7 +10,7 @@ const SlackQuestionsPage = () => {
     const [channelQuestions, setChannelQuestions] = useState({});
     const [errors, setErrors] = useState({});
     const navigate = useNavigate();
-    const statusMessage = useStatusMessage()
+    const statusMessage = useStatusMessage();
 
     useEffect(() => {
         fetchChannels();
@@ -64,6 +64,7 @@ const SlackQuestionsPage = () => {
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
+
     const handleSubmitAll = async () => {
         if (validateChannelQuestions()) {
             try {
@@ -103,9 +104,11 @@ const SlackQuestionsPage = () => {
                 <Box key={channel.id} mb={2}>
                     <Typography variant="h6">#{channel.channel_name}</Typography>
                     <TipTapEditor
-                        onFormDataChange={(value) => handleQuestionChange(channel.id, value)}
+                        onFormDataChange={false}
+                        onFormDataChangeUpdate={(value) => handleQuestionChange(channel.id, value)}
                         id={channel.id}
                         error={errors[channel.id]}
+                        value={channelQuestions[channel.id]?.question_text}
                     />
                     {errors[channel.id] && (
                         <Typography color="error">{errors[channel.id]}</Typography>
