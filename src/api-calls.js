@@ -98,3 +98,16 @@ export const postSlackQuestions = async (formData) => {
     });
     return response.json();
 };
+
+export const getInProgressReviews = async (userId) => {
+    const defaultHeaders = {
+        'Content-Type': 'application/json',
+        Authorization: `Token ${localStorage.getItem('token')}`,
+    };
+
+    const response = await fetch(routes.api.openDoors.getInProgressReviews(userId), {
+        method: 'GET',
+        headers: defaultHeaders,
+    });
+    return response.json();
+};

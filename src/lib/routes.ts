@@ -7,6 +7,7 @@ export const routes = {
         base: import.meta.env.VITE_APP_API_BASE_URL,
         talent: import.meta.env.VITE_APP_API_TALENT_CHOICE_URL,
         internal: import.meta.env.VITE_APP_API_INTERNAL_URL,
+        reports: import.meta.env.VITE_APP_API_OPEN_DOORS_URL,
         admin: {
             stats: () => apiJoin(routes.api.base, 'staff/stats/'),
             deleteCompany: id => apiJoin(routes.api.base, `company-profile/${id}/soft-delete/`),
@@ -87,6 +88,7 @@ export const routes = {
         openDoors: {
             createAccount: () => apiJoin(routes.api.base, 'open-doors/onboarding/'),
             confirmAgreement: () => apiJoin(routes.api.base, `open-doors/onboarding/confirm-agreement/`),
+            getInProgressReviews: userId => apiJoin(routes.api.reports, `reports/get/reports/?user_id=${userId}`)
         },
     },
 };
