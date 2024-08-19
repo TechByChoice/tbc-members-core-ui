@@ -73,9 +73,6 @@ const InProgressReviewsModal = ({open, onClose, items}) => {
                                             to={`/questions/${item.id}`}
                                             onClick={() => console.log(item.id)}
                             >
-                                <ListItemAvatar>
-                                    <Avatar alt={`${item.company_name} Logo`} src={item.company_logo}/>
-                                </ListItemAvatar>
                                 <ListItemText
                                     primary={item.company_name}
                                     secondary={
