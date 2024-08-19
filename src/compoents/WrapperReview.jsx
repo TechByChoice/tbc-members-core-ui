@@ -45,7 +45,8 @@ export default function WrapperReview() {
                 }
                 setIsLoading(false)
             } catch (error) {
-                statusMessage.error('We ran into an issue saving the questions. Please try again.');
+                setIsLoading(false)
+                // statusMessage.error('We ran into an issue saving the questions. Please try again.');
                 console.error('Error submitting questions:', error);
             }
         }
