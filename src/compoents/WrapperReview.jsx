@@ -38,7 +38,6 @@ export default function WrapperReview() {
         if (user[0]?.user_info?.id) {
             try {
                 const data = await getInProgressReviews(user[0]?.user_info?.id);
-                console.log(data.reviews, 'data')
                 if (data) {
                     setInProgress(data.reviews)
                     setReviewModalStatus(true)
@@ -90,15 +89,6 @@ export default function WrapperReview() {
                         </Box>
                         <Box display="flex" flexWrap="wrap" gap={1} px={2} pb={2}>
                             <Box flex="auto">
-                                {/*<Button*/}
-                                {/*    variant={"outlined"}*/}
-                                {/*    size="large"*/}
-                                {/*    fullWidth*/}
-                                {/*    disableElevation*/}
-                                {/*    sx={{borderRadius: "40px"}}*/}
-                                {/*>*/}
-                                {/*    Request Support*/}
-                                {/*</Button>*/}
                             </Box>
                             <Box flex="auto">
                                 <Link to="/dashboard">
