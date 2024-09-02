@@ -56,7 +56,7 @@
     "dependencies": {
         "@biomejs/biome": "^1.8.3",
         "@mapbox/mapbox-sdk": "^0.16.0",
-        "@mui/x-charts": "^7.13.0",
+        "@mui/x-charts": "^7.15.0",
         "@techbychoice/tbc-component-library": "^0.0.7",
         "@tiptap/extension-heading": "^2.5.9",
         "@tiptap/extension-paragraph": "^2.6.6",
