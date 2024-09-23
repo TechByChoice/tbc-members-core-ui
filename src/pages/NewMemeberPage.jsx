@@ -284,27 +284,30 @@ export default function NewMemberPage() {
             body: formData,
             headers: { Authorization: `Token ${localStorage.getItem('token')}` },
         })
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
             .then(data => {
-                if (!data.status) {
+                if (data.status) {
+                    // Handle successful response
+                    statusMessage.success("You're in!");
+                    setIsLoading(false);
+                    history('/dashboard');
+                    fetchUserDetails().then(() => {});
+                } else {
+                    // Handle unsuccessful response
                     if (data.message === 'Member has already been created for this user.') {
-                        // Handle the case when user is already onboarded
                         statusMessage.success("You've already completed onboarding!");
                         setIsLoading(false);
                         history('/dashboard');
                     } else {
-                        // Handle other error cases
                         console.error('Fetch error:', data);
-                        statusMessage.error('We ran into an error saving your profile');
+                        statusMessage.error(data.message || 'We ran into an error saving your profile');
                         setIsLoading(false);
                     }
-                } else {
-                    // Handle successful response
-                    setIsLoading(false);
-                    fetchUserDetails().then(() => {
-                        statusMessage.success("You're in!");
-                        history('/dashboard');
-                    });
                 }
             })
             .catch(error => {
