@@ -1,15 +1,4 @@
-import {Typography,
-    FormControl,
-    FormLabel,
-    TextField,
-    Button,
-    Input,
-    Grid,
-    Autocomplete,
-    InputAdornment,
-    OutlinedInput,
-    InputLabel,
-    FormHelperText,} from '@mui/material';
+import { Button, FormControl, FormHelperText, FormLabel, Grid, Input, InputAdornment, InputLabel, OutlinedInput, Typography } from '@mui/material';
 import React from 'react';
 import { createFilterOptions } from '@mui/material/Autocomplete';
 import Checkbox from '@mui/material/Checkbox';
@@ -26,6 +15,7 @@ function BasicInfoStep({
     formErrors, handleInputChange, handleFileChange, handleAutocompleteChange, questions 
 }) {
     const [ viewNewCompany, setViewNewCompany ] = React.useState(false);
+    const isSimpleOnboarding = import.meta.env.VITE_APP_SIMPLE_ONBOARDING;
 
     return (
         <Grid container spacing={3}>
@@ -129,87 +119,91 @@ function BasicInfoStep({
                     {!!formErrors.years_of_experience && <FormHelperText>{formErrors.years_of_experience}</FormHelperText>}
                 </FormControl>
             </Grid>
-            <Grid item xs={12}>
-                {/* Social Connections Header */}
-                <Typography variant="h6">Let&apos;s connect</Typography>
-                <Typography variant="subtitle2">Add your social to help you connect with the community.</Typography>
-            </Grid>
+            {isSimpleOnboarding !== 'true' && (
+                <>
+                    <Grid item xs={12}>
+                        {/* Social Connections Header */}
+                        <Typography variant="h6">Let&apos;s connect</Typography>
+                        <Typography variant="subtitle2">Add your social to help you connect with the community.</Typography>
+                    </Grid>
 
-            {/* Social Profiles */}
-            <Grid item xs={12}>
-                <FormControl fullWidth>
-                    <InputLabel htmlFor="linkedin">Your Linkedin Profile</InputLabel>
-                    <OutlinedInput
-                        label="Your Linkedin Profile"
-                        onChange={handleInputChange}
-                        name="linkedin"
-                        startAdornment={<InputAdornment position="start">https://</InputAdornment>}
-                        type="url"
-                    />
-                </FormControl>
-            </Grid>
-            <Grid item xs={12}>
-                <FormControl fullWidth>
-                    <InputLabel htmlFor="instagram">Instagram handle</InputLabel>
-                    <OutlinedInput
-                        label="Instagram handle"
-                        onChange={handleInputChange}
-                        name="instagram"
-                        startAdornment={<InputAdornment position="start">@</InputAdornment>}
-                        type="text"
-                        helpertext="It should be @YourUserName"
-                    />
-                </FormControl>
-            </Grid>
-            <Grid item xs={12}>
-                <FormControl fullWidth>
-                    <InputLabel htmlFor="github">Your Github Profile</InputLabel>
-                    <OutlinedInput
-                        label="Your Github Profile"
-                        onChange={handleInputChange}
-                        name="github"
-                        startAdornment={<InputAdornment position="start">https://</InputAdornment>}
-                        type="url"
-                    />
-                </FormControl>
-            </Grid>
-            <Grid item xs={12}>
-                <FormControl fullWidth>
-                    <InputLabel htmlFor="twitter">Your Twitter Handle</InputLabel>
-                    <OutlinedInput
-                        label="Your Twitter Handle"
-                        onChange={handleInputChange}
-                        name="twitter"
-                        startAdornment={<InputAdornment position="start">@</InputAdornment>}
-                        type="text"
-                        helpertext="It should be @YourUserName"
-                    />
-                </FormControl>
-            </Grid>
-            <Grid item xs={12}>
-                <FormControl fullWidth>
-                    <InputLabel htmlFor="youtube">Your Youtube Profile</InputLabel>
-                    <OutlinedInput
-                        label="Your Youtube Profile"
-                        onChange={handleInputChange}
-                        name="youtube"
-                        startAdornment={<InputAdornment position="start">https://</InputAdornment>}
-                        type="url"
-                    />
-                </FormControl>
-            </Grid>
-            <Grid item xs={12}>
-                <FormControl fullWidth>
-                    <InputLabel htmlFor="personal">Your Personal Website</InputLabel>
-                    <OutlinedInput
-                        label="Your Personal Website"
-                        onChange={handleInputChange}
-                        name="personal"
-                        startAdornment={<InputAdornment position="start">https://</InputAdornment>}
-                        type="url"
-                    />
-                </FormControl>
-            </Grid>
+                    {/* Social Profiles */}
+                    <Grid item xs={12}>
+                        <FormControl fullWidth>
+                            <InputLabel htmlFor="linkedin">Your Linkedin Profile</InputLabel>
+                            <OutlinedInput
+                                label="Your Linkedin Profile"
+                                onChange={handleInputChange}
+                                name="linkedin"
+                                startAdornment={<InputAdornment position="start">https://</InputAdornment>}
+                                type="url"
+                            />
+                        </FormControl>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <FormControl fullWidth>
+                            <InputLabel htmlFor="instagram">Instagram handle</InputLabel>
+                            <OutlinedInput
+                                label="Instagram handle"
+                                onChange={handleInputChange}
+                                name="instagram"
+                                startAdornment={<InputAdornment position="start">@</InputAdornment>}
+                                type="text"
+                                helpertext="It should be @YourUserName"
+                            />
+                        </FormControl>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <FormControl fullWidth>
+                            <InputLabel htmlFor="github">Your Github Profile</InputLabel>
+                            <OutlinedInput
+                                label="Your Github Profile"
+                                onChange={handleInputChange}
+                                name="github"
+                                startAdornment={<InputAdornment position="start">https://</InputAdornment>}
+                                type="url"
+                            />
+                        </FormControl>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <FormControl fullWidth>
+                            <InputLabel htmlFor="twitter">Your Twitter Handle</InputLabel>
+                            <OutlinedInput
+                                label="Your Twitter Handle"
+                                onChange={handleInputChange}
+                                name="twitter"
+                                startAdornment={<InputAdornment position="start">@</InputAdornment>}
+                                type="text"
+                                helpertext="It should be @YourUserName"
+                            />
+                        </FormControl>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <FormControl fullWidth>
+                            <InputLabel htmlFor="youtube">Your Youtube Profile</InputLabel>
+                            <OutlinedInput
+                                label="Your Youtube Profile"
+                                onChange={handleInputChange}
+                                name="youtube"
+                                startAdornment={<InputAdornment position="start">https://</InputAdornment>}
+                                type="url"
+                            />
+                        </FormControl>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <FormControl fullWidth>
+                            <InputLabel htmlFor="personal">Your Personal Website</InputLabel>
+                            <OutlinedInput
+                                label="Your Personal Website"
+                                onChange={handleInputChange}
+                                name="personal"
+                                startAdornment={<InputAdornment position="start">https://</InputAdornment>}
+                                type="url"
+                            />
+                        </FormControl>
+                    </Grid>
+                </>
+            )}
         </Grid>
     );
 }

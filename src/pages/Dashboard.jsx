@@ -21,7 +21,7 @@ function Dashboard() {
     const accountInfo = auth.accountDetails[0];
 
     useEffect(() => {
-        fetchUserDetails()
+        fetchUserDetails();
     }, []);
 
     // if (!auth?.isLoading) {

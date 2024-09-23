@@ -49,6 +49,8 @@ export default function JobReferralPage() {
         location: null,
         url: null,
         team_size: null,
+        is_current_company: null,
+        connection_type: null,
     });
     const [ formErrors, setFormErrors ] = React.useState({});
     const history = useNavigate();

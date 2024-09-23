@@ -1,14 +1,14 @@
-import React, {useEffect, useState} from 'react';
-import {Box, Button, Typography} from '@mui/material';
-import {getChannels, postSlackQuestions} from "@/api-calls";
-import TipTapEditor from "@/compoents/TipTapEditor";
-import {useNavigate} from "react-router";
-import {useStatusMessage} from '@/hooks/useStatusMessage';
+import React, { useEffect, useState } from 'react';
+import { Box, Button, Typography } from '@mui/material';
+import { getChannels, postSlackQuestions } from '@/api-calls';
+import TipTapEditor from '@/compoents/TipTapEditor';
+import { useNavigate } from 'react-router';
+import { useStatusMessage } from '@/hooks/useStatusMessage';
 
 const SlackQuestionsPage = () => {
-    const [channels, setChannels] = useState([]);
-    const [channelQuestions, setChannelQuestions] = useState({});
-    const [errors, setErrors] = useState({});
+    const [ channels, setChannels ] = useState([]);
+    const [ channelQuestions, setChannelQuestions ] = useState({});
+    const [ errors, setErrors ] = useState({});
     const navigate = useNavigate();
     const statusMessage = useStatusMessage();
 
@@ -25,7 +25,7 @@ const SlackQuestionsPage = () => {
                 acc[channel.id] = {
                     question_text: '',
                     is_interest: true,
-                    channel: channel.id
+                    channel: channel.id,
                 };
                 return acc;
             }, {});
@@ -41,13 +41,14 @@ const SlackQuestionsPage = () => {
             ...prev,
             [channelId]: {
                 ...prev[channelId],
-                question_text: value
-            }
+                question_text: value,
+                channel: channelId,
+            },
         }));
         // Clear error for this channel if it exists
         if (errors[channelId]) {
             setErrors(prev => {
-                const newErrors = {...prev};
+                const newErrors = { ...prev };
                 delete newErrors[channelId];
                 return newErrors;
             });
@@ -58,7 +59,7 @@ const SlackQuestionsPage = () => {
         const newErrors = {};
         channels.forEach(channel => {
             if (!channelQuestions[channel.id] || !channelQuestions[channel.id].question_text) {
-                newErrors[channel.id] = "Question text is required";
+                newErrors[channel.id] = 'Question text is required';
             }
         });
         setErrors(newErrors);
@@ -68,7 +69,6 @@ const SlackQuestionsPage = () => {
     const handleSubmitAll = async () => {
         if (validateChannelQuestions()) {
             try {
-
                 const data = await postSlackQuestions(channelQuestions);
                 setChannelQuestions({});
                 statusMessage.success('Saved the set of questions!');
@@ -93,34 +93,23 @@ const SlackQuestionsPage = () => {
             {/*        <br/>*/}
             {/*    </>*/}
             {/*))}*/}
-            <Button
-                variant="contained"
-                color="primary"
-                onClick={handleSubmitAll}
-            >
+            <Button variant="contained" color="primary" onClick={handleSubmitAll}>
                 Add All Questions
             </Button>
-            {channels.map((channel) => (
+            {channels?.map(channel => (
                 <Box key={channel.id} mb={2}>
                     <Typography variant="h6">#{channel.channel_name}</Typography>
                     <TipTapEditor
                         onFormDataChange={false}
-                        onFormDataChangeUpdate={(value) => handleQuestionChange(channel.id, value)}
+                        onFormDataChangeUpdate={value => handleQuestionChange(channel.id, value)}
                         id={channel.id}
                         error={errors[channel.id]}
                         value={channelQuestions[channel.id]?.question_text}
                     />
-                    {errors[channel.id] && (
-                        <Typography color="error">{errors[channel.id]}</Typography>
-                    )}
+                    {errors[channel.id] && <Typography color="error">{errors[channel.id]}</Typography>}
                 </Box>
-
             ))}
-            <Button
-                variant="contained"
-                color="primary"
-                onClick={handleSubmitAll}
-            >
+            <Button variant="contained" color="primary" onClick={handleSubmitAll}>
                 Add All Questions
             </Button>
         </Box>

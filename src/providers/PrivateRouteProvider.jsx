@@ -1,8 +1,8 @@
-import React, {useCallback, useEffect, useState} from 'react';
-import {Navigate, useLocation, useNavigate} from 'react-router-dom';
-import {useAuth} from './AuthProvider';
-import {useStatusMessage} from '@/hooks/useStatusMessage';
-import LoadingScreen from "@/compoents/LoadingScreen";
+import React, { useCallback, useEffect, useState } from 'react';
+import { Navigate, useLocation, useNavigate } from 'react-router-dom';
+import { useAuth } from './AuthProvider';
+import { useStatusMessage } from '@/hooks/useStatusMessage';
+import LoadingScreen from '@/compoents/LoadingScreen';
 
 /**
  * PrivateRoutes component for handling authenticated and authorized access to routes.
@@ -12,19 +12,28 @@ import LoadingScreen from "@/compoents/LoadingScreen";
  * @param {Object} props.userDetail - User details
  * @param {boolean} props.isStaff - Whether the route requires staff access
  */
-export const PrivateRoutes = ({children, userDetail, isStaff = false}) => {
-    const {user, isAuthenticated} = useAuth();
+export const PrivateRoutes = ({ children, userDetail, isStaff = false }) => {
+    const {
+        user, isAuthenticated, isLoading, setIsLoading 
+    } = useAuth();
     const navigate = useNavigate();
     const location = useLocation();
-    const [isLoading, setIsLoading] = useState(true);
+    // const [isLoading, setIsLoading] = useState(true);
     const statusMessage = useStatusMessage();
 
-    const redirectUser = useCallback((path, message) => {
-        if (location.pathname !== path) {
-            navigate(path, {replace: true});
-            if (message) statusMessage.info(message);
-        }
-    }, [navigate, statusMessage, location.pathname]);
+    const redirectUser = useCallback(
+        (path, message) => {
+            if (location.pathname !== path) {
+                navigate(path, { replace: true });
+                if (message) statusMessage.info(message);
+            }
+        },
+        [
+            navigate,
+            statusMessage,
+            location.pathname 
+        ],
+    );
 
     const checkUserStatus = useCallback(() => {
         if (!isAuthenticated || !user?.[0]) {
@@ -32,7 +41,7 @@ export const PrivateRoutes = ({children, userDetail, isStaff = false}) => {
             return;
         }
 
-        const {account_info: userAccountInfo, company_account_data} = user[0];
+        const { account_info: userAccountInfo, company_account_data } = user[0];
 
         if (userAccountInfo?.is_member && !userAccountInfo?.is_member_onboarding_complete) {
             redirectUser('/new/member/2', 'Please complete your onboarding to join the community.');
@@ -61,18 +70,23 @@ export const PrivateRoutes = ({children, userDetail, isStaff = false}) => {
         }
 
         setIsLoading(false);
-    }, [isAuthenticated, user, isStaff, redirectUser]);
+    }, [
+        isAuthenticated,
+        user,
+        isStaff,
+        redirectUser
+    ]);
 
     useEffect(() => {
         checkUserStatus();
-    }, [checkUserStatus]);
+    }, [ checkUserStatus ]);
 
     if (!isAuthenticated) {
-        return <Navigate to="/" replace/>;
+        return <Navigate to="/" replace />;
     }
 
     if (isLoading) {
-        return <LoadingScreen/>;
+        return <LoadingScreen />;
     }
 
     return children;

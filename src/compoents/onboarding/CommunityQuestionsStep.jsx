@@ -1,16 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {
-    Grid,
-    Typography,
-    Checkbox,
-    FormControl,
-    FormControlLabel,
-    Select,
-    MenuItem,
-    TextField,
-    Autocomplete,
-    FormHelperText
-} from '@mui/material';
+import { Grid, Typography, Checkbox, FormControl, FormControlLabel, Select, MenuItem, TextField, Autocomplete, FormHelperText } from '@mui/material';
 import FormLabel from '@mui/material/FormLabel';
 import { createFilterOptions } from '@mui/material/Autocomplete';
 import { getDropDrownItems } from '@/api-calls';
@@ -18,10 +7,11 @@ import { getDropDrownItems } from '@/api-calls';
 const filter = createFilterOptions();
 
 function CommunityQuestionsStep({
-    formErrors, questions, handleAutocompleteChange, handleInputChange, handleInputCheckboxChange
+    formErrors, questions, handleAutocompleteChange, handleInputChange, handleInputCheckboxChange 
 }) {
     const [ communityNeeds, setSetCommunityNeeds ] = useState([]);
     const [ connectionMade, setConnectionMade ] = useState([]);
+    const isSimpleFlow = import.meta.env.SIMPLE_ONBOARDING;
 
     useEffect(() => {
         // Fetch the list of companies when the component mounts
@@ -69,7 +59,9 @@ function CommunityQuestionsStep({
 
             <Grid item xs={12}>
                 <FormControl fullWidth>
-                    <FormLabel error={!!formErrors.how_connection_made} required id="how-connection-made-label">How did you find the Tech by Choice community?</FormLabel>
+                    <FormLabel error={!!formErrors.how_connection_made} required id="how-connection-made-label">
+                        How did you find the Tech by Choice community?
+                    </FormLabel>
                     <Select required labelId="how-connection-made-label" id="how-connection-made" name="how_connection_made" onChange={handleInputChange}>
                         {connectionMade?.map(option => (
                             <MenuItem key={option.id} value={option.name}>
@@ -83,7 +75,9 @@ function CommunityQuestionsStep({
 
             <Grid item xs={12}>
                 <FormControl fullWidth>
-                    <FormLabel required error={!!formErrors.tbc_program_interest} id="tbc-program-interest-label">What Tech by Choice Services interest you most?</FormLabel>
+                    <FormLabel required error={!!formErrors.tbc_program_interest} id="tbc-program-interest-label">
+                        What Tech by Choice Services interest you most?
+                    </FormLabel>
                     <Autocomplete
                         multiple
                         selectOnFocus

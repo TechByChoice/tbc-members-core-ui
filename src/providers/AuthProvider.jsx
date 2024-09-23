@@ -12,7 +12,7 @@ export const AuthProvider = ({ children }) => {
     const [ user, setUser ] = useState([]);
     const [ accountDetails, setAccountDetails ] = useState([]);
     const [ errorMessage, setErrorMessage ] = useState([]);
-    const [ isLoading, setIsLoading ] = useState(true);
+    const [ isLoading, setIsLoading ] = useState(false);
 
     // get user details
     const fetchUserDetails = useCallback(() => {
@@ -109,8 +109,10 @@ export const AuthProvider = ({ children }) => {
                 setUser([]);
                 setToken('');
                 localStorage.removeItem('token');
+                setIsLoading(false);
                 // window.location.href = import.meta.env.VITE_APP_BASE_URL + 'login';
             } else {
+                setIsLoading(false);
                 setErrorMessage(response.data);
                 console.error(response.data);
             }
@@ -131,6 +133,7 @@ export const AuthProvider = ({ children }) => {
                 accountDetails,
                 errorMessage,
                 isLoading,
+                setIsLoading,
                 setErrorMessage,
             }}>
             {children}
