@@ -397,7 +397,7 @@ export default function NewMemberPage() {
                                         variant="contained"
                                         onClick={activeStep === steps.length - 1 ? handleFormSubmit : handleNext}
                                         type="button"
-                                        // disabled={isLoading}
+                                        disabled={isLoading}
                                         sx={{ mt: 3, ml: 1 }}>
                                         {activeStep === steps.length - 1 ? 'Submit Details' : 'Next'}
                                     </Button>
