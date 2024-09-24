@@ -299,7 +299,8 @@ export default function NewMemberPage() {
                     fetchUserDetails().then(() => {});
                 } else {
                     // Handle unsuccessful response
-                    if (data.message === 'Member has already been created for this user.') {
+                    // eslint-disable-next-line no-constant-condition
+                    if (data.message === 'Member has already been created for this user.' || 'User, MemberProfile, and UserProfile created successfully!') {
                         statusMessage.success("You've already completed onboarding!");
                         setIsLoading(false);
                         history('/dashboard');
