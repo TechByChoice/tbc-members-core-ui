@@ -39,7 +39,7 @@ export default function WrapperReview() {
             try {
                 const data = await getInProgressReviews(user[0]?.user_info?.id);
                 if (data) {
-                    setInProgress(data.reviews);
+                    setInProgress(data.reviews.length > 0);
                     setReviewModalStatus(true);
                 }
                 setIsLoading(false);
